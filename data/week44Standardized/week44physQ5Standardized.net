@@ -1,0 +1,409 @@
+*Vertices 187
+   1 "Aage Henrik Hansen"                     0.0000    0.0000    0.5000
+   2 "Adrian Koch Bentzon"                    0.0000    0.0000    0.5000
+   3 "Ahmad Zakria Gardizi"                   0.0000    0.0000    0.5000
+   4 "Anders Bakke"                           0.0000    0.0000    0.5000
+   5 "Anders Bo Nielsen"                      0.0000    0.0000    0.5000
+   6 "Anders Hammer Holm"                     0.0000    0.0000    0.5000
+   7 "Anders Langgaard Hjembaek"              0.0000    0.0000    0.5000
+   8 "Anders Paaske Drachmann"                0.0000    0.0000    0.5000
+   9 "Anders Reinholdt"                       0.0000    0.0000    0.5000
+  10 "Anders Sommer-Larsen"                   0.0000    0.0000    0.5000
+  11 "Andreas Abildgaard Swane"               0.0000    0.0000    0.5000
+  12 "Andreas Achen"                          0.0000    0.0000    0.5000
+  13 "Andreas Boerresen"                      0.0000    0.0000    0.5000
+  14 "Andreas Haahr Larsen"                   0.0000    0.0000    0.5000
+  15 "Andreas Ingeman Pedersen"               0.0000    0.0000    0.5000
+  16 "Andreas Soegaard-Pedersen"              0.0000    0.0000    0.5000
+  17 "Andreas Stachowski Winther"             0.0000    0.0000    0.5000
+  18 "Ane Kristine Baden"                     0.0000    0.0000    0.5000
+  19 "Anette Ester Andersen"                  0.0000    0.0000    0.5000
+  20 "Anissa Mohrath"                         0.0000    0.0000    0.5000
+  21 "Anne Kathrine Wellendorf"               0.0000    0.0000    0.5000
+  22 "Anton Almgren"                          0.0000    0.0000    0.5000
+  23 "Arne Heiselberg"                        0.0000    0.0000    0.5000
+  24 "Arnhold Simmonsen"                      0.0000    0.0000    0.5000
+  25 "Asger Jon Frounberg"                    0.0000    0.0000    0.5000
+  26 "Benedict Lehnhoff"                      0.0000    0.0000    0.5000
+  27 "Bjarke Takashi Roejle Christensen"      0.0000    0.0000    0.5000
+  28 "Bolette Badsberg Jensen"                0.0000    0.0000    0.5000
+  29 "Boerge Svane Nielsen"                   0.0000    0.0000    0.5000
+  30 "Camilla Buhl Larsen"                    0.0000    0.0000    0.5000
+  31 "Camilla Jensen"                         0.0000    0.0000    0.5000
+  32 "Carsten Ankjaer Ludwigsen"              0.0000    0.0000    0.5000
+  33 "Casper Lillegaard Madsen"               0.0000    0.0000    0.5000
+  34 "Cecilie L. Andersen"                    0.0000    0.0000    0.5000
+  35 "Charlotte Ditlevsen"                    0.0000    0.0000    0.5000
+  36 "Christian Baadsgaard Jepsen"            0.0000    0.0000    0.5000
+  37 "Christian Broennum-Hansen"              0.0000    0.0000    0.5000
+  38 "Christian Hjort Christensen"            0.0000    0.0000    0.5000
+  39 "Christian Joergen Spange Olsen"         0.0000    0.0000    0.5000
+  40 "Christian Terkelsen Holme"              0.0000    0.0000    0.5000
+  41 "Christine Kyndi Bergen"                 0.0000    0.0000    0.5000
+  42 "Christoffer Bruun-Schmidt"              0.0000    0.0000    0.5000
+  43 "Claus Glavind Holm-Bonde"               0.0000    0.0000    0.5000
+  44 "Daniel Bordig"                          0.0000    0.0000    0.5000
+  45 "Daniel Nielsen"                         0.0000    0.0000    0.5000
+  46 "Daniel Stefaniak Nielsen"               0.0000    0.0000    0.5000
+  47 "Danni Dromi"                            0.0000    0.0000    0.5000
+  48 "Dennis Hansen"                          0.0000    0.0000    0.5000
+  49 "Dennis Priergaard Hansen"               0.0000    0.0000    0.5000
+  50 "Ela Ugur"                               0.0000    0.0000    0.5000
+  51 "Elsa Anisa Christiansen"                0.0000    0.0000    0.5000
+  52 "Emil Lindgaard Sloth Olsen"             0.0000    0.0000    0.5000
+  53 "Emilie Andersen Herfelt"                0.0000    0.0000    0.5000
+  54 "Erik Dreier Christensen"                0.0000    0.0000    0.5000
+  55 "Espen Folger Thomas"                    0.0000    0.0000    0.5000
+  56 "Eva Brottmann Hansen"                   0.0000    0.0000    0.5000
+  57 "Felix Tvedegaard Heim"                  0.0000    0.0000    0.5000
+  58 "Freddie Frimann Hansen"                 0.0000    0.0000    0.5000
+  59 "Frederik Agner Husted"                  0.0000    0.0000    0.5000
+  60 "Frederik Federspiel"                    0.0000    0.0000    0.5000
+  61 "Frederik Jensen"                        0.0000    0.0000    0.5000
+  62 "Frederik Toft Bringstrup"               0.0000    0.0000    0.5000
+  63 "Georg Yoshinaka"                        0.0000    0.0000    0.5000
+  64 "Gustav Collin Rasmussen"                0.0000    0.0000    0.5000
+  65 "Heidi Lundgaard Soerensen"              0.0000    0.0000    0.5000
+  66 "Heine Noerby"                           0.0000    0.0000    0.5000
+  67 "Helga Steen Snorradottir"               0.0000    0.0000    0.5000
+  68 "Hussein Nasser Awada"                   0.0000    0.0000    0.5000
+  69 "Ian Bearden"                            0.0000    0.0000    0.5000
+  70 "Ida Marie Monberg Hindsholm"            0.0000    0.0000    0.5000
+  71 "Jacob Andreas Thygesen Hertz"           0.0000    0.0000    0.5000
+  72 "Jakob Gath"                             0.0000    0.0000    0.5000
+  73 "Jens-Bastian Eppler"                    0.0000    0.0000    0.5000
+  74 "Jeppe Drivsholm Eriksen"                0.0000    0.0000    0.5000
+  75 "Jeppe Karnoee Knudsen"                  0.0000    0.0000    0.5000
+  76 "Jesper Bruun"                           0.0000    0.0000    0.5000
+  77 "Jesper Jul Jensen"                      0.0000    0.0000    0.5000
+  78 "Jesper Ruders"                          0.0000    0.0000    0.5000
+  79 "Jesper Sonne"                           0.0000    0.0000    0.5000
+  80 "Johan Georg Mulvad Samsing"             0.0000    0.0000    0.5000
+  81 "Johannes Christof de Fine Licht"        0.0000    0.0000    0.5000
+  82 "Jonas Buch Hansen"                      0.0000    0.0000    0.5000
+  83 "Jonathan Scharff Nielsen"               0.0000    0.0000    0.5000
+  84 "Jophiel Nyman Wiis"                     0.0000    0.0000    0.5000
+  85 "Jordi-Daniel Behrendt"                  0.0000    0.0000    0.5000
+  86 "Josefine Adler"                         0.0000    0.0000    0.5000
+  87 "Kamilla Trans"                          0.0000    0.0000    0.5000
+  88 "Karl-Soeren Geertsen"                   0.0000    0.0000    0.5000
+  89 "Kasper Graves Hvid"                     0.0000    0.0000    0.5000
+  90 "Kasper Koehler"                         0.0000    0.0000    0.5000
+  91 "Kasper Stener Hintz"                    0.0000    0.0000    0.5000
+  92 "Katrine Rasmussen"                      0.0000    0.0000    0.5000
+  93 "Katrine Rebekka Rosenmejer Nielsen"     0.0000    0.0000    0.5000
+  94 "Kelvin Tonnes Koch"                     0.0000    0.0000    0.5000
+  95 "Kenneth Gordon Kortegaard"              0.0000    0.0000    0.5000
+  96 "Kevin Brix"                             0.0000    0.0000    0.5000
+  97 "Kim Kobusch Simonsen"                   0.0000    0.0000    0.5000
+  98 "Kim Schwartz Madsen"                    0.0000    0.0000    0.5000
+  99 "Kristian Anders Gregersen"              0.0000    0.0000    0.5000
+ 100 "Kristian Due Andersen"                  0.0000    0.0000    0.5000
+ 101 "Kristian Hoeier"                        0.0000    0.0000    0.5000
+ 102 "Kristian Lautrup Nielsen"               0.0000    0.0000    0.5000
+ 103 "Line Bjerregaard Stick"                 0.0000    0.0000    0.5000
+ 104 "Line Kuhnel"                            0.0000    0.0000    0.5000
+ 105 "Line Pedersen"                          0.0000    0.0000    0.5000
+ 106 "Line Tollund Juutilainen"               0.0000    0.0000    0.5000
+ 107 "Lisa Lolk Hauge"                        0.0000    0.0000    0.5000
+ 108 "Lukas Svarre Engedal"                   0.0000    0.0000    0.5000
+ 109 "Mads Bruun Poulsen"                     0.0000    0.0000    0.5000
+ 110 "Mads Harslof"                           0.0000    0.0000    0.5000
+ 111 "Marcel Loevendahl Joergensen"           0.0000    0.0000    0.5000
+ 112 "Mark Jensen"                            0.0000    0.0000    0.5000
+ 113 "Martin Rolighed Christensen"            0.0000    0.0000    0.5000
+ 114 "Martin Sparre"                          0.0000    0.0000    0.5000
+ 115 "Martin Vetter"                          0.0000    0.0000    0.5000
+ 116 "Mathias Kirk Jensen"                    0.0000    0.0000    0.5000
+ 117 "Mathias Loevgreen Engel"                0.0000    0.0000    0.5000
+ 118 "Mathias Luidor Heltberg"                0.0000    0.0000    0.5000
+ 119 "Mathis E.Isaksen"                       0.0000    0.0000    0.5000
+ 120 "Mette Kiehn Groenborg"                  0.0000    0.0000    0.5000
+ 121 "Mike Lauge"                             0.0000    0.0000    0.5000
+ 122 "Mike Patrick Horsted Rasmussen"         0.0000    0.0000    0.5000
+ 123 "Mikkel Broebech Soennichsen"            0.0000    0.0000    0.5000
+ 124 "Mikkel Hahn Pedersen"                   0.0000    0.0000    0.5000
+ 125 "Mikkel Juhl Hobert"                     0.0000    0.0000    0.5000
+ 126 "Mikkel Ortving Lindholmer"              0.0000    0.0000    0.5000
+ 127 "Mikkel Theiss Kristensen"               0.0000    0.0000    0.5000
+ 128 "Mille Stoeckel Jessen"                  0.0000    0.0000    0.5000
+ 129 "Mogens Dam"                             0.0000    0.0000    0.5000
+ 130 "Morten Ankerstjerne"                    0.0000    0.0000    0.5000
+ 131 "Morten From Teuber"                     0.0000    0.0000    0.5000
+ 132 "Morten Warnick Staehr"                  0.0000    0.0000    0.5000
+ 133 "Natalia Havelund Andersen"              0.0000    0.0000    0.5000
+ 134 "Natasha Kure Oreskov"                   0.0000    0.0000    0.5000
+ 135 "Navid Akbari"                           0.0000    0.0000    0.5000
+ 136 "Nicki Floejgaard Soelberg"              0.0000    0.0000    0.5000
+ 137 "Nicolas Palm Perez"                     0.0000    0.0000    0.5000
+ 138 "Nicoline Lyng Strange"                  0.0000    0.0000    0.5000
+ 139 "Niels Christian Rand Momsen"            0.0000    0.0000    0.5000
+ 140 "Niels Wonsyld"                          0.0000    0.0000    0.5000
+ 141 "Niklas Anders Gaardsvoll"               0.0000    0.0000    0.5000
+ 142 "Niklas Maltzahn"                        0.0000    0.0000    0.5000
+ 143 "Nilas Falster Klitgaard"                0.0000    0.0000    0.5000
+ 144 "Ola Roenning"                           0.0000    0.0000    0.5000
+ 145 "Oliver Hammer Boda"                     0.0000    0.0000    0.5000
+ 146 "Patrik Bohn"                            0.0000    0.0000    0.5000
+ 147 "Peder Heiselberg"                       0.0000    0.0000    0.5000
+ 148 "Pernille Andreasen"                     0.0000    0.0000    0.5000
+ 149 "Peter Madsen"                           0.0000    0.0000    0.5000
+ 150 "Peter Uttenthal"                        0.0000    0.0000    0.5000
+ 151 "Philip Helmbo Work Graae"               0.0000    0.0000    0.5000
+ 152 "Philip Tamimi-Sarnikowski"              0.0000    0.0000    0.5000
+ 153 "Rasmus Bugge"                           0.0000    0.0000    0.5000
+ 154 "Rasmus Kildedal"                        0.0000    0.0000    0.5000
+ 155 "Rasmus Straegaard Emig"                 0.0000    0.0000    0.5000
+ 156 "Rebekka Hjoerleivsdottir"               0.0000    0.0000    0.5000
+ 157 "Ronja Oesterbye Lundgren"               0.0000    0.0000    0.5000
+ 158 "Rune Svendsen"                          0.0000    0.0000    0.5000
+ 159 "Runi Klein Hansen"                      0.0000    0.0000    0.5000
+ 160 "Sacha Jul Jensen"                       0.0000    0.0000    0.5000
+ 161 "Samuel Stokholm Baxter"                 0.0000    0.0000    0.5000
+ 162 "Sanne Winther"                          0.0000    0.0000    0.5000
+ 163 "Sara Anne Ramskov-Andersen"             0.0000    0.0000    0.5000
+ 164 "Sarah Groot Nielsen"                    0.0000    0.0000    0.5000
+ 165 "Sarah Marion Larsen"                    0.0000    0.0000    0.5000
+ 166 "Sif Peiter Lund"                        0.0000    0.0000    0.5000
+ 167 "Sigrid Skovbo Adsersen"                 0.0000    0.0000    0.5000
+ 168 "Simon Arent Vedel"                      0.0000    0.0000    0.5000
+ 169 "Soley Thomsen"                          0.0000    0.0000    0.5000
+ 170 "Solvej Knudsen"                         0.0000    0.0000    0.5000
+ 171 "Soeren Borg Nielsen"                    0.0000    0.0000    0.5000
+ 172 "Soeren Froehlich"                       0.0000    0.0000    0.5000
+ 173 "Stefan Mossor Rathmann"                 0.0000    0.0000    0.5000
+ 174 "Susanne Louise Brink Olsen"             0.0000    0.0000    0.5000
+ 175 "Test Man"                               0.0000    0.0000    0.5000
+ 176 "Theis Valdemar Thomsen"                 0.0000    0.0000    0.5000
+ 177 "Thejs Ehlert Brinckmann"                0.0000    0.0000    0.5000
+ 178 "Thomas Doessing"                        0.0000    0.0000    0.5000
+ 179 "Thomas Michael Mariager Pedersen"       0.0000    0.0000    0.5000
+ 180 "Thomas Soendergaard Eriksen"            0.0000    0.0000    0.5000
+ 181 "Thor Meinert Sundahl"                   0.0000    0.0000    0.5000
+ 182 "Thorvald Wadum Larsen"                  0.0000    0.0000    0.5000
+ 183 "Tobias Dahl Hjorth"                     0.0000    0.0000    0.5000
+ 184 "Tor Hess-Andersen"                      0.0000    0.0000    0.5000
+ 185 "Valentin Rosenberg"                     0.0000    0.0000    0.5000
+ 186 "Vega Theil Carstensen"                  0.0000    0.0000    0.5000
+ 187 "William Kurdahl Larsen"                 0.0000    0.0000    0.5000
+*Arcs
+ 121    4 1 
+ 121   58 1 
+ 121   66 1 
+ 121   93 1 
+ 121  101 1 
+ 121  131 1 
+ 121  134 1 
+ 121  139 1 
+  33    4 1 
+  33   66 1 
+  33  101 1 
+  33  121 1 
+  33  131 1 
+  56  133 1 
+  56  164 1 
+  50  167 1 
+   4    5 1 
+   4   66 1 
+   4   95 1 
+   4  121 1 
+  40  108 1 
+  79  123 1 
+  79  168 1 
+  88   22 1 
+  88   79 1 
+  88  123 1 
+  88  168 1 
+  88  180 1 
+ 123   79 1 
+ 123  168 1 
+ 168   79 1 
+ 168   88 1 
+ 168  123 1 
+ 168  153 1 
+ 168  180 1 
+ 180   79 1 
+ 180   88 1 
+  86   42 1 
+  86   81 1 
+  86   98 1 
+  86  103 1 
+  86  145 1 
+  86  186 1 
+  32  102 1 
+ 164   56 1 
+ 164  118 1 
+ 164  133 1 
+ 104   21 1 
+ 104  162 1 
+ 104  172 1 
+ 100   43 1 
+ 100  104 1 
+ 104   21 1 
+ 104  162 1 
+ 104  172 1 
+  67  104 1 
+  67  105 1 
+  96  172 1 
+  96  187 1 
+  24  159 1 
+  24  169 1 
+  24  172 1 
+  34    9 1 
+  34  119 1 
+ 105   67 1 
+   9   34 1 
+   9  142 1 
+   9  150 1 
+ 162   21 1 
+ 162   24 1 
+ 162   61 1 
+ 162  104 1 
+ 162  105 1 
+ 162  142 1 
+ 162  172 1 
+  31  174 1 
+   8    6 1 
+   8   74 1 
+   8   77 1 
+   8   91 1 
+   8  125 1 
+   8  176 1 
+ 173  125 1 
+ 173  125 1 
+  77    6 1 
+  77    8 1 
+  77   74 1 
+  77  125 1 
+ 173  125 1 
+ 132  141 1 
+ 132  173 1 
+ 182   16 1 
+ 182   36 1 
+ 182   94 1 
+ 182   97 1 
+  68    3 1 
+  68  118 1 
+ 169   22 1 
+ 169   39 1 
+ 169   75 1 
+ 169   88 1 
+ 169  133 1 
+ 113    6 1 
+ 113   11 1 
+ 113   13 1 
+ 113   20 1 
+ 113   48 1 
+ 113  107 1 
+ 113  109 1 
+ 113  110 1 
+  84   28 1 
+  84   92 1 
+  16  182 1 
+  58   13 1 
+  58  134 1 
+  58  139 1 
+  58  143 1 
+  20   42 1 
+  20  137 1 
+  20  145 1 
+  20  166 1 
+  20  186 1 
+ 139   58 1 
+ 139   93 1 
+ 139  143 1 
+ 109   11 1 
+ 109   13 1 
+ 109   93 1 
+ 109  110 1 
+ 109  113 1 
+ 107   13 1 
+ 107   22 1 
+ 107   28 1 
+ 107   56 1 
+ 107   84 1 
+ 107   92 1 
+ 107  109 1 
+ 107  111 1 
+ 107  133 1 
+ 107  137 1 
+ 107  166 1 
+ 107  169 1 
+  70   30 1 
+  70   75 1 
+  70  103 1 
+  70  131 1 
+  70  151 1 
+ 184   59 1 
+   6    8 1 
+   6   77 1 
+  48   17 1 
+  48  109 1 
+  48  110 1 
+  13   11 1 
+  13  107 1 
+  13  109 1 
+  13  110 1 
+  13  113 1 
+  13  153 1 
+  91   82 1 
+  91  125 1 
+  91  176 1 
+  97   36 1 
+  97   45 1 
+  82   26 1 
+  82   91 1 
+  82  176 1 
+  82  179 1 
+ 176    6 1 
+ 176    8 1 
+ 176   26 1 
+ 176   82 1 
+ 176   91 1 
+ 176  125 1 
+ 176  173 1 
+ 176  171 1 
+ 176  179 1 
+  92   28 1 
+  92   84 1 
+  92  110 1 
+  92  153 1 
+  36   45 1 
+  36   94 1 
+  36   97 1 
+  36  147 1 
+  36  182 1 
+  94   31 1 
+  94   36 1 
+  94   45 1 
+  94   93 1 
+  94   97 1 
+  22   88 1 
+  22  107 1 
+ 159   24 1 
+ 159  116 1 
+ 159  127 1 
+ 159  159 1 
+ 127   22 1 
+ 127  174 1 
+  74   74 1 
+  39   22 1 
+  39  177 1 
+  37  120 1 
+  37  140 1 
+  37  152 1 
+  37  166 1 
+  54   19 1 
+  54   26 1 
+  54   74 1 
+  19   15 1 
+  19   18 1 
+  19   40 1 
+  19   74 1 
+  19  106 1 
+  19  109 1 
+  19  128 1 
+  19  167 1 
+  19  171 1 
+ 174   22 1 
+ 174  127 1 
