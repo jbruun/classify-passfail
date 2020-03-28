@@ -1,0 +1,315 @@
+---
+title: "Load and accumulate networks"
+author: "Adrienne Traxler & Jesper Bruun"
+date: "3/28/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+This document is part of the supplemental material for the paper: 
+sample(Traxler, A. & Bruun, J.) (202x) Classifying Passing and Failing xxx . JOURNAL. DOI. 
+
+This markdown takes you through the R-script, "loadAllNetworks.r". The purpose of the script is use the igraph package to load and prepare the networks on which we will perform our analyses. Moreover, the script attaches attributes to the network, such as gender, grades and fci-pre test scores. The pre-test scores includes NAs from students who did not answer them. We employ different strategies for dealing with this. We load networks for each week separately, and we also add networks per week. In adding networks per week, we create accumulated networks; an accumulated network for week 2 is obtained by adding links from week 2 to week 1. The accumulated network for week 3 then adds links from week 3 to the accumulated network of week 2 and so on. 
+
+```{r packages, echo = FALSE}
+library(igraph)
+```
+
+## Loading attributes
+Apart from the networks, the data set includes a number of attributes. We start by loading these. 
+```{r attributes, echo = TRUE}
+###Loading node attributes###
+##These will be attached to networks as node attributes later###
+
+attributes<-read.csv("data/SNA_ESERA2013.csv")
+FCI_PRE<-c(17,NA,NA,28,26,18,NA,15,26,13,30,27,23,20,27,24,24,15,24,19,9,5,14,28,16,29,NA,
+           19,NA,27,NA,9,17,12,NA,29,29,NA,24,8,NA,15,18,NA,21,NA,12,28,18,16,NA,NA,NA,27,
+           24,23,NA,13,16,26,10,23,25,22,NA,29,6,10,NA,23,NA,NA,29,21,26,NA,24,17,15,NA,20,
+           23,25,27,NA,11,15,NA,29,NA,12,20,10,20,9,17,26,22,NA,NA,23,24,NA,18,7,25,16,19,
+           23,27,29,23,22,NA,7,17,NA,24,25,6,26,NA,19,21,14,23,28,13,NA,24,19,19,10,NA,24,
+           NA,26,12,27,18,29,12,27,23,28,11,14,NA,23,NA,16,21,26,8,20,NA,NA,19,10,15,29,NA,
+           6,18,NA,8,20,26,8,NA,25,18,20,8,NA,15,16,NA,26,26,21,29,NA,11,NA,24,24)
+SOG<-c(6,NA,9,20,7,0,11,NA,NA,11,24,NA,NA,20,10,9,6,14,14,17,NA,17,10,NA,NA,22,NA,NA,22,8,
+       24,11,6,NA,NA,24,24,NA,20,14,NA,14,-1,NA,16,NA,NA,24,NA,6,NA,NA,NA,22,22,22,NA,-3,11,
+       NA,NA,-3,7,NA,NA,22,NA,4,NA,20,NA,NA,NA,12,14,NA,14,NA,14,NA,17,NA,14,17,NA,6,0,9,NA,
+       22,9,14,14,NA,-3,NA,24,2,NA,NA,14,8,19,NA,NA,11,17,20,24,24,6,NA,10,NA,NA,
+       11,4,20,NA,9,17,2,22,2,22,14,11,6,NA,NA,2,NA,9,0,0,0,22,NA,0,19,17,NA,22,11,14,4,8,NA,
+       NA,NA,17,9,20,NA,9,NA,NA,NA,4,NA,17,NA,NA,17,NA,12,11,20,19,NA,9,NA,11,2,NA,9,17,NA,9,
+       14,14,24,NA,0,14,24,NA)
+```
+
+Now, we preprocess some of the attributes. The FCI-data has a number of NAs, and R will as a standard exclude these from calculations. An NA means that the student did not fill out the FCI pre-test. However, this filling out was done in lab-classes of ~30 students and -- We employ three strategies to impute different meanings to these NAs. The first strategy is to impute 0 for each NA. The second is to impute a random score chosen from the scores from students who achieved the same grade as the student in question. The third strategy is part of a categorisation-strategy. All NAs put in one category, while scores are put in three different categories based on Halloun & Hestenes (1995).
+```{r fci-data, echo = TRUE}
+#New FCI_PRE attribute, where NAs are set to zero.
+FCI_PRE_0<-FCI_PRE
+FCI_PRE_0[is.na(FCI_PRE_0)]<-0
+
+#New FCI_PRE attribute where NAs are replaced by a sample
+FCI_PRE_S<-FCI_PRE
+FCI_PRE_S[is.na(FCI_PRE) & attributes$Course.Grade==-3]<-sample(FCI_PRE[!is.na(FCI_PRE) 
+                                                      & attributes$Course.Grade==-3],1)
+FCI_PRE_S[is.na(FCI_PRE)& attributes$Course.Grade==0]<-sample(FCI_PRE[!is.na(FCI_PRE)
+                                                      & attributes$Course.Grade==0],8)
+FCI_PRE_S[is.na(FCI_PRE)& attributes$Course.Grade==2]<-sample(FCI_PRE[!is.na(FCI_PRE)
+                                                      & attributes$Course.Grade==2],5)
+FCI_PRE_S[is.na(FCI_PRE)& attributes$Course.Grade==4]<-sample(FCI_PRE[!is.na(FCI_PRE)
+                                                      & attributes$Course.Grade==4],1)
+FCI_PRE_S[is.na(FCI_PRE)& attributes$Course.Grade==7]<-sample(FCI_PRE[!is.na(FCI_PRE)
+                                                      & attributes$Course.Grade==7],3)
+FCI_PRE_S[is.na(FCI_PRE)& attributes$Course.Grade==10]<-sample(FCI_PRE[!is.na(FCI_PRE)
+                                                      & attributes$Course.Grade==10],1)
+
+attributes$Course.Grade[attributes$Course.Grade==100]<-NA #R counts NA in the above...
+#New FCI_PRE attribute, where we make four classes. Three based on score and 1 based on NAs. 
+#Classification based on 
+#Halloun & Hestenes 1995 (Interpreting the Force Concept Inventory): 
+#http://modeling.asu.edu/R&E/InterFCI.pdf 
+#NA is Class 1. Below 60% correct (17 or less) is Class 2, "below entry level" 
+#(see p. 6 in H&H). Between 60% and 85% (17-25) is "entry level". Above 85% (26) is expert. 
+FCI_PRE_C<-vector()
+FCI_PRE_C[is.na(FCI_PRE)]<-1
+FCI_PRE_C[FCI_PRE<18]<-2
+FCI_PRE_C[FCI_PRE>=18 & FCI_PRE<=25]<-3
+FCI_PRE_C[FCI_PRE>25]<-4
+
+```
+
+Next, since we will be analysing passing and failing the course, we create a new attribute based on the course grade. The grade 2 is the minimum passing grade. We make a distinction between passing (grades 2, 4, 7, 10, 12) vs failing (-3, 0) and just passing vs just failing (2 vs. 0). 
+```{r passfail, echo = TRUE}
+PASS<-vector(length = 187)
+PASS[attributes$Course.Grade<2]<-0
+PASS[attributes$Course.Grade>=2]<-1
+JUSTPASS<-vector(length=187)
+JUSTPASS<-NA
+JUSTPASS[attributes$Course.Grade==0]<-0
+JUSTPASS[attributes$Course.Grade==2]<-1
+
+```
+
+We append the new attributes to the attributes data frame. 
+
+```{r assign, echo = TRUE}
+attributes$fci_pre<-FCI_PRE
+attributes$fci_pre_0<-FCI_PRE_0
+attributes$fci_pre_s<-FCI_PRE_S
+attributes$fci_pre_c<-FCI_PRE_C
+attributes$sog<-SOG
+attributes$pass<-PASS
+attributes$justpass<-JUSTPASS
+```
+
+## Loading networks
+Networks are loaded in subfolders of the data/networks folder. Is in Bruun & Brewe (2013), we use networks in which links signify communication about problems solving (PS), conceptual discussions (CD), and in-class social interactions (ICS). Here we load and display the networks for each of the weeks for which we have data. Networks are loaded into arrays per type. 
+```{r loadNetworks, echo = TRUE}
+# Import PS weekly networks
+dirs <- list.files("data/networks/")
+files <- c("week36-37physStandQ1.net","AnonymousWeek38physStandQ1.net",
+           "week39physStandQ1.net","week40physStandQ1.net","week42physStandQ1.net",
+           "week43physStandQ1.net","week44physQ1Standardized.net")
+paths <- paste("data/networks",dirs,files,sep="/")
+weeksPS <- lapply(paths,read.graph,format="pajek")
+names(weeksPS) <- c("week36-37","week38","week39","week40","week42","week43","week44")
+weeksPS
+
+# Import networks from their various directories
+dirs <- list.files("data/networks/")
+files <- c("week36-37physStandQ2.net","AnonymousWeek38physStandQ2.net",
+           "week39physStandQ2.net","week40physStandQ2.net","week42physStandQ2.net",
+           "week43physStandQ2.net","week44physQ2Standardized.net")
+paths <- paste("data/networks",dirs,files,sep="/")
+weeksCD <- lapply(paths,read.graph,format="pajek")
+names(weeksCD) <- c("week36-37","week38","week39","week40","week42","week43","week44")
+weeksCD
+
+dirs <- list.files("data/networks/")
+files <- c("week36-37socStandQ1.net","AnonymousWeek38SocStandQ1.net",
+           "week39socStandQ1.net","week40socStandQ1.net","week42socStandQ1.net",
+           "week43socStandQ1.net","week44socQ1Standardized.net")
+paths <- paste("data/networks",dirs,files,sep="/")
+weeksICS <- lapply(paths,read.graph,format="pajek")
+names(weeksICS) <- c("week36-37","week38","week39","week40","week42","week43","week44")
+weeksICS
+```
+
+## Preprocessing networks
+To facilitate our joint analyses of the networks, we make sure all relevant links have weight 1 and that all links that echo connections in a different network layer are deleted for each type of network for each week. 
+```{r preprocess, echo = TRUE}
+###PS###
+#In one network, links were given the weight "NA". 
+lapply(weeksPS,function(x) table(E(x)$weight,useNA="ifany"))
+E(weeksPS$week38)$weight[is.na(E(weeksPS$week38)$weight)] <- 1
+# Remove zero-weight edges -- these appear when links in another layer but not in this layer
+gzero <- lapply(weeksPS,function(x) x-E(x)[weight==0])
+lapply(gzero,function(x) sum(is.multiple(x)))
+graphsPS <- lapply(gzero,simplify,edge.attr.comb="first")
+#Evidence of cleansing
+lapply(graphsPS,function(x) table(E(x)$weight,useNA="ifany"))
+
+##CD###
+#In one network, links were given the weight "NA". 
+lapply(weeksCD,function(x) table(E(x)$weight,useNA="ifany"))
+E(weeksCD$week38)$weight[is.na(E(weeksCD$week38)$weight)] <- 1
+# Remove zero-weight edges -- these appear when links in another layer but not in this layer
+gzero <- lapply(weeksCD,function(x) x-E(x)[weight==0])
+lapply(gzero,function(x) sum(is.multiple(x)))
+graphsCD <- lapply(gzero,simplify,edge.attr.comb="first")
+#Evidence of cleansing
+lapply(graphsCD,function(x) table(E(x)$weight,useNA="ifany"))
+
+###ICS###
+#In one network, links were given the weight "NA" and in another no weight was given.
+lapply(weeksICS,function(x) table(E(x)$weight,useNA="ifany"))
+# Add weight 1 to edges to weeksICS 38 and 44
+E(weeksICS$week38)$weight[is.na(E(weeksICS$week38)$weight)] <- 1
+weeksICS$week44 <- set.edge.attribute(weeksICS$week44, "weight", value=1)
+# Remove zero-weight edges
+gzero <- lapply(weeksICS,function(x) x-E(x)[weight==0])
+lapply(gzero,function(x) sum(is.multiple(x)))
+graphsICS <- lapply(gzero,simplify,edge.attr.comb="first") # defaults to remove-loops=TRUE
+#Evidence of cleansing
+lapply(graphsICS,function(x) table(E(x)$weight,useNA="ifany"))
+```
+
+
+## Making accumulated networks and apply attributes
+```{r accumulated, echo = TRUE}
+###MAKING ACCUMULATED NETWORKS####
+accWeekNets<-function(graphlist,attributes){
+  n<-length(graphlist)
+  accNets<-list()
+  accNets[[1]]<-graphlist[[1]]
+  for(i in 2:n){
+    accNets[[i]]<-graph_from_adjacency_matrix(as_adj(accNets[[i-1]],attr="weight") +
+                                      as_adj(graphlist[[i]],attr="weight"),weighted=T)
+  }
+  for(i in 1:n){
+    V(accNets[[i]])$id<-V(accNets[[i]])$name
+    V(accNets[[i]])$grade<-attributes$Course.Grade
+    V(accNets[[i]])$gender<-attributes$Gender
+    V(accNets[[i]])$age<-attributes$Age
+    V(accNets[[i]])$cohort<-attributes$Cohort
+    V(accNets[[i]])$sog<-attributes$sog
+    V(accNets[[i]])$fci_pre<-attributes$fci_pre
+    V(accNets[[i]])$fci_pre_0<-attributes$fci_pre_0
+    V(accNets[[i]])$fci_pre_s<-attributes$fci_pre_s
+    V(accNets[[i]])$fci_pre_c<-attributes$fci_pre_c
+    V(accNets[[i]])$pass<-attributes$pass
+    V(accNets[[i]])$justpass<-attributes$justpass
+    
+  }
+  return(accNets)
+}
+accPS<-accWeekNets(graphsPS,attributes)
+accCD<-accWeekNets(graphsCD,attributes)
+accICS<-accWeekNets(graphsICS,attributes)
+```
+```{r single, echo = FALSE}
+###APPLY ATTRIBUTES TO SINGLE NETWORKS####
+##NB! Our analyses focus on accumulated networks. 
+##This here for completeness
+applyAttr<-function(g,attributesFrame){
+  
+  V(g)$grade<-attributes$Course.Grade
+  V(g)$gender<-attributes$Gender
+  V(g)$age<-attributes$Age
+  V(g)$cohort<-attributes$Cohort
+  V(g)$sog<-attributes$sog
+  V(g)$fci_pre<-attributes$fci_pre
+  V(g)$fci_pre_0<-attributes$fci_pre_0
+  V(g)$fci_pre_s<-attributes$fci_pre_s
+  V(g)$fci_pre_c<-attributes$fci_pre_c
+  V(g)$pass<-attributes$pass
+  V(g)$justpass<-attributes$justpass
+  
+  return(g)
+}
+weeksPS<-lapply(weeksPS,applyAttr)
+weeksCD<-lapply(weeksCD,applyAttr)
+weeksICS<-lapply(weeksICS,applyAttr)
+```
+
+## Removing irrelevant nodes
+```{r remove, echo = TRUE}
+###REMOVE NODES THAT  THAT REPRESENT TEACHERS
+accPS<-lapply(accPS,delete.vertices,is.na(attributes$Course.Grade))
+accCD<-lapply(accCD,delete.vertices,is.na(attributes$Course.Grade))
+accICS<-lapply(accICS,delete.vertices,is.na(attributes$Course.Grade))
+### NON-PARTICIPATING STUDENTS?###
+biggraph<-graph_from_adjacency_matrix(as_adj(accPS[[7]])+
+                    as_adj(accCD[[7]])+as_adj(accICS[[7]]),weighted = T)
+
+which(degree(biggraph)==0) 
+#There are three isolates (these have a degree of at least 1 in other SINs, 
+#just not PS, CD, and ICS)
+
+accPS<-lapply(accPS,delete.vertices,degree(biggraph)==0)
+accCD<-lapply(accCD,delete.vertices,degree(biggraph)==0)
+accICS<-lapply(accICS,delete.vertices,degree(biggraph)==0)
+```
+
+```{r remove2, echo = FALSE}
+###REMOVE NODES THAT  THAT REPRESENT TEACHERS
+weeksPS<-lapply(weeksPS,delete.vertices,is.na(attributes$Course.Grade))
+weeksCD<-lapply(weeksCD,delete.vertices,is.na(attributes$Course.Grade))
+weeksICS<-lapply(weeksICS,delete.vertices,is.na(attributes$Course.Grade))
+### NON-PARTICIPATING STUDENTS?###
+weeksPS<-lapply(weeksPS,delete.vertices,degree(biggraph)==0)
+weeksCD<-lapply(weeksCD,delete.vertices,degree(biggraph)==0)
+weeksICS<-lapply(weeksICS,delete.vertices,degree(biggraph)==0)
+```
+
+
+## Summarising networks
+### Attributes
+```{r attributesSummary, echo=F}
+par(mfrow=c(2,2))
+plot(table(as.vector(V(accPS[[1]])$grade)), main="grade", ylab="number")
+plot(table(as.vector(V(accPS[[1]])$pass)), main="pass vs. fail", ylab="number")
+plot(table(as.vector(V(accPS[[1]])$justpass)), main="just pass vs. just fail", ylab="number")
+plot(table(as.vector(V(accPS[[1]])$sog)), main="sum of grades", sub="in second block",ylab="number")
+
+par(mfrow=c(2,2))
+plot(table(as.vector(V(accPS[[1]])$fci_pre)), main="FCI pre scores", ylab="number")
+plot(table(as.vector(V(accPS[[1]])$fci_pre_0)), main="FCI pre scores", sub="imputed 0's for NAs", ylab="number")
+plot(table(as.vector(V(accPS[[1]])$fci_pre_s)), main="FCI pre scores", sub="imputed random number from same grades for NAs", ylab="number")
+plot(table(as.vector(V(accPS[[1]])$fci_pre_c)), main="FCI pre scores", sub="1 is NA, 2 is < 18, 4 is > 25", ylab="number")
+par(mfrow=c(2,2))
+plot(table(as.vector(V(accPS[[1]])$gender)), main="gender", sub="female 0, male  1", ylab="number")
+plot(table(as.vector(V(accPS[[1]])$age)), main="age", sub="100 means age unknown",ylab="number")
+plot(table(as.vector(V(accPS[[1]])$cohort)), main="class section", ylab="number")
+```
+### Plots
+```{r plots, echo = F}
+par(mfrow=c(2,2))
+plot(degree.distribution(accPS[[1]],cumulative=T),log="xy", main="PS week 1")
+plot(degree.distribution(accPS[[2]],cumulative=T),log="xy", main="PS week 2")
+plot(degree.distribution(accPS[[3]],cumulative=T),log="xy", main="PS week 3")
+plot(degree.distribution(accPS[[4]],cumulative=T),log="xy", main="PS week 4")
+par(mfrow=c(2,2))
+plot(degree.distribution(accPS[[5]],cumulative=T),log="xy", main="PS week 5")
+plot(degree.distribution(accPS[[6]],cumulative=T),log="xy", main="PS week 6")
+plot(degree.distribution(accPS[[7]],cumulative=T),log="xy", main="PS week 7")
+
+par(mfrow=c(2,2))
+plot(degree.distribution(accCD[[1]],cumulative=T),log="xy", main="CD week 1")
+plot(degree.distribution(accCD[[2]],cumulative=T),log="xy", main="CD week 2")
+plot(degree.distribution(accCD[[3]],cumulative=T),log="xy", main="CD week 3")
+plot(degree.distribution(accCD[[4]],cumulative=T),log="xy", main="CD week 4")
+par(mfrow=c(2,2))
+plot(degree.distribution(accCD[[5]],cumulative=T),log="xy", main="CD week 5")
+plot(degree.distribution(accCD[[6]],cumulative=T),log="xy", main="CD week 6")
+plot(degree.distribution(accCD[[7]],cumulative=T),log="xy", main="CD week 7")
+
+par(mfrow=c(2,2))
+plot(degree.distribution(accICS[[1]],cumulative=T),log="xy", main="ICS week 1")
+plot(degree.distribution(accICS[[2]],cumulative=T),log="xy", main="ICS week 2")
+plot(degree.distribution(accICS[[3]],cumulative=T),log="xy", main="ICS week 3")
+plot(degree.distribution(accICS[[4]],cumulative=T),log="xy", main="ICS week 4")
+par(mfrow=c(2,2))
+plot(degree.distribution(accICS[[5]],cumulative=T),log="xy", main="ICS week 5")
+plot(degree.distribution(accICS[[6]],cumulative=T),log="xy", main="ICS week 6")
+plot(degree.distribution(accICS[[7]],cumulative=T),log="xy", main="ICS week 7")
+
+```
