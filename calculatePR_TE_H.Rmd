@@ -1,0 +1,250 @@
+---
+title: "Calculate Page rank, Target Entropy, and Hide"
+author: "Jesper Bruun & Adrienne Traxleer"
+date: "3/28/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Required functions
+
+```{r cars}
+#required functions
+source("functions/tarEnt.r")
+source("functions/searchInf.r")
+```
+
+## Calculating Page rank
+```{r pagerank, eval=F}
+#pagerank
+accPS_PR<-lapply(accPS,page.rank)
+accCD_PR<-lapply(accCD,page.rank)
+accICS_PR<-lapply(accICS,page.rank)
+singlePS_PR<-lapply(weeksPS,page.rank)
+singleCD_PR<-lapply(weeksCD,page.rank)
+singleICS_PR<-lapply(weeksICS,page.rank)
+```
+
+## Calculating Target Entropy
+```{r targetentropy, eval=F}
+#target entropy
+accPS_TE<-lapply(accPS,TargetEntropy)
+accCD_TE<-lapply(accCD,TargetEntropy)
+accICS_TE<-lapply(accICS,TargetEntropy)
+singlePS_TE<-lapply(weeksPS,TargetEntropy)
+singleCD_TE<-lapply(weeksCD,TargetEntropy)
+singleICS_TE<-lapply(weeksICS,TargetEntropy)
+```
+
+## Calculating Hide
+```{r hide, eval=F}
+#hide
+accPS_S<-lapply(accPS,sInfMatrix)
+accCD_S<-lapply(accCD,sInfMatrix)
+accICS_S<-lapply(accICS,sInfMatrix)
+singlePS_S<-lapply(weeksPS,sInfMatrix)
+singleCD_S<-lapply(weeksCD,sInfMatrix)
+singleICS_S<-lapply(weeksICS,sInfMatrix)
+
+accPS_H<-lapply(accPS_S,colSums,na.rm=T)
+accCD_H<-lapply(accCD_S,colSums,na.rm=T)
+accICS_H<-lapply(accICS_S,colSums,na.rm=T)
+singlePS_H<-lapply(singlePS_S,colSums,na.rm=T)
+singleCD_H<-lapply(singleCD_S,colSums,na.rm=T)
+singleICS_H<-lapply(singleICS_S,colSums,na.rm=T)
+```
+
+## .RData file with calculations done
+THE PRTEH.RData file contains all calculations
+Here, we load the file and make som comparisons. 
+```{r loadPRTEH, echo=T, eval=T}
+load("data/PRTEH.RData")
+```
+We want to figure out whether there are differences in passing and failing that may be connected to other attributes. We use wilcoxon tests per default, since we do not assume distributions to be normal. There seems to be no gender differences. 
+```{r testgender, echo=T}
+wilcox.test(V(accPS[[1]])$grade[V(accPS[[1]])$gender==1],V(accPS[[1]])$grade[V(accPS[[1]])$gender==0])
+wilcox.test(V(accPS[[1]])$pass[V(accPS[[1]])$gender==1],V(accPS[[1]])$pass[V(accPS[[1]])$gender==0])
+wilcox.test(V(accPS[[1]])$justpass[V(accPS[[1]])$gender==1],V(accPS[[1]])$justpass[V(accPS[[1]])$gender==0])
+```
+### FCI NAs excluded
+```{r testFCI1, echo=T}
+par(mfrow=c(2,2))
+plot(table(V(accPS[[1]])$fci_pre[V(accPS[[1]])$pass==1]),ylab="N",xlab="score",main="FCI pre of passing students")
+plot(table(V(accPS[[1]])$fci_pre[V(accPS[[1]])$pass==0]),ylab="N",xlab="score",main="FCI pre of failing students")
+plot(table(V(accPS[[1]])$fci_pre[V(accPS[[1]])$justpass==1]),ylab="N",xlab="score",main="FCI pre of just passing students")
+plot(table(V(accPS[[1]])$fci_pre[V(accPS[[1]])$justpass==0]),ylab="N",xlab="score",main="FCI pre of just failing students")
+```
+### FCI impute 0 if NA
+```{r testFCI2, echo=T}
+par(mfrow=c(2,2))
+plot(table(V(accPS[[1]])$fci_pre_0[V(accPS[[1]])$pass==1]),ylab="N",xlab="score",main="FCI pre of passing students")
+plot(table(V(accPS[[1]])$fci_pre_0[V(accPS[[1]])$pass==0]),ylab="N",xlab="score",main="FCI pre of failing students")
+plot(table(V(accPS[[1]])$fci_pre_0[V(accPS[[1]])$justpass==1]),ylab="N",xlab="score",main="FCI pre of just passing students")
+plot(table(V(accPS[[1]])$fci_pre_0[V(accPS[[1]])$justpass==0]),ylab="N",xlab="score",main="FCI pre of just failing students")
+```
+### FCI impute random score selected from others with same grade if NA
+```{r testFCI3, echo=T}
+par(mfrow=c(2,2))
+plot(table(V(accPS[[1]])$fci_pre_s[V(accPS[[1]])$pass==1]),ylab="N",xlab="score",main="FCI pre of passing students")
+plot(table(V(accPS[[1]])$fci_pre_s[V(accPS[[1]])$pass==0]),ylab="N",xlab="score",main="FCI pre of failing students")
+plot(table(V(accPS[[1]])$fci_pre_s[V(accPS[[1]])$justpass==1]),ylab="N",xlab="score",main="FCI pre of just passing students")
+plot(table(V(accPS[[1]])$fci_pre_s[V(accPS[[1]])$justpass==0]),ylab="N",xlab="score",main="FCI pre of just failing students")
+```
+
+### FCI categories
+
+```{r testFCI4, echo=T}
+
+par(mfrow=c(2,2))
+plot(table(V(accPS[[1]])$fci_pre_c[V(accPS[[1]])$pass==1]),ylab="N",xlab="score",main="FCI pre of passing students")
+plot(table(V(accPS[[1]])$fci_pre_c[V(accPS[[1]])$pass==0]),ylab="N",xlab="score",main="FCI pre of failing students")
+plot(table(V(accPS[[1]])$fci_pre_c[V(accPS[[1]])$justpass==1]),ylab="N",xlab="score",main="FCI pre of just passing students")
+plot(table(V(accPS[[1]])$fci_pre_c[V(accPS[[1]])$justpass==0]),ylab="N",xlab="score",main="FCI pre of just failing students")
+```
+
+### Section number
+
+```{r testcohort, echo=T}
+par(mfrow=c(1,2))
+c1<-table(V(accPS[[1]])$pass[V(accPS[[1]])$cohort==1])/length(which(V(accPS[[1]])$cohort==1))
+c2<-table(V(accPS[[1]])$pass[V(accPS[[1]])$cohort==2])/length(which(V(accPS[[1]])$cohort==2))
+c3<-table(V(accPS[[1]])$pass[V(accPS[[1]])$cohort==3])/length(which(V(accPS[[1]])$cohort==3))
+c4<-table(V(accPS[[1]])$pass[V(accPS[[1]])$cohort==4])/length(which(V(accPS[[1]])$cohort==4))
+c5<-table(V(accPS[[1]])$pass[V(accPS[[1]])$cohort==5])/length(which(V(accPS[[1]])$cohort==5))
+c6<-table(V(accPS[[1]])$pass[V(accPS[[1]])$cohort==6])/length(which(V(accPS[[1]])$cohort==6))
+c10<-table(V(accPS[[1]])$pass[V(accPS[[1]])$cohort==10])/length(which(V(accPS[[1]])$cohort==10))
+cohfail<-c(c1[1],c2[1],c3[1],c4[1],c5[1],c6[1],c10[1])
+cohpass<-c(c1[2],c2[2],c3[2],c4[2],c5[2],c6[2],c10[2])
+plot(cohpass,xlab="Section number",ylab="Fraction",ylim=c(0,1),main="Passing and failing per section",col="darkgreen")
+points(cohfail,col="red")
+cj1<-table(V(accPS[[1]])$justpass[V(accPS[[1]])$cohort==1])/length(which(V(accPS[[1]])$cohort==1))
+cj2<-table(V(accPS[[1]])$justpass[V(accPS[[1]])$cohort==2])/length(which(V(accPS[[1]])$cohort==2))
+cj3<-table(V(accPS[[1]])$justpass[V(accPS[[1]])$cohort==3])/length(which(V(accPS[[1]])$cohort==3))
+cj4<-table(V(accPS[[1]])$justpass[V(accPS[[1]])$cohort==4])/length(which(V(accPS[[1]])$cohort==4))
+cj5<-table(V(accPS[[1]])$justpass[V(accPS[[1]])$cohort==5])/length(which(V(accPS[[1]])$cohort==5))
+cj6<-table(V(accPS[[1]])$justpass[V(accPS[[1]])$cohort==6])/length(which(V(accPS[[1]])$cohort==6))
+cj10<-table(V(accPS[[1]])$justpass[V(accPS[[1]])$cohort==10])/length(which(V(accPS[[1]])$cohort==10))
+cohjfail<-c(cj1[1],cj2[1],cj3[1],cj4[1],cj5[1],cj6[1],cj10[1])
+cohjpass<-c(cj1[2],cj2[2],cj3[2],cj4[2],cj5[2],cj6[2],cj10[2])
+plot(cohjpass,xlab="Section number",ylab="Fraction of whole section",ylim=c(0,1),main="Just passing vs just failing",col="darkgreen")
+points(cohjfail,col="red")
+
+```
+## Problem solving layer
+### Page rank difference 
+```{r testpagerank, echo=T}
+par(mfrow=c(2,2))
+hist(accPS_PR[[7]]$vector[V(accPS[[7]])$pass==1],main="Pagerank of passing")
+hist(accPS_PR[[7]]$vector[V(accPS[[7]])$pass==0],main="Pagerank of failing")
+hist(accPS_PR[[7]]$vector[V(accPS[[7]])$justpass==1],main="Pagerank of just passing")
+hist(accPS_PR[[7]]$vector[V(accPS[[7]])$justpass==0],main="Pagerank of just failing")
+t.test(accPS_PR[[7]]$vector[V(accPS[[7]])$pass==1],accPS_PR[[7]]$vector[V(accPS[[7]])$pass==0])
+wilcox.test(accPS_PR[[7]]$vector[V(accPS[[7]])$pass==1],accPS_PR[[7]]$vector[V(accPS[[7]])$pass==0])
+t.test(accPS_PR[[7]]$vector[V(accPS[[7]])$justpass==1],accPS_PR[[7]]$vector[V(accPS[[7]])$justpass==0])
+wilcox.test(accPS_PR[[7]]$vector[V(accPS[[7]])$justpass==1],accPS_PR[[7]]$vector[V(accPS[[7]])$justpass==0])
+```
+
+```{r testtargetentropy, echo=T}
+par(mfrow=c(2,2))
+hist(accPS_TE[[7]][V(accPS[[7]])$pass==1],main="Target Entropy of passing")
+hist(accPS_TE[[7]][V(accPS[[7]])$pass==0],main="Target Entropy of failing")
+hist(accPS_TE[[7]][V(accPS[[7]])$justpass==1],main="Target Entropy of just passing")
+hist(accPS_TE[[7]][V(accPS[[7]])$justpass==0],main="Target Entropy of just failing")
+t.test(accPS_TE[[7]][V(accPS[[7]])$pass==1],accPS_TE[[7]][V(accPS[[7]])$pass==0])
+wilcox.test(accPS_TE[[7]][V(accPS[[7]])$pass==1],accPS_TE[[7]][V(accPS[[7]])$pass==0])
+t.test(accPS_TE[[7]][V(accPS[[7]])$justpass==1],accPS_TE[[7]][V(accPS[[7]])$justpass==0])
+wilcox.test(accPS_TE[[7]][V(accPS[[7]])$justpass==1],accPS_TE[[7]][V(accPS[[7]])$justpass==0])
+```
+
+```{r testhidePS, echo=T}
+par(mfrow=c(2,2))
+hist(accPS_H[[7]][V(accPS[[7]])$pass==1],main="Hide of passing")
+hist(accPS_H[[7]][V(accPS[[7]])$pass==0],main="Hide of failing")
+hist(accPS_H[[7]][V(accPS[[7]])$justpass==1],main="Hide of just passing")
+hist(accPS_H[[7]][V(accPS[[7]])$justpass==0],main="Hide of just failing")
+t.test(accPS_H[[7]][V(accPS[[7]])$pass==1],accPS_H[[7]][V(accPS[[7]])$pass==0])
+wilcox.test(accPS_H[[7]][V(accPS[[7]])$pass==1],accPS_H[[7]][V(accPS[[7]])$pass==0])
+t.test(accPS_H[[7]][V(accPS[[7]])$justpass==1],accPS_H[[7]][V(accPS[[7]])$justpass==0])
+wilcox.test(accPS_H[[7]][V(accPS[[7]])$justpass==1],accPS_H[[7]][V(accPS[[7]])$justpass==0])
+```
+
+
+## Concept Discussion layer
+### Page rank difference 
+```{r testpagerankCD, echo=T}
+par(mfrow=c(2,2))
+hist(accCD_PR[[7]]$vector[V(accCD[[7]])$pass==1],main="Pagerank of passing")
+hist(accCD_PR[[7]]$vector[V(accCD[[7]])$pass==0],main="Pagerank of failing")
+hist(accCD_PR[[7]]$vector[V(accCD[[7]])$justpass==1],main="Pagerank of just passing")
+hist(accCD_PR[[7]]$vector[V(accCD[[7]])$justpass==0],main="Pagerank of just failing")
+t.test(accCD_PR[[7]]$vector[V(accCD[[7]])$pass==1],accCD_PR[[7]]$vector[V(accCD[[7]])$pass==0])
+wilcox.test(accCD_PR[[7]]$vector[V(accCD[[7]])$pass==1],accCD_PR[[7]]$vector[V(accCD[[7]])$pass==0])
+t.test(accCD_PR[[7]]$vector[V(accCD[[7]])$justpass==1],accCD_PR[[7]]$vector[V(accCD[[7]])$justpass==0])
+wilcox.test(accCD_PR[[7]]$vector[V(accCD[[7]])$justpass==1],accCD_PR[[7]]$vector[V(accCD[[7]])$justpass==0])
+```
+
+```{r testtargetentropyCD, echo=T}
+par(mfrow=c(2,2))
+hist(accCD_TE[[7]][V(accCD[[7]])$pass==1],main="Target Entropy of passing")
+hist(accCD_TE[[7]][V(accCD[[7]])$pass==0],main="Target Entropy of failing")
+hist(accCD_TE[[7]][V(accCD[[7]])$justpass==1],main="Target Entropy of just passing")
+hist(accCD_TE[[7]][V(accCD[[7]])$justpass==0],main="Target Entropy of just failing")
+t.test(accCD_TE[[7]][V(accCD[[7]])$pass==1],accCD_TE[[7]][V(accCD[[7]])$pass==0])
+wilcox.test(accCD_TE[[7]][V(accCD[[7]])$pass==1],accCD_TE[[7]][V(accCD[[7]])$pass==0])
+t.test(accCD_TE[[7]][V(accCD[[7]])$justpass==1],accCD_TE[[7]][V(accCD[[7]])$justpass==0])
+wilcox.test(accCD_TE[[7]][V(accCD[[7]])$justpass==1],accCD_TE[[7]][V(accCD[[7]])$justpass==0])
+```
+
+```{r testhideCD, echo=T}
+par(mfrow=c(2,2))
+hist(accCD_H[[7]][V(accCD[[7]])$pass==1],main="Hide of passing")
+hist(accCD_H[[7]][V(accCD[[7]])$pass==0],main="Hide of failing")
+hist(accCD_H[[7]][V(accCD[[7]])$justpass==1],main="Hide of just passing")
+hist(accCD_H[[7]][V(accCD[[7]])$justpass==0],main="Hide of just failing")
+t.test(accCD_H[[7]][V(accCD[[7]])$pass==1],accCD_H[[7]][V(accCD[[7]])$pass==0])
+wilcox.test(accCD_H[[7]][V(accCD[[7]])$pass==1],accCD_H[[7]][V(accCD[[7]])$pass==0])
+t.test(accCD_H[[7]][V(accCD[[7]])$justpass==1],accCD_H[[7]][V(accCD[[7]])$justpass==0])
+wilcox.test(accCD_H[[7]][V(accCD[[7]])$justpass==1],accCD_H[[7]][V(accCD[[7]])$justpass==0])
+```
+
+## In Class Social layer
+### Page rank difference 
+```{r testpagerankICS, echo=T}
+par(mfrow=c(2,2))
+hist(accICS_PR[[7]]$vector[V(accICS[[7]])$pass==1],main="Pagerank of passing")
+hist(accICS_PR[[7]]$vector[V(accICS[[7]])$pass==0],main="Pagerank of failing")
+hist(accICS_PR[[7]]$vector[V(accICS[[7]])$justpass==1],main="Pagerank of just passing")
+hist(accICS_PR[[7]]$vector[V(accICS[[7]])$justpass==0],main="Pagerank of just failing")
+t.test(accICS_PR[[7]]$vector[V(accICS[[7]])$pass==1],accICS_PR[[7]]$vector[V(accICS[[7]])$pass==0])
+wilcox.test(accICS_PR[[7]]$vector[V(accICS[[7]])$pass==1],accICS_PR[[7]]$vector[V(accICS[[7]])$pass==0])
+t.test(accICS_PR[[7]]$vector[V(accICS[[7]])$justpass==1],accICS_PR[[7]]$vector[V(accICS[[7]])$justpass==0])
+wilcox.test(accICS_PR[[7]]$vector[V(accICS[[7]])$justpass==1],accICS_PR[[7]]$vector[V(accICS[[7]])$justpass==0])
+```
+
+```{r testtargetentropyICS, echo=T}
+par(mfrow=c(2,2))
+hist(accICS_TE[[7]][V(accICS[[7]])$pass==1],main="Target Entropy of passing")
+hist(accICS_TE[[7]][V(accICS[[7]])$pass==0],main="Target Entropy of failing")
+hist(accICS_TE[[7]][V(accICS[[7]])$justpass==1],main="Target Entropy of just passing")
+hist(accICS_TE[[7]][V(accICS[[7]])$justpass==0],main="Target Entropy of just failing")
+t.test(accICS_TE[[7]][V(accICS[[7]])$pass==1],accICS_TE[[7]][V(accICS[[7]])$pass==0])
+wilcox.test(accICS_TE[[7]][V(accICS[[7]])$pass==1],accICS_TE[[7]][V(accICS[[7]])$pass==0])
+t.test(accICS_TE[[7]][V(accICS[[7]])$justpass==1],accICS_TE[[7]][V(accICS[[7]])$justpass==0])
+wilcox.test(accICS_TE[[7]][V(accICS[[7]])$justpass==1],accICS_TE[[7]][V(accICS[[7]])$justpass==0])
+```
+
+```{r testhideICS, echo=T}
+par(mfrow=c(2,2))
+hist(accICS_H[[7]][V(accICS[[7]])$pass==1],main="Hide of passing")
+hist(accICS_H[[7]][V(accICS[[7]])$pass==0],main="Hide of failing")
+hist(accICS_H[[7]][V(accICS[[7]])$justpass==1],main="Hide of just passing")
+hist(accICS_H[[7]][V(accICS[[7]])$justpass==0],main="Hide of just failing")
+t.test(accICS_H[[7]][V(accICS[[7]])$pass==1],accICS_H[[7]][V(accICS[[7]])$pass==0])
+wilcox.test(accICS_H[[7]][V(accICS[[7]])$pass==1],accICS_H[[7]][V(accICS[[7]])$pass==0])
+t.test(accICS_H[[7]][V(accICS[[7]])$justpass==1],accICS_H[[7]][V(accICS[[7]])$justpass==0])
+wilcox.test(accICS_H[[7]][V(accICS[[7]])$justpass==1],accICS_H[[7]][V(accICS[[7]])$justpass==0])
+```
+
