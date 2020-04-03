@@ -7,8 +7,8 @@ Goal for this document is to make exploratory plots and run logistic
 regression for passing and failing in the (single-layer) PS, CD, and ICS
 weekly networks.
 
-**Update 3/30:** Imported data and identified which objects I need. Do
-pass/fail centrality boxplots next.
+**Update 4/3:** Made data frame for pass/fail centrality boxplots, do
+plot commands next.
 
     ## 
     ## Attaching package: 'igraph'
@@ -20,6 +20,21 @@ pass/fail centrality boxplots next.
     ## The following object is masked from 'package:base':
     ## 
     ##     union
+
+    ## 
+    ## Attaching package: 'dplyr'
+
+    ## The following objects are masked from 'package:igraph':
+    ## 
+    ##     as_data_frame, groups, union
+
+    ## The following objects are masked from 'package:stats':
+    ## 
+    ##     filter, lag
+
+    ## The following objects are masked from 'package:base':
+    ## 
+    ##     intersect, setdiff, setequal, union
 
 ## Import data
 
@@ -92,4 +107,42 @@ table(V(accPS[[7]])$justpass, useNA = "ifany")
 
 ## Pass/fail boxplots
 
-DO THIS NEXT
+To do the pass/fail boxplots, I need a data frame with people’s IDs,
+their pass/fail outcomes, and their centrality scores. I need this
+information for each week, with a column for week number as well.
+
+**TEMP HACK:** Need to avoid duplicate node names, so second “Person14”
+gets named "Person16
+
+``` r
+dfPS <- vector("list", length = length(accPS))
+for (i in seq(dfPS)) {
+  df <- igraph::as_data_frame(accPS[[i]], what = "vertices")
+  df$Week <- i
+  df$PageRank <- accPS_PR[[i]]$vector
+  df$tarEnt <- accPS_TE[[i]]
+  df$Hide <- accPS_H[[i]]
+  
+  dfPS[[i]] <- df %>% select(-id)  # ditch id column, it duplicates name + Person14 typo
+}
+dfPS <- bind_rows(dfPS)
+dfPS <- subset(dfPS, select = c(Week, name:Hide))  # reorder to put Week first
+head(dfPS)
+```
+
+    ##   Week    name grade gender age cohort sog fci_pre fci_pre_0 fci_pre_s
+    ## 1    1 Person1     2      1  19      3   6      17        17        17
+    ## 2    1 Person2    -3      1  20     10  NA      NA         0         6
+    ## 3    1 Person3     0      1  22     10   9      NA         0        15
+    ## 4    1 Person4     4      1  19      6  20      28        28        28
+    ## 5    1 Person5     2      1  27      1   7      26        26        26
+    ## 6    1 Person6     4      1  20      2   0      18        18        18
+    ##   fci_pre_c pass justpass Week.1    PageRank    tarEnt       Hide
+    ## 1         2    1        1      1 0.004780164 0.0000000   0.000000
+    ## 2         1    0       NA      1 0.005915686 0.4138169 114.230046
+    ## 3         1    0        0      1 0.004780164 0.0000000   0.000000
+    ## 4         4    1       NA      1 0.005997961 0.0000000  13.228819
+    ## 5         4    1        1      1 0.004780164 0.0000000   0.000000
+    ## 6         3    1       NA      1 0.009249618 1.0000000   3.321928
+
+Now, I think, I can do the boxplots I need?

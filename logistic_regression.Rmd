@@ -11,10 +11,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Goal for this document is to make exploratory plots and run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
 
-**Update 3/30:** Imported data and identified which objects I need. Do pass/fail centrality boxplots next. 
+**Update 4/3:** Made data frame for pass/fail centrality boxplots, do plot commands next. 
 
 ```{r packages, echo = FALSE}
 library(igraph)
+library(dplyr)
 ```
 
 ## Import data
@@ -41,4 +42,37 @@ table(V(accPS[[7]])$justpass, useNA = "ifany")
 
 ## Pass/fail boxplots
 
-DO THIS NEXT
+To do the pass/fail boxplots, I need a data frame with people's IDs, their pass/fail outcomes, and their centrality scores. I need this information for each week, with a column for week number as well. 
+
+**TEMP HACK:** Need to avoid duplicate node names, so second "Person14" gets named "Person16
+```{r, echo = FALSE}
+for (i in seq(accPS)) {
+  V(accPS[[i]])$name[15] <- "Person16"
+  V(accCD[[i]])$name[15] <- "Person16"
+  V(accICS[[i]])$name[15] <- "Person16"
+}
+```
+
+
+```{r}
+dfPS <- vector("list", length = length(accPS))
+for (i in seq(dfPS)) {
+  df <- igraph::as_data_frame(accPS[[i]], what = "vertices")
+  df$Week <- i
+  df$PageRank <- accPS_PR[[i]]$vector
+  df$tarEnt <- accPS_TE[[i]]
+  df$Hide <- accPS_H[[i]]
+  
+  dfPS[[i]] <- df %>% select(-id)  # ditch id column, it duplicates name + Person14 typo
+}
+dfPS <- bind_rows(dfPS)
+dfPS <- subset(dfPS, select = c(Week, name:Hide))  # reorder to put Week first
+head(dfPS)
+```
+
+Now, I think, I can do the boxplots I need?
+
+```{r}
+
+```
+
