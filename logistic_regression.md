@@ -105,6 +105,11 @@ table(V(accPS[[7]])$justpass, useNA = "ifany")
     ##    0    1 <NA> 
     ##   28   39   99
 
+``` r
+nPass <- table(V(accPS[[7]])$pass, useNA = "ifany")
+nJustPass <- table(V(accPS[[7]])$justpass, useNA = "ifany")
+```
+
 ## Pass/fail boxplots
 
 To do the pass/fail boxplots, I need a data frame with people’s IDs,
@@ -127,6 +132,10 @@ for (i in seq(dfPS)) {
 }
 dfPS <- bind_rows(dfPS)
 dfPS <- subset(dfPS, select = c(Week, name:Hide))  # reorder to put Week first
+# Need factors for plotting
+dfPS$Week <- as.factor(dfPS$Week)   
+dfPS$pass <- as.factor(dfPS$pass)
+dfPS$justpass <- as.factor(dfPS$justpass)   
 head(dfPS)
 ```
 
@@ -139,10 +148,52 @@ head(dfPS)
     ## 6    1 Person6     4      1  20      2   0      18        18        18
     ##   fci_pre_c pass justpass Week.1    PageRank    tarEnt       Hide
     ## 1         2    1        1      1 0.004780164 0.0000000   0.000000
-    ## 2         1    0       NA      1 0.005915686 0.4138169 114.230046
+    ## 2         1    0     <NA>      1 0.005915686 0.4138169 114.230046
     ## 3         1    0        0      1 0.004780164 0.0000000   0.000000
-    ## 4         4    1       NA      1 0.005997961 0.0000000  13.228819
+    ## 4         4    1     <NA>      1 0.005997961 0.0000000  13.228819
     ## 5         4    1        1      1 0.004780164 0.0000000   0.000000
-    ## 6         3    1       NA      1 0.009249618 1.0000000   3.321928
+    ## 6         3    1     <NA>      1 0.009249618 1.0000000   3.321928
 
-Now, I think, I can do the boxplots I need?
+Now, I think, I can do the boxplots I need? For PageRank…
+
+``` r
+ggplot(dfPS, aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = pass)) + #theme(aspect.ratio = 4/7) +
+  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-6-1.png)<!-- -->
+
+``` r
+dfPS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = justpass)) + #theme(aspect.ratio = 4/7) +
+  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-6-2.png)<!-- -->
+
+The plot for all passing/failing looks pretty much the same as my old
+one. The justpass/justfail plot also looks similar, but seems to be
+missing some outlier points relative to the old plot. That’s weird,
+since it has a few more data points in it.
+
+For Target Entropy:
+
+``` r
+ggplot(dfPS, aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
+
+and for Hide:
+
+``` r
+ggplot(dfPS, aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->

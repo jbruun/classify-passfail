@@ -11,11 +11,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Goal for this document is to make exploratory plots and run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
 
-**Update 4/3:** Made data frame for pass/fail centrality boxplots, do plot commands next. 
+**Update 4/28:** Pass/fail centrality plots started for PS. 
 
 ```{r packages, echo = FALSE}
 library(igraph)
 library(dplyr)
+library(ggplot2)   # for boxplots
 ```
 
 ## Import data
@@ -37,6 +38,8 @@ Take a look at the pass/fail and just pass/just fail counts (these are the same 
 ```{r}
 table(V(accPS[[7]])$pass, useNA = "ifany")
 table(V(accPS[[7]])$justpass, useNA = "ifany")
+nPass <- table(V(accPS[[7]])$pass, useNA = "ifany")
+nJustPass <- table(V(accPS[[7]])$justpass, useNA = "ifany")
 ```
 
 
@@ -67,12 +70,40 @@ for (i in seq(dfPS)) {
 }
 dfPS <- bind_rows(dfPS)
 dfPS <- subset(dfPS, select = c(Week, name:Hide))  # reorder to put Week first
+# Need factors for plotting
+dfPS$Week <- as.factor(dfPS$Week)   
+dfPS$pass <- as.factor(dfPS$pass)
+dfPS$justpass <- as.factor(dfPS$justpass)   
 head(dfPS)
 ```
 
-Now, I think, I can do the boxplots I need?
+Now, I think, I can do the boxplots I need? For PageRank...
 
 ```{r}
+ggplot(dfPS, aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = pass)) + #theme(aspect.ratio = 4/7) +
+  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
 
+dfPS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = justpass)) + #theme(aspect.ratio = 4/7) +
+  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+The plot for all passing/failing looks pretty much the same as my old one. The justpass/justfail plot also looks similar, but seems to be missing some outlier points relative to the old plot. That's weird, since it has a few more data points in it. 
+
+For Target Entropy:
+```{r}
+ggplot(dfPS, aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+```
+
+and for Hide:
+```{r}
+ggplot(dfPS, aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
 ```
 
