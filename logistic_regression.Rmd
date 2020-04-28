@@ -1,0 +1,44 @@
+---
+title: "Logistic regression"
+author: "Jesper Bruun & Adrienne Traxler"
+date: "3/30/2020"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Goal for this document is to make exploratory plots and run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
+
+**Update 3/30:** Imported data and identified which objects I need. Do pass/fail centrality boxplots next. 
+
+```{r packages, echo = FALSE}
+library(igraph)
+```
+
+## Import data
+
+At this point, `loadAllNetworks` and `calculatePR_TE_H` have already been run. Importing the results of that,
+
+```{r}
+(load("data/PRTEH.RData"))
+```
+
+There's a lot in there, but I'm mostly interested in the `accXX` objects, which hold the accumulated networks as of each week. 
+
+```{r}
+summary(accPS[[7]])
+table(E(accPS[[7]])$weight)
+```
+
+Take a look at the pass/fail and just pass/just fail counts (these are the same in all three network layers):
+```{r}
+table(V(accPS[[7]])$pass, useNA = "ifany")
+table(V(accPS[[7]])$justpass, useNA = "ifany")
+```
+
+
+## Pass/fail boxplots
+
+DO THIS NEXT
