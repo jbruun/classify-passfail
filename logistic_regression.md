@@ -7,8 +7,7 @@ Goal for this document is to make exploratory plots and run logistic
 regression for passing and failing in the (single-layer) PS, CD, and ICS
 weekly networks.
 
-**Update 4/3:** Made data frame for pass/fail centrality boxplots, do
-plot commands next.
+**Update 4/28:** Pass/fail centrality plots started for PS.
 
     ## 
     ## Attaching package: 'igraph'
@@ -119,23 +118,35 @@ information for each week, with a column for week number as well.
 **TEMP HACK:** Need to avoid duplicate node names, so second “Person14”
 gets named "Person16
 
+### Problem solving layer
+
 ``` r
-dfPS <- vector("list", length = length(accPS))
-for (i in seq(dfPS)) {
-  df <- igraph::as_data_frame(accPS[[i]], what = "vertices")
-  df$Week <- i
-  df$PageRank <- accPS_PR[[i]]$vector
-  df$tarEnt <- accPS_TE[[i]]
-  df$Hide <- accPS_H[[i]]
+# accNW should be one of accPS, accCD, or accICS
+# accPR, accTE, and accH should be the corresponding centrality lists
+make_node_df <- function(accNW, accPR, accTE, accH) {
+  dflist <- vector("list", length = length(accNW))
+  for (i in seq(dflist)) {
+    df <- igraph::as_data_frame(accNW[[i]], what = "vertices")
+    df$Week <- i
+    df$PageRank <- accPR[[i]]$vector
+    df$tarEnt <- accTE[[i]]
+    df$Hide <- accH[[i]]
+    
+    dflist[[i]] <- df %>% select(-id)  # ditch id column, it duplicates name + Person14 typo
+  }
+  dfNW <- bind_rows(dflist)
+  dfNW <- subset(dfNW, select = c(Week, name:Hide))  # reorder to put Week first
   
-  dfPS[[i]] <- df %>% select(-id)  # ditch id column, it duplicates name + Person14 typo
+  # Need factors for plotting
+  dfNW$Week <- as.factor(dfNW$Week)   
+  dfNW$pass <- as.factor(dfNW$pass)
+  dfNW$justpass <- as.factor(dfNW$justpass)   
+  return(dfNW)
 }
-dfPS <- bind_rows(dfPS)
-dfPS <- subset(dfPS, select = c(Week, name:Hide))  # reorder to put Week first
-# Need factors for plotting
-dfPS$Week <- as.factor(dfPS$Week)   
-dfPS$pass <- as.factor(dfPS$pass)
-dfPS$justpass <- as.factor(dfPS$justpass)   
+dfPS <- make_node_df(accPS, accPS_PR, accPS_TE, accPS_H)
+dfCD <- make_node_df(accCD, accCD_PR, accCD_TE, accCD_H)
+dfICS <- make_node_df(accICS, accICS_PR, accICS_TE, accICS_H)
+
 head(dfPS)
 ```
 
