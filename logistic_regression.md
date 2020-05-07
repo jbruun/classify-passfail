@@ -120,6 +120,10 @@ gets named "Person16
 
 ### Problem solving layer
 
+To make boxplots using `ggplot`, I need to first collect the node
+information into a long data frame. While I’m doing that for the
+problem-solving layer, I might as well do the others too.
+
 ``` r
 # accNW should be one of accPS, accCD, or accICS
 # accPR, accTE, and accH should be the corresponding centrality lists
@@ -199,6 +203,15 @@ ggplot(dfPS, aes(x = Week, y = tarEnt)) +
 
 ![](logistic_regression_files/figure-gfm/unnamed-chunk-7-1.png)<!-- -->
 
+``` r
+dfPS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-7-2.png)<!-- -->
+
 and for Hide:
 
 ``` r
@@ -208,3 +221,130 @@ ggplot(dfPS, aes(x = Week, y = Hide)) +
 ```
 
 ![](logistic_regression_files/figure-gfm/unnamed-chunk-8-1.png)<!-- -->
+
+``` r
+dfPS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-8-2.png)<!-- -->
+
+### Concept discussion layer
+
+First PageRank:
+
+``` r
+ggplot(dfCD, aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-9-1.png)<!-- -->
+
+``` r
+dfCD %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-9-2.png)<!-- -->
+
+For Target Entropy:
+
+``` r
+ggplot(dfCD, aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-10-1.png)<!-- -->
+
+``` r
+dfCD %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-10-2.png)<!-- -->
+
+and for Hide:
+
+``` r
+ggplot(dfCD, aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-11-1.png)<!-- -->
+
+``` r
+dfCD %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-11-2.png)<!-- -->
+
+### In-class socializing layer
+
+And the third set of boxplots. First PageRank:
+
+``` r
+ggplot(dfICS, aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-12-1.png)<!-- -->
+
+``` r
+dfICS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-12-2.png)<!-- -->
+
+For Target Entropy:
+
+``` r
+ggplot(dfICS, aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-13-1.png)<!-- -->
+
+``` r
+dfICS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-13-2.png)<!-- -->
+
+and for Hide:
+
+``` r
+ggplot(dfICS, aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-14-1.png)<!-- -->
+
+``` r
+dfICS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+![](logistic_regression_files/figure-gfm/unnamed-chunk-14-2.png)<!-- -->

@@ -129,3 +129,81 @@ dfPS %>% filter(is.na(justpass) == FALSE) %>%
   ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
 ```
 
+### Concept discussion layer
+
+First PageRank:
+
+```{r}
+ggplot(dfCD, aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfCD %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+For Target Entropy:
+```{r}
+ggplot(dfCD, aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfCD %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+and for Hide:
+```{r}
+ggplot(dfCD, aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfCD %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+
+### In-class socializing layer
+
+And the third set of boxplots. First PageRank:
+
+```{r}
+ggplot(dfICS, aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfICS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+For Target Entropy:
+```{r}
+ggplot(dfICS, aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfICS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+and for Hide:
+```{r}
+ggplot(dfICS, aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfICS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
