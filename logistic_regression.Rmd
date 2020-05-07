@@ -11,7 +11,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Goal for this document is to make exploratory plots and run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
 
-**Update 4/28:** Pass/fail centrality plots started for PS. 
+**Update 5/7:** Centrality boxplots finished, ready to update logistic regression results. 
 
 ```{r packages, echo = FALSE}
 library(igraph)
@@ -207,3 +207,8 @@ dfICS %>% filter(is.na(justpass) == FALSE) %>%
   geom_boxplot(aes(fill = justpass)) + 
   ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
 ```
+
+
+## Logistic regression
+
+As I recall, we had decided to skip the half-training, half-test approach because the data set isn't large enough to support that. If we stick with the "jackknife" approach... 
