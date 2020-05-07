@@ -58,8 +58,9 @@ for (i in seq(accPS)) {
 
 ### Problem solving layer
 
-```{r}
+To make boxplots using `ggplot`, I need to first collect the node information into a long data frame. While I'm doing that for the problem-solving layer, I might as well do the others too. 
 
+```{r}
 # accNW should be one of accPS, accCD, or accICS
 # accPR, accTE, and accH should be the corresponding centrality lists
 make_node_df <- function(accNW, accPR, accTE, accH) {
@@ -110,6 +111,10 @@ ggplot(dfPS, aes(x = Week, y = tarEnt)) +
   geom_boxplot(aes(fill = pass)) + 
   ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
 
+dfPS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
 ```
 
 and for Hide:
@@ -117,5 +122,10 @@ and for Hide:
 ggplot(dfPS, aes(x = Week, y = Hide)) + 
   geom_boxplot(aes(fill = pass)) + 
   ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfPS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
 ```
 
