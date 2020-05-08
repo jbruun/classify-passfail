@@ -2,7 +2,9 @@
 title: "Logistic regression"
 author: "Jesper Bruun & Adrienne Traxler"
 date: "3/30/2020"
-output: github_document
+output: 
+  html_document: 
+    keep_md: yes
 ---
 
 ```{r setup, include=FALSE}
@@ -24,7 +26,7 @@ library(ggplot2)   # for boxplots
 At this point, `loadAllNetworks` and `calculatePR_TE_H` have already been run. Importing the results of that,
 
 ```{r}
-(load("data/PRTEH.RData"))
+(load("../data/PRTEH.RData"))
 ```
 
 There's a lot in there, but I'm mostly interested in the `accXX` objects, which hold the accumulated networks as of each week. 
