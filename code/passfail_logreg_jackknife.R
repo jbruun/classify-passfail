@@ -6,10 +6,7 @@
 rm(list = ls())
 
 library(igraph)
-#library(ggplot2)
-library(tidyr)
-library(readr)
-library(plyr)
+library(dplyr)
 
 # Import pass/fail centrality data
 #loadvars <- load("data/centPassFail.Rdata")
@@ -18,9 +15,15 @@ load("data/centrality_data_frames.Rdata")
 
 ## Run jackknife logistic regression 
 
-# Input: List of weekly data frames, optional outcome (Pass/JustPass) and subset of predictors to use
-# Output: List of prediction vectors for that weekly aggregate network; each node in the vector is predicted using
-#  all the other nodes
+# Turn long data frame into list of weekly frames
+centPS <- dfPS %>% group_split(Week)
+centCD <- dfPS %>% group_split(Week)
+centICS <- dfPS %>% group_split(Week)
+
+# Input: List of weekly data frames, optional outcome (Pass/JustPass), optional 
+#  subset of predictors to use
+# Output: List of prediction vectors for that weekly aggregate network; each node in the 
+#  vector is predicted using all the other nodes
 jackPred <- function(layer, outcome = "Pass", 
                      predictors = c("Gender", "Section", "FCIPre", "PageRank", 
                                     "tarEnt", "Hide")) {
