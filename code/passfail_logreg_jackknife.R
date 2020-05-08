@@ -6,14 +6,14 @@
 rm(list = ls())
 
 library(igraph)
-library(ggplot2)
+#library(ggplot2)
 library(tidyr)
 library(readr)
 library(plyr)
 
 # Import pass/fail centrality data
 #loadvars <- load("data/centPassFail.Rdata")
-load("../data/PRTEH.RData")
+load("data/centrality_data_frames.Rdata")
 
 
 ## Run jackknife logistic regression 
@@ -21,35 +21,39 @@ load("../data/PRTEH.RData")
 # Input: List of weekly data frames, optional outcome (Pass/JustPass) and subset of predictors to use
 # Output: List of prediction vectors for that weekly aggregate network; each node in the vector is predicted using
 #  all the other nodes
-jackPred <- function(layer,outcome="Pass",predictors=c("Gender","Section","FCIPre","PageRank","tarEnt","Hide")) {
-  if (outcome=="Pass") {
-    choices <- c("Fail","Pass")
-  } else if (outcome=="JustPass" | outcome=="Pass2") {
-    choices <- c("Fail0","Pass2")
+jackPred <- function(layer, outcome = "Pass", 
+                     predictors = c("Gender", "Section", "FCIPre", "PageRank", 
+                                    "tarEnt", "Hide")) {
+  if (outcome == "Pass") {
+    choices <- c("Fail", "Pass")
+  } else if (outcome == "JustPass" | outcome == "Pass2") {
+    choices <- c("Fail0", "Pass2")
   } else {
     stop("Not a valid outcome variable.")
   }
-  userows <- complete.cases(layer[[length(layer)]][,c(outcome,predictors)])  # remove incomplete rows
-  allprob <- matrix(nrow=sum(userows),ncol=length(layer))
-  fitStr <- paste(predictors,collapse="+")
-  fitForm <- paste0(outcome,"~",fitStr)
+  # remove incomplete rows
+  userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
+
+  allprob <- matrix(nrow = sum(userows), ncol = length(layer))
+  fitStr <- paste(predictors, collapse = "+")
+  fitForm <- paste0(outcome, "~", fitStr)
   for(j in 1:length(layer)) {
     # data is complete cases
-    data <- layer[[j]][userows,c(outcome,predictors)]
+    data <- layer[[j]][userows, c(outcome, predictors)]
     # Loop through all nodes
     for(i in 1:dim(data)[1]) {
       # training set is data minus observation i
-      train <- data[-i,]
-      glm.fit <- glm(fitForm,family=binomial,data=train)
-      allprob[i,j] <- predict(glm.fit,newdata=data[i,],type="response")
+      train <- data[-i, ]
+      glm.fit <- glm(fitForm, family = binomial, data = train)
+      allprob[i, j] <- predict(glm.fit, newdata = data[i, ], type = "response")
     }
   }
   allpred <- allprob
-  allpred[allprob<0.5] <- choices[1] #"Fail"
-  allpred[allprob>=0.5] <- choices[2] #"Pass"
-  allpred <- data.frame(layer[[1]][userows,"id"],data[,outcome],as.data.frame(allpred))
-  names(allpred) <- c("id",outcome,paste0("Week",c(1:length(layer))))
-  print(paste0("Fit: ",fitForm,", complete N = ",dim(allpred)[1]))
+  allpred[allprob < 0.5] <- choices[1] #"Fail"
+  allpred[allprob >= 0.5] <- choices[2] #"Pass"
+  allpred <- data.frame(layer[[1]][userows, "id"], data[, outcome], as.data.frame(allpred))
+  names(allpred) <- c("id", outcome, paste0("Week", c(1:length(layer))))
+  print(paste0("Fit: ", fitForm, ", complete N = ", dim(allpred)[1]))
   return(allpred)
 }
 
@@ -59,33 +63,44 @@ predCD <- jackPred(centCD)
 predICS <- jackPred(centICS)
 
 # Predict just-pass/just-fail (2/0)
-predJustPS <- jackPred(centPS,outcome="JustPass")
-predJustCD <- jackPred(centCD,outcome="JustPass")
-predJustICS <- jackPred(centICS,outcome="JustPass")
+predJustPS <- jackPred(centPS, outcome = "JustPass")
+predJustCD <- jackPred(centCD, outcome = "JustPass")
+predJustICS <- jackPred(centICS, outcome = "JustPass")
 
 # Save weekly predictions
-save(predPS,predCD,predICS,predJustPS,predJustCD,predJustICS,file="../data/jackknife_predictions.Rdata")
+save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
+     file = "data/jackknife_predictions.Rdata")
 
-# Collect success rate for each week (prediction==outcome)
-succRate <- rbind(sapply(predPS[,3:9],function(x) mean(x==predPS$Pass)),
-                  sapply(predCD[,3:9],function(x) mean(x==predCD$Pass)),
-                  sapply(predICS[,3:9],function(x) mean(x==predICS$Pass)))
-succRate <- data.frame(Layer=c("PS","CD","ICS"),N=c(dim(predPS)[1],dim(predCD)[1],dim(predICS)[1]),succRate,
-                       Guessing=c(mean(predPS$Pass=="Pass"),mean(predCD$Pass=="Pass"),mean(predICS$Pass=="Pass")))
 
-write.csv(succRate,"../succRate.csv",row.names=FALSE)
+## Collect success rates and compare with guessing everyone passes
+
+# Success rate for each week (prediction == outcome)
+succRate <- rbind(sapply(predPS[, 3:9], function(x) mean(x == predPS$Pass)),
+                  sapply(predCD[, 3:9], function(x) mean(x == predCD$Pass)),
+                  sapply(predICS[, 3:9], function(x) mean(x == predICS$Pass)))
+succRate <- data.frame(Layer = c("PS","CD","ICS"), 
+                       N = c(dim(predPS)[1], dim(predCD)[1], dim(predICS)[1]),
+                       succRate, 
+                       Guessing = c(mean(predPS$Pass == "Pass"), mean(predCD$Pass == "Pass"),
+                                    mean(predICS$Pass == "Pass")))
+
+write.csv(succRate,"succRate.csv", row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
-succRate02 <- rbind(sapply(predJustPS[,3:9],function(x) mean(x==predJustPS$JustPass)),
-                    sapply(predJustCD[,3:9],function(x) mean(x==predJustCD$JustPass)),
-                    sapply(predJustICS[,3:9],function(x) mean(x==predJustICS$JustPass)))
-succRate02 <- data.frame(Layer=c("PS","CD","ICS"),N=c(dim(predJustPS)[1],dim(predJustCD)[1],dim(predJustICS)[1]),
+succRate02 <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$JustPass)),
+                    sapply(predJustCD[, 3:9], function(x) mean(x == predJustCD$JustPass)),
+                    sapply(predJustICS[, 3:9], function(x) mean(x == predJustICS$JustPass)))
+succRate02 <- data.frame(Layer = c("PS", "CD", "ICS"),
+                         N = c(dim(predJustPS)[1], dim(predJustCD)[1], dim(predJustICS)[1]),
                          succRate02,
-                         Guessing=c(mean(predJustPS$JustPass=="Pass2"),mean(predJustCD$JustPass=="Pass2"),
-                                    mean(predJustICS$JustPass=="Pass2")))
+                         Guessing = c(mean(predJustPS$JustPass == "Pass2"),
+                                      mean(predJustCD$JustPass == "Pass2"),
+                                      mean(predJustICS$JustPass == "Pass2")))
 
-write.csv(succRate02,"../succRate02.csv",row.names=FALSE)
+write.csv(succRate02,"succRate02.csv", row.names = FALSE)
 
+
+## OLD, NOT UPDATED YET 
 
 # What if we ignore FCIpre?
 predPSnoFCI <-jackPred(centPS,predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
