@@ -1,0 +1,212 @@
+---
+title: "Centrality plots"
+author: "Jesper Bruun & Adrienne Traxler"
+date: "3/30/2020--5/8/2020"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Goal for this document is to make exploratory plots and run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
+
+**Update 5/8:** Wrapping up centrality boxplots in its own file, and removing that from `logistic_regression.Rmd`. 
+
+```{r packages, echo = FALSE}
+library(igraph)
+library(dplyr)
+library(ggplot2)   # for boxplots
+```
+
+## Import data
+
+At this point, `loadAllNetworks` and `calculatePR_TE_H` have already been run. Importing the results of that,
+
+```{r}
+(load("../data/PRTEH.RData"))
+```
+
+There's a lot in there, but I'm mostly interested in the `accXX` objects, which hold the accumulated networks as of each week. 
+
+```{r}
+summary(accPS[[7]])
+table(E(accPS[[7]])$weight)
+```
+
+Take a look at the pass/fail and just pass/just fail counts (these are the same in all three network layers):
+```{r}
+table(V(accPS[[7]])$pass, useNA = "ifany")
+table(V(accPS[[7]])$justpass, useNA = "ifany")
+nPass <- table(V(accPS[[7]])$pass, useNA = "ifany")
+nJustPass <- table(V(accPS[[7]])$justpass, useNA = "ifany")
+```
+
+
+## Pass/fail boxplots
+
+To do the pass/fail boxplots, I need a data frame with people's IDs, their pass/fail outcomes, and their centrality scores. I need this information for each week, with a column for week number as well. 
+
+**TEMP HACK:** Need to avoid duplicate node names, so second "Person14" gets named "Person16
+```{r, echo = FALSE}
+for (i in seq(accPS)) {
+  V(accPS[[i]])$name[15] <- "Person16"
+  V(accCD[[i]])$name[15] <- "Person16"
+  V(accICS[[i]])$name[15] <- "Person16"
+}
+```
+
+### Problem solving layer
+
+To make boxplots using `ggplot`, I need to first collect the node information into a long data frame. While I'm doing that for the problem-solving layer, I might as well do the others too. 
+
+```{r}
+# accNW should be one of accPS, accCD, or accICS
+# accPR, accTE, and accH should be the corresponding centrality lists
+make_node_df <- function(accNW, accPR, accTE, accH) {
+  dflist <- vector("list", length = length(accNW))
+  for (i in seq(dflist)) {
+    df <- igraph::as_data_frame(accNW[[i]], what = "vertices")
+    df$Week <- i
+    df$PageRank <- accPR[[i]]$vector
+    df$tarEnt <- accTE[[i]]
+    df$Hide <- accH[[i]]
+    
+    dflist[[i]] <- df %>% select(-id)  # ditch id column, it duplicates name + Person14 typo
+  }
+  dfNW <- bind_rows(dflist)
+  dfNW <- subset(dfNW, select = c(Week, name:Hide))  # reorder to put Week first
+  
+  # Need factors for plotting
+  dfNW$Week <- as.factor(dfNW$Week)   
+  dfNW$pass <- as.factor(dfNW$pass)
+  dfNW$justpass <- as.factor(dfNW$justpass)   
+  return(dfNW)
+}
+dfPS <- make_node_df(accPS, accPS_PR, accPS_TE, accPS_H)
+dfCD <- make_node_df(accCD, accCD_PR, accCD_TE, accCD_H)
+dfICS <- make_node_df(accICS, accICS_PR, accICS_TE, accICS_H)
+
+head(dfPS)
+```
+
+Now, I think, I can do the boxplots I need? For PageRank...
+
+```{r}
+ggplot(dfPS, aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = pass)) + #theme(aspect.ratio = 4/7) +
+  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfPS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = justpass)) + #theme(aspect.ratio = 4/7) +
+  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+The plot for all passing/failing looks pretty much the same as my old one. The justpass/justfail plot also looks similar, but seems to be missing some outlier points relative to the old plot. That's weird, since it has a few more data points in it. 
+
+For Target Entropy:
+```{r}
+ggplot(dfPS, aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfPS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+and for Hide:
+```{r}
+ggplot(dfPS, aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfPS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+### Concept discussion layer
+
+First PageRank:
+
+```{r}
+ggplot(dfCD, aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfCD %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+For Target Entropy:
+```{r}
+ggplot(dfCD, aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfCD %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+and for Hide:
+```{r}
+ggplot(dfCD, aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfCD %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+
+### In-class socializing layer
+
+And the third set of boxplots. First PageRank:
+
+```{r}
+ggplot(dfICS, aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfICS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = PageRank)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+For Target Entropy:
+```{r}
+ggplot(dfICS, aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfICS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = tarEnt)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
+and for Hide:
+```{r}
+ggplot(dfICS, aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = pass)) + 
+  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
+
+dfICS %>% filter(is.na(justpass) == FALSE) %>% 
+  ggplot(aes(x = Week, y = Hide)) + 
+  geom_boxplot(aes(fill = justpass)) + 
+  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
+```
+
