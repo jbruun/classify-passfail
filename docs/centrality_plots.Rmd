@@ -11,9 +11,9 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Goal for this document is to make exploratory plots and run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
+Goal for this document is to make exploratory plots for passing and failing in the (single-layer) PS, CD, and ICS weekly networks. Run this file after `make_node_data_frames.Rmd`, which prepares the centrality data frames that I need here.
 
-**Update 5/8:** Wrapping up centrality boxplots in its own file, and removing that from `logistic_regression.Rmd`. 
+**Update 5/8:** Spun this off into its own file, separate from both data import and logistic regression.
 
 ```{r packages, echo = FALSE}
 library(igraph)
