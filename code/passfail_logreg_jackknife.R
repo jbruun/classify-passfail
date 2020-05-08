@@ -1,7 +1,7 @@
 # Logstic regression on pass/fail centrality by removing single observations.
-# Last modified:  8/22/18 (update jackPred to record Pass2/Fail0 when checking that outcome, check no-FCI results)
+# Last modified: 5/8/20 (updating to use Jesper's cleaned-up data)
 # 
-# Status: Works.
+# Status: Jackknife prediction runs (at least on PS), next do justpass and success rates.
 
 rm(list = ls())
 
@@ -17,19 +17,19 @@ load("data/centrality_data_frames.Rdata")
 
 # Turn long data frame into list of weekly frames
 centPS <- dfPS %>% group_split(Week)
-centCD <- dfPS %>% group_split(Week)
-centICS <- dfPS %>% group_split(Week)
+centCD <- dfCD %>% group_split(Week)
+centICS <- dfICS %>% group_split(Week)
 
 # Input: List of weekly data frames, optional outcome (Pass/JustPass), optional 
 #  subset of predictors to use
 # Output: List of prediction vectors for that weekly aggregate network; each node in the 
 #  vector is predicted using all the other nodes
-jackPred <- function(layer, outcome = "Pass", 
-                     predictors = c("Gender", "Section", "FCIPre", "PageRank", 
+jackPred <- function(layer, outcome = "pass", 
+                     predictors = c("gender", "cohort", "fci_pre", "PageRank", 
                                     "tarEnt", "Hide")) {
-  if (outcome == "Pass") {
+  if (outcome == "pass") {
     choices <- c("Fail", "Pass")
-  } else if (outcome == "JustPass" | outcome == "Pass2") {
+  } else if (outcome == "justpass" | outcome == "Pass2") {
     choices <- c("Fail0", "Pass2")
   } else {
     stop("Not a valid outcome variable.")
@@ -38,8 +38,8 @@ jackPred <- function(layer, outcome = "Pass",
   userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
 
   allprob <- matrix(nrow = sum(userows), ncol = length(layer))
-  fitStr <- paste(predictors, collapse = "+")
-  fitForm <- paste0(outcome, "~", fitStr)
+  fitStr <- paste(predictors, collapse = " + ")
+  fitForm <- paste0(outcome, " ~ ", fitStr)
   for(j in 1:length(layer)) {
     # data is complete cases
     data <- layer[[j]][userows, c(outcome, predictors)]
@@ -54,8 +54,8 @@ jackPred <- function(layer, outcome = "Pass",
   allpred <- allprob
   allpred[allprob < 0.5] <- choices[1] #"Fail"
   allpred[allprob >= 0.5] <- choices[2] #"Pass"
-  allpred <- data.frame(layer[[1]][userows, "id"], data[, outcome], as.data.frame(allpred))
-  names(allpred) <- c("id", outcome, paste0("Week", c(1:length(layer))))
+  allpred <- data.frame(layer[[1]][userows, "name"], data[, outcome], as.data.frame(allpred))
+  names(allpred) <- c("name", outcome, paste0("Week", c(1:length(layer))))
   print(paste0("Fit: ", fitForm, ", complete N = ", dim(allpred)[1]))
   return(allpred)
 }
@@ -64,6 +64,9 @@ jackPred <- function(layer, outcome = "Pass",
 predPS <- jackPred(centPS)
 predCD <- jackPred(centCD)
 predICS <- jackPred(centICS)
+
+
+## CODE BELOW NOT CHECKED/UPDATED YET
 
 # Predict just-pass/just-fail (2/0)
 predJustPS <- jackPred(centPS, outcome = "JustPass")
