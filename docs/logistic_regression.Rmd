@@ -1,7 +1,7 @@
 ---
 title: "Logistic regression"
 author: "Jesper Bruun & Adrienne Traxler"
-date: "3/30/2020"
+date: "3/30/2020--"
 output: 
   html_document: 
     keep_md: yes
@@ -11,7 +11,7 @@ output:
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-Goal for this document is to make exploratory plots and run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
+Goal for this document is to run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
 
 **Update 5/7:** Centrality boxplots finished, ready to update logistic regression results. 
 
