@@ -20,16 +20,14 @@ centPS <- dfPS %>% group_split(Week)
 centCD <- dfCD %>% group_split(Week)
 centICS <- dfICS %>% group_split(Week)
 
-# Input: List of weekly data frames, optional outcome (Pass/JustPass), optional 
+# Input: List of weekly data frames, optional outcome (pass/justpass), optional 
 #  subset of predictors to use
 # Output: List of prediction vectors for that weekly aggregate network; each node in the 
 #  vector is predicted using all the other nodes
 jackPred <- function(layer, outcome = "pass", 
                      predictors = c("gender", "cohort", "fci_pre", "PageRank", 
                                     "tarEnt", "Hide")) {
-  if (outcome == "pass") {
-    choices <- c("0", "1")
-  } else if (outcome == "justpass") {
+  if (outcome == "pass" | outcome == "justpass") {
     choices <- c("0", "1")
   } else {
     stop("Not a valid outcome variable.")
