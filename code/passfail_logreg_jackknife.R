@@ -28,9 +28,9 @@ jackPred <- function(layer, outcome = "pass",
                      predictors = c("gender", "cohort", "fci_pre", "PageRank", 
                                     "tarEnt", "Hide")) {
   if (outcome == "pass") {
-    choices <- c("Fail", "Pass")
-  } else if (outcome == "justpass" | outcome == "Pass2") {
-    choices <- c("Fail0", "Pass2")
+    choices <- c("0", "1")
+  } else if (outcome == "justpass") {
+    choices <- c("0", "1")
   } else {
     stop("Not a valid outcome variable.")
   }
@@ -52,12 +52,20 @@ jackPred <- function(layer, outcome = "pass",
     }
   }
   allpred <- allprob
-  allpred[allprob < 0.5] <- choices[1] #"Fail"
-  allpred[allprob >= 0.5] <- choices[2] #"Pass"
-  allpred <- data.frame(layer[[1]][userows, "name"], data[, outcome], as.data.frame(allpred))
-  names(allpred) <- c("name", outcome, paste0("Week", c(1:length(layer))))
-  print(paste0("Fit: ", fitForm, ", complete N = ", dim(allpred)[1]))
-  return(allpred)
+  allpred[allprob < 0.5] <- choices[1]    # 0
+  allpred[allprob >= 0.5] <- choices[2]   # 1
+  
+  # To return: node name, actual outcome, predicted outcome columns
+  alldata <- data.frame(layer[[1]][userows, "name"], data[, outcome], as.data.frame(allpred))
+  
+  # Turn outcomes into factor
+  for(i in seq_along(layer)) {
+    alldata[, i+2] <- as.factor(alldata[, i+2])
+  }
+  
+  names(alldata) <- c("name", outcome, paste0("Week", c(1:length(layer))))
+  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1]))
+  return(alldata)
 }
 
 # Predict pass/fail
@@ -65,25 +73,22 @@ predPS <- jackPred(centPS)
 predCD <- jackPred(centCD)
 predICS <- jackPred(centICS)
 
-
-## CODE BELOW NOT CHECKED/UPDATED YET
-
 # Predict just-pass/just-fail (2/0)
-predJustPS <- jackPred(centPS, outcome = "JustPass")
-predJustCD <- jackPred(centCD, outcome = "JustPass")
-predJustICS <- jackPred(centICS, outcome = "JustPass")
+predJustPS <- jackPred(centPS, outcome = "justpass")
+predJustCD <- jackPred(centCD, outcome = "justpass")
+predJustICS <- jackPred(centICS, outcome = "justpass")
 
-# Save weekly predictions
+# Save pass/fail predictions
 save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
-     file = "data/jackknife_predictions.Rdata")
+     file = "data/jackknife_logistic_predictions.Rdata")
 
 
 ## Collect success rates and compare with guessing everyone passes
 
 # Success rate for each week (prediction == outcome)
-succRate <- rbind(sapply(predPS[, 3:9], function(x) mean(x == predPS$Pass)),
-                  sapply(predCD[, 3:9], function(x) mean(x == predCD$Pass)),
-                  sapply(predICS[, 3:9], function(x) mean(x == predICS$Pass)))
+succRate <- rbind(sapply(predPS[, 3:9], function(x) mean(x == predPS$pass)),
+                  sapply(predCD[, 3:9], function(x) mean(x == predCD$pass)),
+                  sapply(predICS[, 3:9], function(x) mean(x == predICS$pass)))
 succRate <- data.frame(Layer = c("PS","CD","ICS"), 
                        N = c(dim(predPS)[1], dim(predCD)[1], dim(predICS)[1]),
                        succRate, 
