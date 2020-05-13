@@ -370,7 +370,7 @@ summary {
 
 
 <p>Goal for this document is to run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.</p>
-<p><strong>Update 5/7:</strong> Centrality boxplots finished, ready to update logistic regression results.</p>
+<p><strong>Update 5/8:</strong> Logistic regression results calculated and imported; success rates calculated.</p>
 <pre><code>## 
 ## Attaching package: &#39;igraph&#39;</code></pre>
 <pre><code>## The following objects are masked from &#39;package:stats&#39;:
@@ -436,6 +436,8 @@ centPS[[1]]</code></pre>
 ## 10 2     Pers~     7      1    20      3    11      13        13        13
 ## # ... with 156 more rows, and 7 more variables: fci_pre_c &lt;dbl&gt;, pass &lt;fct&gt;,
 ## #   justpass &lt;fct&gt;, Week.1 &lt;int&gt;, PageRank &lt;dbl&gt;, tarEnt &lt;dbl&gt;, Hide &lt;dbl&gt;</code></pre>
+<div id="jackknife-logistic-regression-loop" class="section level3">
+<h3>Jackknife logistic regression loop</h3>
 <p>Next, the function that actually does the calculations.</p>
 <ul>
 <li>Input: A list of weekly data frames, optional outcome (pass/justpass, defaults to “pass”), and an optional subset of predictors to use (defaults gender, cohort, FCI pre, and centrality)</li>
@@ -482,7 +484,7 @@ centPS[[1]]</code></pre>
   print(paste0(&quot;Fit: &quot;, fitForm, &quot;, complete N = &quot;, dim(alldata)[1]))
   return(alldata)
 }</code></pre>
-<p>It takes a few seconds to run the loop, so I’ll import the results rather than executing it here.</p>
+<p>It takes a few seconds to run the loop, so I’ll import the results rather than executing it here. I did this for each centrality data frame (PS, CD, and ICS), using demographics (Gender/Section), FCI pretest score, and all three centrality measures as predictors. The function predicts passing if P &gt; 0.5.</p>
 <pre class="r"><code># Predict pass/fail
 #predPS &lt;- jackPred(centPS)
 #predCD &lt;- jackPred(centCD)
@@ -494,6 +496,48 @@ centPS[[1]]</code></pre>
 #predJustICS &lt;- jackPred(centICS, outcome = &quot;justpass&quot;)
 
 load(&quot;../data/jackknife_logistic_predictions.Rdata&quot;)</code></pre>
+</div>
+<div id="success-rates" class="section level3">
+<h3>Success rates</h3>
+<p>We’re interested in a couple of success rate comparisons: how predictions compared with reality for each week, and how well it would have worked to just guess that everyone passed.</p>
+<p>First, the success rate for predictions based on each week’s accumulated centrality data, for all students (who have complete records):</p>
+<pre class="r"><code>compareSucc &lt;- rbind(sapply(predPS[, 3:9], function(x) mean(x == predPS$pass)),
+                     sapply(predCD[, 3:9], function(x) mean(x == predCD$pass)),
+                     sapply(predICS[, 3:9], function(x) mean(x == predICS$pass)))
+succRate &lt;- data.frame(Layer = c(&quot;PS&quot;,&quot;CD&quot;,&quot;ICS&quot;), 
+                       N = c(dim(predPS)[1], dim(predCD)[1], dim(predICS)[1]),
+                       compareSucc, 
+                       Guessing = c(mean(predPS$pass == &quot;1&quot;), mean(predCD$pass == &quot;1&quot;),
+                                    mean(predICS$pass == &quot;1&quot;)))
+succRate</code></pre>
+<pre><code>##   Layer   N     Week1     Week2     Week3     Week4     Week5     Week6
+## 1    PS 142 0.8098592 0.8591549 0.8450704 0.8380282 0.8521127 0.8450704
+## 2    CD 142 0.8028169 0.8028169 0.8309859 0.8239437 0.8450704 0.8380282
+## 3   ICS 142 0.8239437 0.8309859 0.8591549 0.8450704 0.8450704 0.8380282
+##       Week7  Guessing
+## 1 0.8450704 0.8309859
+## 2 0.8169014 0.8309859
+## 3 0.8521127 0.8309859</code></pre>
+<p>Now, the same calculation for only the people who were on the pass/fail boundary (2/0):</p>
+<pre class="r"><code>compareJust &lt;- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
+                     sapply(predJustCD[, 3:9], function(x) mean(x == predJustCD$justpass)),
+                     sapply(predJustICS[, 3:9], function(x) mean(x == predJustICS$justpass)))
+succRateJust &lt;- data.frame(Layer = c(&quot;PS&quot;, &quot;CD&quot;, &quot;ICS&quot;),
+                           N = c(dim(predJustPS)[1], dim(predJustCD)[1], dim(predJustICS)[1]),
+                           compareJust,
+                           Guessing = c(mean(predJustPS$justpass == &quot;1&quot;),
+                                        mean(predJustCD$justpass == &quot;1&quot;),
+                                        mean(predJustICS$justpass == &quot;1&quot;)))
+succRateJust</code></pre>
+<pre><code>##   Layer  N     Week1     Week2     Week3     Week4     Week5     Week6
+## 1    PS 55 0.7090909 0.6000000 0.6545455 0.6363636 0.6545455 0.6181818
+## 2    CD 55 0.5636364 0.6000000 0.5272727 0.5818182 0.6000000 0.6181818
+## 3   ICS 55 0.6181818 0.6545455 0.6181818 0.6363636 0.6363636 0.6181818
+##       Week7  Guessing
+## 1 0.6181818 0.6181818
+## 2 0.6181818 0.6181818
+## 3 0.6000000 0.6181818</code></pre>
+</div>
 </div>
 
 

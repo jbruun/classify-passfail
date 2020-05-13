@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Goal for this document is to run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
 
-**Update 5/7:** Centrality boxplots finished, ready to update logistic regression results. 
+**Update 5/8:** Logistic regression results calculated and imported; success rates calculated. 
 
 ```{r packages, echo = FALSE}
 library(igraph)
@@ -43,6 +43,8 @@ centICS <- dfICS %>% group_split(Week)
 centPS[[1]]
 centPS[[2]]
 ```
+
+### Jackknife logistic regression loop
 
 Next, the function that actually does the calculations. 
 
@@ -93,7 +95,7 @@ jackPred <- function(layer, outcome = "pass",
 }
 ```
 
-It takes a few seconds to run the loop, so I'll import the results rather than executing it here.
+It takes a few seconds to run the loop, so I'll import the results rather than executing it here. I did this for each centrality data frame (PS, CD, and ICS), using demographics (Gender/Section), FCI pretest score, and all three centrality measures as predictors. The function predicts passing if P > 0.5. 
 
 ```{r}
 # Predict pass/fail
@@ -107,5 +109,37 @@ It takes a few seconds to run the loop, so I'll import the results rather than e
 #predJustICS <- jackPred(centICS, outcome = "justpass")
 
 load("../data/jackknife_logistic_predictions.Rdata")
+```
+
+
+### Success rates
+
+We're interested in a couple of success rate comparisons: how predictions compared with reality for each week, and how well it would have worked to just guess that everyone passed.
+
+First, the success rate for predictions based on each week's accumulated centrality data, for all students (who have complete records):
+```{r}
+compareSucc <- rbind(sapply(predPS[, 3:9], function(x) mean(x == predPS$pass)),
+                     sapply(predCD[, 3:9], function(x) mean(x == predCD$pass)),
+                     sapply(predICS[, 3:9], function(x) mean(x == predICS$pass)))
+succRate <- data.frame(Layer = c("PS","CD","ICS"), 
+                       N = c(dim(predPS)[1], dim(predCD)[1], dim(predICS)[1]),
+                       compareSucc, 
+                       Guessing = c(mean(predPS$pass == "1"), mean(predCD$pass == "1"),
+                                    mean(predICS$pass == "1")))
+succRate
+```
+
+Now, the same calculation for only the people who were on the pass/fail boundary (2/0):
+```{r}
+compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
+                     sapply(predJustCD[, 3:9], function(x) mean(x == predJustCD$justpass)),
+                     sapply(predJustICS[, 3:9], function(x) mean(x == predJustICS$justpass)))
+succRateJust <- data.frame(Layer = c("PS", "CD", "ICS"),
+                           N = c(dim(predJustPS)[1], dim(predJustCD)[1], dim(predJustICS)[1]),
+                           compareJust,
+                           Guessing = c(mean(predJustPS$justpass == "1"),
+                                        mean(predJustCD$justpass == "1"),
+                                        mean(predJustICS$justpass == "1")))
+succRateJust
 ```
 
