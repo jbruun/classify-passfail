@@ -86,29 +86,29 @@ save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
 ## Collect success rates and compare with guessing everyone passes
 
 # Success rate for each week (prediction == outcome)
-succRate <- rbind(sapply(predPS[, 3:9], function(x) mean(x == predPS$pass)),
-                  sapply(predCD[, 3:9], function(x) mean(x == predCD$pass)),
-                  sapply(predICS[, 3:9], function(x) mean(x == predICS$pass)))
+compareSucc <- rbind(sapply(predPS[, 3:9], function(x) mean(x == predPS$pass)),
+                     sapply(predCD[, 3:9], function(x) mean(x == predCD$pass)),
+                     sapply(predICS[, 3:9], function(x) mean(x == predICS$pass)))
 succRate <- data.frame(Layer = c("PS","CD","ICS"), 
                        N = c(dim(predPS)[1], dim(predCD)[1], dim(predICS)[1]),
-                       succRate, 
-                       Guessing = c(mean(predPS$Pass == "Pass"), mean(predCD$Pass == "Pass"),
-                                    mean(predICS$Pass == "Pass")))
+                       compareSucc, 
+                       Guessing = c(mean(predPS$pass == "1"), mean(predCD$pass == "1"),
+                                    mean(predICS$pass == "1")))
 
 write.csv(succRate,"succRate.csv", row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
-succRate02 <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$JustPass)),
-                    sapply(predJustCD[, 3:9], function(x) mean(x == predJustCD$JustPass)),
-                    sapply(predJustICS[, 3:9], function(x) mean(x == predJustICS$JustPass)))
-succRate02 <- data.frame(Layer = c("PS", "CD", "ICS"),
-                         N = c(dim(predJustPS)[1], dim(predJustCD)[1], dim(predJustICS)[1]),
-                         succRate02,
-                         Guessing = c(mean(predJustPS$JustPass == "Pass2"),
-                                      mean(predJustCD$JustPass == "Pass2"),
-                                      mean(predJustICS$JustPass == "Pass2")))
+compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
+                     sapply(predJustCD[, 3:9], function(x) mean(x == predJustCD$justpass)),
+                     sapply(predJustICS[, 3:9], function(x) mean(x == predJustICS$justpass)))
+succRateJust <- data.frame(Layer = c("PS", "CD", "ICS"),
+                           N = c(dim(predJustPS)[1], dim(predJustCD)[1], dim(predJustICS)[1]),
+                           compareJust,
+                           Guessing = c(mean(predJustPS$justpass == "1"),
+                                        mean(predJustCD$justpass == "1"),
+                                        mean(predJustICS$justpass == "1")))
 
-write.csv(succRate02,"succRate02.csv", row.names = FALSE)
+write.csv(succRateJust,"succRateJust.csv", row.names = FALSE)
 
 
 ## OLD, NOT UPDATED YET 
