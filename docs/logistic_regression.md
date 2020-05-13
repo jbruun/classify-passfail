@@ -1,7 +1,7 @@
 ---
 title: "Logistic regression"
 author: "Jesper Bruun & Adrienne Traxler"
-date: "3/30/2020"
+date: "3/30/2020--"
 output: 
   html_document: 
     keep_md: yes
@@ -9,7 +9,7 @@ output:
 
 
 
-Goal for this document is to make exploratory plots and run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
+Goal for this document is to run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
 
 **Update 5/7:** Centrality boxplots finished, ready to update logistic regression results. 
 
@@ -56,329 +56,137 @@ Goal for this document is to make exploratory plots and run logistic regression 
 
 ## Import data
 
-At this point, `loadAllNetworks` and `calculatePR_TE_H` have already been run. Importing the results of that,
+At this point, the following Rmd files have already been run: `loadAllNetworks`, `calculatePR_TE_H`, and `make_node_data_frames`. Importing the results of that gives me three long data frames. Each has all the node info and centrality values, by week, for a single layer. 
 
 
 ```r
-(load("../data/PRTEH.RData"))
+(load("../data/centrality_data_frames.Rdata"))
 ```
 
 ```
-##  [1] "nominator"         "singleICS_S"       "accCD_S"          
-##  [4] "graphsICS"         "files"             "weeksPS"          
-##  [7] "FCI_PRE_S"         "accCD"             ".Random.seed"     
-## [10] "weeksCD"           "accPS_TE"          "singlePS_TE"      
-## [13] "singleCD_TE"       "singleICS_H"       "singleCD_H"       
-## [16] "singlePS_H"        "accCD_H"           "biggraph"         
-## [19] "sInfMatrix"        "weightedAdjacency" "targetEntropy"    
-## [22] "applyAttr"         "accCD_PR"          "accICS_PR"        
-## [25] "accICS_S"          "pass"              "paths"            
-## [28] "FCI_PRE_C"         "JUSTPASS"          "ccWeekNets"       
-## [31] "accPS_S"           "FCI_PRE"           "SOG"              
-## [34] "accPS_H"           "searchInformation" "FCI_PRE_0"        
-## [37] "denominator"       "singleICS_PR"      "accPS_PR"         
-## [40] "singlePS_PR"       "singleCD_PR"       "singleCD_S"       
-## [43] "singlePS_S"        "weeksICS"          "graphsPS"         
-## [46] "dirs"              "accWeekNets"       "PASS"             
-## [49] "attributes"        "accICS"            "accPS"            
-## [52] "justpass"          "graphsCD"          "accICS_TE"        
-## [55] "singleICS_TE"      "accCD_TE"          "accICS_H"         
-## [58] "TargetEntropy"     "gzero"
+## [1] "dfPS"      "dfCD"      "dfICS"     "nPass"     "nJustPass"
 ```
-
-There's a lot in there, but I'm mostly interested in the `accXX` objects, which hold the accumulated networks as of each week. 
-
-
-```r
-summary(accPS[[7]])
-```
-
-```
-## IGRAPH f9c3ed0 DNW- 166 1199 -- 
-## + attr: name (v/c), id (v/c), grade (v/n), gender (v/n), age (v/n),
-## | cohort (v/n), sog (v/n), fci_pre (v/n), fci_pre_0 (v/n), fci_pre_s
-## | (v/n), fci_pre_c (v/n), pass (v/n), justpass (v/n), weight (e/n)
-```
-
-```r
-table(E(accPS[[7]])$weight)
-```
-
-```
-## 
-##   1   2   3   4   5   6   7 
-## 634 226 159  66  69  42   3
-```
-
-Take a look at the pass/fail and just pass/just fail counts (these are the same in all three network layers):
-
-```r
-table(V(accPS[[7]])$pass, useNA = "ifany")
-```
-
-```
-## 
-##   0   1 
-##  38 128
-```
-
-```r
-table(V(accPS[[7]])$justpass, useNA = "ifany")
-```
-
-```
-## 
-##    0    1 <NA> 
-##   28   39   99
-```
-
-```r
-nPass <- table(V(accPS[[7]])$pass, useNA = "ifany")
-nJustPass <- table(V(accPS[[7]])$justpass, useNA = "ifany")
-```
-
-
-## Pass/fail boxplots
-
-To do the pass/fail boxplots, I need a data frame with people's IDs, their pass/fail outcomes, and their centrality scores. I need this information for each week, with a column for week number as well. 
-
-**TEMP HACK:** Need to avoid duplicate node names, so second "Person14" gets named "Person16
-
-
-### Problem solving layer
-
-To make boxplots using `ggplot`, I need to first collect the node information into a long data frame. While I'm doing that for the problem-solving layer, I might as well do the others too. 
-
-
-```r
-# accNW should be one of accPS, accCD, or accICS
-# accPR, accTE, and accH should be the corresponding centrality lists
-make_node_df <- function(accNW, accPR, accTE, accH) {
-  dflist <- vector("list", length = length(accNW))
-  for (i in seq(dflist)) {
-    df <- igraph::as_data_frame(accNW[[i]], what = "vertices")
-    df$Week <- i
-    df$PageRank <- accPR[[i]]$vector
-    df$tarEnt <- accTE[[i]]
-    df$Hide <- accH[[i]]
-    
-    dflist[[i]] <- df %>% select(-id)  # ditch id column, it duplicates name + Person14 typo
-  }
-  dfNW <- bind_rows(dflist)
-  dfNW <- subset(dfNW, select = c(Week, name:Hide))  # reorder to put Week first
-  
-  # Need factors for plotting
-  dfNW$Week <- as.factor(dfNW$Week)   
-  dfNW$pass <- as.factor(dfNW$pass)
-  dfNW$justpass <- as.factor(dfNW$justpass)   
-  return(dfNW)
-}
-dfPS <- make_node_df(accPS, accPS_PR, accPS_TE, accPS_H)
-dfCD <- make_node_df(accCD, accCD_PR, accCD_TE, accCD_H)
-dfICS <- make_node_df(accICS, accICS_PR, accICS_TE, accICS_H)
-
-head(dfPS)
-```
-
-```
-##   Week    name grade gender age cohort sog fci_pre fci_pre_0 fci_pre_s
-## 1    1 Person1     2      1  19      3   6      17        17        17
-## 2    1 Person2    -3      1  20     10  NA      NA         0         6
-## 3    1 Person3     0      1  22     10   9      NA         0        15
-## 4    1 Person4     4      1  19      6  20      28        28        28
-## 5    1 Person5     2      1  27      1   7      26        26        26
-## 6    1 Person6     4      1  20      2   0      18        18        18
-##   fci_pre_c pass justpass Week.1    PageRank    tarEnt       Hide
-## 1         2    1        1      1 0.004780164 0.0000000   0.000000
-## 2         1    0     <NA>      1 0.005915686 0.4138169 114.230046
-## 3         1    0        0      1 0.004780164 0.0000000   0.000000
-## 4         4    1     <NA>      1 0.005997961 0.0000000  13.228819
-## 5         4    1        1      1 0.004780164 0.0000000   0.000000
-## 6         3    1     <NA>      1 0.009249618 1.0000000   3.321928
-```
-
-Now, I think, I can do the boxplots I need? For PageRank...
-
-
-```r
-ggplot(dfPS, aes(x = Week, y = PageRank)) + 
-  geom_boxplot(aes(fill = pass)) + #theme(aspect.ratio = 4/7) +
-  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
-
-```r
-dfPS %>% filter(is.na(justpass) == FALSE) %>% 
-  ggplot(aes(x = Week, y = PageRank)) + 
-  geom_boxplot(aes(fill = justpass)) + #theme(aspect.ratio = 4/7) +
-  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-6-2.png)<!-- -->
-
-The plot for all passing/failing looks pretty much the same as my old one. The justpass/justfail plot also looks similar, but seems to be missing some outlier points relative to the old plot. That's weird, since it has a few more data points in it. 
-
-For Target Entropy:
-
-```r
-ggplot(dfPS, aes(x = Week, y = tarEnt)) + 
-  geom_boxplot(aes(fill = pass)) + 
-  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-7-1.png)<!-- -->
-
-```r
-dfPS %>% filter(is.na(justpass) == FALSE) %>% 
-  ggplot(aes(x = Week, y = tarEnt)) + 
-  geom_boxplot(aes(fill = justpass)) + 
-  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-7-2.png)<!-- -->
-
-and for Hide:
-
-```r
-ggplot(dfPS, aes(x = Week, y = Hide)) + 
-  geom_boxplot(aes(fill = pass)) + 
-  ggtitle(paste0("PS all passing/failing (",nPass[2],"/",nPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
-
-```r
-dfPS %>% filter(is.na(justpass) == FALSE) %>% 
-  ggplot(aes(x = Week, y = Hide)) + 
-  geom_boxplot(aes(fill = justpass)) + 
-  ggtitle(paste0("PS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-8-2.png)<!-- -->
-
-### Concept discussion layer
-
-First PageRank:
-
-
-```r
-ggplot(dfCD, aes(x = Week, y = PageRank)) + 
-  geom_boxplot(aes(fill = pass)) + 
-  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
-
-```r
-dfCD %>% filter(is.na(justpass) == FALSE) %>% 
-  ggplot(aes(x = Week, y = PageRank)) + 
-  geom_boxplot(aes(fill = justpass)) + 
-  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-9-2.png)<!-- -->
-
-For Target Entropy:
-
-```r
-ggplot(dfCD, aes(x = Week, y = tarEnt)) + 
-  geom_boxplot(aes(fill = pass)) + 
-  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
-
-```r
-dfCD %>% filter(is.na(justpass) == FALSE) %>% 
-  ggplot(aes(x = Week, y = tarEnt)) + 
-  geom_boxplot(aes(fill = justpass)) + 
-  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-10-2.png)<!-- -->
-
-and for Hide:
-
-```r
-ggplot(dfCD, aes(x = Week, y = Hide)) + 
-  geom_boxplot(aes(fill = pass)) + 
-  ggtitle(paste0("CD all passing/failing (",nPass[2],"/",nPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
-
-```r
-dfCD %>% filter(is.na(justpass) == FALSE) %>% 
-  ggplot(aes(x = Week, y = Hide)) + 
-  geom_boxplot(aes(fill = justpass)) + 
-  ggtitle(paste0("CD just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-11-2.png)<!-- -->
-
-
-### In-class socializing layer
-
-And the third set of boxplots. First PageRank:
-
-
-```r
-ggplot(dfICS, aes(x = Week, y = PageRank)) + 
-  geom_boxplot(aes(fill = pass)) + 
-  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
-
-```r
-dfICS %>% filter(is.na(justpass) == FALSE) %>% 
-  ggplot(aes(x = Week, y = PageRank)) + 
-  geom_boxplot(aes(fill = justpass)) + 
-  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-12-2.png)<!-- -->
-
-For Target Entropy:
-
-```r
-ggplot(dfICS, aes(x = Week, y = tarEnt)) + 
-  geom_boxplot(aes(fill = pass)) + 
-  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
-
-```r
-dfICS %>% filter(is.na(justpass) == FALSE) %>% 
-  ggplot(aes(x = Week, y = tarEnt)) + 
-  geom_boxplot(aes(fill = justpass)) + 
-  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-13-2.png)<!-- -->
-
-and for Hide:
-
-```r
-ggplot(dfICS, aes(x = Week, y = Hide)) + 
-  geom_boxplot(aes(fill = pass)) + 
-  ggtitle(paste0("ICS all passing/failing (",nPass[2],"/",nPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
-
-```r
-dfICS %>% filter(is.na(justpass) == FALSE) %>% 
-  ggplot(aes(x = Week, y = Hide)) + 
-  geom_boxplot(aes(fill = justpass)) + 
-  ggtitle(paste0("ICS just passing/failing (",nJustPass[2],"/",nJustPass[1],")"))
-```
-
-![](logistic_regression_files/figure-html/unnamed-chunk-14-2.png)<!-- -->
 
 
 ## Logistic regression
 
-As I recall, we had decided to skip the half-training, half-test approach because the data set isn't large enough to support that. If we stick with the "jackknife" approach... 
+As I recall, we had decided to skip the half-training, half-test approach because the data set isn't large enough to support that. If we stick with the "jackknife" approach, I can port in my old code.
+
+The first thing I need is a list of data frames, rather than a single long data frame. Tidyverse to the rescue:
+
+
+```r
+centPS <- dfPS %>% group_split(Week)
+centCD <- dfCD %>% group_split(Week)
+centICS <- dfICS %>% group_split(Week)
+
+centPS[[1]]
+```
+
+```
+## # A tibble: 166 x 17
+##    Week  name  grade gender   age cohort   sog fci_pre fci_pre_0 fci_pre_s
+##    <fct> <chr> <int>  <int> <int>  <int> <dbl>   <dbl>     <dbl>     <dbl>
+##  1 1     Pers~     2      1    19      3     6      17        17        17
+##  2 1     Pers~    -3      1    20     10    NA      NA         0         6
+##  3 1     Pers~     0      1    22     10     9      NA         0        15
+##  4 1     Pers~     4      1    19      6    20      28        28        28
+##  5 1     Pers~     2      1    27      1     7      26        26        26
+##  6 1     Pers~     4      1    20      2     0      18        18        18
+##  7 1     Pers~     0      1    19     10    11      NA         0        15
+##  8 1     Pers~     7      1    20      2    NA      15        15        15
+##  9 1     Pers~    12      1   100      4    NA      26        26        26
+## 10 1     Pers~     7      1    20      3    11      13        13        13
+## # ... with 156 more rows, and 7 more variables: fci_pre_c <dbl>, pass <fct>,
+## #   justpass <fct>, Week.1 <int>, PageRank <dbl>, tarEnt <dbl>, Hide <dbl>
+```
+
+```r
+centPS[[2]]
+```
+
+```
+## # A tibble: 166 x 17
+##    Week  name  grade gender   age cohort   sog fci_pre fci_pre_0 fci_pre_s
+##    <fct> <chr> <int>  <int> <int>  <int> <dbl>   <dbl>     <dbl>     <dbl>
+##  1 2     Pers~     2      1    19      3     6      17        17        17
+##  2 2     Pers~    -3      1    20     10    NA      NA         0         6
+##  3 2     Pers~     0      1    22     10     9      NA         0        15
+##  4 2     Pers~     4      1    19      6    20      28        28        28
+##  5 2     Pers~     2      1    27      1     7      26        26        26
+##  6 2     Pers~     4      1    20      2     0      18        18        18
+##  7 2     Pers~     0      1    19     10    11      NA         0        15
+##  8 2     Pers~     7      1    20      2    NA      15        15        15
+##  9 2     Pers~    12      1   100      4    NA      26        26        26
+## 10 2     Pers~     7      1    20      3    11      13        13        13
+## # ... with 156 more rows, and 7 more variables: fci_pre_c <dbl>, pass <fct>,
+## #   justpass <fct>, Week.1 <int>, PageRank <dbl>, tarEnt <dbl>, Hide <dbl>
+```
+
+Next, the function that actually does the calculations. 
+
+* Input: A list of weekly data frames, optional outcome (pass/justpass, defaults to "pass"), and an optional subset of predictors to use (defaults gender, cohort, FCI pre, and centrality)
+* Output: A data frame with node names, pass/fail outcome, and prediction vectors for that weekly aggregate network. Each node is predicted using all the other nodes in its week.
+
+
+```r
+jackPred <- function(layer, outcome = "pass", 
+                     predictors = c("gender", "cohort", "fci_pre", "PageRank", 
+                                    "tarEnt", "Hide")) {
+  if (outcome == "pass" | outcome == "justpass") {
+    choices <- c("0", "1")
+  } else {
+    stop("Not a valid outcome variable.")
+  }
+  # remove incomplete rows
+  userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
+
+  allprob <- matrix(nrow = sum(userows), ncol = length(layer))
+  fitStr <- paste(predictors, collapse = " + ")
+  fitForm <- paste0(outcome, " ~ ", fitStr)
+  for(j in 1:length(layer)) {
+    # data is complete cases
+    data <- layer[[j]][userows, c(outcome, predictors)]
+    # Loop through all nodes
+    for(i in 1:dim(data)[1]) {
+      # training set is data minus observation i
+      train <- data[-i, ]
+      glm.fit <- glm(fitForm, family = binomial, data = train)
+      allprob[i, j] <- predict(glm.fit, newdata = data[i, ], type = "response")
+    }
+  }
+  allpred <- allprob
+  allpred[allprob < 0.5] <- choices[1]    # 0
+  allpred[allprob >= 0.5] <- choices[2]   # 1
+  
+  # To return: node name, actual outcome, predicted outcome columns
+  alldata <- data.frame(layer[[1]][userows, "name"], data[, outcome], as.data.frame(allpred))
+  
+  # Turn outcomes into factor
+  for(i in seq_along(layer)) {
+    alldata[, i+2] <- as.factor(alldata[, i+2])
+  }
+  
+  names(alldata) <- c("name", outcome, paste0("Week", c(1:length(layer))))
+  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1]))
+  return(alldata)
+}
+```
+
+It takes a few seconds to run the loop, so I'll import the results rather than executing it here.
+
+
+```r
+# Predict pass/fail
+#predPS <- jackPred(centPS)
+#predCD <- jackPred(centCD)
+#predICS <- jackPred(centICS)
+
+# Predict just-pass/just-fail (2/0)
+#predJustPS <- jackPred(centPS, outcome = "justpass")
+#predJustCD <- jackPred(centCD, outcome = "justpass")
+#predJustICS <- jackPred(centICS, outcome = "justpass")
+
+load("../data/jackknife_logistic_predictions.Rdata")
+```
+
