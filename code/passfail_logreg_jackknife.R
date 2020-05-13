@@ -154,31 +154,3 @@ p1 + geom_hline(yintercept=succRate[1,10],linetype="dashed",color=plotcolors[1])
   geom_hline(yintercept=succRate[2,10],linetype="dashed",color=plotcolors[2]) +
   geom_hline(yintercept=succRate[3,10],linetype="dashed",color=plotcolors[3])
 ggsave("../figures/succRate_jackknife.png",width=5,height=4,units="in",dpi=150)
-
-
-## Old code
-
-# # Not sure I'm still using this...
-# aggPS <- centPS[[7]][complete.cases(centPS[[7]][,c(2:4,7:10)]),]
-# aggCD <- centCD[[7]]
-# aggICS <- centICS[[7]]
-# 
-# # Toy run: Use entire last week of PS data to predict itself (ISLR 4.6.2)
-# glm.PS <- glm(Pass~PageRank+tarEnt+Hide+Gender+Section+FCIPre,family=binomial,data=aggPS)
-# PS.probs <- predict(glm.PS,type="response")
-# predN <- sum(complete.cases(aggPS[,c(2:4,7:10)]))
-# PS.pred <- rep("Fail",predN)
-# PS.pred[PS.probs>0.5] <- "Pass"
-# table(PS.pred,aggPS$Pass)
-# mean(PS.pred==aggPS$Pass)
-# mean(aggPS$Pass=="Pass")
-# 
-# # Remove Section and redo
-# glm.PS2 <- glm(Pass~PageRank+FCIPre,family=binomial,data=aggPS)
-# PS.probs2 <- predict(glm.PS2,type="response")
-# PS.pred2 <- rep("Fail",predN)
-# PS.pred2[PS.probs2>0.5] <- "Pass"
-# table(PS.pred2,aggPS$Pass)
-# mean(PS.pred2==aggPS$Pass)
-# mean(aggPS$Pass=="Pass")
-# 
