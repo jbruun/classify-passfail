@@ -1,7 +1,7 @@
 ---
 title: "Logistic regression"
 author: "Jesper Bruun & Adrienne Traxler"
-date: "3/30/2020--"
+date: "3/30/2020--5/26/2020"
 output: 
   html_document: 
     keep_md: yes
@@ -11,7 +11,7 @@ output:
 
 Goal for this document is to run logistic regression for passing and failing in the (single-layer) PS, CD, and ICS weekly networks.
 
-**Update 5/8:** Logistic regression results calculated and imported; success rates calculated. 
+**Update 5/26:** Added summary of results at bottom. Done for now?
 
 
 ```
@@ -248,3 +248,80 @@ succRateJust
 ## 3 0.6000000 0.6181818
 ```
 
+## Summary of results
+
+The success rate tables have the punchline here. If the success rate for a given week and layer is higher than the value in the last column (the "assume everyone passes" default classifier), that's good news. 
+
+Doing a quick boolean comparison,
+
+```r
+succRate[, c(3:9)] > succRate[1, 10]
+```
+
+```
+##      Week1 Week2 Week3 Week4 Week5 Week6 Week7
+## [1,] FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+## [2,] FALSE FALSE FALSE FALSE  TRUE  TRUE FALSE
+## [3,] FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
+```
+
+```r
+rowSums(succRate[, c(3:9)] > succRate[1, 10])
+```
+
+```
+## [1] 6 2 5
+```
+
+In many weeks, the logistic regression success rate beats the default, especially on the PS and ICS layers. 
+
+
+```r
+(succRate[, c(3:9)] - succRate[1, 10]) * 100
+```
+
+```
+##        Week1     Week2    Week3      Week4    Week5     Week6     Week7
+## 1 -2.1126761  2.816901 1.408451  0.7042254 2.112676 1.4084507  1.408451
+## 2 -2.8169014 -2.816901 0.000000 -0.7042254 1.408451 0.7042254 -1.408451
+## 3 -0.7042254  0.000000 2.816901  1.4084507 1.408451 0.7042254  2.112676
+```
+
+If you look at the amount by which it wins, though, it's not too exciting---always less than 3% better, and generally less than 2%. 
+
+For grades on the boundary, 
+
+
+```r
+succRateJust[, c(3:9)] > succRateJust[1, 10]
+```
+
+```
+##      Week1 Week2 Week3 Week4 Week5 Week6 Week7
+## [1,]  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE
+## [2,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [3,] FALSE  TRUE FALSE  TRUE  TRUE FALSE FALSE
+```
+
+```r
+rowSums(succRateJust[, c(3:9)] > succRateJust[1, 10])
+```
+
+```
+## [1] 4 0 3
+```
+
+```r
+(succRateJust[, c(3:9)] - succRateJust[1, 10]) * 100
+```
+
+```
+##       Week1     Week2     Week3     Week4     Week5 Week6     Week7
+## 1  9.090909 -1.818182  3.636364  1.818182  3.636364     0  0.000000
+## 2 -5.454545 -1.818182 -9.090909 -3.636364 -1.818182     0  0.000000
+## 3  0.000000  3.636364  0.000000  1.818182  1.818182     0 -1.818182
+```
+
+Here, logistic regression succeeds less often (and never for CD), though sometimes by higher percentages when it does. Also interesting (if disappointing) is that the logistic regression classifier isn't really getting better as more weekly data accumulates. 
+
+The overall verdict is that logistic regression often beats the default classifier (at least for PS and ICS), but not in an obviously time-dependent way as the weeks progress, and not by amounts to get excited about. 
