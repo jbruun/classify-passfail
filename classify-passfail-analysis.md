@@ -2,35 +2,29 @@ R markdown for Classifying student passing and failing from network
 measures
 ================
 Adrienne Traxler & Jesper Bruun
-3/1/2020
+9/3/2020
 
-## R Markdown
+Summarize results here.
 
-This is an R Markdown document. Markdown is a simple formatting syntax
-for authoring HTML, PDF, and MS Word documents. For more details on
-using R Markdown see <http://rmarkdown.rstudio.com>.
+**Update 6/9:** Started with collecting data information (since I keep
+forgetting which variables to use).
 
-When you click the **Knit** button a document will be generated that
-includes both content as well as the output of any embedded R code
-chunks within the document. You can embed an R code chunk like this:
+## Summary of data
+
+After the network data has been cleaned and assigned node attributes (by
+`loadAllNetworks.r`), and centrality values are calculated (by
+`calculatePR_TE_H.r`), the igraph objects are stored in
+`data/PRTEH.RData`.
 
 ``` r
-summary(cars)
+load("data/PRTEH.RData")
 ```
 
-    ##      speed           dist       
-    ##  Min.   : 4.0   Min.   :  2.00  
-    ##  1st Qu.:12.0   1st Qu.: 26.00  
-    ##  Median :15.0   Median : 36.00  
-    ##  Mean   :15.4   Mean   : 42.98  
-    ##  3rd Qu.:19.0   3rd Qu.: 56.00  
-    ##  Max.   :25.0   Max.   :120.00
+That file includes:
 
-## Including Plots
+  - `accPS`, `accCD`, and `accICS`: Accumulated network objects for each
+    week for the problem solving, concept discussion, and in-class
+    social network layers.
 
-You can also embed plots, for example:
-
-![](classify-passfail-analysis_files/figure-gfm/pressure-1.png)<!-- -->
-
-Note that the `echo = FALSE` parameter was added to the code chunk to
-prevent printing of the R code that generated the plot.
+  - 
+## Logisitic regression results
