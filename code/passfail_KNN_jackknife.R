@@ -10,7 +10,7 @@ library(dplyr)
 library(class)   # for knn
 
 # Import pass/fail centrality data
-#loadvars <- load("data/centPassFail.Rdata")
+#loadvars <- load("data/centPassFail.Rdata")  # old data
 load("data/centrality_data_frames.Rdata")
 
 
@@ -25,7 +25,7 @@ centICS <- dfICS %>% group_split(Week)
 #  subset of predictors to use
 # Output: List of prediction vectors for that weekly aggregate network; each node in the 
 #  vector is predicted using all the other nodes
-jackPred <- function(layer, outcome = "pass", 
+jackPred <- function(layer, nK = 1, outcome = "pass", 
                      predictors = c("gender", "cohort", "fci_pre", "PageRank", 
                                     "tarEnt", "Hide")) {
   if (outcome == "pass" | outcome == "justpass") {
@@ -36,13 +36,13 @@ jackPred <- function(layer, outcome = "pass",
   
   # Input data (complete cases) and empty frame to store predictions 
   Nlayer <- length(layer)
-  userows <- complete.cases(layer[[Nlayer]][, c(outcome,predictors)])  
-  allprob <- matrix(nrow = sum(userows), ncol = Nlayer)
+  userows <- complete.cases(layer[[Nlayer]][, c(outcome, predictors)])  
+  allpred <- matrix(nrow = sum(userows), ncol = Nlayer)
   
   # Build fitting input string using predictor names
   fitStr <- paste(predictors, collapse = " + ")
   fitForm <- paste0(outcome, " ~ ", fitStr)
-  
+
   # Loop through all weeks
   for(j in seq(Nlayer)) {
     data <- layer[[j]][userows, c(outcome, predictors)] # data is complete cases
@@ -55,8 +55,10 @@ jackPred <- function(layer, outcome = "pass",
       test <- as.matrix(data[i, predictors])
       
       # Outcome vectors for training and test data
-      trOutcome <- data[-i, outcome]
-      teOutcome <- data[i, outcome]
+      # Can't just do data[-i, outcome], for explanation see
+      # https://stackoverflow.com/questions/51063381/vector-from-tibble-has-length-0
+      trOutcome <- pull(data[-i, ], var = outcome)
+      teOutcome <- pull(data[i, ], var = outcome)
       
       # Run KNN
       set.seed(2)
@@ -69,22 +71,21 @@ jackPred <- function(layer, outcome = "pass",
   # Assemble data frame: Translate factor to labels, add node names and outcomes
   allpred[allpred == 1] <- choices[1] # 0
   allpred[allpred == 2] <- choices[2] # 1
-  allpred <- data.frame(layer[[1]][userows, "id"],  # node names
+  allpred <- data.frame(layer[[1]][userows, "name"],  # node names
                         data[, outcome],            # real outcome
                         as.data.frame(allpred))     # predicted outcome
-  names(allpred) <- c("id", outcome, paste0("Week", c(1:length(layer))))
+  names(allpred) <- c("name", outcome, paste0("Week", c(1:length(layer))))
   
   # Print info string and return predictions
-  print(paste0("Fit: ", fitForm, ", #neighbors = ", nK, ", complete N = ", dim(allpred)[1]))
+  print(paste0("Fit: ", fitForm, ", #neighbors = ", nK, 
+               ", complete N = ", dim(allpred)[1]))
   return(allpred)
 }
 
-## NOT TESTED YET
-
 # Predict pass/fail
-predPS <- jackPred(centPS)
-predCD <- jackPred(centCD)
-predICS <- jackPred(centICS)
+predPS <- jackPred(centPS, nK = 2)
+predCD <- jackPred(centCD, nK = 2)
+predICS <- jackPred(centICS, nK = 2)
 
 # Predict just-pass/just-fail (2/0)
 predJustPS <- jackPred(centPS, outcome = "justpass")
