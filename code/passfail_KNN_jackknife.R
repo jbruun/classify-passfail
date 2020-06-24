@@ -1,7 +1,7 @@
 # K nearest neighbors on pass/fail centrality by removing single observations.
 # Last modified: 6/24/20 (created)
 # 
-# Status: 
+# Status: Saved predictions. Update succRate code with nK next. 
 
 rm(list = ls())
 
@@ -85,22 +85,23 @@ jackPred <- function(layer, nK = 1, outcome = "pass",
 }
 
 # Predict pass/fail
-predPS <- jackPred(centPS, nK = 1)
-predCD <- jackPred(centCD, nK = 1)
-predICS <- jackPred(centICS, nK = 1)
+predPS <- jackPred(centPS, nK = 2)
+predCD <- jackPred(centCD, nK = 2)
+predICS <- jackPred(centICS, nK = 2)
 
 # Predict just-pass/just-fail (2/0)
-predJustPS <- jackPred(centPS, nK = 1, outcome = "justpass")
-predJustCD <- jackPred(centCD, nK = 1, outcome = "justpass")
-predJustICS <- jackPred(centICS, nK = 1, outcome = "justpass")
+predJustPS <- jackPred(centPS, nK = 2, outcome = "justpass")
+predJustCD <- jackPred(centCD, nK = 2, outcome = "justpass")
+predJustICS <- jackPred(centICS, nK = 2, outcome = "justpass")
 
 # Save pass/fail predictions
-if (identical(predPS$nK, predCD$nK, predICS$nK, predJustPS$nK, 
-               predJustCD$nK, predJustICS$nK)) {
+allnK <- c(predPS$nK, predCD$nK, predICS$nK, predJustPS$nK, 
+           predJustCD$nK, predJustICS$nK)
+if (max(allnK) == min(allnK)) {
   outfile <- paste0("data/jackknife_knn", as.character(predPS$nK), 
                     "_predictions.Rda")
 } else {
-  cat("Warning: Not all neighbor #s are the same")
+  cat("Warning: Not all neighbor #s are the same\n")
   outfile <- "data/jackknife_knnX_predictions.Rda"
 }
 save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
