@@ -8,6 +8,8 @@ rm(list = ls())
 library(igraph)
 library(dplyr)
 library(class)   # for knn
+library(tidyr)
+library(ggplot2)  # for plotting success rates
 
 # Import pass/fail centrality data
 #loadvars <- load("data/centPassFail.Rdata")  # old data
@@ -88,13 +90,13 @@ predCD <- jackPred(centCD, nK = 2)
 predICS <- jackPred(centICS, nK = 2)
 
 # Predict just-pass/just-fail (2/0)
-predJustPS <- jackPred(centPS, outcome = "justpass")
-predJustCD <- jackPred(centCD, outcome = "justpass")
-predJustICS <- jackPred(centICS, outcome = "justpass")
+predJustPS <- jackPred(centPS, nK = 1, outcome = "justpass")
+predJustCD <- jackPred(centCD, nK = 1, outcome = "justpass")
+predJustICS <- jackPred(centICS, nK = 1, outcome = "justpass")
 
 # Save pass/fail predictions
 save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
-     file = "data/jackknife_logistic_predictions.Rdata")
+     file = "data/jackknife_knn_predictions.Rdata")
 
 
 ## Collect success rates and compare with guessing everyone passes
@@ -106,10 +108,11 @@ compareSucc <- rbind(sapply(predPS[, 3:9], function(x) mean(x == predPS$pass)),
 succRate <- data.frame(Layer = c("PS","CD","ICS"), 
                        N = c(dim(predPS)[1], dim(predCD)[1], dim(predICS)[1]),
                        compareSucc, 
-                       Guessing = c(mean(predPS$pass == "1"), mean(predCD$pass == "1"),
+                       Guessing = c(mean(predPS$pass == "1"), 
+                                    mean(predCD$pass == "1"),
                                     mean(predICS$pass == "1")))
 
-write.csv(succRate,"succRate.csv", row.names = FALSE)
+write.csv(succRate,"succRate_knn.csv", row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
 compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
@@ -122,7 +125,19 @@ succRateJust <- data.frame(Layer = c("PS", "CD", "ICS"),
                                         mean(predJustCD$justpass == "1"),
                                         mean(predJustICS$justpass == "1")))
 
-write.csv(succRateJust,"succRateJust.csv", row.names = FALSE)
+write.csv(succRateJust,"succRateJust_knn.csv", row.names = FALSE)
+
+
+## Plotting success rates
+dflong <- succRate %>% 
+  pivot_longer(Week1:Week7, names_to = "Week", values_to = "Rate")
+
+ggplot(data = dflong, mapping = aes(x = Week, y = Rate)) + 
+  geom_point(mapping = aes(color = Layer, shape = Layer)) + 
+  geom_hline(aes(yintercept = Guessing)) + 
+  ylim(0, 1) + 
+  labs(title = "Success rate: KNN, 1 neighbor")
+  
 
 
 ## OLD, NOT UPDATED YET 
