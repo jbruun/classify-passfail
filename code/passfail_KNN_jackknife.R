@@ -81,13 +81,13 @@ jackPred <- function(layer, nK = 1, outcome = "pass",
   # Print info string and return predictions
   print(paste0("Fit: ", fitForm, ", #neighbors = ", nK, 
                ", complete N = ", dim(allpred)[1]))
-  return(allpred)
+  return(list(nK = nK, allpred = allpred))
 }
 
 # Predict pass/fail
-predPS <- jackPred(centPS, nK = 2)
-predCD <- jackPred(centCD, nK = 2)
-predICS <- jackPred(centICS, nK = 2)
+predPS <- jackPred(centPS, nK = 1)
+predCD <- jackPred(centCD, nK = 1)
+predICS <- jackPred(centICS, nK = 1)
 
 # Predict just-pass/just-fail (2/0)
 predJustPS <- jackPred(centPS, nK = 1, outcome = "justpass")
@@ -95,8 +95,16 @@ predJustCD <- jackPred(centCD, nK = 1, outcome = "justpass")
 predJustICS <- jackPred(centICS, nK = 1, outcome = "justpass")
 
 # Save pass/fail predictions
+if (identical(predPS$nK, predCD$nK, predICS$nK, predJustPS$nK, 
+               predJustCD$nK, predJustICS$nK)) {
+  outfile <- paste0("data/jackknife_knn", as.character(predPS$nK), 
+                    "_predictions.Rda")
+} else {
+  cat("Warning: Not all neighbor #s are the same")
+  outfile <- "data/jackknife_knnX_predictions.Rda"
+}
 save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
-     file = "data/jackknife_knn_predictions.Rdata")
+     file = outfile)
 
 
 ## Collect success rates and compare with guessing everyone passes
