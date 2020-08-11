@@ -111,15 +111,17 @@ save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
 ## Collect success rates and compare with guessing everyone passes
 
 # Success rate for each week (prediction == outcome)
-compareSucc <- rbind(sapply(predPS[, 3:9], function(x) mean(x == predPS$pass)),
-                     sapply(predCD[, 3:9], function(x) mean(x == predCD$pass)),
-                     sapply(predICS[, 3:9], function(x) mean(x == predICS$pass)))
+compareSucc <- rbind(sapply(predPS[[2]][, 3:9], function(x) mean(x == predPS[[2]]$pass)),
+                     sapply(predCD[[2]][, 3:9], function(x) mean(x == predCD[[2]]$pass)),
+                     sapply(predICS[[2]][, 3:9], function(x) mean(x == predICS[[2]]$pass)))
 succRate <- data.frame(Layer = c("PS","CD","ICS"), 
-                       N = c(dim(predPS)[1], dim(predCD)[1], dim(predICS)[1]),
+                       nK = c(predPS[[1]], predCD[[1]], predICS[[1]]),
+                       N = c(dim(predPS[[2]])[1], dim(predCD[[2]])[1], 
+                             dim(predICS[[2]])[1]),
                        compareSucc, 
-                       Guessing = c(mean(predPS$pass == "1"), 
-                                    mean(predCD$pass == "1"),
-                                    mean(predICS$pass == "1")))
+                       Guessing = c(mean(predPS[[2]]$pass == "1"), 
+                                    mean(predCD[[2]]$pass == "1"),
+                                    mean(predICS[[2]]$pass == "1")))
 
 write.csv(succRate,"succRate_knn.csv", row.names = FALSE)
 
