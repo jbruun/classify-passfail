@@ -159,12 +159,40 @@ ggplot(data = dflong, mapping = aes(x = Week, y = Rate)) +
   
 
 
-## OLD, NOT UPDATED YET 
+## No-FCI version
 
 # What if we ignore FCIpre?
-predPSnoFCI <-jackPred(centPS,predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predCDnoFCI <-jackPred(centCD,predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predICSnoFCI <-jackPred(centICS,predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
+predict_noFCI <- c("gender", "cohort", "PageRank", "tarEnt", "Hide")
+
+# All pass/fail
+predPSnoFCI <-jackPred(centPS, nK = 2, predictors = predict_noFCI)
+predCDnoFCI <-jackPred(centCD, nK = 2, predictors = predict_noFCI)
+predICSnoFCI <-jackPred(centICS, nK = 2, predictors = predict_noFCI)
+
+# Just-pass/just-fail (2/0)
+predJustPSnoFCI <- jackPred(centPS, nK = 2, outcome = "justpass", 
+                            predictors = predict_noFCI)
+predJustCDnoFCI <- jackPred(centCD, nK = 2, outcome = "justpass", 
+                            predictors = predict_noFCI)
+predJustICSnoFCI <- jackPred(centICS, nK = 2, outcome = "justpass", 
+                             predictors = predict_noFCI)
+
+# Save pass/fail predictions
+allnKnoFCI <- c(predPSnoFCI$nK, predCDnoFCI$nK, predICSnoFCI$nK, 
+                predJustPSnoFCI$nK, predJustCDnoFCI$nK, predJustICSnoFCI$nK)
+if (max(allnKnoFCI) == min(allnKnoFCI)) {
+  outfile <- paste0("data/jackknife_knn", as.character(predPS$nK), 
+                    "_noFCI_predictions.Rda")
+} else {
+  cat("Warning: Not all neighbor #s are the same\n")
+  outfile <- "data/jackknife_knnX_noFCI_predictions.Rda"
+}
+save(predPSnoFCI, predCDnoFCI, predICSnoFCI, predJustPSnoFCI, 
+     predJustCDnoFCI, predJustICSnoFCI, file = outfile)
+
+
+## CODE BELOW NOT UPDATED
+
 succRatenoFCI <- rbind(sapply(predPSnoFCI[,3:9],function(x) mean(x==predPSnoFCI$Pass)),
                        sapply(predCDnoFCI[,3:9],function(x) mean(x==predCDnoFCI$Pass)),
                        sapply(predICSnoFCI[,3:9],function(x) mean(x==predICSnoFCI$Pass)))
