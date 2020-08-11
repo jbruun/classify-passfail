@@ -1,7 +1,7 @@
 # K nearest neighbors on pass/fail centrality by removing single observations.
-# Last modified: 6/24/20 (created)
+# Last modified: 8/11/20 (add nK to saved tables)
 # 
-# Status: Saved predictions. Update succRate code with nK next. 
+# Status: Updated succRate code with nK. Run no-FCIpre version next.
 
 rm(list = ls())
 
@@ -126,15 +126,21 @@ succRate <- data.frame(Layer = c("PS","CD","ICS"),
 write.csv(succRate,"succRate_knn.csv", row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
-compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
-                     sapply(predJustCD[, 3:9], function(x) mean(x == predJustCD$justpass)),
-                     sapply(predJustICS[, 3:9], function(x) mean(x == predJustICS$justpass)))
+compareJust <- rbind(sapply(predJustPS[[2]][, 3:9], 
+                            function(x) mean(x == predJustPS[[2]]$justpass)),
+                     sapply(predJustCD[[2]][, 3:9], 
+                            function(x) mean(x == predJustCD[[2]]$justpass)),
+                     sapply(predJustICS[[2]][, 3:9], 
+                            function(x) mean(x == predJustICS[[2]]$justpass)))
 succRateJust <- data.frame(Layer = c("PS", "CD", "ICS"),
-                           N = c(dim(predJustPS)[1], dim(predJustCD)[1], dim(predJustICS)[1]),
+                           nK = c(predJustPS[[1]], predJustCD[[1]], predJustICS[[1]]),
+                           N = c(dim(predJustPS[[2]])[1], 
+                                 dim(predJustCD[[2]])[1], 
+                                 dim(predJustICS[[2]])[1]),
                            compareJust,
-                           Guessing = c(mean(predJustPS$justpass == "1"),
-                                        mean(predJustCD$justpass == "1"),
-                                        mean(predJustICS$justpass == "1")))
+                           Guessing = c(mean(predJustPS[[2]]$justpass == "1"),
+                                        mean(predJustCD[[2]]$justpass == "1"),
+                                        mean(predJustICS[[2]]$justpass == "1")))
 
 write.csv(succRateJust,"succRateJust_knn.csv", row.names = FALSE)
 
@@ -143,11 +149,13 @@ write.csv(succRateJust,"succRateJust_knn.csv", row.names = FALSE)
 dflong <- succRate %>% 
   pivot_longer(Week1:Week7, names_to = "Week", values_to = "Rate")
 
+plotlab <- paste0("Success rate: KNN, ", median(succRate$nK), " neighbor(s)")
+
 ggplot(data = dflong, mapping = aes(x = Week, y = Rate)) + 
   geom_point(mapping = aes(color = Layer, shape = Layer)) + 
   geom_hline(aes(yintercept = Guessing)) + 
   ylim(0, 1) + 
-  labs(title = "Success rate: KNN, 1 neighbor")
+  labs(title = plotlab)
   
 
 
