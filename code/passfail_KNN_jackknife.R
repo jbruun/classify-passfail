@@ -1,7 +1,7 @@
 # K nearest neighbors on pass/fail centrality by removing single observations.
-# Last modified: 8/11/20 (add nK to saved tables)
+# Last modified: 8/11/20 (add nK to saved tables, start no-FCI version)
 # 
-# Status: Updated succRate code with nK. Run no-FCIpre version next.
+# Status: Updated succRate code with nK. No-FCIpre succRate table giving NaNs.
 
 rm(list = ls())
 
@@ -191,15 +191,27 @@ save(predPSnoFCI, predCDnoFCI, predICSnoFCI, predJustPSnoFCI,
      predJustCDnoFCI, predJustICSnoFCI, file = outfile)
 
 
-## CODE BELOW NOT UPDATED
+# Success rate tables
 
-succRatenoFCI <- rbind(sapply(predPSnoFCI[,3:9],function(x) mean(x==predPSnoFCI$Pass)),
-                       sapply(predCDnoFCI[,3:9],function(x) mean(x==predCDnoFCI$Pass)),
-                       sapply(predICSnoFCI[,3:9],function(x) mean(x==predICSnoFCI$Pass)))
-succRatenoFCI <- data.frame(Layer=c("PS","CD","ICS"),N=c(dim(predPSnoFCI)[1],dim(predCDnoFCI)[1],dim(predICSnoFCI)[1]),
-                            succRatenoFCI,
-                            Guessing=c(mean(predPSnoFCI$Pass=="Pass"),mean(predCDnoFCI$Pass=="Pass"),
-                                       mean(predICSnoFCI$Pass=="Pass")))
+## NOT WORKING YET
+
+Nnodes <- c(dim(predPSnoFCI[[2]])[1], dim(predCDnoFCI[[2]])[1],
+            dim(predICSnoFCI[[2]])[1])
+Guessing <- c(mean(predPSnoFCI[[2]]$Pass == "pass"),
+              mean(predCDnoFCI[[2]]$Pass == "pass"),
+              mean(predICSnoFCI[[2]]$Pass == "pass"))
+
+succRatenoFCI <- rbind(sapply(predPSnoFCI[[2]][,3:9],
+                              function(x) mean(x == predPSnoFCI[[2]]$Pass)),
+                       sapply(predCDnoFCI[[2]][,3:9],
+                              function(x) mean(x == predCDnoFCI[[2]]$Pass)),
+                       sapply(predICSnoFCI[[2]][,3:9],
+                              function(x) mean(x == predICSnoFCI[[2]]$Pass)))
+succRatenoFCI <- data.frame(Layer = c("PS", "CD", "ICS"),
+                            N = Nnodes, succRatenoFCI,
+                            Guessing = Guessing)
+
+## CODE BELOW NOT UPDATED
 
 predPSnoFCI02 <-jackPred(centPS,outcome="JustPass",predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
 predCDnoFCI02 <-jackPred(centCD,outcome="JustPass",predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
