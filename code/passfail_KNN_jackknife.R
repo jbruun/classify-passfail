@@ -1,7 +1,7 @@
 # K nearest neighbors on pass/fail centrality by removing single observations.
-# Last modified: 8/11/20 (add nK to saved tables, start no-FCI version)
+# Last modified: 8/18/20 (function-ize success rate calculations, add no-FCI)
 # 
-# Status: Updated succRate code with nK. No-FCIpre succRate table giving NaNs.
+# Status: Works. 
 
 rm(list = ls())
 
@@ -199,52 +199,10 @@ save(predPSnoFCI, predCDnoFCI, predICSnoFCI, predJustPSnoFCI,
 
 # Success rate tables
 
-## NOT WORKING YET
+succRatenoFCI <- getSucc(predPSnoFCI, predCDnoFCI, predICSnoFCI, "pass")
+succRateJustnoFCI <- getSucc(predJustPSnoFCI, predJustCDnoFCI, predJustICSnoFCI, 
+                             "justpass")
 
-Nnodes <- c(dim(predPSnoFCI[[2]])[1], dim(predCDnoFCI[[2]])[1],
-            dim(predICSnoFCI[[2]])[1])
-Guessing <- c(mean(predPSnoFCI[[2]]$Pass == "pass"),
-              mean(predCDnoFCI[[2]]$Pass == "pass"),
-              mean(predICSnoFCI[[2]]$Pass == "pass"))
+write.csv(succRatenoFCI,"succRate_knn_noFCI.csv", row.names = FALSE)
+write.csv(succRateJustnoFCI,"succRateJust_knn_noFCI.csv", row.names = FALSE)
 
-succRatenoFCI <- rbind(sapply(predPSnoFCI[[2]][,3:9],
-                              function(x) mean(x == predPSnoFCI[[2]]$Pass)),
-                       sapply(predCDnoFCI[[2]][,3:9],
-                              function(x) mean(x == predCDnoFCI[[2]]$Pass)),
-                       sapply(predICSnoFCI[[2]][,3:9],
-                              function(x) mean(x == predICSnoFCI[[2]]$Pass)))
-succRatenoFCI <- data.frame(Layer = c("PS", "CD", "ICS"),
-                            N = Nnodes, succRatenoFCI,
-                            Guessing = Guessing)
-
-## CODE BELOW NOT UPDATED
-
-predPSnoFCI02 <-jackPred(centPS,outcome="JustPass",predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predCDnoFCI02 <-jackPred(centCD,outcome="JustPass",predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predICSnoFCI02 <-jackPred(centICS,outcome="JustPass",predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-succRatenoFCI02 <- rbind(sapply(predPSnoFCI02[,3:9],function(x) mean(x==predPSnoFCI02$JustPass)),
-                       sapply(predCDnoFCI02[,3:9],function(x) mean(x==predCDnoFCI02$JustPass)),
-                       sapply(predICSnoFCI02[,3:9],function(x) mean(x==predICSnoFCI02$JustPass)))
-succRatenoFCI02 <- data.frame(Layer=c("PS","CD","ICS"),N=c(dim(predPSnoFCI02)[1],dim(predCDnoFCI02)[1],dim(predICSnoFCI02)[1]),
-                              succRatenoFCI02,
-                              Guessing=c(mean(predPSnoFCI02$JustPass=="Pass2"),mean(predCDnoFCI02$JustPass=="Pass2"),
-                                       mean(predICSnoFCI02$JustPass=="Pass2")))
-
-write.csv(succRatenoFCI,"../succRatenoFCI.csv",row.names=FALSE)
-write.csv(succRatenoFCI02,"../succRatenoFCI02.csv",row.names=FALSE)
-
-# Save no-FCI weekly predictions
-save(predPSnoFCI,predCDnoFCI,predICSnoFCI,predPSnoFCI02,predCDnoFCI02,predICSnoFCI02,
-     file="../data/jackknife_predictions_noFCI.Rdata")
-
-
-
-# Plot it up
-longRate <- succRate[,c(1,3:9)] %>% gather(Week,SuccRate,-Layer) %>% mutate(Week=parse_number(Week))
-ggsucc <- ggplot(longRate,aes(x=Week,y=SuccRate,color=Layer))
-plotcolors <- unique(ggplot_build(ggsucc)$data[[1]][,1])
-p1 <- ggsucc + geom_line() + scale_y_continuous(limits=c(0.5,1))
-p1 + geom_hline(yintercept=succRate[1,10],linetype="dashed",color=plotcolors[1]) + 
-  geom_hline(yintercept=succRate[2,10],linetype="dashed",color=plotcolors[2]) +
-  geom_hline(yintercept=succRate[3,10],linetype="dashed",color=plotcolors[3])
-ggsave("../figures/succRate_jackknife.png",width=5,height=4,units="in",dpi=150)
