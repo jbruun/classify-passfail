@@ -1,0 +1,190 @@
+---
+title: "K nearest neighbors"
+author: "Jesper Bruun & Adrienne Traxler"
+date: "8/18/2020--"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Goal for this document is to use K nearest neighbors to predict passing and just-passing in the (single-layer) PS, CD, and ICS weekly networks. Calculate success rates for each week and save.
+
+**Update 8/18:** Starting this file to document calculations I worked out in `passfail_KNN_jackknife.R`. 
+
+```{r packages, echo = FALSE}
+library(igraph)
+library(dplyr)
+```
+
+## Import data
+
+At this point, the following Rmd files have already been run: `loadAllNetworks`, `calculatePR_TE_H`, and `make_node_data_frames`. Importing the results of that gives me three long data frames. Each has all the node info and centrality values, by week, for a single layer. 
+
+```{r}
+(load("../data/centrality_data_frames.Rdata"))
+```
+
+
+## Jackknife K nearest neighbors
+
+Because of the data set size, we'll use a "jackknife" approach, where each observation is removed, the remaining observations are used to predict the missing one, and then we repeat until we've checked them all. 
+
+Turn the long data frames into lists of single (weekly) data frames: 
+
+```{r}
+centPS <- dfPS %>% group_split(Week)
+centCD <- dfCD %>% group_split(Week)
+centICS <- dfICS %>% group_split(Week)
+
+centPS[[1]]
+```
+
+### Jackknife loop
+
+Next, the function that actually does the calculations. 
+
+* Input: A list of weekly data frames, optional outcome (pass/justpass, defaults to "pass"), and an optional subset of predictors to use (defaults gender, cohort, FCI pre, and centrality)
+* Output: A list with two items. The first is the number of neighbors used (`nK`); the second is a data frame with node names, pass/fail outcome, and prediction vectors for that weekly aggregate network. Each node is predicted using all the other nodes in its week.
+
+```{r}
+jackPred <- function(layer, nK = 1, outcome = "pass", 
+                     predictors = c("gender", "cohort", "fci_pre", "PageRank", 
+                                    "tarEnt", "Hide")) {
+  if (outcome == "pass" | outcome == "justpass") {
+    choices <- c("0", "1")
+  } else {
+    stop("Not a valid outcome variable.")
+  }
+  
+  # Input data (complete cases) and empty frame to store predictions 
+  Nlayer <- length(layer)
+  userows <- complete.cases(layer[[Nlayer]][, c(outcome, predictors)])  
+  allpred <- matrix(nrow = sum(userows), ncol = Nlayer)
+  
+  # Build fitting input string using predictor names
+  fitStr <- paste(predictors, collapse = " + ")
+  fitForm <- paste0(outcome, " ~ ", fitStr)
+
+  # Loop through all weeks
+  for(j in seq(Nlayer)) {
+    data <- layer[[j]][userows, c(outcome, predictors)] # data is complete cases
+    
+    # Loop through all nodes
+    for(i in 1:dim(data)[1]) {
+      # training set is data minus observation i
+      # Predictor matrices for training and test data
+      train <- as.matrix(data[-i, predictors])
+      test <- as.matrix(data[i, predictors])
+      
+      # Outcome vectors for training and test data
+      # Can't just do data[-i, outcome], for explanation see
+      # https://stackoverflow.com/questions/51063381/vector-from-tibble-has-length-0
+      trOutcome <- pull(data[-i, ], var = outcome)
+      teOutcome <- pull(data[i, ], var = outcome)
+      
+      # Run KNN
+      set.seed(2)
+      # Logistic regression makes probabilities, which you translate into prediction; 
+      # KNN does it all in one step
+      allpred[i, j] <- knn(train, test, trOutcome, k = nK)
+    }
+  }
+  
+  # Assemble data frame: Translate factor to labels, add node names and outcomes
+  allpred[allpred == 1] <- choices[1] # 0
+  allpred[allpred == 2] <- choices[2] # 1
+  allpred <- data.frame(layer[[1]][userows, "name"],  # node names
+                        data[, outcome],            # real outcome
+                        as.data.frame(allpred))     # predicted outcome
+  names(allpred) <- c("name", outcome, paste0("Week", c(1:length(layer))))
+  
+  # Print info string and return predictions
+  print(paste0("Fit: ", fitForm, ", #neighbors = ", nK, 
+               ", complete N = ", dim(allpred)[1]))
+  return(list(nK = nK, allpred = allpred))
+}
+```
+
+**PICK UP HERE**
+
+It takes a few seconds to run the loop, so I'll import the results rather than executing it here. I did this for each centrality data frame (PS, CD, and ICS), using demographics (Gender/Section), FCI pretest score, and all three centrality measures as predictors. The function predicts passing if P > 0.5. 
+
+```{r}
+# Predict pass/fail
+#predPS <- jackPred(centPS)
+#predCD <- jackPred(centCD)
+#predICS <- jackPred(centICS)
+
+# Predict just-pass/just-fail (2/0)
+#predJustPS <- jackPred(centPS, outcome = "justpass")
+#predJustCD <- jackPred(centCD, outcome = "justpass")
+#predJustICS <- jackPred(centICS, outcome = "justpass")
+
+load("../data/jackknife_logistic_predictions.Rdata")
+```
+
+
+### Success rates
+
+We're interested in a couple of success rate comparisons: how predictions compared with reality for each week, and how well it would have worked to just guess that everyone passed.
+
+First, the success rate for predictions based on each week's accumulated centrality data, for all students (who have complete records):
+```{r}
+compareSucc <- rbind(sapply(predPS[, 3:9], function(x) mean(x == predPS$pass)),
+                     sapply(predCD[, 3:9], function(x) mean(x == predCD$pass)),
+                     sapply(predICS[, 3:9], function(x) mean(x == predICS$pass)))
+succRate <- data.frame(Layer = c("PS","CD","ICS"), 
+                       N = c(dim(predPS)[1], dim(predCD)[1], dim(predICS)[1]),
+                       compareSucc, 
+                       Guessing = c(mean(predPS$pass == "1"), mean(predCD$pass == "1"),
+                                    mean(predICS$pass == "1")))
+succRate
+```
+
+Now, the same calculation for only the people who were on the pass/fail boundary (2/0):
+```{r}
+compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
+                     sapply(predJustCD[, 3:9], function(x) mean(x == predJustCD$justpass)),
+                     sapply(predJustICS[, 3:9], function(x) mean(x == predJustICS$justpass)))
+succRateJust <- data.frame(Layer = c("PS", "CD", "ICS"),
+                           N = c(dim(predJustPS)[1], dim(predJustCD)[1], dim(predJustICS)[1]),
+                           compareJust,
+                           Guessing = c(mean(predJustPS$justpass == "1"),
+                                        mean(predJustCD$justpass == "1"),
+                                        mean(predJustICS$justpass == "1")))
+succRateJust
+```
+
+## Summary of results
+
+The success rate tables have the punchline here. If the success rate for a given week and layer is higher than the value in the last column (the "assume everyone passes" default classifier), that's good news. 
+
+Doing a quick boolean comparison,
+```{r}
+succRate[, c(3:9)] > succRate[1, 10]
+rowSums(succRate[, c(3:9)] > succRate[1, 10])
+```
+
+In many weeks, the logistic regression success rate beats the default, especially on the PS and ICS layers. 
+
+```{r}
+(succRate[, c(3:9)] - succRate[1, 10]) * 100
+```
+
+If you look at the amount by which it wins, though, it's not too exciting---always less than 3% better, and generally less than 2%. 
+
+For grades on the boundary, 
+
+```{r}
+succRateJust[, c(3:9)] > succRateJust[1, 10]
+rowSums(succRateJust[, c(3:9)] > succRateJust[1, 10])
+(succRateJust[, c(3:9)] - succRateJust[1, 10]) * 100
+```
+
+Here, logistic regression succeeds less often (and never for CD), though sometimes by higher percentages when it does. Also interesting (if disappointing) is that the logistic regression classifier isn't really getting better as more weekly data accumulates. 
+
+The overall verdict is that logistic regression often beats the default classifier (at least for PS and ICS), but not in an obviously time-dependent way as the weeks progress, and not by amounts to get excited about. 
