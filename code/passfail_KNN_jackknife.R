@@ -111,36 +111,42 @@ save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
 ## Collect success rates and compare with guessing everyone passes
 
 # Success rate for each week (prediction == outcome)
-compareSucc <- rbind(sapply(predPS[[2]][, 3:9], function(x) mean(x == predPS[[2]]$pass)),
-                     sapply(predCD[[2]][, 3:9], function(x) mean(x == predCD[[2]]$pass)),
-                     sapply(predICS[[2]][, 3:9], function(x) mean(x == predICS[[2]]$pass)))
-succRate <- data.frame(Layer = c("PS","CD","ICS"), 
-                       nK = c(predPS[[1]], predCD[[1]], predICS[[1]]),
-                       N = c(dim(predPS[[2]])[1], dim(predCD[[2]])[1], 
-                             dim(predICS[[2]])[1]),
-                       compareSucc, 
-                       Guessing = c(mean(predPS[[2]]$pass == "1"), 
-                                    mean(predCD[[2]]$pass == "1"),
-                                    mean(predICS[[2]]$pass == "1")))
+
+# Input: Three prediction data frames, outcome variable (pass/justpass)
+# Output: Success rate data frame with layer name, # of neighbors (nK),
+#  # of nodes (N), weekly prediction success rates, and guessing success rate
+getSucc <- function(pPS, pCD, pICS, outcome = "pass") {
+  
+  # Calculate one row of success rate table:
+  # Pull weekly columns and compare them with outcome (pass/justpass)
+  succRow <- function(p) sapply(p[[2]][, 3:9], 
+                                function(x) mean(x == p[[2]][[outcome]]))
+  
+  compareSucc <- rbind(succRow(pPS), succRow(pCD), succRow(pICS))
+
+  # Number of nodes: pull from prediction data frame
+  Nnodes <- c(dim(pPS[[2]])[1], dim(pCD[[2]])[1], dim(pICS[[2]])[1])
+  
+  # How successful is it to just guess that everyone passes?
+  Guessing  <- c(mean(pPS[[2]][[outcome]] == "1"), 
+                 mean(pCD[[2]][[outcome]] == "1"),
+                 mean(pICS[[2]][[outcome]] == "1"))
+    
+  # Package all these calculations in a data frame
+  succRate <- data.frame(Layer = c("PS","CD","ICS"), 
+                         nK = c(pPS[[1]], pCD[[1]], pICS[[1]]),
+                         N = Nnodes, 
+                         compareSucc, 
+                         Guessing)
+  return(succRate)
+}
+
+succRate <- getSucc(predPS, predCD, predICS)
 
 write.csv(succRate,"succRate_knn.csv", row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
-compareJust <- rbind(sapply(predJustPS[[2]][, 3:9], 
-                            function(x) mean(x == predJustPS[[2]]$justpass)),
-                     sapply(predJustCD[[2]][, 3:9], 
-                            function(x) mean(x == predJustCD[[2]]$justpass)),
-                     sapply(predJustICS[[2]][, 3:9], 
-                            function(x) mean(x == predJustICS[[2]]$justpass)))
-succRateJust <- data.frame(Layer = c("PS", "CD", "ICS"),
-                           nK = c(predJustPS[[1]], predJustCD[[1]], predJustICS[[1]]),
-                           N = c(dim(predJustPS[[2]])[1], 
-                                 dim(predJustCD[[2]])[1], 
-                                 dim(predJustICS[[2]])[1]),
-                           compareJust,
-                           Guessing = c(mean(predJustPS[[2]]$justpass == "1"),
-                                        mean(predJustCD[[2]]$justpass == "1"),
-                                        mean(predJustICS[[2]]$justpass == "1")))
+succRateJust <- getSucc(predJustPS, predJustCD, predJustICS, "justpass")
 
 write.csv(succRateJust,"succRateJust_knn.csv", row.names = FALSE)
 
