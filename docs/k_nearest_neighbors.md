@@ -147,7 +147,7 @@ load("../data/jackknife_knn1_predictions.Rda")
 ```
 
 
-### Success rates
+### Success rates for K = 1
 
 We're interested in a couple of success rate comparisons: how predictions compared with reality for each week, and how well it would have worked to just guess that everyone passed.
 
@@ -183,9 +183,13 @@ getSucc <- function(pPS, pCD, pICS, outcome = "pass") {
                          Guessing)
   return(succRate)
 }
+```
 
-succRate <- getSucc(predPS, predCD, predICS)
-succRate
+With the function made, calculate success rates for everyone, then for only the people who were on the pass/fail boundary (2/0):
+
+```r
+succRate1 <- getSucc(predPS, predCD, predICS)
+succRate1
 ```
 
 ```
@@ -199,11 +203,9 @@ succRate
 ## 3 0.8028169 0.8309859
 ```
 
-Now, the same calculation for only the people who were on the pass/fail boundary (2/0):
-
 ```r
-succRateJust <- getSucc(predJustPS, predJustCD, predJustICS, "justpass")
-succRateJust
+succRateJust1 <- getSucc(predJustPS, predJustCD, predJustICS, "justpass")
+succRateJust1
 ```
 
 ```
@@ -217,7 +219,49 @@ succRateJust
 ## 3 0.6000000 0.6181818
 ```
 
-**BELOW NOT UPDATED**
+### Success rates for K = 2
+
+Import the `nK = 2` data and calculate the new success rates. Note that this overwrites the prediction objects (`predPS`, `predJustPS`, etc.), so I'll need to be careful about order if I want to do any more calculations with the earlier data.
+
+```r
+load("../data/jackknife_knn2_predictions.Rda")
+```
+
+Success rates:
+
+```r
+succRate2 <- getSucc(predPS, predCD, predICS)
+succRate2
+```
+
+```
+##   Layer nK   N     Week1     Week2     Week3     Week4     Week5     Week6
+## 1    PS  2 142 0.8098592 0.8098592 0.7746479 0.8098592 0.8098592 0.8098592
+## 2    CD  2 142 0.8380282 0.8239437 0.8450704 0.8239437 0.8521127 0.7957746
+## 3   ICS  2 142 0.8309859 0.7816901 0.8028169 0.8309859 0.8309859 0.8309859
+##       Week7  Guessing
+## 1 0.7957746 0.8309859
+## 2 0.8169014 0.8309859
+## 3 0.8591549 0.8309859
+```
+
+```r
+succRateJust2 <- getSucc(predJustPS, predJustCD, predJustICS, "justpass")
+succRateJust2
+```
+
+```
+##   Layer nK  N     Week1     Week2     Week3     Week4     Week5     Week6
+## 1    PS  2 55 0.5818182 0.5272727 0.4727273 0.6000000 0.5818182 0.5818182
+## 2    CD  2 55 0.7090909 0.5818182 0.6363636 0.6545455 0.6363636 0.5636364
+## 3   ICS  2 55 0.5636364 0.4727273 0.6000000 0.7090909 0.6545455 0.5818182
+##       Week7  Guessing
+## 1 0.4909091 0.6181818
+## 2 0.5636364 0.6181818
+## 3 0.6727273 0.6181818
+```
+
+
 
 ## Summary of results
 
@@ -226,73 +270,141 @@ The success rate tables have the punchline here. If the success rate for a given
 Doing a quick boolean comparison,
 
 ```r
-succRate[, c(3:9)] > succRate[1, 10]
+succRate1[, c(4:10)] > succRate1[1, 11]
 ```
 
 ```
-##         N Week1 Week2 Week3 Week4 Week5 Week6
-## [1,] TRUE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE
-## [2,] TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
-## [3,] TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE
+##      Week1 Week2 Week3 Week4 Week5 Week6 Week7
+## [1,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [2,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [3,]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE
+```
+
+```r
+rowSums(succRate1[, c(4:10)] > succRate1[1, 11])
+```
+
+```
+## [1] 0 0 1
+```
+
+KNN with one neighbor does worse than guessing everyone passes, most of the time. 
+
+
+```r
+succRate2[, c(4:10)] > succRate2[1, 11]
+```
+
+```
+##      Week1 Week2 Week3 Week4 Week5 Week6 Week7
+## [1,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [2,]  TRUE FALSE  TRUE FALSE  TRUE FALSE FALSE
+## [3,] FALSE FALSE FALSE FALSE FALSE FALSE  TRUE
 ```
 
 ```r
-rowSums(succRate[, c(3:9)] > succRate[1, 10])
+rowSums(succRate2[, c(4:10)] > succRate2[1, 11])
 ```
 
 ```
-## [1] 6 7 7
+## [1] 0 3 1
 ```
 
-In many weeks, the logistic regression success rate beats the default, especially on the PS and ICS layers. 
-
-
-```r
-(succRate[, c(3:9)] - succRate[1, 10]) * 100
-```
-
-```
-##          N     Week1    Week2    Week3    Week4    Week5     Week6
-## 1 14129.58  9.859155 0.000000 5.633803 3.521127 2.112676  1.408451
-## 2 14129.58 11.971831 3.521127 6.338028 7.746479 6.338028  2.112676
-## 3 14129.58 14.084507 9.859155 8.450704 7.042254 8.450704 10.563380
-```
-
-If you look at the amount by which it wins, though, it's not too exciting---always less than 3% better, and generally less than 2%. 
+For two neighbors, the situation is a bit better for the CD network, but otherwise the same.
 
 For grades on the boundary, 
 
 
 ```r
-succRateJust[, c(3:9)] > succRateJust[1, 10]
+succRateJust1[, c(4:10)] > succRateJust1[1, 11]
 ```
 
 ```
-##         N Week1 Week2 Week3 Week4 Week5 Week6
-## [1,] TRUE FALSE FALSE  TRUE  TRUE FALSE FALSE
-## [2,] TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE
-## [3,] TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE
-```
-
-```r
-rowSums(succRateJust[, c(3:9)] > succRateJust[1, 10])
-```
-
-```
-## [1] 3 5 6
+##      Week1 Week2 Week3 Week4 Week5 Week6 Week7
+## [1,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [2,]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE
+## [3,] FALSE FALSE FALSE  TRUE FALSE  TRUE FALSE
 ```
 
 ```r
-(succRateJust[, c(3:9)] - succRateJust[1, 10]) * 100
+rowSums(succRateJust1[, c(4:10)] > succRateJust1[1, 11])
 ```
 
 ```
-##          N    Week1     Week2    Week3     Week4     Week5     Week6
-## 1 5447.273  0.00000 -9.090909 1.818182  1.818182 -7.272727  0.000000
-## 2 5447.273 14.54545 -7.272727 0.000000  1.818182  1.818182  3.636364
-## 3 5447.273  0.00000  1.818182 7.272727 18.181818  7.272727 10.909091
+## [1] 0 1 2
 ```
 
-Here, logistic regression succeeds less often (and never for CD), though sometimes by higher percentages when it does. Also interesting (if disappointing) is that the logistic regression classifier isn't really getting better as more weekly data accumulates. 
+```r
+succRateJust2[, c(4:10)] > succRateJust2[1, 11]
+```
 
-The overall verdict is that logistic regression often beats the default classifier (at least for PS and ICS), but not in an obviously time-dependent way as the weeks progress, and not by amounts to get excited about. 
+```
+##      Week1 Week2 Week3 Week4 Week5 Week6 Week7
+## [1,] FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [2,]  TRUE FALSE  TRUE  TRUE  TRUE FALSE FALSE
+## [3,] FALSE FALSE FALSE  TRUE  TRUE FALSE  TRUE
+```
+
+```r
+rowSums(succRateJust2[, c(4:10)] > succRateJust2[1, 11])
+```
+
+```
+## [1] 0 4 3
+```
+
+```r
+(succRateJust2[, c(4:10)] - succRateJust2[1, 11]) * 100
+```
+
+```
+##       Week1      Week2      Week3     Week4     Week5     Week6      Week7
+## 1 -3.636364  -9.090909 -14.545455 -1.818182 -3.636364 -3.636364 -12.727273
+## 2  9.090909  -3.636364   1.818182  3.636364  1.818182 -5.454545  -5.454545
+## 3 -5.454545 -14.545455  -1.818182  9.090909  3.636364 -3.636364   5.454545
+```
+
+Things are only marginally better for the justpass criterion. Week 4 actually seems to be the high point. Even more than logistic regression, the K nearest neighbors classifier isn't improving as weekly data accumulates. 
+
+### Plotting success rates
+
+To more easily compare, I'd like to plot this too. 
+
+
+```r
+plotSucc <- function(succRate) {
+  dflong <- succRate %>% 
+    pivot_longer(Week1:Week7, names_to = "Week", values_to = "Rate")
+  
+  plotlab <- paste0("Success rate: KNN, ", median(succRate$nK), " neighbor(s)")
+
+  ggplot(data = dflong, mapping = aes(x = Week, y = Rate)) + 
+    geom_point(mapping = aes(color = Layer, shape = Layer)) + 
+    geom_hline(aes(yintercept = Guessing)) + 
+    ylim(0, 1) + 
+    labs(title = plotlab)
+}
+
+plotSucc(succRate1)
+```
+
+![](k_nearest_neighbors_files/figure-html/plotSucc-1.png)<!-- -->
+
+```r
+plotSucc(succRateJust1)
+```
+
+![](k_nearest_neighbors_files/figure-html/plotSucc-2.png)<!-- -->
+
+```r
+plotSucc(succRate2)
+```
+
+![](k_nearest_neighbors_files/figure-html/plotSucc-3.png)<!-- -->
+
+```r
+plotSucc(succRateJust2)
+```
+
+![](k_nearest_neighbors_files/figure-html/plotSucc-4.png)<!-- -->
+

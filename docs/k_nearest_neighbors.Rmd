@@ -229,7 +229,7 @@ Things are only marginally better for the justpass criterion. Week 4 actually se
 
 To more easily compare, I'd like to plot this too. 
 
-```{r}
+```{r plotSucc}
 plotSucc <- function(succRate) {
   dflong <- succRate %>% 
     pivot_longer(Week1:Week7, names_to = "Week", values_to = "Rate")
@@ -243,7 +243,10 @@ plotSucc <- function(succRate) {
     labs(title = plotlab)
 }
 
-plotSucc(succRate)
-plotSucc(succRateJust)
+plotSucc(succRate1)
+plotSucc(succRateJust1)
+
+plotSucc(succRate2)
+plotSucc(succRateJust2)
 ```
 
