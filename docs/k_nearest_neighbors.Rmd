@@ -163,16 +163,34 @@ getSucc <- function(pPS, pCD, pICS, outcome = "pass") {
                          Guessing)
   return(succRate)
 }
-
-succRate <- getSucc(predPS, predCD, predICS)
-succRate
 ```
 
-Now, the same calculation for only the people who were on the pass/fail boundary (2/0):
+With the function made, calculate success rates for everyone, then for only the people who were on the pass/fail boundary (2/0):
+```{r Success rates 1}
+succRate1 <- getSucc(predPS, predCD, predICS)
+succRate1
+
+succRateJust1 <- getSucc(predJustPS, predJustCD, predJustICS, "justpass")
+succRateJust1
+```
+
+### Success rates for K = 2
+
+Import the `nK = 2` data and calculate the new success rates. Note that this overwrites the prediction objects (`predPS`, `predJustPS`, etc.), so I'll need to be careful about order if I want to do any more calculations with the earlier data.
 ```{r}
-succRateJust <- getSucc(predJustPS, predJustCD, predJustICS, "justpass")
-succRateJust
+load("../data/jackknife_knn2_predictions.Rda")
 ```
+
+Success rates:
+```{r Success rates 2}
+succRate2 <- getSucc(predPS, predCD, predICS)
+succRate2
+
+succRateJust2 <- getSucc(predJustPS, predJustCD, predJustICS, "justpass")
+succRateJust2
+```
+
+
 
 ## Summary of results
 
@@ -180,21 +198,32 @@ The success rate tables have the punchline here. If the success rate for a given
 
 Doing a quick boolean comparison,
 ```{r}
-succRate[, c(4:10)] > succRate[1, 11]
-rowSums(succRate[, c(4:10)] > succRate[1, 11])
+succRate1[, c(4:10)] > succRate1[1, 11]
+rowSums(succRate1[, c(4:10)] > succRate1[1, 11])
 ```
 
-KNN with two neighbors actually does worse than guessing everyone passes, most of the time. 
+KNN with one neighbor does worse than guessing everyone passes, most of the time. 
+
+```{r}
+succRate2[, c(4:10)] > succRate2[1, 11]
+rowSums(succRate2[, c(4:10)] > succRate2[1, 11])
+```
+
+For two neighbors, the situation is a bit better for the CD network, but otherwise the same.
 
 For grades on the boundary, 
 
 ```{r}
-succRateJust[, c(4:10)] > succRateJust[1, 11]
-rowSums(succRateJust[, c(4:10)] > succRateJust[1, 11])
-#(succRateJust[, c(4:10)] - succRateJust[1, 11]) * 100
+succRateJust1[, c(4:10)] > succRateJust1[1, 11]
+rowSums(succRateJust1[, c(4:10)] > succRateJust1[1, 11])
+
+
+succRateJust2[, c(4:10)] > succRateJust2[1, 11]
+rowSums(succRateJust2[, c(4:10)] > succRateJust2[1, 11])
+(succRateJust2[, c(4:10)] - succRateJust2[1, 11]) * 100
 ```
 
-Things are only marginally better for the justpass criterion. Even more than logistic regression, the K nearest neighbors classifier isn't improving as weekly data accumulates. 
+Things are only marginally better for the justpass criterion. Week 4 actually seems to be the high point. Even more than logistic regression, the K nearest neighbors classifier isn't improving as weekly data accumulates. 
 
 ### Plotting success rates
 
