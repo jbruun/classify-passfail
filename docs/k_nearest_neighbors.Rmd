@@ -172,34 +172,25 @@ succRateJust <- getSucc(predJustPS, predJustCD, predJustICS, "justpass")
 succRateJust
 ```
 
-**BELOW NOT UPDATED**
-
 ## Summary of results
 
 The success rate tables have the punchline here. If the success rate for a given week and layer is higher than the value in the last column (the "assume everyone passes" default classifier), that's good news. 
 
 Doing a quick boolean comparison,
 ```{r}
-succRate[, c(3:9)] > succRate[1, 10]
-rowSums(succRate[, c(3:9)] > succRate[1, 10])
+succRate[, c(4:10)] > succRate[1, 11]
+rowSums(succRate[, c(4:10)] > succRate[1, 11])
 ```
 
-In many weeks, the logistic regression success rate beats the default, especially on the PS and ICS layers. 
-
-```{r}
-(succRate[, c(3:9)] - succRate[1, 10]) * 100
-```
-
-If you look at the amount by which it wins, though, it's not too exciting---always less than 3% better, and generally less than 2%. 
+KNN with two neighbors actually does worse than guessing everyone passes, most of the time. 
 
 For grades on the boundary, 
 
 ```{r}
-succRateJust[, c(3:9)] > succRateJust[1, 10]
-rowSums(succRateJust[, c(3:9)] > succRateJust[1, 10])
-(succRateJust[, c(3:9)] - succRateJust[1, 10]) * 100
+succRateJust[, c(4:10)] > succRateJust[1, 11]
+rowSums(succRateJust[, c(4:10)] > succRateJust[1, 11])
+#(succRateJust[, c(4:10)] - succRateJust[1, 11]) * 100
 ```
 
-Here, logistic regression succeeds less often (and never for CD), though sometimes by higher percentages when it does. Also interesting (if disappointing) is that the logistic regression classifier isn't really getting better as more weekly data accumulates. 
+Things are only marginally better for the justpass criterion. Even more than logistic regression, the K nearest neighbors classifier isn't improving as weekly data accumulates. 
 
-The overall verdict is that logistic regression often beats the default classifier (at least for PS and ICS), but not in an obviously time-dependent way as the weeks progress, and not by amounts to get excited about. 
