@@ -190,11 +190,46 @@ succRateJust2 <- getSucc(predJustPS, predJustCD, predJustICS, "justpass")
 succRateJust2
 ```
 
+### Success rates for no-FCI calculations
+
+What if we ignore `FCIpre`? It's the biggest contributor to missing data here. Again, I'll comment out the calculations and import the results.
+
+```{r}
+predict_noFCI <- c("gender", "cohort", "PageRank", "tarEnt", "Hide")
+
+# All pass/fail
+#predPSnoFCI <-jackPred(centPS, nK = 2, predictors = predict_noFCI)
+#predCDnoFCI <-jackPred(centCD, nK = 2, predictors = predict_noFCI)
+#predICSnoFCI <-jackPred(centICS, nK = 2, predictors = predict_noFCI)
+
+# Just-pass/just-fail (2/0)
+#predJustPSnoFCI <- jackPred(centPS, nK = 2, outcome = "justpass", 
+#                            predictors = predict_noFCI)
+#predJustCDnoFCI <- jackPred(centCD, nK = 2, outcome = "justpass", 
+#                            predictors = predict_noFCI)
+#predJustICSnoFCI <- jackPred(centICS, nK = 2, outcome = "justpass", 
+#                             predictors = predict_noFCI)
+
+load("../data/jackknife_knn2_noFCI_predictions.Rda")
+```
+
+Calculating the success rate tables uses the same function as above:
+```{r}
+succRatenoFCI2 <- getSucc(predPSnoFCI, predCDnoFCI, predICSnoFCI, "pass")
+succRateJustnoFCI2 <- getSucc(predJustPSnoFCI, predJustCDnoFCI, 
+                              predJustICSnoFCI, "justpass")
+
+succRatenoFCI2
+succRateJustnoFCI2
+```
+
 
 
 ## Summary of results
 
 The success rate tables have the punchline here. If the success rate for a given week and layer is higher than the value in the last column (the "assume everyone passes" default classifier), that's good news. 
+
+### `K = 1` and `K = 2`, all predictors
 
 Doing a quick boolean comparison,
 ```{r}
@@ -225,6 +260,20 @@ rowSums(succRateJust2[, c(4:10)] > succRateJust2[1, 11])
 
 Things are only marginally better for the justpass criterion. Week 4 actually seems to be the high point. Even more than logistic regression, the K nearest neighbors classifier isn't improving as weekly data accumulates. 
 
+### `K = 1` and `K = 2`, no FCI
+
+Same deal as above, with the no-FCI success rates:
+```{r}
+succRatenoFCI2[, c(4:10)] > succRatenoFCI2[1, 11]
+rowSums(succRatenoFCI2[, c(4:10)] > succRatenoFCI2[1, 11])
+
+succRateJustnoFCI2[, c(4:10)] > succRateJustnoFCI2[1, 11]
+rowSums(succRateJustnoFCI2[, c(4:10)] > succRateJustnoFCI2[1, 11])
+```
+
+Again, there's not a big show of improvement for later weeks; again week 1 or week 4 are the best showings. 
+
+
 ### Plotting success rates
 
 To more easily compare, I'd like to plot this too. 
@@ -248,5 +297,11 @@ plotSucc(succRateJust1)
 
 plotSucc(succRate2)
 plotSucc(succRateJust2)
+```
+
+And the no-FCI plots too:
+```{r plotSucc-noFCI}
+plotSucc(succRatenoFCI2)
+plotSucc(succRateJustnoFCI2)
 ```
 

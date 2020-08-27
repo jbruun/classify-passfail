@@ -261,11 +261,73 @@ succRateJust2
 ## 3 0.6727273 0.6181818
 ```
 
+### Success rates for no-FCI calculations
+
+What if we ignore `FCIpre`? It's the biggest contributor to missing data here. Again, I'll comment out the calculations and import the results.
+
+
+```r
+predict_noFCI <- c("gender", "cohort", "PageRank", "tarEnt", "Hide")
+
+# All pass/fail
+#predPSnoFCI <-jackPred(centPS, nK = 2, predictors = predict_noFCI)
+#predCDnoFCI <-jackPred(centCD, nK = 2, predictors = predict_noFCI)
+#predICSnoFCI <-jackPred(centICS, nK = 2, predictors = predict_noFCI)
+
+# Just-pass/just-fail (2/0)
+#predJustPSnoFCI <- jackPred(centPS, nK = 2, outcome = "justpass", 
+#                            predictors = predict_noFCI)
+#predJustCDnoFCI <- jackPred(centCD, nK = 2, outcome = "justpass", 
+#                            predictors = predict_noFCI)
+#predJustICSnoFCI <- jackPred(centICS, nK = 2, outcome = "justpass", 
+#                             predictors = predict_noFCI)
+
+load("../data/jackknife_knn2_noFCI_predictions.Rda")
+```
+
+Calculating the success rate tables uses the same function as above:
+
+```r
+succRatenoFCI2 <- getSucc(predPSnoFCI, predCDnoFCI, predICSnoFCI, "pass")
+succRateJustnoFCI2 <- getSucc(predJustPSnoFCI, predJustCDnoFCI, 
+                              predJustICSnoFCI, "justpass")
+
+succRatenoFCI2
+```
+
+```
+##   Layer nK   N     Week1     Week2     Week3     Week4     Week5     Week6
+## 1    PS  2 166 0.8012048 0.7108434 0.7168675 0.7650602 0.7289157 0.7409639
+## 2    CD  2 166 0.7951807 0.7469880 0.7530120 0.7771084 0.7650602 0.7228916
+## 3   ICS  2 166 0.7831325 0.7289157 0.7469880 0.7289157 0.7409639 0.7469880
+##       Week7  Guessing
+## 1 0.7469880 0.7710843
+## 2 0.7349398 0.7710843
+## 3 0.7951807 0.7710843
+```
+
+```r
+succRateJustnoFCI2
+```
+
+```
+##   Layer nK  N     Week1     Week2     Week3     Week4     Week5     Week6
+## 1    PS  2 67 0.5970149 0.4776119 0.4328358 0.5671642 0.6268657 0.6567164
+## 2    CD  2 67 0.5671642 0.4776119 0.6119403 0.6119403 0.5373134 0.5373134
+## 3   ICS  2 67 0.5074627 0.5223881 0.5522388 0.6716418 0.5820896 0.4925373
+##       Week7  Guessing
+## 1 0.4925373 0.5820896
+## 2 0.5820896 0.5820896
+## 3 0.6268657 0.5820896
+```
+
 
 
 ## Summary of results
 
 The success rate tables have the punchline here. If the success rate for a given week and layer is higher than the value in the last column (the "assume everyone passes" default classifier), that's good news. 
+
+### `K = 1` and `K = 2`, all predictors
 
 Doing a quick boolean comparison,
 
@@ -366,6 +428,51 @@ rowSums(succRateJust2[, c(4:10)] > succRateJust2[1, 11])
 
 Things are only marginally better for the justpass criterion. Week 4 actually seems to be the high point. Even more than logistic regression, the K nearest neighbors classifier isn't improving as weekly data accumulates. 
 
+### `K = 1` and `K = 2`, no FCI
+
+Same deal as above, with the no-FCI success rates:
+
+```r
+succRatenoFCI2[, c(4:10)] > succRatenoFCI2[1, 11]
+```
+
+```
+##      Week1 Week2 Week3 Week4 Week5 Week6 Week7
+## [1,]  TRUE FALSE FALSE FALSE FALSE FALSE FALSE
+## [2,]  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE
+## [3,]  TRUE FALSE FALSE FALSE FALSE FALSE  TRUE
+```
+
+```r
+rowSums(succRatenoFCI2[, c(4:10)] > succRatenoFCI2[1, 11])
+```
+
+```
+## [1] 1 2 2
+```
+
+```r
+succRateJustnoFCI2[, c(4:10)] > succRateJustnoFCI2[1, 11]
+```
+
+```
+##      Week1 Week2 Week3 Week4 Week5 Week6 Week7
+## [1,]  TRUE FALSE FALSE FALSE  TRUE  TRUE FALSE
+## [2,] FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE
+## [3,] FALSE FALSE FALSE  TRUE FALSE FALSE  TRUE
+```
+
+```r
+rowSums(succRateJustnoFCI2[, c(4:10)] > succRateJustnoFCI2[1, 11])
+```
+
+```
+## [1] 3 2 2
+```
+
+Again, there's not a big show of improvement for later weeks; again week 1 or week 4 are the best showings. 
+
+
 ### Plotting success rates
 
 To more easily compare, I'd like to plot this too. 
@@ -407,4 +514,18 @@ plotSucc(succRateJust2)
 ```
 
 ![](k_nearest_neighbors_files/figure-html/plotSucc-4.png)<!-- -->
+
+And the no-FCI plots too:
+
+```r
+plotSucc(succRatenoFCI2)
+```
+
+![](k_nearest_neighbors_files/figure-html/plotSucc-noFCI-1.png)<!-- -->
+
+```r
+plotSucc(succRateJustnoFCI2)
+```
+
+![](k_nearest_neighbors_files/figure-html/plotSucc-noFCI-2.png)<!-- -->
 
