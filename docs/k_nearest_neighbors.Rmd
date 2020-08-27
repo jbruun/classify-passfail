@@ -17,7 +17,9 @@ Goal for this document is to use K nearest neighbors to predict passing and just
 
 ```{r packages, echo = FALSE, message = FALSE}
 library(igraph)
+library(tidyr)
 library(dplyr)
+library(ggplot2)
 ```
 
 ## Import data
@@ -126,7 +128,7 @@ load("../data/jackknife_knn1_predictions.Rda")
 ```
 
 
-### Success rates
+### Success rates for K = 1
 
 We're interested in a couple of success rate comparisons: how predictions compared with reality for each week, and how well it would have worked to just guess that everyone passed.
 
@@ -193,4 +195,26 @@ rowSums(succRateJust[, c(4:10)] > succRateJust[1, 11])
 ```
 
 Things are only marginally better for the justpass criterion. Even more than logistic regression, the K nearest neighbors classifier isn't improving as weekly data accumulates. 
+
+### Plotting success rates
+
+To more easily compare, I'd like to plot this too. 
+
+```{r}
+plotSucc <- function(succRate) {
+  dflong <- succRate %>% 
+    pivot_longer(Week1:Week7, names_to = "Week", values_to = "Rate")
+  
+  plotlab <- paste0("Success rate: KNN, ", median(succRate$nK), " neighbor(s)")
+
+  ggplot(data = dflong, mapping = aes(x = Week, y = Rate)) + 
+    geom_point(mapping = aes(color = Layer, shape = Layer)) + 
+    geom_hline(aes(yintercept = Guessing)) + 
+    ylim(0, 1) + 
+    labs(title = plotlab)
+}
+
+plotSucc(succRate)
+plotSucc(succRateJust)
+```
 
