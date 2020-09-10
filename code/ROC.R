@@ -1,4 +1,22 @@
-jackPred <- function(layer, outcome = "pass", 
+
+rm(list = ls())
+
+library(igraph)
+library(dplyr)
+
+# Import pass/fail centrality data
+#loadvars <- load("data/centPassFail.Rdata")
+load("data/centrality_data_frames.Rdata")
+
+
+## Run jackknife logistic regression 
+
+# Turn long data frame into list of weekly frames
+centPS <- dfPS %>% group_split(Week)
+centCD <- dfCD %>% group_split(Week)
+centICS <- dfICS %>% group_split(Week)
+
+jackPredLog <- function(layer, outcome = "pass", 
                      predictors = c("gender", "cohort", "fci_pre", "PageRank", 
                                     "tarEnt", "Hide"),p=0.5) {
   if (outcome == "pass" | outcome == "justpass") {
@@ -40,15 +58,16 @@ jackPred <- function(layer, outcome = "pass",
   return(alldata)
 }
 
+
 # Predict pass/fail
-predPS <- jackPred(centPS,p=0.2)
-predCD <- jackPred(centCD,p=0.2)
-predICS <- jackPred(centICS,p=0.2)
+predPS <- jackPredLog(centPS,p=0.2)
+predCD <- jackPredLog(centCD,p=0.2)
+predICS <- jackPredLog(centICS,p=0.2)
 
 # Predict just-pass/just-fail (2/0)
-predJustPS <- jackPred(centPS, outcome = "justpass",p=0.2)
-predJustCD <- jackPred(centCD, outcome = "justpass",p=0.2)
-predJustICS <- jackPred(centICS, outcome = "justpass",p=0.2)
+predJustPS <- jackPredLog(centPS, outcome = "justpass",p=0.2)
+predJustCD <- jackPredLog(centCD, outcome = "justpass",p=0.2)
+predJustICS <- jackPredLog(centICS, outcome = "justpass",p=0.2)
 ###ROC curves and such###
 ROCplus<-function(predFrame,w){
   if(length(unique(predFrame[,w+2]))!=1){
@@ -56,11 +75,11 @@ ROCplus<-function(predFrame,w){
   }
   else if (predFrame[1,w+2]==1){
     confusionMatrix<-matrix(0,2,2)
-    confusionMatrix[,2]<-table(truth=predPS[,2],prediction=predPS[,w+2])
+    confusionMatrix[,2]<-table(truth=predFrame[,2],prediction=predFrame[,w+2])
   }
   else{
     confusionMatrix<-matrix(0,2,2)
-    confusionMatrix[,1]<-table(truth=predPS[,2],prediction=predPS[,w+2])
+    confusionMatrix[,1]<-table(truth=predFrame[,2],prediction=predFrame[,w+2])
   }
   FP<-confusionMatrix[1,2]
   FN<-confusionMatrix[2,1]
@@ -75,12 +94,112 @@ ROCplus<-function(predFrame,w){
   return(res)
 }
 
-ROCplusWeeks<-function(predPS){
+ROCplusWeeks<-function(predFrame){
   res<-matrix(0,ncol=8,nrow=7)
   rownames(res)<-c("w1","w2","w3","w4","w5","w6","w7")
   colnames(res)<-c("FP","FN","TN","TP","FPR","TPR","PPV","SR")
   for(i in 1:7){
-  res[i,]<-ROCplus(predPS,i)
+  res[i,]<-ROCplus(predFrame,i)
   }
+  res<-as.data.frame(res)
   return(res)
 }
+
+
+ROC_PS_log<-list()
+for(i in 1:100){
+  predPS_x<-jackPredLog(centPS,p=i/100)
+  ROC<-ROCplusWeeks(predPS_x)
+  ROC_PS_log[[i]]<-ROC
+}
+
+ROC_CD_log<-list()
+for(i in 1:100){
+  predCD_x<-jackPredLog(centCD,p=i/100)
+  ROC<-ROCplusWeeks(predCD_x)
+  ROC_CD_log[[i]]<-ROC
+}
+
+ROC_ICS_log<-list()
+for(i in 1:100){
+  predICS_x<-jackPredLog(centICS,p=i/100)
+  ROC<-ROCplusWeeks(predICS_x)
+  ROC_ICS_log[[i]]<-ROC
+}
+
+ROC_PS_justpass_log<-list()
+for(i in 1:100){
+  predPS_x<-jackPredLog(centPS,outcome = "justpass",p=i/100)
+  ROC<-ROCplusWeeks(predPS_x)
+  ROC_PS_justpass_log[[i]]<-ROC
+}
+
+ROC_CD_justpass_log<-list()
+for(i in 1:100){
+  predCD_x<-jackPredLog(centCD, outcome = "justpass",p=i/100)
+  ROC<-ROCplusWeeks(predCD_x)
+  ROC_CD_justpass_log[[i]]<-ROC
+}
+
+ROC_ICS_justpass_log<-list()
+for(i in 1:100){
+  predICS_x<-jackPredLog(centICS, outcome = "justpass",p=i/100)
+  ROC<-ROCplusWeeks(predICS_x)
+  ROC_ICS_justpass_log[[i]]<-ROC
+}
+
+
+save(ROC_PS_log,ROC_CD_log,ROC_ICS_log, ROC_PS_justpass_log,ROC_CD_justpass_log,ROC_ICS_justpass_log,file="data/ROC_logreg.Rdata")
+
+ROC_PS_TPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_PS_FPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_PS_PPV<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_PS_SR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+for (i in 1:100){
+  ROC_PS_TPR[i,1:7]<-ROC_PS_log[[i]]$TPR[1:7]
+  ROC_PS_FPR[i,1:7]<-ROC_PS_log[[i]]$FPR[1:7]
+  ROC_PS_PPV[i,1:7]<-ROC_PS_log[[i]]$PPV[1:7]
+  ROC_PS_SR[i,1:7]<-ROC_PS_log[[i]]$SR[1:7]
+}
+
+plot(ROC_PS_FPR$w1,ROC_PS_TPR$w1,xlab = "False Postive Rate",ylab="True Positive Rate",type="l",col="black")
+points(ROC_PS_FPR$w2,ROC_PS_TPR$w2,type="l",col="blue")
+points(ROC_PS_FPR$w3,ROC_PS_TPR$w3,type="l",col="red")
+points(ROC_PS_FPR$w4,ROC_PS_TPR$w4,type="l",col="yellow")
+points(ROC_PS_FPR$w5,ROC_PS_TPR$w5,type="l",col="grey")
+points(ROC_PS_FPR$w6,ROC_PS_TPR$w6,type="l",col="purple")
+points(ROC_PS_FPR$w7,ROC_PS_TPR$w7,type="l",col="green")
+
+plot(c(1:100),ROC_PS_PPV$w1,xlab = "Threshold probability",ylab="Positive Prediction Value",type="l",col="black")
+points(c(1:100),ROC_PS_PPV$w2,type="l",col="blue")
+points(c(1:100),ROC_PS_PPV$w3,type="l",col="red")
+points(c(1:100),ROC_PS_PPV$w4,type="l",col="yellow")
+points(c(1:100),ROC_PS_PPV$w5,type="l",col="grey")
+points(c(1:100),ROC_PS_PPV$w6,type="l",col="purple")
+points(c(1:100),ROC_PS_PPV$w7,type="l",col="green")
+
+plot(c(1:100),ROC_PS_SR$w1,ylim=c(0,1), xlab = "Threshold probability",ylab="Success Rate",type="l",col="black")
+points(c(1:100),ROC_PS_SR$w2,type="l",col="blue")
+points(c(1:100),ROC_PS_SR$w3,type="l",col="red")
+points(c(1:100),ROC_PS_SR$w4,type="l",col="yellow")
+points(c(1:100),ROC_PS_SR$w5,type="l",col="grey")
+points(c(1:100),ROC_PS_SR$w6,type="l",col="purple")
+points(c(1:100),ROC_PS_SR$w7,type="l",col="green")
+
+plot(c(1:100),ROC_PS_FPR$w1,ylim=c(0,1), xlab = "Threshold probability",ylab="False Positive Rate",type="l",col="black")
+points(c(1:100),ROC_PS_FPR$w2,type="l",col="blue")
+points(c(1:100),ROC_PS_FPR$w3,type="l",col="red")
+points(c(1:100),ROC_PS_FPR$w4,type="l",col="yellow")
+points(c(1:100),ROC_PS_FPR$w5,type="l",col="grey")
+points(c(1:100),ROC_PS_FPR$w6,type="l",col="purple")
+points(c(1:100),ROC_PS_FPR$w7,type="l",col="green")
+
+plot(c(1:100),ROC_PS_TPR$w1,ylim=c(0,1), xlab = "Threshold probability",ylab="True Positive Rate",type="l",col="black")
+points(c(1:100),ROC_PS_TPR$w2,type="l",col="blue")
+points(c(1:100),ROC_PS_TPR$w3,type="l",col="red")
+points(c(1:100),ROC_PS_TPR$w4,type="l",col="yellow")
+points(c(1:100),ROC_PS_TPR$w5,type="l",col="grey")
+points(c(1:100),ROC_PS_TPR$w6,type="l",col="purple")
+points(c(1:100),ROC_PS_TPR$w7,type="l",col="green")
+
+save(ROC_PS_log,ROC_CD_log,ROC_ICS_log, file="data/ROC_logreg.Rdata")
