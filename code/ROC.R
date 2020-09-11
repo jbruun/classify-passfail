@@ -162,13 +162,108 @@ for (i in 1:100){
   ROC_PS_SR[i,1:7]<-ROC_PS_log[[i]]$SR[1:7]
 }
 
-plot(ROC_PS_FPR$w1,ROC_PS_TPR$w1,xlab = "False Postive Rate",ylab="True Positive Rate",type="l",col="black")
+ROC_CD_TPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_CD_FPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_CD_PPV<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_CD_SR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+for (i in 1:100){
+  ROC_CD_TPR[i,1:7]<-ROC_CD_log[[i]]$TPR[1:7]
+  ROC_CD_FPR[i,1:7]<-ROC_CD_log[[i]]$FPR[1:7]
+  ROC_CD_PPV[i,1:7]<-ROC_CD_log[[i]]$PPV[1:7]
+  ROC_CD_SR[i,1:7]<-ROC_CD_log[[i]]$SR[1:7]
+}
+
+ROC_ICS_TPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_ICS_FPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_ICS_PPV<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_ICS_SR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+for (i in 1:100){
+  ROC_ICS_TPR[i,1:7]<-ROC_ICS_log[[i]]$TPR[1:7]
+  ROC_ICS_FPR[i,1:7]<-ROC_ICS_log[[i]]$FPR[1:7]
+  ROC_ICS_PPV[i,1:7]<-ROC_ICS_log[[i]]$PPV[1:7]
+  ROC_ICS_SR[i,1:7]<-ROC_ICS_log[[i]]$SR[1:7]
+}
+
+ROC_PS_justpass_TPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_PS_justpass_FPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_PS_justpass_PPV<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_PS_justpass_SR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+for (i in 1:100){
+  ROC_PS_justpass_TPR[i,1:7]<-ROC_PS_justpass_log[[i]]$TPR[1:7]
+  ROC_PS_justpass_FPR[i,1:7]<-ROC_PS_justpass_log[[i]]$FPR[1:7]
+  ROC_PS_justpass_PPV[i,1:7]<-ROC_PS_justpass_log[[i]]$PPV[1:7]
+  ROC_PS_justpass_SR[i,1:7]<-ROC_PS_justpass_log[[i]]$SR[1:7]
+}
+
+ROC_CD_justpass_TPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_CD_justpass_FPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_CD_justpass_PPV<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_CD_justpass_SR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+for (i in 1:100){
+  ROC_CD_justpass_TPR[i,1:7]<-ROC_CD_justpass_log[[i]]$TPR[1:7]
+  ROC_CD_justpass_FPR[i,1:7]<-ROC_CD_justpass_log[[i]]$FPR[1:7]
+  ROC_CD_justpass_PPV[i,1:7]<-ROC_CD_justpass_log[[i]]$PPV[1:7]
+  ROC_CD_justpass_SR[i,1:7]<-ROC_CD_justpass_log[[i]]$SR[1:7]
+}
+
+ROC_ICS_justpass_TPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_ICS_justpass_FPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_ICS_justpass_PPV<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+ROC_ICS_justpass_SR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+for (i in 1:100){
+  ROC_ICS_justpass_TPR[i,1:7]<-ROC_ICS_justpass_log[[i]]$TPR[1:7]
+  ROC_ICS_justpass_FPR[i,1:7]<-ROC_ICS_justpass_log[[i]]$FPR[1:7]
+  ROC_ICS_justpass_PPV[i,1:7]<-ROC_ICS_justpass_log[[i]]$PPV[1:7]
+  ROC_ICS_justpass_SR[i,1:7]<-ROC_ICS_justpass_log[[i]]$SR[1:7]
+}
+###PLOTTING###
+plot(ROC_PS_FPR$w1,ROC_PS_TPR$w1,main="Pass/fail logistic regression jack-knife PS", xlab = "False Postive Rate",ylab="True Positive Rate",type="l",col="black")
 points(ROC_PS_FPR$w2,ROC_PS_TPR$w2,type="l",col="blue")
 points(ROC_PS_FPR$w3,ROC_PS_TPR$w3,type="l",col="red")
 points(ROC_PS_FPR$w4,ROC_PS_TPR$w4,type="l",col="yellow")
 points(ROC_PS_FPR$w5,ROC_PS_TPR$w5,type="l",col="grey")
 points(ROC_PS_FPR$w6,ROC_PS_TPR$w6,type="l",col="purple")
 points(ROC_PS_FPR$w7,ROC_PS_TPR$w7,type="l",col="green")
+
+plot(ROC_CD_FPR$w1,ROC_CD_TPR$w1,main="Pass/fail logistic regression jack-knife CD", xlab = "False Postive Rate",ylab="True Positive Rate",type="l",col="black")
+points(ROC_CD_FPR$w2,ROC_CD_TPR$w2,type="l",col="blue")
+points(ROC_CD_FPR$w3,ROC_CD_TPR$w3,type="l",col="red")
+points(ROC_CD_FPR$w4,ROC_CD_TPR$w4,type="l",col="yellow")
+points(ROC_CD_FPR$w5,ROC_CD_TPR$w5,type="l",col="grey")
+points(ROC_CD_FPR$w6,ROC_CD_TPR$w6,type="l",col="purple")
+points(ROC_CD_FPR$w7,ROC_CD_TPR$w7,type="l",col="green")
+
+plot(ROC_ICS_FPR$w1,ROC_ICS_TPR$w1,main="Pass/fail logistic regression jack-knife ICS", xlab = "False Postive Rate",ylab="True Positive Rate",type="l",col="black")
+points(ROC_ICS_FPR$w2,ROC_ICS_TPR$w2,type="l",col="blue")
+points(ROC_ICS_FPR$w3,ROC_ICS_TPR$w3,type="l",col="red")
+points(ROC_ICS_FPR$w4,ROC_ICS_TPR$w4,type="l",col="yellow")
+points(ROC_ICS_FPR$w5,ROC_ICS_TPR$w5,type="l",col="grey")
+points(ROC_ICS_FPR$w6,ROC_ICS_TPR$w6,type="l",col="purple")
+points(ROC_ICS_FPR$w7,ROC_ICS_TPR$w7,type="l",col="green")
+
+plot(ROC_PS_justpass_FPR$w1,ROC_PS_justpass_TPR$w1,main="Just pass/fail logistic regression jack-knife PS", xlab = "False Postive Rate",ylab="True Positive Rate",type="l",col="black")
+points(ROC_PS_justpass_FPR$w2,ROC_PS_justpass_TPR$w2,type="l",col="blue")
+points(ROC_PS_justpass_FPR$w3,ROC_PS_justpass_TPR$w3,type="l",col="red")
+points(ROC_PS_justpass_FPR$w4,ROC_PS_justpass_TPR$w4,type="l",col="yellow")
+points(ROC_PS_justpass_FPR$w5,ROC_PS_justpass_TPR$w5,type="l",col="grey")
+points(ROC_PS_justpass_FPR$w6,ROC_PS_justpass_TPR$w6,type="l",col="purple")
+points(ROC_PS_justpass_FPR$w7,ROC_PS_justpass_TPR$w7,type="l",col="green")
+
+plot(ROC_CD_justpass_FPR$w1,ROC_CD_justpass_TPR$w1,main="Just pass/fail logistic regression jack-knife CD", xlab = "False Postive Rate",ylab="True Positive Rate",type="l",col="black")
+points(ROC_CD_justpass_FPR$w2,ROC_CD_justpass_TPR$w2,type="l",col="blue")
+points(ROC_CD_justpass_FPR$w3,ROC_CD_justpass_TPR$w3,type="l",col="red")
+points(ROC_CD_justpass_FPR$w4,ROC_CD_justpass_TPR$w4,type="l",col="yellow")
+points(ROC_CD_justpass_FPR$w5,ROC_CD_justpass_TPR$w5,type="l",col="grey")
+points(ROC_CD_justpass_FPR$w6,ROC_CD_justpass_TPR$w6,type="l",col="purple")
+points(ROC_CD_justpass_FPR$w7,ROC_CD_justpass_TPR$w7,type="l",col="green")
+
+plot(ROC_ICS_justpass_FPR$w1,ROC_ICS_justpass_TPR$w1,main="Just pass/fail logistic regression jack-knife ICS", xlab = "False Postive Rate",ylab="True Positive Rate",type="l",col="black")
+points(ROC_ICS_justpass_FPR$w2,ROC_ICS_justpass_TPR$w2,type="l",col="blue")
+points(ROC_ICS_justpass_FPR$w3,ROC_ICS_justpass_TPR$w3,type="l",col="red")
+points(ROC_ICS_justpass_FPR$w4,ROC_ICS_justpass_TPR$w4,type="l",col="yellow")
+points(ROC_ICS_justpass_FPR$w5,ROC_ICS_justpass_TPR$w5,type="l",col="grey")
+points(ROC_ICS_justpass_FPR$w6,ROC_ICS_justpass_TPR$w6,type="l",col="purple")
+points(ROC_ICS_justpass_FPR$w7,ROC_ICS_justpass_TPR$w7,type="l",col="green")
 
 plot(c(1:100),ROC_PS_PPV$w1,xlab = "Threshold probability",ylab="Positive Prediction Value",type="l",col="black")
 points(c(1:100),ROC_PS_PPV$w2,type="l",col="blue")
