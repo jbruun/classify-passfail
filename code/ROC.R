@@ -58,11 +58,58 @@ jackPredLog <- function(layer, outcome = "pass",
   return(alldata)
 }
 
-
+jackPredLDA <- function(layer, outcome = "pass", 
+                        predictors = c("gender", "cohort", "fci_pre", 
+                                       "PageRank", "tarEnt", "Hide"),p=0.5) {
+  # Check for valid input
+  if (outcome == "pass" | outcome == "justpass") {
+    choices <- c("0", "1")
+  } else {
+    stop("Not a valid outcome variable.")
+  }
+  # Remove incomplete rows
+  userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
+  
+  allprob <- matrix(nrow = sum(userows), ncol = length(layer))
+  cases <- c(1:sum(userows))
+  
+  # Build fitting input string using predictor names
+  fitStr <- paste(predictors, collapse = " + ")
+  fitForm <- paste0(outcome, " ~ ", fitStr)
+  
+  # Loop through all weeks
+  for(j in 1:length(layer)) {
+    # Data is complete cases
+    data <- data.frame(layer[[j]][userows, c(outcome, predictors)])
+    # Loop through all nodes
+    for(i in 1:dim(data)[1]) {
+      # Training set is data minus observation i
+      train <- !cases==i
+      lda.fit <- lda(data[,-1], grouping=data[,1], subset = train)
+      allprob[i, j] <- predict(lda.fit, newdata = data[i,-1])$posterior[2]
+    }
+  }
+  allpred <- allprob
+  allpred[allprob < p] <- choices[1]    # 0
+  allpred[allprob >= p] <- choices[2]   # 1
+  
+  # To return: node name, actual outcome, predicted outcome columns
+  alldata <- data.frame(layer[[1]][userows, "name"], data[, outcome], 
+                        as.data.frame(allpred))
+  
+  # Turn outcomes into factor
+  for(i in seq_along(layer)) {
+    alldata[, i+2] <- as.factor(alldata[, i+2])
+  }
+  
+  names(alldata) <- c("name", outcome, paste0("Week", c(1:length(layer))))
+  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1]))
+  return(alldata)
+}
 # Predict pass/fail
-predPS <- jackPredLog(centPS,p=0.2)
-predCD <- jackPredLog(centCD,p=0.2)
-predICS <- jackPredLog(centICS,p=0.2)
+predPS <- jackPredLDA(centPS,p=0.2)
+predCD <- jackPredLDA(centCD,p=0.2)
+predICS <- jackPredLDA(centICS,p=0.2)
 
 # Predict just-pass/just-fail (2/0)
 predJustPS <- jackPredLog(centPS, outcome = "justpass",p=0.2)
@@ -150,6 +197,8 @@ for(i in 1:100){
 
 
 save(ROC_PS_log,ROC_CD_log,ROC_ICS_log, ROC_PS_justpass_log,ROC_CD_justpass_log,ROC_ICS_justpass_log,file="data/ROC_logreg.Rdata")
+
+
 
 ROC_PS_TPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
 ROC_PS_FPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
