@@ -4,10 +4,12 @@ rm(list = ls())
 library(igraph)
 library(dplyr)
 
+
+
 # Import pass/fail centrality data
 #loadvars <- load("data/centPassFail.Rdata")
 load("data/centrality_data_frames.Rdata")
-
+load("data/ROC_logreg.Rdata")
 
 ## Run jackknife logistic regression 
 

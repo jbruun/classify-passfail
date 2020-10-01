@@ -9,7 +9,7 @@
 #  node in the vector is predicted using all the other nodes
 jackPredLog <- function(layer, outcome = "pass", 
                         predictors = c("gender", "cohort", "fci_pre", 
-                                       "PageRank", "tarEnt", "Hide")) {
+                                       "PageRank", "tarEnt", "Hide"), p=0.5) {
   # Check for valid input
   if (outcome == "pass" | outcome == "justpass") {
     choices <- c("0", "1")
@@ -37,8 +37,8 @@ jackPredLog <- function(layer, outcome = "pass",
     }
   }
   allpred <- allprob
-  allpred[allprob < 0.5] <- choices[1]    # 0
-  allpred[allprob >= 0.5] <- choices[2]   # 1
+  allpred[allprob < p] <- choices[1]    # 0
+  allpred[allprob >= p] <- choices[2]   # 1
   
   # To return: node name, actual outcome, predicted outcome columns
   alldata <- data.frame(layer[[1]][userows, "name"], data[, outcome], 
@@ -62,7 +62,7 @@ jackPredLog <- function(layer, outcome = "pass",
 #  node in the vector is predicted using all the other nodes
 jackPredLDA <- function(layer, outcome = "pass", 
                         predictors = c("gender", "cohort", "fci_pre", 
-                                       "PageRank", "tarEnt", "Hide")) {
+                                       "PageRank", "tarEnt", "Hide"), p=0.5) {
   # Check for valid input
   if (outcome == "pass" | outcome == "justpass") {
     choices <- c("0", "1")
@@ -92,12 +92,61 @@ jackPredLDA <- function(layer, outcome = "pass",
     }
   }
   allpred <- allprob
-  allpred[allprob < 0.5] <- choices[1]    # 0
-  allpred[allprob >= 0.5] <- choices[2]   # 1
+  allpred[allprob < p] <- choices[1]    # 0
+  allpred[allprob >= p] <- choices[2]   # 1
   
   # To return: node name, actual outcome, predicted outcome columns
   alldata <- data.frame(layer[[1]][userows, "name"], data[, outcome], 
                         as.data.frame(allpred))
+  
+  # Turn outcomes into factor
+  for(i in seq_along(layer)) {
+    alldata[, i+2] <- as.factor(alldata[, i+2])
+  }
+  
+  names(alldata) <- c("name", outcome, paste0("Week", c(1:length(layer))))
+  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1]))
+  return(alldata)
+}
+
+# Quadratic discriminant analysis (QDA) version
+# Input: List of weekly data frames, optional outcome (pass/justpass), optional 
+#  subset of predictors to use
+# Output: List of prediction vectors for that weekly aggregate network; each 
+#  node in the vector is predicted using all the other nodes
+
+jackPredQDA<- function(layer, outcome = "pass", 
+                       predictors = c("gender", "cohort", "fci_pre", "PageRank", 
+                                      "tarEnt", "Hide"),p=0.5) {
+  if (outcome == "pass" | outcome == "justpass") {
+    choices <- c("0", "1")
+  } else {
+    stop("Not a valid outcome variable.")
+  }
+  # remove incomplete rows
+  userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
+  
+  allprob <- matrix(nrow = sum(userows), ncol = length(layer))
+  cases<-c(1:sum(userows))
+  fitStr <- paste(predictors, collapse = " + ")
+  fitForm <- paste0(outcome, " ~ ", fitStr)
+  for(j in 1:length(layer)) {
+    # data is complete cases
+    data <- data.frame(layer[[j]][userows, c(outcome, predictors)])
+    # Loop through all nodes
+    for(i in 1:dim(data)[1]) {
+      # training set is data minus observation i
+      train <- !cases==i
+      qda.fit <- qda(data[,-1], grouping=data[,1], subset = train)
+      allprob[i, j] <- predict(qda.fit, newdata = data[i,-1])$posterior[2]
+    }
+  }
+  allpred <- allprob
+  allpred[allprob < p] <- choices[1]    # 0
+  allpred[allprob >= p] <- choices[2]   # 1
+  
+  # To return: node name, actual outcome, predicted outcome columns
+  alldata <- data.frame(layer[[1]][userows, "name"], data[, outcome], as.data.frame(allpred))
   
   # Turn outcomes into factor
   for(i in seq_along(layer)) {
