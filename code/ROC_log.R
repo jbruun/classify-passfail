@@ -108,15 +108,7 @@ jackPredLDA <- function(layer, outcome = "pass",
   print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1]))
   return(alldata)
 }
-# Predict pass/fail
-predPS <- jackPredLDA(centPS,p=0.2)
-predCD <- jackPredLDA(centCD,p=0.2)
-predICS <- jackPredLDA(centICS,p=0.2)
 
-# Predict just-pass/just-fail (2/0)
-predJustPS <- jackPredLog(centPS, outcome = "justpass",p=0.2)
-predJustCD <- jackPredLog(centCD, outcome = "justpass",p=0.2)
-predJustICS <- jackPredLog(centICS, outcome = "justpass",p=0.2)
 ###ROC curves and such###
 ROCplus<-function(predFrame,w){
   if(length(unique(predFrame[,w+2]))!=1){
@@ -154,7 +146,7 @@ ROCplusWeeks<-function(predFrame){
   return(res)
 }
 
-
+#RUN
 ROC_PS_log<-list()
 for(i in 1:100){
   predPS_x<-jackPredLog(centPS,p=i/100)
