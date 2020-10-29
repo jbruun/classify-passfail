@@ -149,43 +149,48 @@ ROCplusWeeks<-function(predFrame){
 #RUN
 ROC_PS_log<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("gender", "cohort", "fci_pre_c", "PageRank", 
-                                              "tarEnt", "Hide"),p=i/100)
+  predPS_x<-jackPredLog(centPS,predictors = c("fci_pre_0", "PageRank","age" 
+                                            ),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_PS_log[[i]]<-ROC
 }
 
 ROC_CD_log<-list()
 for(i in 1:100){
-  predCD_x<-jackPredLog(centCD,p=i/100)
+  predCD_x<-jackPredLog(centCD,predictors = c("fci_pre_c", "PageRank", 
+                                              "tarEnt", "Hide"),p=i/100)
   ROC<-ROCplusWeeks(predCD_x)
   ROC_CD_log[[i]]<-ROC
 }
 
 ROC_ICS_log<-list()
 for(i in 1:100){
-  predICS_x<-jackPredLog(centICS,p=i/100)
+  predICS_x<-jackPredLog(centICS,predictors = c("gender", "cohort", "fci_pre_c", "PageRank", 
+                                                "tarEnt", "Hide"),p=i/100)
   ROC<-ROCplusWeeks(predICS_x)
   ROC_ICS_log[[i]]<-ROC
 }
 
 ROC_PS_justpass_log<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,outcome = "justpass",p=i/100)
+  predPS_x<-jackPredLog(centPS,outcome = "justpass",predictors = c("gender", "cohort", "fci_pre_c", "PageRank", 
+                                                                   "tarEnt", "Hide"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_PS_justpass_log[[i]]<-ROC
 }
 
 ROC_CD_justpass_log<-list()
 for(i in 1:100){
-  predCD_x<-jackPredLog(centCD, outcome = "justpass",p=i/100)
+  predCD_x<-jackPredLog(centCD, outcome = "justpass",predictors = c("gender", "cohort", "fci_pre_c", "PageRank", 
+                                                                    "tarEnt", "Hide"),p=i/100)
   ROC<-ROCplusWeeks(predCD_x)
   ROC_CD_justpass_log[[i]]<-ROC
 }
 
 ROC_ICS_justpass_log<-list()
 for(i in 1:100){
-  predICS_x<-jackPredLog(centICS, outcome = "justpass",p=i/100)
+  predICS_x<-jackPredLog(centICS, outcome = "justpass",predictors = c("gender", "cohort", "fci_pre_c", "PageRank", 
+                                                                      "tarEnt", "Hide"),p=i/100)
   ROC<-ROCplusWeeks(predICS_x)
   ROC_ICS_justpass_log[[i]]<-ROC
 }
@@ -204,6 +209,11 @@ for (i in 1:100){
   ROC_PS_FPR[i,1:7]<-ROC_PS_log[[i]]$FPR[1:7]
   ROC_PS_PPV[i,1:7]<-ROC_PS_log[[i]]$PPV[1:7]
   ROC_PS_SR[i,1:7]<-ROC_PS_log[[i]]$SR[1:7]
+}
+
+PS_AUC<-vector()
+for (i in 1:7){
+  PS_AUC[i]<-simple_auc(ROC_PS_TPR[,i],ROC_PS_FPR[,i])
 }
 
 ROC_CD_TPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
