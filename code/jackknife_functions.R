@@ -7,6 +7,13 @@
 #  subset of predictors to use
 # Output: List of prediction vectors for that weekly aggregate network; each 
 #  node in the vector is predicted using all the other nodes
+
+library(igraph)
+library(dplyr)
+library(class)   # for knn
+library(tidyr)
+library(ggplot2)  # for plotting success rates
+
 jackPredLog <- function(layer, outcome = "pass", 
                         predictors = c("gender", "cohort", "fci_pre", 
                                        "PageRank", "tarEnt", "Hide"), p=0.5) {
@@ -87,7 +94,7 @@ jackPredLDA <- function(layer, outcome = "pass",
     for(i in 1:dim(data)[1]) {
       # Training set is data minus observation i
       train <- !cases==i
-      lda.fit <- lda(data[,-1], grouping=data[,1], subset = train)
+      lda.fit <- lda(as.matrix(data[,-1]), grouping=data[,1], subset = train)
       allprob[i, j] <- predict(lda.fit, newdata = data[i,-1])$posterior[2]
     }
   }
@@ -137,7 +144,7 @@ jackPredQDA<- function(layer, outcome = "pass",
     for(i in 1:dim(data)[1]) {
       # training set is data minus observation i
       train <- !cases==i
-      qda.fit <- qda(data[,-1], grouping=data[,1], subset = train)
+      qda.fit <- qda(as.matrix(data[,-1]), grouping=data[,1], subset = train)
       allprob[i, j] <- predict(qda.fit, newdata = data[i,-1])$posterior[2]
     }
   }
