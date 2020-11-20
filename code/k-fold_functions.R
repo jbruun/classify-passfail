@@ -1,11 +1,12 @@
 # K-fold cross-validation loops for different classifiers. Lots of duplicate 
 # code, should probably combine functions, but haven't yet.
 
-# Split a vector into (approximately) equal-sized chunks
+# Split rows of a data frame into (approximately) equal-sized chunks
 # See https://stackoverflow.com/questions/3318333/split-a-vector-into-chunks
 chunk <- function(df, n) {
   x <- seq(nrow(df))
-  split(df, cut(x, n, labels = FALSE)) 
+  # split(df, cut(x, n, labels = FALSE))  # for now, only split row numbers
+  split(x, cut(x, n, labels = FALSE))
 }
 
 
@@ -34,13 +35,17 @@ kfoldLog <- function(layer, outcome = "pass", k = 5,
   for(j in 1:length(layer)) {
     # Data is complete cases
     data <- layer[[j]][userows, c(outcome, predictors)]
+    chunkrows <- chunk(data, n = k)
   
-    # Loop through all nodes
-    for(i in 1:dim(data)[1]) {
-      # Training set is data minus observation i
-      train <- data[-i, ]
+    # Loop through all chunks
+    for(i in 1:k) {
+      # Training set is data minus chunk i
+      train <- data[-chunkrows[[i]], ]
+      test <- data[chunkrows[[i]], ]
+      
       glm.fit <- glm(fitForm, family = binomial, data = train)
-      allprob[i, j] <- predict(glm.fit, newdata = data[i, ], type = "response")
+      allprob[chunkrows[[i]], j] <- predict(glm.fit, newdata = test, 
+                                            type = "response")
     }
   }
   allpred <- allprob
@@ -57,7 +62,7 @@ kfoldLog <- function(layer, outcome = "pass", k = 5,
   }
   
   names(alldata) <- c("name", outcome, paste0("Week", c(1:length(layer))))
-  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1]))
+  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1], "k = ", k))
   return(alldata)
 }
 
