@@ -62,7 +62,7 @@ kfoldLog <- function(layer, outcome = "pass", k = 5,
   }
   
   names(alldata) <- c("name", outcome, paste0("Week", c(1:length(layer))))
-  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1], "k = ", k))
+  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1], ", k = ", k))
   return(alldata)
 }
 
