@@ -1,4 +1,4 @@
-library(ggplots2)
+library(ggplot2)
 background<-data.frame(age=centPS[[1]]$age,gender=centPS[[1]]$gender,cohort=centPS[[1]]$cohort,fci_pre=centPS[[1]]$fci_pre,
                        fci_pre_0=centPS[[1]]$fci_pre_0,fci_pre_c=centPS[[1]]$fci_pre_c,pass=centPS[[1]]$pass,justpass=centPS[[1]]$justpass)
 #Distributions of variables
@@ -10,7 +10,7 @@ fciPlotClasses<-ggplot(background, aes(x=fci_pre_c)) + geom_bar() + labs(title="
 plot(fciPlotClasses)
 agePlot<-ggplot(background, aes(x=age)) + geom_bar() + labs(title="FCI pre-test score classes")
 plot(agePlot)
-cohortPlot<-ggplot(background, aes(x=cohortc)) + geom_bar() + labs(title="FCI pre-test scores")
+cohortPlot<-ggplot(background, aes(x=cohort)) + geom_bar() + labs(title="FCI pre-test scores")
 plot(cohortPlot)
 plotPass<-ggplot(background, aes(x=pass)) + geom_bar() + labs(title="FCI pre-test scores")
 plot(plotPass)
