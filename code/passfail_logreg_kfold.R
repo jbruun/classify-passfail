@@ -49,7 +49,7 @@ succRate <- data.frame(Layer = c("PS","CD","ICS"),
                        Guessing = c(mean(predPS$pass == "1"), mean(predCD$pass == "1"),
                                     mean(predICS$pass == "1")))
 
-write.csv(succRate,"succRate.csv", row.names = FALSE)
+write.csv(succRate,"succRate_logReg_kfold5.csv", row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
 compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
