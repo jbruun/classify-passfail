@@ -1,12 +1,20 @@
 # K-fold cross-validation loops for different classifiers. Lots of duplicate 
 # code, should probably combine functions, but haven't yet.
 
+# Split a vector into (approximately) equal-sized chunks
+# See https://stackoverflow.com/questions/3318333/split-a-vector-into-chunks
+chunk <- function(df, n) {
+  x <- seq(nrow(df))
+  split(df, cut(x, n, labels = FALSE)) 
+}
+
+
 # Logistic regression version
-# Input: List of weekly data frames, optional outcome (pass/justpass), optional 
-#  subset of predictors to use
+# Input: List of weekly data frames, optional outcome (pass/justpass), number of
+#  chunks to divide data into, optional subset of predictors to use
 # Output: List of prediction vectors for that weekly aggregate network; each 
 #  node in the vector is predicted using all the other nodes
-kfoldLog <- function(layer, outcome = "pass", 
+kfoldLog <- function(layer, outcome = "pass", k = 5, 
                         predictors = c("gender", "cohort", "fci_pre", 
                                        "PageRank", "tarEnt", "Hide"), p=0.5) {
   # Check for valid input
