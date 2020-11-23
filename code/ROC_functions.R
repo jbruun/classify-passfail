@@ -34,6 +34,24 @@ ROCplusWeeks<-function(predFrame){
   return(res)
 }
 
+performanceMeasures<-function(ROC_frame, M=100){
+  #needs specific format from ROC calculations
+  TPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+  FPR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+  PPV<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+  SR<-data.frame(w1=double(),w2=double(),w3=double(),w4=double(),w5=double(),w6=double(),w7=double())
+  
+
+for (i in 1:M){
+  TPR[i,1:7]<-ROC_frame[[i]]$TPR[1:7]
+  FPR[i,1:7]<-ROC_frame[[i]]$FPR[1:7]
+  PPV[i,1:7]<-ROC_frame[[i]]$PPV[1:7]
+  SR[i,1:7]<-ROC_frame[[i]]$SR[1:7]
+}
+result<-list(TPR,FPR,PPV,SR)
+return(result)
+}
+
 simple_auc <- function(TPR, FPR){
   x<-data.frame(TPR,FPR)
   x<- x[order(x[, 1],decreasing = F),]
@@ -43,4 +61,14 @@ simple_auc <- function(TPR, FPR){
   dFPR <- abs(c(diff(FPR), 0))
   dTPR <- abs(c(diff(TPR), 0))
   sum(TPR * dFPR) + sum(dTPR * dFPR)/2
+}
+
+AUC<-function(TPR,FPR){
+  #TPR and FPR are data frames
+  AUC<-vector()
+  for (i in 1:7){
+    AUC[i]<-simple_auc(TPR[,i],FPR[,i])
+  }
+  return(AUC)
+  
 }

@@ -7,7 +7,10 @@ rm(list = ls())
 
 library(igraph)
 library(dplyr)
-
+library(class)   # for knn
+library(tidyr)
+library(ggplot2)  # for plotting success rates
+library(MASS)
 
 
 # Import pass/fail centrality data
