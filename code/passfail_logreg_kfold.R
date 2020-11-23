@@ -20,21 +20,21 @@ centPS <- dfPS %>% group_split(Week)
 centCD <- dfCD %>% group_split(Week)
 centICS <- dfICS %>% group_split(Week)
 
-source("code/jackknife_functions.R")
+source("code/k-fold_functions.R")
 
 # Predict pass/fail
-predPS <- jackPredLog(centPS)
-predCD <- jackPredLog(centCD)
-predICS <- jackPredLog(centICS)
+predPS <- kfoldLog(centPS, k = 5)
+predCD <- kfoldLog(centCD, k = 5)
+predICS <- kfoldLog(centICS, k = 5)
 
 # Predict just-pass/just-fail (2/0)
-predJustPS <- jackPredLog(centPS, outcome = "justpass")
-predJustCD <- jackPredLog(centCD, outcome = "justpass")
-predJustICS <- jackPredLog(centICS, outcome = "justpass")
+predJustPS <- kfoldLog(centPS, outcome = "justpass", k = 5)
+predJustCD <- kfoldLog(centCD, outcome = "justpass", k = 5)
+predJustICS <- kfoldLog(centICS, outcome = "justpass", k = 5)
 
 # Save pass/fail predictions
 save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
-     file = "data/jackknife_logistic_predictions.Rdata")
+     file = "data/kfold5_logistic_predictions.Rdata")
 
 
 ## Collect success rates and compare with guessing everyone passes
@@ -49,7 +49,7 @@ succRate <- data.frame(Layer = c("PS","CD","ICS"),
                        Guessing = c(mean(predPS$pass == "1"), mean(predCD$pass == "1"),
                                     mean(predICS$pass == "1")))
 
-write.csv(succRate,"succRate.csv", row.names = FALSE)
+write.csv(succRate,"succRate_logReg_kfold5.csv", row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
 compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
