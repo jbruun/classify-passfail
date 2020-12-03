@@ -12,7 +12,8 @@ chunk <- function(df, n) {
 
 # Logistic regression version
 # Input: List of weekly data frames, optional outcome (pass/justpass), number of
-#  chunks to divide data into, optional subset of predictors to use
+#  chunks to divide data into, optional set of predictors to use, optional 
+#  probability threshold to predict outcome
 # Output: List of prediction vectors for that weekly aggregate network; each 
 #  node in the vector is predicted using all the other nodes
 kfoldLog <- function(layer, outcome = "pass", k = 5, 
