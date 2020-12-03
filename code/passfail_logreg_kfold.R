@@ -28,21 +28,21 @@ source("code/k-fold_functions.R")
 # Predict pass/fail
 predictors <- c("gender", "cohort", "fci_pre_c", "PageRank", "tarEnt", "Hide")
 
-predPS <- kfoldLog(centPS, k = 5, predictors = predictors)
-predCD <- kfoldLog(centCD, k = 5, predictors = predictors)
-predICS <- kfoldLog(centICS, k = 5, predictors = predictors)
+predPS <- kfoldLog(centPS, k = 10, predictors = predictors)
+predCD <- kfoldLog(centCD, k = 10, predictors = predictors)
+predICS <- kfoldLog(centICS, k = 10, predictors = predictors)
 
 # Predict just-pass/just-fail (2/0)
-predJustPS <- kfoldLog(centPS, outcome = "justpass", k = 5, 
+predJustPS <- kfoldLog(centPS, outcome = "justpass", k = 10, 
                        predictors = predictors)
-predJustCD <- kfoldLog(centCD, outcome = "justpass", k = 5, 
+predJustCD <- kfoldLog(centCD, outcome = "justpass", k = 10, 
                        predictors = predictors)
-predJustICS <- kfoldLog(centICS, outcome = "justpass", k = 5, 
+predJustICS <- kfoldLog(centICS, outcome = "justpass", k = 10, 
                         predictors = predictors)
 
 # Save pass/fail predictions
 save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
-     file = "data/kfold5_logistic_predictions.Rdata")
+     file = "data/kfold10_logistic_predictions.Rdata")
 
 
 ## Collect success rates and compare with guessing everyone passes
@@ -57,7 +57,7 @@ succRate <- data.frame(Layer = c("PS","CD","ICS"),
                        Guessing = c(mean(predPS$pass == "1"), mean(predCD$pass == "1"),
                                     mean(predICS$pass == "1")))
 
-write.csv(succRate,"succRate_logReg_kfold5.csv", row.names = FALSE)
+write.csv(succRate,"succRate_logReg_kfold10.csv", row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
 compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
@@ -70,19 +70,23 @@ succRateJust <- data.frame(Layer = c("PS", "CD", "ICS"),
                                         mean(predJustCD$justpass == "1"),
                                         mean(predJustICS$justpass == "1")))
 
-write.csv(succRateJust,"succRateJust_logReg_kfold5.csv", row.names = FALSE)
+write.csv(succRateJust,"succRateJust_logReg_kfold10.csv", row.names = FALSE)
 
 
 
 # Plot it up
-longRate <- succRate[,c(1,3:9)] %>% 
+df <- succRateJust
+
+longRate <- df[,c(1,3:9)] %>% 
   gather(Week, SuccRate, -Layer) %>% 
   mutate(Week = parse_number(Week))
 ggsucc <- ggplot(longRate, aes(x = Week, y = SuccRate, color = Layer))
 plotcolors <- unique(ggplot_build(ggsucc)$data[[1]][,1])
 
 p1 <- ggsucc + geom_line() + scale_y_continuous(limits = c(0.5, 1))
-p1 + geom_hline(yintercept = succRate[1, 10], linetype = "dashed", color = "black")  
+p1 + geom_hline(yintercept = df[1, 10], linetype = "dashed", color = "black") +
+  ggtitle("JustPass outcome, k = 10")
+ggsave("figures/succRateJust_kfold10.png", width = 5, height = 4, units = "in", dpi = 150)
 
 #p1 + geom_hline(yintercept = succRate[1, 10], linetype = "dashed", color = plotcolors[1]) + 
 #  geom_hline(yintercept = succRate[2, 10], linetype = "dashed", color = plotcolors[2]) +
