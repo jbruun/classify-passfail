@@ -1,19 +1,22 @@
 # Logstic regression on pass/fail centrality with k-fold cross-validation.
-# Last modified: 11/6/20 (forked from passfail_logreg_jackknife.R)
+# Last modified: 12/3/20 (run and save k=5 results, check plot)
 # 
-# Status: 
+# Status: Works. 
 
 rm(list = ls())
 
 library(igraph)
 library(dplyr)
+library(tidyr)
+library(readr)
+library(ggplot2)
 
 # Import pass/fail centrality data
 #loadvars <- load("data/centPassFail.Rdata")
 load("data/centrality_data_frames.Rdata")
 
 
-## Run jackknife logistic regression 
+## Run k-fold logistic regression 
 
 # Turn long data frame into list of weekly frames
 centPS <- dfPS %>% group_split(Week)
@@ -23,18 +26,22 @@ centICS <- dfICS %>% group_split(Week)
 source("code/k-fold_functions.R")
 
 # Predict pass/fail
-predPS <- kfoldLog(centPS, k = 5)
-predCD <- kfoldLog(centCD, k = 5)
-predICS <- kfoldLog(centICS, k = 5)
+kf <- 10
+preds <- c("gender", "cohort", "fci_pre_c", "PageRank", "tarEnt", "Hide")
+
+predPS <- kfoldLog(centPS, k = kf, predictors = preds)
+predCD <- kfoldLog(centCD, k = kf, predictors = preds)
+predICS <- kfoldLog(centICS, k = kf, predictors = preds)
 
 # Predict just-pass/just-fail (2/0)
-predJustPS <- kfoldLog(centPS, outcome = "justpass", k = 5)
-predJustCD <- kfoldLog(centCD, outcome = "justpass", k = 5)
-predJustICS <- kfoldLog(centICS, outcome = "justpass", k = 5)
+predJustPS <- kfoldLog(centPS, outcome = "justpass", k = kf, predictors = preds)
+predJustCD <- kfoldLog(centCD, outcome = "justpass", k = kf, predictors = preds)
+predJustICS <- kfoldLog(centICS, outcome = "justpass", k = kf, predictors = preds)
 
 # Save pass/fail predictions
+outfile <- paste0("data/kfold", as.character(kf), "_logistic_predictions.Rdata")
 save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
-     file = "data/kfold5_logistic_predictions.Rdata")
+     file = outfile)
 
 
 ## Collect success rates and compare with guessing everyone passes
@@ -49,7 +56,8 @@ succRate <- data.frame(Layer = c("PS","CD","ICS"),
                        Guessing = c(mean(predPS$pass == "1"), mean(predCD$pass == "1"),
                                     mean(predICS$pass == "1")))
 
-write.csv(succRate,"succRate_logReg_kfold5.csv", row.names = FALSE)
+SRfile <- paste0("succRate_logReg_kfold", as.character(kf), ".csv")
+write.csv(succRate, SRfile, row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
 compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
@@ -62,49 +70,28 @@ succRateJust <- data.frame(Layer = c("PS", "CD", "ICS"),
                                         mean(predJustCD$justpass == "1"),
                                         mean(predJustICS$justpass == "1")))
 
-write.csv(succRateJust,"succRateJust.csv", row.names = FALSE)
-
-
-## OLD, NOT UPDATED YET 
-
-# What if we ignore FCIpre?
-predPSnoFCI <-jackPredLog(centPS,predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predCDnoFCI <-jackPredLog(centCD,predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predICSnoFCI <-jackPredLog(centICS,predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-succRatenoFCI <- rbind(sapply(predPSnoFCI[,3:9],function(x) mean(x==predPSnoFCI$Pass)),
-                       sapply(predCDnoFCI[,3:9],function(x) mean(x==predCDnoFCI$Pass)),
-                       sapply(predICSnoFCI[,3:9],function(x) mean(x==predICSnoFCI$Pass)))
-succRatenoFCI <- data.frame(Layer=c("PS","CD","ICS"),N=c(dim(predPSnoFCI)[1],dim(predCDnoFCI)[1],dim(predICSnoFCI)[1]),
-                            succRatenoFCI,
-                            Guessing=c(mean(predPSnoFCI$Pass=="Pass"),mean(predCDnoFCI$Pass=="Pass"),
-                                       mean(predICSnoFCI$Pass=="Pass")))
-
-predPSnoFCI02 <-jackPredLog(centPS,outcome="JustPass",predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predCDnoFCI02 <-jackPredLog(centCD,outcome="JustPass",predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predICSnoFCI02 <-jackPredLog(centICS,outcome="JustPass",predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-succRatenoFCI02 <- rbind(sapply(predPSnoFCI02[,3:9],function(x) mean(x==predPSnoFCI02$JustPass)),
-                       sapply(predCDnoFCI02[,3:9],function(x) mean(x==predCDnoFCI02$JustPass)),
-                       sapply(predICSnoFCI02[,3:9],function(x) mean(x==predICSnoFCI02$JustPass)))
-succRatenoFCI02 <- data.frame(Layer=c("PS","CD","ICS"),N=c(dim(predPSnoFCI02)[1],dim(predCDnoFCI02)[1],dim(predICSnoFCI02)[1]),
-                              succRatenoFCI02,
-                              Guessing=c(mean(predPSnoFCI02$JustPass=="Pass2"),mean(predCDnoFCI02$JustPass=="Pass2"),
-                                       mean(predICSnoFCI02$JustPass=="Pass2")))
-
-write.csv(succRatenoFCI,"../succRatenoFCI.csv",row.names=FALSE)
-write.csv(succRatenoFCI02,"../succRatenoFCI02.csv",row.names=FALSE)
-
-# Save no-FCI weekly predictions
-save(predPSnoFCI,predCDnoFCI,predICSnoFCI,predPSnoFCI02,predCDnoFCI02,predICSnoFCI02,
-     file="../data/jackknife_predictions_noFCI.Rdata")
-
+SRfile <- paste0("succRateJust_logReg_kfold", as.character(kf), ".csv")
+write.csv(succRateJust, SRfile, row.names = FALSE)
 
 
 # Plot it up
-longRate <- succRate[,c(1,3:9)] %>% gather(Week,SuccRate,-Layer) %>% mutate(Week=parse_number(Week))
-ggsucc <- ggplot(longRate,aes(x=Week,y=SuccRate,color=Layer))
+df <- succRateJust
+toplabel <- paste0("JustPass outcome, k = ", as.character(kf))
+plotfile <- paste0("figures/succRateJust_kfold", as.character(kf), ".png")
+
+longRate <- df[,c(1,3:9)] %>% 
+  gather(Week, SuccRate, -Layer) %>% 
+  mutate(Week = parse_number(Week))
+ggsucc <- ggplot(longRate, aes(x = Week, y = SuccRate, color = Layer))
 plotcolors <- unique(ggplot_build(ggsucc)$data[[1]][,1])
-p1 <- ggsucc + geom_line() + scale_y_continuous(limits=c(0.5,1))
-p1 + geom_hline(yintercept=succRate[1,10],linetype="dashed",color=plotcolors[1]) + 
-  geom_hline(yintercept=succRate[2,10],linetype="dashed",color=plotcolors[2]) +
-  geom_hline(yintercept=succRate[3,10],linetype="dashed",color=plotcolors[3])
-ggsave("../figures/succRate_jackknife.png",width=5,height=4,units="in",dpi=150)
+
+p1 <- ggsucc + geom_line() + scale_y_continuous(limits = c(0.5, 1))
+p1 + geom_hline(yintercept = df[1, 10], linetype = "dashed", color = "black") +
+  ggtitle(toplabel)
+
+ggsave(plotfile, width = 5, height = 4, units = "in", dpi = 150)
+
+#p1 + geom_hline(yintercept = succRate[1, 10], linetype = "dashed", color = plotcolors[1]) + 
+#  geom_hline(yintercept = succRate[2, 10], linetype = "dashed", color = plotcolors[2]) +
+#  geom_hline(yintercept = succRate[3, 10], linetype = "dashed", color = plotcolors[3])
+#ggsave("../figures/succRate_jackknife.png",width=5,height=4,units="in",dpi=150)
