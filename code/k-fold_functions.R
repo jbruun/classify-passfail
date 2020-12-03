@@ -15,7 +15,7 @@ chunk <- function(df, n) {
 #  chunks to divide data into, optional set of predictors to use, optional 
 #  probability threshold to predict outcome
 # Output: List of prediction vectors for that weekly aggregate network; each 
-#  node in the vector is predicted using all the other nodes
+#  chunk in the vector is predicted using the remaining chunks
 kfoldLog <- function(layer, outcome = "pass", k = 5, 
                         predictors = c("gender", "cohort", "fci_pre", 
                                        "PageRank", "tarEnt", "Hide"), p=0.5) {
@@ -69,13 +69,14 @@ kfoldLog <- function(layer, outcome = "pass", k = 5,
 
 
 # Linear discriminant analysis (LDA) version
-# Input: List of weekly data frames, optional outcome (pass/justpass), optional 
-#  subset of predictors to use
+# Input: List of weekly data frames, optional outcome (pass/justpass), number of
+#  chunks to divide data into, optional set of predictors to use, optional 
+#  probability threshold to predict outcome
 # Output: List of prediction vectors for that weekly aggregate network; each 
-#  node in the vector is predicted using all the other nodes
-jackPredLDA <- function(layer, outcome = "pass", 
-                        predictors = c("gender", "cohort", "fci_pre", 
-                                       "PageRank", "tarEnt", "Hide"), p=0.5) {
+#  chunk in the vector is predicted using the remaining chunks
+kfoldLDA <- function(layer, outcome = "pass", k = 5, 
+                     predictors = c("gender", "cohort", "fci_pre", 
+                                    "PageRank", "tarEnt", "Hide"), p=0.5) {
   # Check for valid input
   if (outcome == "pass" | outcome == "justpass") {
     choices <- c("0", "1")
