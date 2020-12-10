@@ -102,11 +102,12 @@ kfoldLDA <- function(layer, outcome = "pass", k = 5,
     # Loop through all chunks
     for(i in 1:k) {
       # Training set is data minus chunk i
-      train <- data[-chunkrows[[i]], ]
-      test <- data[chunkrows[[i]], ]
+      #train <- data[-chunkrows[[i]], ]
+      trainrows <- cases[-chunkrows[[i]]]
+      test <- data[chunkrows[[i]], -1]
       
-      #lda.fit <- lda(data[, -1], grouping = data[, 1], subset = train)
-      lda.fit <- lda(formula = as.formula(fitForm), data = train)
+      lda.fit <- lda(data[, -1], grouping = data[, 1], subset = trainrows)
+      #lda.fit <- lda(formula = as.formula(fitForm), data = train)
       allprob[chunkrows[[i]], j] <- predict(lda.fit, newdata = test)$posterior[2]
     }
   }
