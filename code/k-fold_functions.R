@@ -69,14 +69,14 @@ kfoldLog <- function(layer, outcome = "pass", k = 5,
 
 
 # Linear discriminant analysis (LDA) version
-# Input: List of weekly data frames, optional outcome (pass/justpass), number of
-#  chunks to divide data into, optional set of predictors to use, optional 
-#  probability threshold to predict outcome
+# Input: List of weekly data frames, outcome (pass/justpass), number of chunks 
+#  to divide data into, set of predictors to use, probability threshold to 
+#  predict outcome
 # Output: List of prediction vectors for that weekly aggregate network; each 
 #  chunk in the vector is predicted using the remaining chunks
 kfoldLDA <- function(layer, outcome = "pass", k = 5, 
                      predictors = c("gender", "cohort", "fci_pre", 
-                                    "PageRank", "tarEnt", "Hide"), p=0.5) {
+                                    "PageRank", "tarEnt", "Hide"), p = 0.5) {
   # Check for valid input
   if (outcome == "pass" | outcome == "justpass") {
     choices <- c("0", "1")
@@ -95,14 +95,19 @@ kfoldLDA <- function(layer, outcome = "pass", k = 5,
   
   # Loop through all weeks
   for(j in 1:length(layer)) {
-    # Data is complete cases
+    # Data is complete cases (outcome + all predictors)
     data <- data.frame(layer[[j]][userows, c(outcome, predictors)])
-    # Loop through all nodes
-    for(i in 1:dim(data)[1]) {
-      # Training set is data minus observation i
-      train <- !cases==i
-      lda.fit <- lda(data[,-1], grouping=data[,1], subset = train)
-      allprob[i, j] <- predict(lda.fit, newdata = data[i,-1])$posterior[2]
+    chunkrows <- chunk(data, n = k)
+    
+    # Loop through all chunks
+    for(i in 1:k) {
+      # Training set is data minus chunk i
+      train <- data[-chunkrows[[i]], ]
+      test <- data[chunkrows[[i]], ]
+      
+      #lda.fit <- lda(data[, -1], grouping = data[, 1], subset = train)
+      lda.fit <- lda(formula = as.formula(fitForm), data = train)
+      allprob[chunkrows[[i]], j] <- predict(lda.fit, newdata = test)$posterior[2]
     }
   }
   allpred <- allprob
@@ -118,8 +123,8 @@ kfoldLDA <- function(layer, outcome = "pass", k = 5,
     alldata[, i+2] <- as.factor(alldata[, i+2])
   }
   
-  names(alldata) <- c("name", outcome, paste0("Week", c(1:length(layer))))
-  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1]))
+  names(alldata) <- c("name", outcome, paste0("Week", seq(layer)))
+  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1], ", k = ", k))
   return(alldata)
 }
 
