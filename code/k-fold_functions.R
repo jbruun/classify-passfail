@@ -11,11 +11,10 @@ chunk <- function(df, n) {
 
 
 # Logistic regression version
-# Input: List of weekly data frames, optional outcome (pass/justpass), number of
-#  chunks to divide data into, optional set of predictors to use, optional 
-#  probability threshold to predict outcome
-# Output: List of prediction vectors for that weekly aggregate network; each 
-#  chunk in the vector is predicted using the remaining chunks
+# Input: List of weekly data frames, outcome (pass/justpass), number of chunks 
+#  to divide data into, predictors to use, probability threshold for outcome
+# Output: Data frame of prediction vectors for that weekly aggregate network; 
+#  each chunk in the vector is predicted using the other k-1 chunks
 kfoldLog <- function(layer, outcome = "pass", k = 5, 
                         predictors = c("gender", "cohort", "fci_pre", 
                                        "PageRank", "tarEnt", "Hide"), p=0.5) {
@@ -70,10 +69,9 @@ kfoldLog <- function(layer, outcome = "pass", k = 5,
 
 # Linear discriminant analysis (LDA) version
 # Input: List of weekly data frames, outcome (pass/justpass), number of chunks 
-#  to divide data into, set of predictors to use, probability threshold to 
-#  predict outcome
-# Output: List of prediction vectors for that weekly aggregate network; each 
-#  chunk in the vector is predicted using the remaining chunks
+#  to divide data into, predictors to use, probability threshold for outcome
+# Output: Data frame of prediction vectors for that weekly aggregate network; 
+#  each chunk in the vector is predicted using the other k-1 chunks
 kfoldLDA <- function(layer, outcome = "pass", k = 5, 
                      predictors = c("gender", "cohort", "fci_pre", 
                                     "PageRank", "tarEnt", "Hide"), p = 0.5) {
@@ -102,13 +100,14 @@ kfoldLDA <- function(layer, outcome = "pass", k = 5,
     # Loop through all chunks
     for(i in 1:k) {
       # Training set is data minus chunk i
-      #train <- data[-chunkrows[[i]], ]
-      trainrows <- cases[-chunkrows[[i]]]
-      test <- data[chunkrows[[i]], -1]
+      #trainrows <- cases[-chunkrows[[i]]]
+      train <- data[-chunkrows[[i]], ]
+      test <- data[chunkrows[[i]], ]
       
-      lda.fit <- lda(data[, -1], grouping = data[, 1], subset = trainrows)
-      #lda.fit <- lda(formula = as.formula(fitForm), data = train)
-      allprob[chunkrows[[i]], j] <- predict(lda.fit, newdata = test)$posterior[2]
+      #lda.fit <- lda(data[, -1], grouping = data[, 1], subset = trainrows)
+      lda.fit <- lda(formula = as.formula(fitForm), data = train)
+      lda.pred <- predict(lda.fit, newdata = test)$posterior
+      allprob[chunkrows[[i]], j] <- lda.pred[, 2]  # NOT the same as predict(...)$posterior[2]
     }
   }
   allpred <- allprob
