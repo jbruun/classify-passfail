@@ -129,14 +129,13 @@ kfoldLDA <- function(layer, outcome = "pass", k = 5,
 }
 
 # Quadratic discriminant analysis (QDA) version
-# Input: List of weekly data frames, optional outcome (pass/justpass), optional 
-#  subset of predictors to use
-# Output: List of prediction vectors for that weekly aggregate network; each 
-#  node in the vector is predicted using all the other nodes
-
-jackPredQDA<- function(layer, outcome = "pass", 
-                       predictors = c("gender", "cohort", "fci_pre", "PageRank", 
-                                      "tarEnt", "Hide"),p=0.5) {
+# Input: List of weekly data frames, outcome (pass/justpass), number of chunks 
+#  to divide data into, predictors to use, probability threshold for outcome
+# Output: Data frame of prediction vectors for that weekly aggregate network; 
+#  each chunk in the vector is predicted using the other k-1 chunks
+kfoldQDA <- function(layer, outcome = "pass", k = 5, 
+                     predictors = c("gender", "cohort", "fci_pre", 
+                                    "PageRank", "tarEnt", "Hide"), p = 0.5) {
   if (outcome == "pass" | outcome == "justpass") {
     choices <- c("0", "1")
   } else {
@@ -146,18 +145,27 @@ jackPredQDA<- function(layer, outcome = "pass",
   userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
   
   allprob <- matrix(nrow = sum(userows), ncol = length(layer))
-  cases<-c(1:sum(userows))
+  cases <- c(1:sum(userows))
+  
+  # Build fitting input string using predictor names
   fitStr <- paste(predictors, collapse = " + ")
   fitForm <- paste0(outcome, " ~ ", fitStr)
+  
+  # Loop through all weeks
   for(j in 1:length(layer)) {
-    # data is complete cases
+    # Data is complete cases (outcome + all predictors)
     data <- data.frame(layer[[j]][userows, c(outcome, predictors)])
-    # Loop through all nodes
-    for(i in 1:dim(data)[1]) {
-      # training set is data minus observation i
-      train <- !cases==i
-      qda.fit <- qda(data[,-1], grouping=data[,1], subset = train)
-      allprob[i, j] <- predict(qda.fit, newdata = data[i,-1])$posterior[2]
+    chunkrows <- chunk(data, n = k)
+    
+    # Loop through all chunks
+    for(i in 1:k) {
+      # Training set is data minus chunk i
+      train <- data[-chunkrows[[i]], ]
+      test <- data[chunkrows[[i]], ]
+      
+      qda.fit <- qda(formula = as.formula(fitForm), data = train)
+      qda.pred <- predict(qda.fit, newdata = test)$posterior
+      allprob[chunkrows[[i]], j] <- qda.pred[, 2]
     }
   }
   allpred <- allprob
