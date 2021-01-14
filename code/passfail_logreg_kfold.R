@@ -77,7 +77,7 @@ write.csv(succRateJust, SRfile, row.names = FALSE)
 # Plot it up
 df <- succRateJust
 toplabel <- paste0("JustPass outcome, k = ", as.character(kf))
-plotfile <- paste0("figures/succRateJust_logreg_kfold", as.character(kf), ".png")
+plotfile <- paste0("plots/succRateJust_logreg_kfold", as.character(kf), ".png")
 
 longRate <- df[,c(1,3:9)] %>% 
   gather(Week, SuccRate, -Layer) %>% 
