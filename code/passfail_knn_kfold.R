@@ -1,7 +1,7 @@
 # K nearest neighbors on pass/fail centrality with k-fold cross-validation.
 # Last modified: 1/14/21 (created)
 # 
-# Status: 
+# Status: Calculated outcomes/success rates, still updating plot.
 
 rm(list = ls())
 
@@ -31,16 +31,16 @@ kf <- 5
 preds <- c("gender", "cohort", "fci_pre_c", "PageRank", "tarEnt", "Hide")
 
 predPS <- kfoldKNN(centPS, k = kf, nK = 2, predictors = preds)
-predCD <- kfoldLDA(centCD, k = kf, predictors = preds)
-predICS <- kfoldLDA(centICS, k = kf, predictors = preds)
+predCD <- kfoldKNN(centCD, k = kf, nK = 2, predictors = preds)
+predICS <- kfoldKNN(centICS, k = kf, nK = 2, predictors = preds)
 
 # Predict just-pass/just-fail (2/0)
-predJustPS <- kfoldLDA(centPS, outcome = "justpass", k = kf, predictors = preds)
-predJustCD <- kfoldLDA(centCD, outcome = "justpass", k = kf, predictors = preds)
-predJustICS <- kfoldLDA(centICS, outcome = "justpass", k = kf, predictors = preds)
+predJustPS <- kfoldKNN(centPS, outcome = "justpass", k = kf, nK = 2, predictors = preds)
+predJustCD <- kfoldKNN(centCD, outcome = "justpass", k = kf, nK = 2, predictors = preds)
+predJustICS <- kfoldKNN(centICS, outcome = "justpass", k = kf, nK = 2, predictors = preds)
 
 # Save pass/fail predictions
-outfile <- paste0("data/kfold", as.character(kf), "_LDA_predictions.Rdata")
+outfile <- paste0("data/kfold", as.character(kf), "_KNN_predictions.Rdata")
 save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
      file = outfile)
 
@@ -48,38 +48,53 @@ save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
 ## Collect success rates and compare with guessing everyone passes
 
 # Success rate for each week (prediction == outcome)
-compareSucc <- rbind(sapply(predPS[, 3:9], function(x) mean(x == predPS$pass)),
-                     sapply(predCD[, 3:9], function(x) mean(x == predCD$pass)),
-                     sapply(predICS[, 3:9], function(x) mean(x == predICS$pass)))
-succRate <- data.frame(Layer = c("PS","CD","ICS"), 
-                       N = c(dim(predPS)[1], dim(predCD)[1], dim(predICS)[1]),
-                       compareSucc, 
-                       Guessing = c(mean(predPS$pass == "1"), mean(predCD$pass == "1"),
-                                    mean(predICS$pass == "1")))
 
-SRfile <- paste0("succRate_lda_kfold", as.character(kf), ".csv")
+# Input: Three prediction data frames, outcome variable (pass/justpass)
+# Output: Success rate data frame with layer name, # of neighbors (nK),
+#  # of nodes (N), weekly prediction success rates, and guessing success rate
+getSucc <- function(pPS, pCD, pICS, outcome = "pass") {
+  
+  # Calculate one row of success rate table:
+  # Pull weekly columns and compare them with outcome (pass/justpass)
+  succRow <- function(p) sapply(p[[2]][, 3:9], 
+                                function(x) mean(x == p[[2]][[outcome]]))
+  
+  compareSucc <- rbind(succRow(pPS), succRow(pCD), succRow(pICS))
+  
+  # Number of nodes: pull from prediction data frame
+  Nnodes <- c(dim(pPS[[2]])[1], dim(pCD[[2]])[1], dim(pICS[[2]])[1])
+  
+  # How successful is it to just guess that everyone passes?
+  Guessing  <- c(mean(pPS[[2]][[outcome]] == "1"), 
+                 mean(pCD[[2]][[outcome]] == "1"),
+                 mean(pICS[[2]][[outcome]] == "1"))
+  
+  # Package all these calculations in a data frame
+  succRate <- data.frame(Layer = c("PS","CD","ICS"), 
+                         nK = c(pPS[[1]], pCD[[1]], pICS[[1]]),
+                         N = Nnodes, 
+                         compareSucc, 
+                         Guessing)
+  return(succRate)
+}
+
+# Success rate for all predictions 
+succRate <- getSucc(predPS, predCD, predICS)
+SRfile <- paste0("results/succRate_knn_kfold", as.character(kf), ".csv")
 write.csv(succRate, SRfile, row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
-compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
-                     sapply(predJustCD[, 3:9], function(x) mean(x == predJustCD$justpass)),
-                     sapply(predJustICS[, 3:9], function(x) mean(x == predJustICS$justpass)))
-succRateJust <- data.frame(Layer = c("PS", "CD", "ICS"),
-                           N = c(dim(predJustPS)[1], dim(predJustCD)[1], dim(predJustICS)[1]),
-                           compareJust,
-                           Guessing = c(mean(predJustPS$justpass == "1"),
-                                        mean(predJustCD$justpass == "1"),
-                                        mean(predJustICS$justpass == "1")))
-
-SRfile <- paste0("succRateJust_lda_kfold", as.character(kf), ".csv")
+succRateJust <- getSucc(predJustPS, predJustCD, predJustICS, "justpass")
+SRfile <- paste0("results/succRateJust_knn_kfold", as.character(kf), ".csv")
 write.csv(succRateJust, SRfile, row.names = FALSE)
 
 
-# Plot it up
+## Plotting success rates 
+
 # Can change next three rows for pass/justpass
-df <- succRateJust
-toplabel <- paste0("JustPass outcome, k = ", as.character(kf))
-plotfile <- paste0("figures/succRateJust_lda_kfold", as.character(kf), ".png")
+df <- succRate
+toplabel <- paste0("Pass outcome, k = ", as.character(kf))
+plotfile <- paste0("figures/succRate_knn_kfold", as.character(kf), ".png")
 
 longRate <- df[,c(1,3:9)] %>% 
   gather(Week, SuccRate, -Layer) %>% 
