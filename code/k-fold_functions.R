@@ -192,12 +192,7 @@ kfoldQDA <- function(layer, outcome = "pass", k = 5,
 kfoldKNN <- function(layer, k = 5, outcome = "pass", nK = 1, 
                      predictors = c("gender", "cohort", "fci_pre", 
                                     "PageRank", "tarEnt", "Hide")) {
-  # Check for valid input
-  if (outcome == "pass" | outcome == "justpass") {
-    choices <- c("0", "1")
-  } else {
-    stop("Not a valid outcome variable.")
-  }
+  choices <- checkInput(outcome)
   
   # Input data (complete cases) and empty frame to store predictions 
   Nlayer <- length(layer)
@@ -211,25 +206,28 @@ kfoldKNN <- function(layer, k = 5, outcome = "pass", nK = 1,
   # Loop through all weeks
   for(j in seq(Nlayer)) {
     data <- layer[[j]][userows, c(outcome, predictors)] # data is complete cases
+    chunkrows <- chunk(data, n = k)
     
-    # Loop through all nodes
-    for(i in 1:dim(data)[1]) {
-      # Training set is data minus observation i
+    # Loop through all chunks
+    for(i in 1:k) {
+      # Training set is data minus chunk i
       # Predictor matrices for training and test data
-      train <- as.matrix(data[-i, predictors])
-      test <- as.matrix(data[i, predictors])
+      #train <- as.matrix(data[-i, predictors])
+      #test <- as.matrix(data[i, predictors])
+      train <- data[-chunkrows[[i]], ]
+      test <- data[chunkrows[[i]], ]
       
       # Outcome vectors for training and test data
       # Can't just do data[-i, outcome], for explanation see
       # https://stackoverflow.com/questions/51063381/vector-from-tibble-has-length-0
-      trOutcome <- pull(data[-i, ], var = outcome)
-      teOutcome <- pull(data[i, ], var = outcome)
+      trOutcome <- pull(data[-chunkrows[[i]], ], var = outcome)
+      teOutcome <- pull(data[chunkrows[[i]], ], var = outcome)
       
       # Run KNN
       set.seed(2)
       # Logistic regression makes probabilities, which you translate into 
       # prediction; KNN does it all in one step
-      allpred[i, j] <- knn(train, test, trOutcome, k = nK)
+      allpred[chunkrows[[i]], j] <- class::knn(train, test, trOutcome, k = nK)
     }
   }
   
