@@ -179,7 +179,7 @@ kfoldQDA <- function(layer, outcome = "pass", k = 5,
   }
   
   names(alldata) <- c("name", outcome, paste0("Week", c(1:length(layer))))
-  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1]))
+  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1], ", k = ", k))
   return(alldata)
 }
 
@@ -241,6 +241,6 @@ kfoldKNN <- function(layer, k = 5, outcome = "pass", nK = 1,
   
   # Print info string and return predictions
   print(paste0("Fit: ", fitForm, ", #neighbors = ", nK, 
-               ", complete N = ", dim(allpred)[1]))
+               ", complete N = ", dim(allpred)[1], ", k = ", k))
   return(list(nK = nK, allpred = allpred))
 }
