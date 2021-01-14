@@ -211,7 +211,7 @@ jackPredKNN <- function(layer, nK = 1, outcome = "pass",
       set.seed(2)
       # Logistic regression makes probabilities, which you translate into 
       # prediction; KNN does it all in one step
-      allpred[i, j] <- knn(train, test, trOutcome, k = nK)
+      allpred[i, j] <- class::knn(train, test, trOutcome, k = nK)
     }
   }
   
