@@ -9,6 +9,15 @@ chunk <- function(df, n) {
   split(x, cut(x, n, labels = FALSE))
 }
 
+# Check for valid input to model fitting
+checkInput <- function(outcome) {
+  if (outcome == "pass" | outcome == "justpass") {
+    choices <- c("0", "1")
+  } else {
+    stop("Not a valid outcome variable (must be pass or justpass).")
+  }
+  return(choices)  
+}
 
 # Logistic regression version
 # Input: List of weekly data frames, outcome (pass/justpass), number of chunks 
@@ -18,12 +27,8 @@ chunk <- function(df, n) {
 kfoldLog <- function(layer, outcome = "pass", k = 5, 
                         predictors = c("gender", "cohort", "fci_pre", 
                                        "PageRank", "tarEnt", "Hide"), p=0.5) {
-  # Check for valid input
-  if (outcome == "pass" | outcome == "justpass") {
-    choices <- c("0", "1")
-  } else {
-    stop("Not a valid outcome variable.")
-  }
+  choices <- checkInput(outcome)
+    
   # Remove incomplete rows
   userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
   
@@ -75,12 +80,8 @@ kfoldLog <- function(layer, outcome = "pass", k = 5,
 kfoldLDA <- function(layer, outcome = "pass", k = 5, 
                      predictors = c("gender", "cohort", "fci_pre", 
                                     "PageRank", "tarEnt", "Hide"), p = 0.5) {
-  # Check for valid input
-  if (outcome == "pass" | outcome == "justpass") {
-    choices <- c("0", "1")
-  } else {
-    stop("Not a valid outcome variable.")
-  }
+  choices <- checkInput(outcome)
+  
   # Remove incomplete rows
   userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
   
@@ -136,11 +137,8 @@ kfoldLDA <- function(layer, outcome = "pass", k = 5,
 kfoldQDA <- function(layer, outcome = "pass", k = 5, 
                      predictors = c("gender", "cohort", "fci_pre", 
                                     "PageRank", "tarEnt", "Hide"), p = 0.5) {
-  if (outcome == "pass" | outcome == "justpass") {
-    choices <- c("0", "1")
-  } else {
-    stop("Not a valid outcome variable.")
-  }
+  choices <- checkInput(outcome)
+  
   # remove incomplete rows
   userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
   
@@ -187,13 +185,13 @@ kfoldQDA <- function(layer, outcome = "pass", k = 5,
 
 
 # K nearest neighbors version
-# Input: List of weekly data frames, optional outcome (pass/justpass), optional 
-#  subset of predictors to use
+# Input: List of weekly data frames, outcome (pass/justpass), number of chunks 
+#  to divide data into, number of neighbors, predictors to use
 # Output: List of prediction vectors for that weekly aggregate network; each 
 #  node in the vector is predicted using all the other nodes
-jackPredKNN <- function(layer, nK = 1, outcome = "pass", 
-                        predictors = c("gender", "cohort", "fci_pre", 
-                                       "PageRank", "tarEnt", "Hide")) {
+kfoldKNN <- function(layer, k = 5, outcome = "pass", nK = 1, 
+                     predictors = c("gender", "cohort", "fci_pre", 
+                                    "PageRank", "tarEnt", "Hide")) {
   # Check for valid input
   if (outcome == "pass" | outcome == "justpass") {
     choices <- c("0", "1")
