@@ -2,7 +2,7 @@
 ## Models with network  measures and FCI pre classes
 
 rm(list = ls())
-tstart<-Sys.time()
+
 
 library(igraph)
 library(dplyr)
@@ -342,7 +342,3 @@ save(ROC_PS_log,ROC_CD_log,ROC_ICS_log, ROC_PS_justpass_log,ROC_CD_justpass_log,
      ROC_PS_log_PR,ROC_CD_log_PR,ROC_ICS_log_PR, ROC_PS_justpass_log_PR,ROC_CD_justpass_log_PR,ROC_ICS_justpass_log_PR,
      file="data/ROC_AUC/ROC_AUC/ROC_NetworkMeasuresCohort_logreg.Rdata")
 
-tend<-Sys.time()
-tend-tstart
-
-t1<-Sys.time()
