@@ -27,7 +27,7 @@ centICS <- dfICS %>% group_split(Week)
 source("code/k-fold_functions.R")
 
 # Predict pass/fail
-kf <- 5
+kf <- 10
 preds <- c("gender", "cohort", "fci_pre_c", "PageRank", "tarEnt", "Hide")
 
 predPS <- kfoldKNN(centPS, k = kf, nK = 2, predictors = preds)
@@ -91,10 +91,10 @@ write.csv(succRateJust, SRfile, row.names = FALSE)
 
 ## Plotting success rates 
 
-# Can change next three rows for pass/justpass
-df <- succRateJust
-toplabel <- paste0("JustPass outcome, k = ", as.character(kf))
-plotfile <- paste0("plots/succRateJust_knn_kfold", as.character(kf), ".png")
+# Change next three lines to toggle pass/justpass
+df <- succRate
+toplabel <- paste0("Pass outcome, k = ", as.character(kf))
+plotfile <- paste0("plots/succRate_knn_kfold", as.character(kf), ".png")
 
 longRate <- df %>% 
   select(Layer, Week1:Week7) %>% 
