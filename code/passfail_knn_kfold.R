@@ -1,7 +1,7 @@
 # K nearest neighbors on pass/fail centrality with k-fold cross-validation.
-# Last modified: 1/14/21 (created)
+# Last modified: 1/25/21 (fixed plotting code (column numbering issue))
 # 
-# Status: Calculated outcomes/success rates, still updating plot.
+# Status: Works.
 
 rm(list = ls())
 
@@ -92,23 +92,20 @@ write.csv(succRateJust, SRfile, row.names = FALSE)
 ## Plotting success rates 
 
 # Can change next three rows for pass/justpass
-df <- succRate
-toplabel <- paste0("Pass outcome, k = ", as.character(kf))
-plotfile <- paste0("figures/succRate_knn_kfold", as.character(kf), ".png")
+df <- succRateJust
+toplabel <- paste0("JustPass outcome, k = ", as.character(kf))
+plotfile <- paste0("plots/succRateJust_knn_kfold", as.character(kf), ".png")
 
-longRate <- df[,c(1,3:9)] %>% 
+longRate <- df %>% 
+  select(Layer, Week1:Week7) %>% 
   gather(Week, SuccRate, -Layer) %>% 
   mutate(Week = parse_number(Week))
 ggsucc <- ggplot(longRate, aes(x = Week, y = SuccRate, color = Layer))
 plotcolors <- unique(ggplot_build(ggsucc)$data[[1]][,1])
 
 p1 <- ggsucc + geom_line() + scale_y_continuous(limits = c(0.5, 1))
-p1 + geom_hline(yintercept = df[1, 10], linetype = "dashed", color = "black") +
+p1 + geom_hline(yintercept = df[1, "Guessing"], linetype = "dashed", color = "black") +
   ggtitle(toplabel)
 
 ggsave(plotfile, width = 5, height = 4, units = "in", dpi = 150)
 
-#p1 + geom_hline(yintercept=succRate[1,10],linetype="dashed",color=plotcolors[1]) + 
-#  geom_hline(yintercept=succRate[2,10],linetype="dashed",color=plotcolors[2]) +
-#  geom_hline(yintercept=succRate[3,10],linetype="dashed",color=plotcolors[3])
-#ggsave("../figures/succRate_jackknife.png",width=5,height=4,units="in",dpi=150)
