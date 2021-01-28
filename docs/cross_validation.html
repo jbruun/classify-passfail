@@ -420,6 +420,7 @@ summary {
 <p>Goal for this document is to summarize results from the cross-validation methods we used: Leave One Out Cross-Validation aka LOOCV aka jackknife, and k-fold cross-validation with <code>k=5</code> and <code>k=10</code>.</p>
 <p><strong>Update 25 Jan:</strong> Starting this file to document calculations I worked out in <code>passfail_XX_kfold.R</code> files.</p>
 <pre><code>## Warning: package &#39;igraph&#39; was built under R version 4.0.3</code></pre>
+<pre><code>## Warning: package &#39;tibble&#39; was built under R version 4.0.3</code></pre>
 <div id="import-data" class="section level2">
 <h2>Import data</h2>
 <p>At this point, the following R scripts have already been run.</p>
@@ -431,19 +432,18 @@ summary {
 <pre class="r"><code>filelist &lt;- list.files(path = &quot;../results&quot;, pattern = &quot;*.csv&quot;)
 infiles &lt;- file.path(&quot;../results&quot;, filelist)
 allSuccRates &lt;- lapply(infiles, read.csv)</code></pre>
-<p>I want to name these appropriately and probably reorder them. <strong><em>IN PROGRESS</em></strong></p>
-<pre class="r"><code>gsub(&quot;succRate&quot;, &quot;&quot;, filelist)</code></pre>
-<pre><code>##  [1] &quot;_knn.csv&quot;                &quot;_knn_kfold10.csv&quot;       
-##  [3] &quot;_knn_kfold5.csv&quot;         &quot;_knn_noFCI.csv&quot;         
-##  [5] &quot;_lda.csv&quot;                &quot;_lda_kfold10.csv&quot;       
-##  [7] &quot;_lda_kfold5.csv&quot;         &quot;_logReg.csv&quot;            
-##  [9] &quot;_logReg_kfold10.csv&quot;     &quot;_logReg_kfold5.csv&quot;     
-## [11] &quot;_qda.csv&quot;                &quot;Just_knn.csv&quot;           
-## [13] &quot;Just_knn_kfold10.csv&quot;    &quot;Just_knn_kfold5.csv&quot;    
-## [15] &quot;Just_knn_noFCI.csv&quot;      &quot;Just_lda.csv&quot;           
-## [17] &quot;Just_lda_kfold10.csv&quot;    &quot;Just_lda_kfold5.csv&quot;    
-## [19] &quot;Just_logReg.csv&quot;         &quot;Just_logReg_kfold10.csv&quot;
-## [21] &quot;Just_logReg_kfold5.csv&quot;  &quot;Just_qda.csv&quot;</code></pre>
+<p>I want to name these appropriately and reorder them.</p>
+<pre class="r"><code>succLabels &lt;- gsub(&quot;succRate&quot;, &quot;&quot;, filelist) %&gt;% 
+  gsub(&quot;.csv&quot;, &quot;&quot;, .) %&gt;% 
+  gsub(&quot;^_&quot;, &quot;&quot;, .)
+names(allSuccRates) &lt;- succLabels
+newOrder &lt;- c(8, 10, 9, 5, 7, 6, 11, 1, 3, 2)  # logReg, LDA, QDA, KNN
+allSuccRates &lt;- allSuccRates[c(newOrder, newOrder + 11)]</code></pre>
+<p>Now I’d like to put these into a long data frame so I can plot them more easily. <strong><em>IN PROGRESS</em></strong></p>
+<pre class="r"><code># see https://gist.github.com/aammd/9ae2f5cce9afd799bafb
+succRateLong &lt;- enframe(allSuccRates) %&gt;% unnest()</code></pre>
+<pre><code>## Warning: `cols` is now required when using unnest().
+## Please use `cols = c(value)`</code></pre>
 </div>
 
 

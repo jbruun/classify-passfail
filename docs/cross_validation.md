@@ -18,6 +18,10 @@ Goal for this document is to summarize results from the cross-validation methods
 ## Warning: package 'igraph' was built under R version 4.0.3
 ```
 
+```
+## Warning: package 'tibble' was built under R version 4.0.3
+```
+
 ## Import data
 
 At this point, the following R scripts have already been run. 
@@ -34,25 +38,28 @@ infiles <- file.path("../results", filelist)
 allSuccRates <- lapply(infiles, read.csv)
 ```
 
-I want to name these appropriately and probably reorder them. ***IN PROGRESS***
+I want to name these appropriately and reorder them. 
 
 
 ```r
-gsub("succRate", "", filelist)
+succLabels <- gsub("succRate", "", filelist) %>% 
+  gsub(".csv", "", .) %>% 
+  gsub("^_", "", .)
+names(allSuccRates) <- succLabels
+newOrder <- c(8, 10, 9, 5, 7, 6, 11, 1, 3, 2)  # logReg, LDA, QDA, KNN
+allSuccRates <- allSuccRates[c(newOrder, newOrder + 11)]
+```
+
+Now I'd like to put these into a long data frame so I can plot them more easily. ***IN PROGRESS***
+
+
+```r
+# see https://gist.github.com/aammd/9ae2f5cce9afd799bafb
+succRateLong <- enframe(allSuccRates) %>% unnest()
 ```
 
 ```
-##  [1] "_knn.csv"                "_knn_kfold10.csv"       
-##  [3] "_knn_kfold5.csv"         "_knn_noFCI.csv"         
-##  [5] "_lda.csv"                "_lda_kfold10.csv"       
-##  [7] "_lda_kfold5.csv"         "_logReg.csv"            
-##  [9] "_logReg_kfold10.csv"     "_logReg_kfold5.csv"     
-## [11] "_qda.csv"                "Just_knn.csv"           
-## [13] "Just_knn_kfold10.csv"    "Just_knn_kfold5.csv"    
-## [15] "Just_knn_noFCI.csv"      "Just_lda.csv"           
-## [17] "Just_lda_kfold10.csv"    "Just_lda_kfold5.csv"    
-## [19] "Just_logReg.csv"         "Just_logReg_kfold10.csv"
-## [21] "Just_logReg_kfold5.csv"  "Just_qda.csv"
+## Warning: `cols` is now required when using unnest().
+## Please use `cols = c(value)`
 ```
-
 
