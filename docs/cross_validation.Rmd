@@ -63,9 +63,23 @@ Now I'd like to put these into a long data frame so I can plot them more easily.
 
 ```{r}
 # see https://gist.github.com/aammd/9ae2f5cce9afd799bafb
-succRateLong <- enframe(allSuccRates) %>% 
+succRateWide <- enframe(allSuccRates) %>% 
   unnest(cols = value) %>% 
   separate(col = name, into = c("outcome", "name"), sep = "[.]")
-succRateLong
+succRateWide
+```
+
+Finally, turn that wide frame (separate column for each week) into a long one (column for week number + single column for result). ***IN PROGRESS***
+
+```{r}
+succRateWide %>% pivot_longer()
+```
+
+
+
+### Plot success rates
+
+```{r}
+succRateLong %>% ggplot(mapping = aes())
 ```
 
