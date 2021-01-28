@@ -431,19 +431,99 @@ summary {
 <p>Each of those files saves the predictions in an .Rdata file in the <code>data</code> directory and the success rate table in the <code>results</code> directory. Results are saved separately for the full set of pass/fail outcomes and for students who were just on the pass/fail border (the justpass outcome, saved in <code>Just</code> files). The k-fold results were saved for <code>k=5</code> and <code>k=10</code>.</p>
 <pre class="r"><code>filelist &lt;- list.files(path = &quot;../results&quot;, pattern = &quot;*.csv&quot;)
 infiles &lt;- file.path(&quot;../results&quot;, filelist)
-allSuccRates &lt;- lapply(infiles, read.csv)</code></pre>
-<p>I want to name these appropriately and reorder them.</p>
+infiles </code></pre>
+<pre><code>##  [1] &quot;../results/succRate_knn.csv&quot;               
+##  [2] &quot;../results/succRate_knn_kfold10.csv&quot;       
+##  [3] &quot;../results/succRate_knn_kfold5.csv&quot;        
+##  [4] &quot;../results/succRate_knn_noFCI.csv&quot;         
+##  [5] &quot;../results/succRate_lda.csv&quot;               
+##  [6] &quot;../results/succRate_lda_kfold10.csv&quot;       
+##  [7] &quot;../results/succRate_lda_kfold5.csv&quot;        
+##  [8] &quot;../results/succRate_logReg.csv&quot;            
+##  [9] &quot;../results/succRate_logReg_kfold10.csv&quot;    
+## [10] &quot;../results/succRate_logReg_kfold5.csv&quot;     
+## [11] &quot;../results/succRate_qda.csv&quot;               
+## [12] &quot;../results/succRateJust_knn.csv&quot;           
+## [13] &quot;../results/succRateJust_knn_kfold10.csv&quot;   
+## [14] &quot;../results/succRateJust_knn_kfold5.csv&quot;    
+## [15] &quot;../results/succRateJust_knn_noFCI.csv&quot;     
+## [16] &quot;../results/succRateJust_lda.csv&quot;           
+## [17] &quot;../results/succRateJust_lda_kfold10.csv&quot;   
+## [18] &quot;../results/succRateJust_lda_kfold5.csv&quot;    
+## [19] &quot;../results/succRateJust_logReg.csv&quot;        
+## [20] &quot;../results/succRateJust_logReg_kfold10.csv&quot;
+## [21] &quot;../results/succRateJust_logReg_kfold5.csv&quot; 
+## [22] &quot;../results/succRateJust_qda.csv&quot;</code></pre>
+<pre class="r"><code>allSuccRates &lt;- lapply(infiles, read.csv) 
+summary(allSuccRates)</code></pre>
+<pre><code>##       Length Class      Mode
+##  [1,] 11     data.frame list
+##  [2,] 11     data.frame list
+##  [3,] 11     data.frame list
+##  [4,] 11     data.frame list
+##  [5,] 10     data.frame list
+##  [6,] 10     data.frame list
+##  [7,] 10     data.frame list
+##  [8,] 10     data.frame list
+##  [9,] 10     data.frame list
+## [10,] 10     data.frame list
+## [11,] 10     data.frame list
+## [12,] 11     data.frame list
+## [13,] 11     data.frame list
+## [14,] 11     data.frame list
+## [15,] 11     data.frame list
+## [16,] 10     data.frame list
+## [17,] 10     data.frame list
+## [18,] 10     data.frame list
+## [19,] 10     data.frame list
+## [20,] 10     data.frame list
+## [21,] 10     data.frame list
+## [22,] 10     data.frame list</code></pre>
+<div id="clean-up-and-organize" class="section level3">
+<h3>Clean up and organize</h3>
+<p>I want to name these appropriately and reorder them. Make sure each name is tagged with <code>pass</code> or <code>justpass</code> so I can use that below.</p>
 <pre class="r"><code>succLabels &lt;- gsub(&quot;succRate&quot;, &quot;&quot;, filelist) %&gt;% 
   gsub(&quot;.csv&quot;, &quot;&quot;, .) %&gt;% 
-  gsub(&quot;^_&quot;, &quot;&quot;, .)
+  gsub(&quot;^_&quot;, &quot;&quot;, .) %&gt;% 
+  paste0(&quot;pass.&quot;, .) %&gt;% 
+  gsub(&quot;^pass.Just_&quot;, &quot;justpass.&quot;, .)
 names(allSuccRates) &lt;- succLabels
-newOrder &lt;- c(8, 10, 9, 5, 7, 6, 11, 1, 3, 2)  # logReg, LDA, QDA, KNN
+names(allSuccRates)</code></pre>
+<pre><code>##  [1] &quot;pass.knn&quot;                &quot;pass.knn_kfold10&quot;       
+##  [3] &quot;pass.knn_kfold5&quot;         &quot;pass.knn_noFCI&quot;         
+##  [5] &quot;pass.lda&quot;                &quot;pass.lda_kfold10&quot;       
+##  [7] &quot;pass.lda_kfold5&quot;         &quot;pass.logReg&quot;            
+##  [9] &quot;pass.logReg_kfold10&quot;     &quot;pass.logReg_kfold5&quot;     
+## [11] &quot;pass.qda&quot;                &quot;justpass.knn&quot;           
+## [13] &quot;justpass.knn_kfold10&quot;    &quot;justpass.knn_kfold5&quot;    
+## [15] &quot;justpass.knn_noFCI&quot;      &quot;justpass.lda&quot;           
+## [17] &quot;justpass.lda_kfold10&quot;    &quot;justpass.lda_kfold5&quot;    
+## [19] &quot;justpass.logReg&quot;         &quot;justpass.logReg_kfold10&quot;
+## [21] &quot;justpass.logReg_kfold5&quot;  &quot;justpass.qda&quot;</code></pre>
+<pre class="r"><code># Reorder to (logReg, LDA, QDA, KNN, (repeats for justpass))
+newOrder &lt;- c(8, 10, 9, 5, 7, 6, 11, 1, 3, 2)  
 allSuccRates &lt;- allSuccRates[c(newOrder, newOrder + 11)]</code></pre>
-<p>Now I’d like to put these into a long data frame so I can plot them more easily. <strong><em>IN PROGRESS</em></strong></p>
+<p>Now I’d like to put these into a long data frame so I can plot them more easily. In the process, I separate the <code>pass</code>/<code>justpass</code> label into its own column.</p>
 <pre class="r"><code># see https://gist.github.com/aammd/9ae2f5cce9afd799bafb
-succRateLong &lt;- enframe(allSuccRates) %&gt;% unnest()</code></pre>
-<pre><code>## Warning: `cols` is now required when using unnest().
-## Please use `cols = c(value)`</code></pre>
+succRateLong &lt;- enframe(allSuccRates) %&gt;% 
+  unnest(cols = value) %&gt;% 
+  separate(col = name, into = c(&quot;outcome&quot;, &quot;name&quot;), sep = &quot;[.]&quot;)
+succRateLong</code></pre>
+<pre><code>## # A tibble: 60 x 13
+##    outcome name  Layer     N Week1 Week2 Week3 Week4 Week5 Week6 Week7 Guessing
+##    &lt;chr&gt;   &lt;chr&gt; &lt;chr&gt; &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;    &lt;dbl&gt;
+##  1 pass    logR~ PS      142 0.810 0.859 0.845 0.838 0.852 0.845 0.845    0.831
+##  2 pass    logR~ CD      142 0.803 0.803 0.831 0.824 0.845 0.838 0.817    0.831
+##  3 pass    logR~ ICS     142 0.824 0.831 0.859 0.845 0.845 0.838 0.852    0.831
+##  4 pass    logR~ PS      166 0.789 0.777 0.783 0.777 0.789 0.783 0.795    0.771
+##  5 pass    logR~ CD      166 0.783 0.771 0.783 0.771 0.783 0.789 0.795    0.771
+##  6 pass    logR~ ICS     166 0.795 0.771 0.765 0.783 0.771 0.789 0.801    0.771
+##  7 pass    logR~ PS      166 0.789 0.777 0.783 0.795 0.783 0.789 0.789    0.771
+##  8 pass    logR~ CD      166 0.789 0.783 0.795 0.801 0.795 0.783 0.777    0.771
+##  9 pass    logR~ ICS     166 0.789 0.771 0.771 0.783 0.783 0.801 0.807    0.771
+## 10 pass    lda   PS      142 0.817 0.845 0.831 0.838 0.838 0.831 0.831    0.831
+## # ... with 50 more rows, and 1 more variable: nK &lt;int&gt;</code></pre>
+</div>
 </div>
 
 

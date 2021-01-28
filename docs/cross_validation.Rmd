@@ -35,24 +35,37 @@ Each of those files saves the predictions in an .Rdata file in the `data` direct
 ```{r}
 filelist <- list.files(path = "../results", pattern = "*.csv")
 infiles <- file.path("../results", filelist)
-allSuccRates <- lapply(infiles, read.csv)
+infiles 
+allSuccRates <- lapply(infiles, read.csv) 
+summary(allSuccRates)
 ```
 
-I want to name these appropriately and reorder them. 
+
+### Clean up and organize
+
+I want to name these appropriately and reorder them. Make sure each name is tagged with `pass` or `justpass` so I can use that below. 
 
 ```{r}
 succLabels <- gsub("succRate", "", filelist) %>% 
   gsub(".csv", "", .) %>% 
-  gsub("^_", "", .)
+  gsub("^_", "", .) %>% 
+  paste0("pass.", .) %>% 
+  gsub("^pass.Just_", "justpass.", .)
 names(allSuccRates) <- succLabels
-newOrder <- c(8, 10, 9, 5, 7, 6, 11, 1, 3, 2)  # logReg, LDA, QDA, KNN
+names(allSuccRates)
+
+# Reorder to (logReg, LDA, QDA, KNN, (repeats for justpass))
+newOrder <- c(8, 10, 9, 5, 7, 6, 11, 1, 3, 2)  
 allSuccRates <- allSuccRates[c(newOrder, newOrder + 11)]
 ```
 
-Now I'd like to put these into a long data frame so I can plot them more easily. ***IN PROGRESS***
+Now I'd like to put these into a long data frame so I can plot them more easily. In the process, I separate the `pass`/`justpass` label into its own column. 
 
 ```{r}
 # see https://gist.github.com/aammd/9ae2f5cce9afd799bafb
-succRateLong <- enframe(allSuccRates) %>% unnest()
+succRateLong <- enframe(allSuccRates) %>% 
+  unnest(cols = value) %>% 
+  separate(col = name, into = c("outcome", "name"), sep = "[.]")
+succRateLong
 ```
 
