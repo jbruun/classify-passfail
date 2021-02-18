@@ -1,12 +1,13 @@
+##THIS FILE WILL BE SOURCED IN successPlots.r
 
 
 #######################################################
 ###LOAD CALCULATIONS FROM log reg, lda, qdua and KNN###
 #######################################################
-load("data/ROC_AUC/ROC_NetworkMeasuresGender_logreg.Rdata")
-load("data/ROC_AUC/ROC_NetworkMeasuresGender_lda.Rdata")
-load("data/ROC_AUC/ROC_NetworkMeasuresGender_qda.Rdata")
-load("data/ROC_AUC/ROC_NetworkMeasuresGender_knn.Rdata")
+load("data/ROC_AUC/ROC03_NetworkMeasuresGender_logreg.Rdata")
+load("data/ROC_AUC/ROC03_NetworkMeasuresGender_lda.Rdata")
+load("data/ROC_AUC/ROC03_NetworkMeasuresGender_qda.Rdata")
+load("data/ROC_AUC/ROC03_NetworkMeasuresGender_knn.Rdata")
 
 #OUTCOME = PASSED
 #Logistic Regression

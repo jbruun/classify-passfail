@@ -12,9 +12,13 @@ library(MASS)
 
 load("data/centrality_data_frames.Rdata")
 # Turn long data frame into list of weekly frames
-centPS <- dfPS %>% group_split(Week)
-centCD <- dfCD %>% group_split(Week)
-centICS <- dfICS %>% group_split(Week)
+dfBG<-dfPS[,1:13] #dataframe with background variables
+dfPSC<-data.frame(PS_PageRank=dfPS$PageRank,PS_tarEnt=dfPS$tarEnt,PS_Hide=dfPS$Hide) #dataframe with network centralities for PS layer
+dfCDC<-data.frame(CD_PageRank=dfCD$PageRank,CD_tarEnt=dfCD$tarEnt,CD_Hide=dfCD$Hide) #dataframe with network centralities for CD layer
+dfICSC<-data.frame(ICS_PageRank=dfICS$PageRank,ICS_tarEnt=dfICS$tarEnt,ICS_Hide=dfICS$Hide) #dataframe with network centralities for ICS layer
+dfAll<-data.frame(dfBG,dfPSC,dfCDC,dfICSC) #All combined
+centAll <- dfAll %>% group_split(Week)
+
 
 source("code/jackknife_functions.R")
 source("code/ROC_functions.R")
@@ -24,322 +28,108 @@ source("code/ROC_functions.R")
 #########LOGISTIC REGRESSION###########
 #########LOGISTIC REGRESSION###########
 
-######ALL NETWORK PREDICTORS######
+######BEST NETWORK PREDICTORS PASSED######
 
-ROC_PS_log<-list()
+ROC_A_log<-list() #Model A: PS_PR+H + ICS_PR + CD_PR
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_log[[i]]<-ROC
+  predA_x<-jackPredLog(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank","CD_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predA_x)
+  ROC_A_log[[i]]<-ROC
 }
 
-ROC_CD_log<-list()
+ROC_B_log<-list() #Model B: PS_PR+H + ICS_PR + CD_PR+TE
 for(i in 1:100){
-  predCD_x<-jackPredLog(centCD,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_log[[i]]<-ROC
+  predB_x<-jackPredLog(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank","CD_PageRank","CD_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predB_x)
+  ROC_B_log[[i]]<-ROC
 }
 
-ROC_ICS_log<-list()
+ROC_C_log<-list() #Model C PS_PR+H + ICS_PR
 for(i in 1:100){
-  predICS_x<-jackPredLog(centICS,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_log[[i]]<-ROC
+  predC_x<-jackPredLog(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predC_x)
+  ROC_C_log[[i]]<-ROC
 }
 
-ROC_PS_justpass_log<-list()
+ROC_D_log<-list() #Model D: ICS_PR + CD_PR+TE
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_log[[i]]<-ROC
+  predD_x<-jackPredLog(centAll,predictors = c("ICS_PageRank","CD_PageRank","CD_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predD_x)
+  ROC_D_log[[i]]<-ROC
 }
 
-ROC_CD_justpass_log<-list()
+ROC_E_log<-list() #Model E: ICS_PR + CD_PR
 for(i in 1:100){
-  predCD_x<-jackPredLog(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_log[[i]]<-ROC
+  predD_x<-jackPredLog(centAll,predictors = c("ICS_PageRank","CD_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predD_x)
+  ROC_D_log[[i]]<-ROC
 }
 
-ROC_ICS_justpass_log<-list()
+ROC_F_log<-list() #Model F: PS_PR+H + ICS_PR+H + CD_PR
 for(i in 1:100){
-  predICS_x<-jackPredLog(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_log[[i]]<-ROC
+  predF_x<-jackPredLog(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank","ICS_Hide","CD_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predF_x)
+  ROC_F_log[[i]]<-ROC
 }
 
-######PAGERANK TARGET ENTROPY NETWORK PREDICTORS######
-
-ROC_PS_log_PRTE<-list()
+ROC_G_log<-list() #Model B: PS_PR+H + ICS_PR+H + CD_PR+TE
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_log_PRTE[[i]]<-ROC
+  predG_x<-jackPredLog(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank","ICS_Hide","CD_PageRank","CD_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predG_x)
+  ROC_G_log[[i]]<-ROC
 }
 
-ROC_CD_log_PRTE<-list()
+ROC_H_log<-list() #Model C PS_PR+H + ICS_PR
 for(i in 1:100){
-  predCD_x<-jackPredLog(centCD,predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_log_PRTE[[i]]<-ROC
+  predH_x<-jackPredLog(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank","ICS_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predH_x)
+  ROC_H_log[[i]]<-ROC
 }
 
-ROC_ICS_log_PRTE<-list()
+ROC_I_log<-list() #Model D: ICS_PR+H + CD_PR+TE
 for(i in 1:100){
-  predICS_x<-jackPredLog(centICS,predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_log_PRTE[[i]]<-ROC
+  predI_x<-jackPredLog(centAll,predictors = c("ICS_PageRank","ICS_Hide","CD_PageRank","CD_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predI_x)
+  ROC_I_log[[i]]<-ROC
 }
 
-ROC_PS_justpass_log_PRTE<-list()
+ROC_J_log<-list() #Model J: ICS_PR+H + CD_PR
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_log_PRTE[[i]]<-ROC
+  predJ_x<-jackPredLog(centAll,predictors = c("ICS_PageRank","ICS_Hide","CD_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predJ_x)
+  ROC_J_log[[i]]<-ROC
+}
+######BEST NETWORK PREDICTORS JUST PASSED######
+ROC_K_log<-list() #Model K: ICS_PR + CD_PR+H+TE
+for(i in 1:100){
+  predK_x<-jackPredLog(centAll,outcome = "justpass",predictors = c("ICS_PageRank","CD_PageRank","CD_tarEnt","CD_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predK_x)
+  ROC_K_log[[i]]<-ROC
 }
 
-ROC_CD_justpass_log_PRTE<-list()
+ROC_L_log<-list() #Model K: ICS_PR + CD_PR+H
 for(i in 1:100){
-  predCD_x<-jackPredLog(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_log_PRTE[[i]]<-ROC
+  predL_x<-jackPredLog(centAll,outcome = "justpass",predictors = c("ICS_PageRank","CD_PageRank","CD_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predL_x)
+  ROC_L_log[[i]]<-ROC
 }
 
-ROC_ICS_justpass_log_PRTE<-list()
+ROC_M_log<-list() #Model K: ICS_PR + CD_PR
 for(i in 1:100){
-  predICS_x<-jackPredLog(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_log_PRTE[[i]]<-ROC
+  predM_x<-jackPredLog(centAll,outcome = "justpass",predictors = c("ICS_PageRank","CD_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predM_x)
+  ROC_M_log[[i]]<-ROC
 }
 
-######PAGERANK HIDE NETWORK PREDICTORS######
-
-ROC_PS_log_PRH<-list()
+ROC_N_log<-list() #Model K: ICS_PR + CD_H
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_log_PRH[[i]]<-ROC
+  predN_x<-jackPredLog(centAll,outcome = "justpass",predictors = c("ICS_PageRank","CD_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predN_x)
+  ROC_N_log[[i]]<-ROC
 }
-
-ROC_CD_log_PRH<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLog(centCD,predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_log_PRH[[i]]<-ROC
-}
-
-ROC_ICS_log_PRH<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLog(centICS,predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_log_PRH[[i]]<-ROC
-}
-
-ROC_PS_justpass_log_PRH<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_log_PRH[[i]]<-ROC
-}
-
-ROC_CD_justpass_log_PRH<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLog(centCD, outcome = "justpass",predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_log_PRH[[i]]<-ROC
-}
-
-ROC_ICS_justpass_log_PRH<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLog(centICS, outcome = "justpass",predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_log_PRH[[i]]<-ROC
-}
-
-######TARGET ENTROPY HIDE NETWORK PREDICTORS######
-
-ROC_PS_log_TEH<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_log_TEH[[i]]<-ROC
-}
-
-ROC_CD_log_TEH<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLog(centCD,predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_log_TEH[[i]]<-ROC
-}
-
-ROC_ICS_log_TEH<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLog(centICS,predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_log_TEH[[i]]<-ROC
-}
-
-ROC_PS_justpass_log_TEH<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,outcome = "justpass",predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_log_TEH[[i]]<-ROC
-}
-
-ROC_CD_justpass_log_TEH<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLog(centCD, outcome = "justpass",predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_log_TEH[[i]]<-ROC
-}
-
-ROC_ICS_justpass_log_TEH<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLog(centICS, outcome = "justpass",predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_log_TEH[[i]]<-ROC
-}
-
-######TARGET ENTROPY NETWORK PREDICTORS######
-
-ROC_PS_log_TE<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_log_TE[[i]]<-ROC
-}
-
-ROC_CD_log_TE<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLog(centCD,predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_log_TE[[i]]<-ROC
-}
-
-ROC_ICS_log_TE<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLog(centICS,predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_log_TE[[i]]<-ROC
-}
-
-ROC_PS_justpass_log_TE<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,outcome = "justpass",predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_log_TE[[i]]<-ROC
-}
-
-ROC_CD_justpass_log_TE<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLog(centCD, outcome = "justpass",predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_log_TE[[i]]<-ROC
-}
-
-ROC_ICS_justpass_log_TE<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLog(centICS, outcome = "justpass",predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_log_TE[[i]]<-ROC
-}
-
-######HIDE NETWORK PREDICTORS######
-
-ROC_PS_log_H<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_log_H[[i]]<-ROC
-}
-
-ROC_CD_log_H<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLog(centCD,predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_log_H[[i]]<-ROC
-}
-
-ROC_ICS_log_H<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLog(centICS,predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_log_H[[i]]<-ROC
-}
-
-ROC_PS_justpass_log_H<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,outcome = "justpass",predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_log_H[[i]]<-ROC
-}
-
-ROC_CD_justpass_log_H<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLog(centCD, outcome = "justpass",predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_log_H[[i]]<-ROC
-}
-
-ROC_ICS_justpass_log_H<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLog(centICS, outcome = "justpass",predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_log_H[[i]]<-ROC
-}
-
-######PAGERANK NETWORK PREDICTORS######
-
-ROC_PS_log_PR<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_log_PR[[i]]<-ROC
-}
-
-ROC_CD_log_PR<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLog(centCD,predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_log_PR[[i]]<-ROC
-}
-
-ROC_ICS_log_PR<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLog(centICS,predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_log_PR[[i]]<-ROC
-}
-
-ROC_PS_justpass_log_PR<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_log_PR[[i]]<-ROC
-}
-
-ROC_CD_justpass_log_PR<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLog(centCD, outcome = "justpass",predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_log_PR[[i]]<-ROC
-}
-
-ROC_ICS_justpass_log_PR<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLog(centICS, outcome = "justpass",predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_log_PR[[i]]<-ROC
-}
-
-save(ROC_PS_log,ROC_CD_log,ROC_ICS_log, ROC_PS_justpass_log,ROC_CD_justpass_log,ROC_ICS_justpass_log,
-     ROC_PS_log_PRTE,ROC_CD_log_PRTE,ROC_ICS_log_PRTE, ROC_PS_justpass_log_PRTE,ROC_CD_justpass_log_PRTE,ROC_ICS_justpass_log_PRTE,
-     ROC_PS_log_PRH,ROC_CD_log_PRH,ROC_ICS_log_PRH, ROC_PS_justpass_log_PRH,ROC_CD_justpass_log_PRH,ROC_ICS_justpass_log_PRH,
-     ROC_PS_log_TEH,ROC_CD_log_TEH,ROC_ICS_log_TEH, ROC_PS_justpass_log_TEH,ROC_CD_justpass_log_TEH,ROC_ICS_justpass_log_TEH,
-     ROC_PS_log_H,ROC_CD_log_H,ROC_ICS_log_H, ROC_PS_justpass_log_H,ROC_CD_justpass_log_H,ROC_ICS_justpass_log_H,
-     ROC_PS_log_TE,ROC_CD_log_TE,ROC_ICS_log_TE, ROC_PS_justpass_log_TE,ROC_CD_justpass_log_TE,ROC_ICS_justpass_log_TE,
-     ROC_PS_log_PR,ROC_CD_log_PR,ROC_ICS_log_PR, ROC_PS_justpass_log_PR,ROC_CD_justpass_log_PR,ROC_ICS_justpass_log_PR,
-     file="data/ROC_NB_logreg.Rdata")
+#
+save(ROC_A_log,ROC_B_log,ROC_C_log,ROC_D_log,ROC_E_log,ROC_F_log,ROC_G_log,ROC_H_log,ROC_I_log
+     ,ROC_J_log,ROC_K_log,ROC_L_log,ROC_M_log,ROC_N_log,file="data/ROC_AUC/ROC11_NB_logreg.Rdata")
 
 tend<-Sys.time()
 tend-tstart
@@ -349,323 +139,109 @@ t1<-Sys.time()
 #########LINEAR DISCRIMINANT ANALYSIS###########
 #########LINEAR DISCRIMINANT ANALYSIS ###########
 #########LINEAR DISCRIMINANT ANALYSIS ###########
+######BEST NETWORK PREDICTORS PASSED######
 
-######ALL NETWORK PREDICTORS######
-
-ROC_PS_lda<-list()
+ROC_A_lda<-list() #Model A: PS_PR+H + ICS_PR + CD_PR
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_lda[[i]]<-ROC
+  predA_x<-jackPredLDA(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank","CD_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predA_x)
+  ROC_A_lda[[i]]<-ROC
 }
 
-ROC_CD_lda<-list()
+ROC_B_lda<-list() #Model B: PS_PR+H + ICS_PR + CD_PR+TE
 for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_lda[[i]]<-ROC
+  predB_x<-jackPredLDA(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank","CD_PageRank","CD_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predB_x)
+  ROC_B_lda[[i]]<-ROC
 }
 
-ROC_ICS_lda<-list()
+ROC_C_lda<-list() #Model C PS_PR+H + ICS_PR
 for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_lda[[i]]<-ROC
+  predC_x<-jackPredLDA(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predC_x)
+  ROC_C_lda[[i]]<-ROC
 }
 
-ROC_PS_justpass_lda<-list()
+ROC_D_lda<-list() #Model D: ICS_PR + CD_PR+TE
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_lda[[i]]<-ROC
+  predD_x<-jackPredLDA(centAll,predictors = c("ICS_PageRank","CD_PageRank","CD_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predD_x)
+  ROC_D_lda[[i]]<-ROC
 }
 
-ROC_CD_justpass_lda<-list()
+ROC_E_lda<-list() #Model E: ICS_PR + CD_PR
 for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_lda[[i]]<-ROC
+  predD_x<-jackPredLDA(centAll,predictors = c("ICS_PageRank","CD_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predD_x)
+  ROC_D_lda[[i]]<-ROC
 }
 
-ROC_ICS_justpass_lda<-list()
+ROC_F_lda<-list() #Model F: PS_PR+H + ICS_PR+H + CD_PR
 for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_lda[[i]]<-ROC
+  predF_x<-jackPredLDA(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank","ICS_Hide","CD_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predF_x)
+  ROC_F_lda[[i]]<-ROC
 }
 
-######PAGERANK TARGET ENTROPY NETWORK PREDICTORS######
-
-ROC_PS_lda_PRTE<-list()
+ROC_G_lda<-list() #Model B: PS_PR+H + ICS_PR+H + CD_PR+TE
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_lda_PRTE[[i]]<-ROC
+  predG_x<-jackPredLDA(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank","ICS_Hide","CD_PageRank","CD_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predG_x)
+  ROC_G_lda[[i]]<-ROC
 }
 
-ROC_CD_lda_PRTE<-list()
+ROC_H_lda<-list() #Model C PS_PR+H + ICS_PR
 for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD,predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_lda_PRTE[[i]]<-ROC
+  predH_x<-jackPredLDA(centAll,predictors = c("PS_PageRank","PS_Hide","ICS_PageRank","ICS_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predH_x)
+  ROC_H_lda[[i]]<-ROC
 }
 
-ROC_ICS_lda_PRTE<-list()
+ROC_I_lda<-list() #Model D: ICS_PR+H + CD_PR+TE
 for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS,predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_lda_PRTE[[i]]<-ROC
+  predI_x<-jackPredLDA(centAll,predictors = c("ICS_PageRank","ICS_Hide","CD_PageRank","CD_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predI_x)
+  ROC_I_lda[[i]]<-ROC
 }
 
-ROC_PS_justpass_lda_PRTE<-list()
+ROC_J_lda<-list() #Model J: ICS_PR+H + CD_PR
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_lda_PRTE[[i]]<-ROC
+  predJ_x<-jackPredLDA(centAll,predictors = c("ICS_PageRank","ICS_Hide","CD_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predJ_x)
+  ROC_J_lda[[i]]<-ROC
+}
+######BEST NETWORK PREDICTORS JUST PASSED######
+ROC_K_lda<-list() #Model K: ICS_PR + CD_PR+H+TE
+for(i in 1:100){
+  predK_x<-jackPredLDA(centAll,outcome = "justpass",predictors = c("ICS_PageRank","CD_PageRank","CD_tarEnt","CD_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predK_x)
+  ROC_K_lda[[i]]<-ROC
 }
 
-ROC_CD_justpass_lda_PRTE<-list()
+ROC_L_lda<-list() #Model K: ICS_PR + CD_PR+H
 for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_lda_PRTE[[i]]<-ROC
+  predL_x<-jackPredLDA(centAll,outcome = "justpass",predictors = c("ICS_PageRank","CD_PageRank","CD_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predL_x)
+  ROC_L_lda[[i]]<-ROC
 }
 
-ROC_ICS_justpass_lda_PRTE<-list()
+ROC_M_lda<-list() #Model K: ICS_PR + CD_PR
 for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_lda_PRTE[[i]]<-ROC
+  predM_x<-jackPredLDA(centAll,outcome = "justpass",predictors = c("ICS_PageRank","CD_PageRank"),p=i/100)
+  ROC<-ROCplusWeeks(predM_x)
+  ROC_M_lda[[i]]<-ROC
 }
 
-######PAGERANK HIDE NETWORK PREDICTORS######
-
-ROC_PS_lda_PRH<-list()
+ROC_N_lda<-list() #Model K: ICS_PR + CD_H
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_lda_PRH[[i]]<-ROC
+  predN_x<-jackPredLDA(centAll,outcome = "justpass",predictors = c("ICS_PageRank","CD_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predN_x)
+  ROC_N_lda[[i]]<-ROC
 }
+#
+save(ROC_A_lda,ROC_B_lda,ROC_C_lda,ROC_D_lda,ROC_E_lda,ROC_F_lda,ROC_G_lda,ROC_H_lda,ROC_I_lda
+     ,ROC_J_lda,ROC_K_lda,ROC_L_lda,ROC_M_lda,ROC_N_lda,file="data/ROC_AUC/ROC11_NB_lda.Rdata")
 
-ROC_CD_lda_PRH<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD,predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_lda_PRH[[i]]<-ROC
-}
-
-ROC_ICS_lda_PRH<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS,predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_lda_PRH[[i]]<-ROC
-}
-
-ROC_PS_justpass_lda_PRH<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,outcome = "justpass",predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_lda_PRH[[i]]<-ROC
-}
-
-ROC_CD_justpass_lda_PRH<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD, outcome = "justpass",predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_lda_PRH[[i]]<-ROC
-}
-
-ROC_ICS_justpass_lda_PRH<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS, outcome = "justpass",predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_lda_PRH[[i]]<-ROC
-}
-
-######TARGET ENTROPY HIDE NETWORK PREDICTORS######
-
-ROC_PS_lda_TEH<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_lda_TEH[[i]]<-ROC
-}
-
-ROC_CD_lda_TEH<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD,predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_lda_TEH[[i]]<-ROC
-}
-
-ROC_ICS_lda_TEH<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS,predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_lda_TEH[[i]]<-ROC
-}
-
-ROC_PS_justpass_lda_TEH<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,outcome = "justpass",predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_lda_TEH[[i]]<-ROC
-}
-
-ROC_CD_justpass_lda_TEH<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD, outcome = "justpass",predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_lda_TEH[[i]]<-ROC
-}
-
-ROC_ICS_justpass_lda_TEH<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS, outcome = "justpass",predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_lda_TEH[[i]]<-ROC
-}
-
-######TARGET ENTROPY NETWORK PREDICTORS######
-
-ROC_PS_lda_TE<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_lda_TE[[i]]<-ROC
-}
-
-ROC_CD_lda_TE<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD,predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_lda_TE[[i]]<-ROC
-}
-
-ROC_ICS_lda_TE<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS,predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_lda_TE[[i]]<-ROC
-}
-
-ROC_PS_justpass_lda_TE<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,outcome = "justpass",predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_lda_TE[[i]]<-ROC
-}
-
-ROC_CD_justpass_lda_TE<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD, outcome = "justpass",predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_lda_TE[[i]]<-ROC
-}
-
-ROC_ICS_justpass_lda_TE<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS, outcome = "justpass",predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_lda_TE[[i]]<-ROC
-}
-
-######HIDE NETWORK PREDICTORS######
-
-ROC_PS_lda_H<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_lda_H[[i]]<-ROC
-}
-
-ROC_CD_lda_H<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD,predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_lda_H[[i]]<-ROC
-}
-
-ROC_ICS_lda_H<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS,predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_lda_H[[i]]<-ROC
-}
-
-ROC_PS_justpass_lda_H<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,outcome = "justpass",predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_lda_H[[i]]<-ROC
-}
-
-ROC_CD_justpass_lda_H<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD, outcome = "justpass",predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_lda_H[[i]]<-ROC
-}
-
-ROC_ICS_justpass_lda_H<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS, outcome = "justpass",predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_lda_H[[i]]<-ROC
-}
-
-######TARGET ENTROPY NETWORK PREDICTORS######
-
-ROC_PS_lda_PR<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_lda_PR[[i]]<-ROC
-}
-
-ROC_CD_lda_PR<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD,predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_lda_PR[[i]]<-ROC
-}
-
-ROC_ICS_lda_PR<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS,predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_lda_PR[[i]]<-ROC
-}
-
-ROC_PS_justpass_lda_PR<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,outcome = "justpass",predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_lda_PR[[i]]<-ROC
-}
-
-ROC_CD_justpass_lda_PR<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD, outcome = "justpass",predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_lda_PR[[i]]<-ROC
-}
-
-ROC_ICS_justpass_lda_PR<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS, outcome = "justpass",predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_lda_PR[[i]]<-ROC
-}
-
-save(ROC_PS_lda,ROC_CD_lda,ROC_ICS_lda, ROC_PS_justpass_lda,ROC_CD_justpass_lda,ROC_ICS_justpass_lda,
-     ROC_PS_lda_PRTE,ROC_CD_lda_PRTE,ROC_ICS_lda_PRTE, ROC_PS_justpass_lda_PRTE,ROC_CD_justpass_lda_PRTE,ROC_ICS_justpass_lda_PRTE,
-     ROC_PS_lda_PRH,ROC_CD_lda_PRH,ROC_ICS_lda_PRH, ROC_PS_justpass_lda_PRH,ROC_CD_justpass_lda_PRH,ROC_ICS_justpass_lda_PRH,
-     ROC_PS_lda_TEH,ROC_CD_lda_TEH,ROC_ICS_lda_TEH, ROC_PS_justpass_lda_TEH,ROC_CD_justpass_lda_TEH,ROC_ICS_justpass_lda_TEH,
-     ROC_PS_lda_H,ROC_CD_lda_H,ROC_ICS_lda_H, ROC_PS_justpass_lda_H,ROC_CD_justpass_lda_H,ROC_ICS_justpass_lda_H,
-     ROC_PS_lda_TE,ROC_CD_lda_TE,ROC_ICS_lda_TE, ROC_PS_justpass_lda_TE,ROC_CD_justpass_lda_TE,ROC_ICS_justpass_lda_TE,
-     ROC_PS_lda_PR,ROC_CD_lda_PR,ROC_ICS_lda_PR, ROC_PS_justpass_lda_PR,ROC_CD_justpass_lda_PR,ROC_ICS_justpass_lda_PR,
-     file="data/ROC_NB_lda.Rdata")
 
 
 
@@ -674,322 +250,221 @@ save(ROC_PS_lda,ROC_CD_lda,ROC_ICS_lda, ROC_PS_justpass_lda,ROC_CD_justpass_lda,
 #########QUADRATIC DISCRIMINANT ANALYSIS ###########
 #########QUADRATIC DISCRIMINANT ANALYSIS ###########
 
-######ALL NETWORK PREDICTORS######
 
-ROC_PS_qda<-list()
+######BEST NETWORK PREDICTORS PASSED######
+
+ROC_A_qda<-list() #Model A: PS_PR+TE+H + CD_PR+TE + ICS_PR+TE
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_qda[[i]]<-ROC
+  predA_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_tarEnt","PS_Hide",
+                                              "CD_PageRank","CD_tarEnt",
+                                              "ICS_PageRank","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predA_x)
+  ROC_A_qda[[i]]<-ROC
 }
 
-ROC_CD_qda<-list()
+ROC_B_qda<-list() #Model B: PS_PR+TE+H + CD_PR+TE + ICS_H+TE
 for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_qda[[i]]<-ROC
+  predB_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_tarEnt","PS_Hide",
+                                              "CD_PageRank","CD_tarEnt",
+                                              "ICS_Hide","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predB_x)
+  ROC_B_qda[[i]]<-ROC
 }
 
-ROC_ICS_qda<-list()
+ROC_C_qda<-list() #Model C: PS_PR+TE+H + CD_PR+TE + ICS_PR+TE
 for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_qda[[i]]<-ROC
+  predC_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_tarEnt","PS_Hide",
+                                              "CD_PageRank","CD_tarEnt",
+                                              "ICS_PageRank","ICS_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predC_x)
+  ROC_C_qda[[i]]<-ROC
 }
 
-ROC_PS_justpass_qda<-list()
+ROC_D_qda<-list() #Model A: PS_PR+TE+H + CD_TE+H + ICS_PR+TE
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_qda[[i]]<-ROC
+  predD_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_tarEnt","PS_Hide",
+                                              "CD_Hide","CD_tarEnt",
+                                              "ICS_PageRank","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predD_x)
+  ROC_D_qda[[i]]<-ROC
 }
 
-ROC_CD_justpass_qda<-list()
+ROC_E_qda<-list() #Model B: PS_PR+TE+H + CD_TE+H + ICS_H+TE
 for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_qda[[i]]<-ROC
+  predE_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_tarEnt","PS_Hide",
+                                              "CD_Hide","CD_tarEnt",
+                                              "ICS_Hide","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predE_x)
+  ROC_E_qda[[i]]<-ROC
 }
 
-ROC_ICS_justpass_qda<-list()
+ROC_F_qda<-list() #Model C: PS_PR+TE+H + CD_TE+H + ICS_PR+TE
 for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_qda[[i]]<-ROC
+  predF_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_tarEnt","PS_Hide",
+                                              "CD_Hide","CD_tarEnt",
+                                              "ICS_PageRank","ICS_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predF_x)
+  ROC_F_qda[[i]]<-ROC
 }
 
-######PAGERANK TARGET ENTROPY NETWORK PREDICTORS######
-
-ROC_PS_qda_PRTE<-list()
+ROC_G_qda<-list() #Model A: CD_PR+TE + ICS_PR+TE
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_qda_PRTE[[i]]<-ROC
+  predG_x<-jackPredQDA(centAll,predictors = c("CD_PageRank","CD_tarEnt",
+                                              "ICS_PageRank","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predG_x)
+  ROC_G_qda[[i]]<-ROC
 }
 
-ROC_CD_qda_PRTE<-list()
+ROC_H_qda<-list() #Model H: CD_PR+TE + ICS_H+TE
 for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD,predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_qda_PRTE[[i]]<-ROC
+  predH_x<-jackPredQDA(centAll,predictors = c("CD_PageRank","CD_tarEnt",
+                                              "ICS_Hide","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predH_x)
+  ROC_H_qda[[i]]<-ROC
 }
 
-ROC_ICS_qda_PRTE<-list()
+ROC_I_qda<-list() #Model I:CD_PR+TE + ICS_PR+TE
 for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS,predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_qda_PRTE[[i]]<-ROC
+  predI_x<-jackPredQDA(centAll,predictors = c("CD_PageRank","CD_tarEnt",
+                                              "ICS_PageRank","ICS_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predI_x)
+  ROC_I_qda[[i]]<-ROC
 }
 
-ROC_PS_justpass_qda_PRTE<-list()
+ROC_J_qda<-list() #Model J:CD_TE+H + ICS_PR+TE
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_qda_PRTE[[i]]<-ROC
+  predJ_x<-jackPredQDA(centAll,predictors = c("CD_Hide","CD_tarEnt",
+                                              "ICS_PageRank","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predJ_x)
+  ROC_J_qda[[i]]<-ROC
 }
 
-ROC_CD_justpass_qda_PRTE<-list()
+ROC_K_qda<-list() #Model K: CD_TE+H + ICS_H+TE
 for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_qda_PRTE[[i]]<-ROC
+  predK_x<-jackPredQDA(centAll,predictors = c("CD_Hide","CD_tarEnt",
+                                              "ICS_Hide","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predK_x)
+  ROC_K_qda[[i]]<-ROC
 }
 
-ROC_ICS_justpass_qda_PRTE<-list()
+ROC_L_qda<-list() #Model L: CD_TE+H + ICS_PR+TE
 for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_qda_PRTE[[i]]<-ROC
+  predL_x<-jackPredQDA(centAll,predictors = c("CD_Hide","CD_tarEnt",
+                                              "ICS_PageRank","ICS_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predL_x)
+  ROC_L_qda[[i]]<-ROC
 }
 
-######PAGERANK HIDE NETWORK PREDICTORS######
-
-ROC_PS_qda_PRH<-list()
+ROC_M_qda<-list() #Model M: PS_PR+TE+H + CD_PR+TE 
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_qda_PRH[[i]]<-ROC
+  predM_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_tarEnt","PS_Hide",
+                                              "CD_PageRank","CD_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predM_x)
+  ROC_M_qda[[i]]<-ROC
 }
 
-ROC_CD_qda_PRH<-list()
+ROC_N_qda<-list() #Model M: PS_PR+TE+H + CD_TE+H 
 for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD,predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_qda_PRH[[i]]<-ROC
+  predN_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_tarEnt","PS_Hide",
+                                              "CD_tarEnt","CD_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predN_x)
+  ROC_N_qda[[i]]<-ROC
 }
 
-ROC_ICS_qda_PRH<-list()
+ROC_O_qda<-list() #Model A: PS_PR+TE+H + CD_PR+TE + ICS_PR+TE
 for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS,predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_qda_PRH[[i]]<-ROC
+  predO_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_Hide",
+                                              "CD_PageRank","CD_tarEnt",
+                                              "ICS_PageRank","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predO_x)
+  ROC_O_qda[[i]]<-ROC
 }
 
-ROC_PS_justpass_qda_PRH<-list()
+ROC_P_qda<-list() #Model B: PS_PR+TE+H + CD_PR+TE + ICS_H+TE
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,outcome = "justpass",predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_qda_PRH[[i]]<-ROC
+  predP_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_Hide",
+                                              "CD_PageRank","CD_tarEnt",
+                                              "ICS_Hide","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predP_x)
+  ROC_P_qda[[i]]<-ROC
 }
 
-ROC_CD_justpass_qda_PRH<-list()
+ROC_Q_qda<-list() #Model C: PS_PR+TE+H + CD_PR+TE + ICS_PR+TE
 for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD, outcome = "justpass",predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_qda_PRH[[i]]<-ROC
+  predQ_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_Hide",
+                                              "CD_PageRank","CD_tarEnt",
+                                              "ICS_PageRank","ICS_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predQ_x)
+  ROC_Q_qda[[i]]<-ROC
 }
 
-ROC_ICS_justpass_qda_PRH<-list()
+ROC_R_qda<-list() #Model A: PS_PR+TE+H + CD_TE+H + ICS_PR+TE
 for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS, outcome = "justpass",predictors = c("PageRank","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_qda_PRH[[i]]<-ROC
+  predR_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_Hide",
+                                              "CD_Hide","CD_tarEnt",
+                                              "ICS_PageRank","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predR_x)
+  ROC_R_qda[[i]]<-ROC
 }
 
-######TARGET ENTROPY HIDE NETWORK PREDICTORS######
-
-ROC_PS_qda_TEH<-list()
+ROC_S_qda<-list() #Model B: PS_PR+TE+H + CD_TE+H + ICS_H+TE
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_qda_TEH[[i]]<-ROC
+  predS_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_Hide",
+                                              "CD_Hide","CD_tarEnt",
+                                              "ICS_Hide","ICS_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predS_x)
+  ROC_S_qda[[i]]<-ROC
 }
 
-ROC_CD_qda_TEH<-list()
+ROC_T_qda<-list() #Model C: PS_PR+TE+H + CD_TE+H + ICS_PR+TE
 for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD,predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_qda_TEH[[i]]<-ROC
+  predT_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_Hide",
+                                              "CD_Hide","CD_tarEnt",
+                                              "ICS_PageRank","ICS_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predT_x)
+  ROC_T_qda[[i]]<-ROC
 }
 
-ROC_ICS_qda_TEH<-list()
+ROC_U_qda<-list() #Model M: PS_PR+TE+H + CD_PR+TE 
 for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS,predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_qda_TEH[[i]]<-ROC
+  predU_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_Hide",
+                                              "CD_PageRank","CD_tarEnt"),p=i/100)
+  ROC<-ROCplusWeeks(predU_x)
+  ROC_U_qda[[i]]<-ROC
 }
 
-ROC_PS_justpass_qda_TEH<-list()
+ROC_V_qda<-list() #Model M: PS_PR+TE+H + CD_TE+H 
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,outcome = "justpass",predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_qda_TEH[[i]]<-ROC
+  predV_x<-jackPredQDA(centAll,predictors = c("PS_PageRank","PS_Hide",
+                                              "CD_tarEnt","CD_Hide"),p=i/100)
+  ROC<-ROCplusWeeks(predV_x)
+  ROC_V_qda[[i]]<-ROC
 }
 
-ROC_CD_justpass_qda_TEH<-list()
+##JUST PASS PREDICTORS
+
+ROC_W_qda<-list() #Model M: PS_PR+H + CD_TE+H 
 for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD, outcome = "justpass",predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_qda_TEH[[i]]<-ROC
+  predW_x<-jackPredQDA(centAll,outcome = "justpass", 
+                       predictors = c("CD_PageRank","CD_Hide",
+                                       "ICS_PageRank","ICS_tarEnt"),p=i/100) #
+  ROC<-ROCplusWeeks(predW_x)
+  ROC_W_qda[[i]]<-ROC
 }
 
-ROC_ICS_justpass_qda_TEH<-list()
+ROC_X_qda<-list() #Model M: PS_PR+H + CD_TE+H 
 for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS, outcome = "justpass",predictors = c("tarEnt","Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_qda_TEH[[i]]<-ROC
+  predX_x<-jackPredQDA(centAll,outcome = "justpass", 
+                       predictors = c("CD_PageRank","CD_Hide",
+                                     "ICS_tarEnt"),p=i/100) #ERROR: rank deficiency in group 1 
+  ROC<-ROCplusWeeks(predX_x)
+  ROC_X_qda[[i]]<-ROC
 }
 
-######TARGET ENTROPY NETWORK PREDICTORS######
-
-ROC_PS_qda_TE<-list()
-for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_qda_TE[[i]]<-ROC
-}
-
-ROC_CD_qda_TE<-list()
-for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD,predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_qda_TE[[i]]<-ROC
-}
-
-ROC_ICS_qda_TE<-list()
-for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS,predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_qda_TE[[i]]<-ROC
-}
-
-ROC_PS_justpass_qda_TE<-list()
-for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,outcome = "justpass",predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_qda_TE[[i]]<-ROC
-}
-
-ROC_CD_justpass_qda_TE<-list()
-for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD, outcome = "justpass",predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_qda_TE[[i]]<-ROC
-}
-
-ROC_ICS_justpass_qda_TE<-list()
-for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS, outcome = "justpass",predictors = c("tarEnt"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_qda_TE[[i]]<-ROC
-}
-
-######HIDE NETWORK PREDICTORS######
-
-ROC_PS_qda_H<-list()
-for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_qda_H[[i]]<-ROC
-}
-
-ROC_CD_qda_H<-list()
-for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD,predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_qda_H[[i]]<-ROC
-}
-
-ROC_ICS_qda_H<-list()
-for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS,predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_qda_H[[i]]<-ROC
-}
-
-ROC_PS_justpass_qda_H<-list()
-for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,outcome = "justpass",predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_qda_H[[i]]<-ROC
-}
-
-ROC_CD_justpass_qda_H<-list()
-for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD, outcome = "justpass",predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_qda_H[[i]]<-ROC
-}
-
-ROC_ICS_justpass_qda_H<-list()
-for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS, outcome = "justpass",predictors = c("Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_qda_H[[i]]<-ROC
-}
-
-######TARGET ENTROPY NETWORK PREDICTORS######
-
-ROC_PS_qda_PR<-list()
-for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_qda_PR[[i]]<-ROC
-}
-
-ROC_CD_qda_PR<-list()
-for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD,predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_qda_PR[[i]]<-ROC
-}
-
-ROC_ICS_qda_PR<-list()
-for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS,predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_qda_PR[[i]]<-ROC
-}
-
-ROC_PS_justpass_qda_PR<-list()
-for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,outcome = "justpass",predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_qda_PR[[i]]<-ROC
-}
-
-ROC_CD_justpass_qda_PR<-list()
-for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD, outcome = "justpass",predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_qda_PR[[i]]<-ROC
-}
-
-ROC_ICS_justpass_qda_PR<-list()
-for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS, outcome = "justpass",predictors = c("PageRank"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_qda_PR[[i]]<-ROC
-}
-
-save(ROC_PS_qda,ROC_CD_qda,ROC_ICS_qda, ROC_PS_justpass_qda,ROC_CD_justpass_qda,ROC_ICS_justpass_qda,
-     ROC_PS_qda_PRTE,ROC_CD_qda_PRTE,ROC_ICS_qda_PRTE, ROC_PS_justpass_qda_PRTE,ROC_CD_justpass_qda_PRTE,ROC_ICS_justpass_qda_PRTE,
-     ROC_PS_qda_PRH,ROC_CD_qda_PRH,ROC_ICS_qda_PRH, ROC_PS_justpass_qda_PRH,ROC_CD_justpass_qda_PRH,ROC_ICS_justpass_qda_PRH,
-     ROC_PS_qda_TEH,ROC_CD_qda_TEH,ROC_ICS_qda_TEH, ROC_PS_justpass_qda_TEH,ROC_CD_justpass_qda_TEH,ROC_ICS_justpass_qda_TEH,
-     ROC_PS_qda_H,ROC_CD_qda_H,ROC_ICS_qda_H, ROC_PS_justpass_qda_H,ROC_CD_justpass_qda_H,ROC_ICS_justpass_qda_H,
-     ROC_PS_qda_TE,ROC_CD_qda_TE,ROC_ICS_qda_TE, ROC_PS_justpass_qda_TE,ROC_CD_justpass_qda_TE,ROC_ICS_justpass_qda_TE,
-     ROC_PS_qda_PR,ROC_CD_qda_PR,ROC_ICS_qda_PR, ROC_PS_justpass_qda_PR,ROC_CD_justpass_qda_PR,ROC_ICS_justpass_qda_PR,
-     file="data/ROC_NB_qda.Rdata")
+save(ROC_A_qda,ROC_B_qda,ROC_C_qda,ROC_D_qda,ROC_E_qda,ROC_F_qda,ROC_G_qda,
+     ROC_H_qda,ROC_I_qda,ROC_J_qda,ROC_K_qda,ROC_L_qda,ROC_M_qda,ROC_N_qda,
+     ROC_O_qda,ROC_P_qda,ROC_Q_qda,ROC_R_qda,ROC_S_qda,ROC_T_qda,ROC_U_qda,
+     ROC_V_qda,ROC_W_qda,ROC_X_qda,file="data/ROC_AUC/ROC11_NB_qda.Rdata")
 
 
 
@@ -998,322 +473,74 @@ save(ROC_PS_qda,ROC_CD_qda,ROC_ICS_qda, ROC_PS_justpass_qda,ROC_CD_justpass_qda,
 #########K NEAREST NEIGHBORS###########
 #########K NEAREST NEIGHBORS###########
 
-######ALL NETWORK PREDICTORS######
-t1<-Sys.time()
-ROC_PS_knn<-list()
+######BEST NETWORK PREDICTORS PASSED######
+ROC_A_knn<-list()
 for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,predictors = c("PageRank","tarEnt", "Hide"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_knn[[i]]<-ROC
+  predA_x<-jackPredKNN(centAll,predictors = c("PS_PageRank","PS_tarEnt", "PS_Hide",
+                                              "CD_PageRank","CD_tarEnt", "CD_Hide",
+                                              "ICS_PageRank","ICS_tarEnt","ICS_Hide"),nK = i)
+  ROC<-ROCplusWeeks(predA_x$allpred)
+  ROC_A_knn[[i]]<-ROC
 }
 
-ROC_CD_knn<-list()
+ROC_B_knn<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("PageRank","tarEnt", "Hide"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_knn[[i]]<-ROC
+  predB_x<-jackPredKNN(centAll,predictors = c("CD_PageRank","CD_tarEnt", "CD_Hide",
+                                              "ICS_PageRank","ICS_tarEnt","ICS_Hide"),nK = i)
+  ROC<-ROCplusWeeks(predB_x$allpred)
+  ROC_B_knn[[i]]<-ROC
 }
 
-ROC_ICS_knn<-list()
+ROC_C_knn<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("PageRank","tarEnt", "Hide"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_knn[[i]]<-ROC
+  predC_x<-jackPredKNN(centAll,predictors = c("PS_PageRank","PS_tarEnt", "PS_Hide",
+                                              "CD_PageRank","CD_tarEnt", "CD_Hide"),nK = i)
+  ROC<-ROCplusWeeks(predC_x$allpred)
+  ROC_C_knn[[i]]<-ROC
 }
 
-ROC_PS_justpass_knn<-list()
+ROC_D_knn<-list()
 for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_justpass_knn[[i]]<-ROC
+  predD_x<-jackPredKNN(centAll,predictors = c("PS_PageRank","PS_tarEnt", "PS_Hide",
+                                              "ICS_PageRank","ICS_tarEnt","ICS_Hide"),nK = i)
+  ROC<-ROCplusWeeks(predD_x$allpred)
+  ROC_D_knn[[i]]<-ROC
 }
 
-ROC_CD_justpass_knn<-list()
+######BEST NETWORK PREDICTORS JUST PASSED######
+ROC_E_knn<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_justpass_knn[[i]]<-ROC
+  predE_x<-jackPredKNN(centAll,outcome = "justpass",predictors = c("PS_PageRank","PS_tarEnt", "PS_Hide",
+                                              "CD_PageRank","CD_tarEnt", "CD_Hide",
+                                              "ICS_PageRank","ICS_tarEnt","ICS_Hide"),nK = i)
+  ROC<-ROCplusWeeks(predE_x$allpred)
+  ROC_E_knn[[i]]<-ROC
 }
 
-ROC_ICS_justpass_knn<-list()
+ROC_F_knn<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_justpass_knn[[i]]<-ROC
+  predF_x<-jackPredKNN(centAll,predictors = c("CD_PageRank","CD_tarEnt", "CD_Hide",
+                                              "ICS_PageRank","ICS_tarEnt","ICS_Hide"),nK = i)
+  ROC<-ROCplusWeeks(predF_x$allpred)
+  ROC_F_knn[[i]]<-ROC
 }
 
-######PAGERANK TARGET ENTROPY NETWORK PREDICTORS######
-
-ROC_PS_knn_PRTE<-list()
+ROC_G_knn<-list()
 for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,predictors = c("PageRank","tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_knn_PRTE[[i]]<-ROC
+  predG_x<-jackPredKNN(centAll,predictors = c("PS_PageRank","PS_tarEnt", "PS_Hide",
+                                              "CD_PageRank","CD_tarEnt", "CD_Hide"),nK = i)
+  ROC<-ROCplusWeeks(predG_x$allpred)
+  ROC_G_knn[[i]]<-ROC
 }
 
-ROC_CD_knn_PRTE<-list()
+ROC_H_knn<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("PageRank","tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_knn_PRTE[[i]]<-ROC
+  predH_x<-jackPredKNN(centAll,predictors = c("PS_PageRank","PS_tarEnt", "PS_Hide",
+                                              "ICS_PageRank","ICS_tarEnt","ICS_Hide"),nK = i)
+  ROC<-ROCplusWeeks(predH_x$allpred)
+  ROC_H_knn[[i]]<-ROC
 }
-
-ROC_ICS_knn_PRTE<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("PageRank","tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_knn_PRTE[[i]]<-ROC
-}
-
-ROC_PS_justpass_knn_PRTE<-list()
-for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_justpass_knn_PRTE[[i]]<-ROC
-}
-
-ROC_CD_justpass_knn_PRTE<-list()
-for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_justpass_knn_PRTE[[i]]<-ROC
-}
-
-ROC_ICS_justpass_knn_PRTE<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_justpass_knn_PRTE[[i]]<-ROC
-}
-
-######PAGERANK HIDE NETWORK PREDICTORS######
-
-ROC_PS_knn_PRH<-list()
-for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,predictors = c("PageRank","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_knn_PRH[[i]]<-ROC
-}
-
-ROC_CD_knn_PRH<-list()
-for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("PageRank","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_knn_PRH[[i]]<-ROC
-}
-
-ROC_ICS_knn_PRH<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("PageRank","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_knn_PRH[[i]]<-ROC
-}
-
-ROC_PS_justpass_knn_PRH<-list()
-for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("PageRank","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_justpass_knn_PRH[[i]]<-ROC
-}
-
-ROC_CD_justpass_knn_PRH<-list()
-for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("PageRank","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_justpass_knn_PRH[[i]]<-ROC
-}
-
-ROC_ICS_justpass_knn_PRH<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("PageRank","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_justpass_knn_PRH[[i]]<-ROC
-}
-
-######TARGET ENTROPY HIDE NETWORK PREDICTORS######
-
-ROC_PS_knn_TEH<-list()
-for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,predictors = c("tarEnt","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_knn_TEH[[i]]<-ROC
-}
-
-ROC_CD_knn_TEH<-list()
-for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("tarEnt","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_knn_TEH[[i]]<-ROC
-}
-
-ROC_ICS_knn_TEH<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("tarEnt","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_knn_TEH[[i]]<-ROC
-}
-
-ROC_PS_justpass_knn_TEH<-list()
-for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("tarEnt","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_justpass_knn_TEH[[i]]<-ROC
-}
-
-ROC_CD_justpass_knn_TEH<-list()
-for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("tarEnt","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_justpass_knn_TEH[[i]]<-ROC
-}
-
-ROC_ICS_justpass_knn_TEH<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("tarEnt","Hide"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_justpass_knn_TEH[[i]]<-ROC
-}
-
-######TARGET ENTROPY NETWORK PREDICTORS######
-
-ROC_PS_knn_TE<-list()
-for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,predictors = c("tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_knn_TE[[i]]<-ROC
-}
-
-ROC_CD_knn_TE<-list()
-for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_knn_TE[[i]]<-ROC
-}
-
-ROC_ICS_knn_TE<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_knn_TE[[i]]<-ROC
-}
-
-ROC_PS_justpass_knn_TE<-list()
-for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_justpass_knn_TE[[i]]<-ROC
-}
-
-ROC_CD_justpass_knn_TE<-list()
-for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_justpass_knn_TE[[i]]<-ROC
-}
-
-ROC_ICS_justpass_knn_TE<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("tarEnt"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_justpass_knn_TE[[i]]<-ROC
-}
-
-######HIDE NETWORK PREDICTORS######
-
-ROC_PS_knn_H<-list()
-for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,predictors = c("Hide"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_knn_H[[i]]<-ROC
-}
-
-ROC_CD_knn_H<-list()
-for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("Hide"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_knn_H[[i]]<-ROC
-}
-
-ROC_ICS_knn_H<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("Hide"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_knn_H[[i]]<-ROC
-}
-
-ROC_PS_justpass_knn_H<-list()
-for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("Hide"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_justpass_knn_H[[i]]<-ROC
-}
-
-ROC_CD_justpass_knn_H<-list()
-for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("Hide"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_justpass_knn_H[[i]]<-ROC
-}
-
-ROC_ICS_justpass_knn_H<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("Hide"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_justpass_knn_H[[i]]<-ROC
-}
-
-######TARGET ENTROPY NETWORK PREDICTORS######
-
-ROC_PS_knn_PR<-list()
-for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,predictors = c("PageRank"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_knn_PR[[i]]<-ROC
-}
-
-ROC_CD_knn_PR<-list()
-for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("PageRank"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_knn_PR[[i]]<-ROC
-}
-
-ROC_ICS_knn_PR<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("PageRank"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_knn_PR[[i]]<-ROC
-}
-
-ROC_PS_justpass_knn_PR<-list()
-for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("PageRank"),nK = i)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
-  ROC_PS_justpass_knn_PR[[i]]<-ROC
-}
-
-ROC_CD_justpass_knn_PR<-list()
-for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("PageRank"),nK = i)
-  ROC<-ROCplusWeeks(predCD_x$allpred)
-  ROC_CD_justpass_knn_PR[[i]]<-ROC
-}
-
-ROC_ICS_justpass_knn_PR<-list()
-for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("PageRank"),nK = i)
-  ROC<-ROCplusWeeks(predICS_x$allpred)
-  ROC_ICS_justpass_knn_PR[[i]]<-ROC
-}
-
-save(ROC_PS_knn,ROC_CD_knn,ROC_ICS_knn, ROC_PS_justpass_knn,ROC_CD_justpass_knn,ROC_ICS_justpass_knn,
-     ROC_PS_knn_PRTE,ROC_CD_knn_PRTE,ROC_ICS_knn_PRTE, ROC_PS_justpass_knn_PRTE,ROC_CD_justpass_knn_PRTE,ROC_ICS_justpass_knn_PRTE,
-     ROC_PS_knn_PRH,ROC_CD_knn_PRH,ROC_ICS_knn_PRH, ROC_PS_justpass_knn_PRH,ROC_CD_justpass_knn_PRH,ROC_ICS_justpass_knn_PRH,
-     ROC_PS_knn_TEH,ROC_CD_knn_TEH,ROC_ICS_knn_TEH, ROC_PS_justpass_knn_TEH,ROC_CD_justpass_knn_TEH,ROC_ICS_justpass_knn_TEH,
-     ROC_PS_knn_H,ROC_CD_knn_H,ROC_ICS_knn_H, ROC_PS_justpass_knn_H,ROC_CD_justpass_knn_H,ROC_ICS_justpass_knn_H,
-     ROC_PS_knn_TE,ROC_CD_knn_TE,ROC_ICS_knn_TE, ROC_PS_justpass_knn_TE,ROC_CD_justpass_knn_TE,ROC_ICS_justpass_knn_TE,
-     ROC_PS_knn_PR,ROC_CD_knn_PR,ROC_ICS_knn_PR, ROC_PS_justpass_knn_PR,ROC_CD_justpass_knn_PR,ROC_ICS_justpass_knn_PR,
+save(ROC_A_knn,ROC_B_knn,ROC_C_knn,ROC_D_knn
+     ROC_E_knn,ROC_F_knn,ROC_G_knn,ROC_H_knn
      file="data/ROC_NB_knn.Rdata")
 
-t2<-Sys.time()
-t2-t1

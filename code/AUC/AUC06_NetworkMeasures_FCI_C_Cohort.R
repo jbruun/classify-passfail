@@ -1,12 +1,13 @@
+##THIS FILE WILL BE SOURCED IN successPlots.r
 
 
 #######################################################
 ###LOAD CALCULATIONS FROM log reg, lda, qdua and KNN###
 #######################################################
-load("data/ROC_AUC/ROC_NetworkMeasuresFCI_C_cohort_logreg.Rdata")
-load("data/ROC_AUC/ROC_NetworkMeasuresFCI_C_cohort_lda.Rdata")
-load("data/ROC_AUC/ROC_NetworkMeasuresFCI_C_cohort_qda.Rdata")
-load("data/ROC_AUC/ROC_NetworkMeasuresFCI_C_cohort_knn.Rdata")
+load("data/ROC_AUC/ROC06_NetworkMeasuresFCI_C_cohort_logreg.Rdata")
+load("data/ROC_AUC/ROC06_NetworkMeasuresFCI_C_cohort_lda.Rdata")
+load("data/ROC_AUC/ROC06_NetworkMeasuresFCI_C_cohort_qda.Rdata")
+load("data/ROC_AUC/ROC06_NetworkMeasuresFCI_C_cohort_knn.Rdata")
 
 #OUTCOME = PASSED
 #Logistic Regression

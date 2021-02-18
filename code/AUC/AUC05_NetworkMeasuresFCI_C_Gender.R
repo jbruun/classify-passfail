@@ -1,3 +1,6 @@
+##THIS FILE WILL BE SOURCED IN successPlots.r
+
+
 #######################################################
 ###LOAD CALCULATIONS FROM log reg, lda, qdua and KNN###
 #######################################################

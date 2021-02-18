@@ -1,10 +1,12 @@
+##THIS FILE WILL BE SOURCED IN successPlots.r
+
 #######################################################
 ###LOAD CALCULATIONS FROM log reg, lda, qdua and KNN###
 #######################################################
-load("data/ROC_AUC/ROC_NB_logreg.Rdata")
-load("data/ROC_AUC/ROC_NB_lda.Rdata")
-load("data/ROC_AUC/ROC_NB_qda.Rdata")
-load("data/ROC_AUC/ROC_NB_knn.Rdata")
+load("data/ROC_AUC/ROC01_NB_logreg.Rdata")
+load("data/ROC_AUC/ROC01_NB_lda.Rdata")
+load("data/ROC_AUC/ROC01_NB_qda.Rdata")
+load("data/ROC_AUC/ROC01_NB_knn.Rdata")
 
 #OUTCOME = PASSED
 #Logistic Regression

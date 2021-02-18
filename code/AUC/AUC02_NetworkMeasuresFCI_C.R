@@ -2,10 +2,10 @@
 #######################################################
 ###LOAD CALCULATIONS FROM log reg, lda, qdua and KNN###
 #######################################################
-load("data/ROC_AUC/ROC_NetworkMeasuresFCI_C_logreg.Rdata")
-load("data/ROC_AUC/ROC_NetworkMeasuresFCI_C_lda.Rdata")
-load("data/ROC_AUC/ROC_NetworkMeasuresFCI_C_qda.Rdata")
-load("data/ROC_AUC/ROC_NetworkMeasuresFCI_C_knn.Rdata")
+load("data/ROC_AUC/ROC02_NetworkMeasuresFCI_C_logreg.Rdata")
+load("data/ROC_AUC/ROC02_NetworkMeasuresFCI_C_lda.Rdata")
+load("data/ROC_AUC/ROC02_NetworkMeasuresFCI_C_qda.Rdata")
+load("data/ROC_AUC/ROC02_NetworkMeasuresFCI_C_knn.Rdata")
 
 #OUTCOME = PASSED
 #Logistic Regression

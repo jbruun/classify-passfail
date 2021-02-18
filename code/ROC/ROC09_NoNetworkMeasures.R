@@ -303,7 +303,8 @@ for (i in 1:100){
 F_AUC_justpass_log<-simple_auc(ROC_F_TPR_log,ROC_F_FPR_log)
 
 save(ROC_GCF_log,ROC_GC_log,ROC_GF_log, ROC_CF_log,ROC_F_log,ROC_C_log,ROC_F_log,
-     ROC_GCF_justpass_log,ROC_GC_justpass_log,ROC_GF_justpass_log, ROC_CF_justpass_log,ROC_F_justpass_log,ROC_C_justpass_log,ROC_F_justpass_log,file="data/ROC_NN_logreg.Rdata")
+     ROC_GCF_justpass_log,ROC_GC_justpass_log,ROC_GF_justpass_log, ROC_CF_justpass_log,
+     ROC_F_justpass_log,ROC_C_justpass_log,ROC_F_justpass_log,file="data/ROC_AUC/ROC09_NN_logreg.Rdata")
 
 ##########LDA############
 ##########LDA############
@@ -589,7 +590,8 @@ for (i in 1:100){
 F_AUC_justpass_lda<-simple_auc(ROC_F_TPR_lda,ROC_F_FPR_lda)
 
 save(ROC_GCF_lda,ROC_GC_lda,ROC_GF_lda, ROC_CF_lda,ROC_F_lda,ROC_C_lda,ROC_F_lda,
-     ROC_GCF_justpass_lda,ROC_GC_justpass_lda,ROC_GF_justpass_lda, ROC_CF_justpass_lda,ROC_F_justpass_lda,ROC_C_justpass_lda,ROC_F_justpass_lda,file="data/ROC_NN_ldareg.Rdata")
+     ROC_GCF_justpass_lda,ROC_GC_justpass_lda,ROC_GF_justpass_lda, ROC_CF_justpass_lda,
+     ROC_F_justpass_lda,ROC_C_justpass_lda,ROC_F_justpass_lda,file="data/ROC_AUC/ROC09_NN_ldareg.Rdata")
 
 
 ##########QDA############
@@ -876,7 +878,8 @@ for (i in 1:100){
 F_AUC_justpass_qda<-simple_auc(ROC_F_TPR_qda,ROC_F_FPR_qda)
 
 save(ROC_GCF_qda,ROC_GC_qda,ROC_GF_qda, ROC_CF_qda,ROC_F_qda,ROC_C_qda,ROC_F_qda,
-     ROC_GCF_justpass_qda,ROC_GC_justpass_qda,ROC_GF_justpass_qda, ROC_CF_justpass_qda,ROC_F_justpass_qda,ROC_C_justpass_qda,ROC_F_justpass_qda,file="data/ROC_NN_qdareg.Rdata")
+     ROC_GCF_justpass_qda,ROC_GC_justpass_qda,ROC_GF_justpass_qda, ROC_CF_justpass_qda,
+     ROC_F_justpass_qda,ROC_C_justpass_qda,ROC_F_justpass_qda,file="data/ROC_AUC/ROC09_NN_qdareg.Rdata")
 
 ##########KNN############
 ##########KNN############
@@ -1134,6 +1137,6 @@ KNNP<-c(max(GCF_SR_knn_JP),max(GF_SR_knn_JP),max(GC_SR_knn_JP),max(CF_SR_knn_JP)
 OnlyBackground_JP<-data.frame(logistic=logRegP, LDA=ldaP,QDA=qdaP,KNN=KNNP)
 rownames(OnlyBackground_JP)<-c("GCF","GF","GC","CF","F","G","C")
 
-save(OnlyBackground,OnlyBackground_JP,file="data/AUC_SR_NN_fcipre.Rdata")
+save(OnlyBackground,OnlyBackground_JP,file="data/ROC_AUC/AUC09_SR_NN_fcipre.Rdata")
 
 
