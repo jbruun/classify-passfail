@@ -1,543 +1,204 @@
 #######################################################
 ###LOAD CALCULATIONS FROM log reg, lda, qdua and KNN###
 #######################################################
-load("data/ROC_AUC/ROC_NB_logreg.Rdata")
-load("data/ROC_AUC/ROC_NB_lda.Rdata")
-load("data/ROC_AUC/ROC_NB_qda.Rdata")
-load("data/ROC_AUC/ROC_NB_knn.Rdata")
+load("data/ROC_AUC/ROC11_NB_logreg.Rdata")
+load("data/ROC_AUC/ROC11_NB_lda.Rdata")
+load("data/ROC_AUC/ROC11_NB_qda.Rdata")
+load("data/ROC_AUC/ROC11_NB_knn.Rdata")
 
-#OUTCOME = PASSED
-#Logistic Regression
+##########OUTCOME = PASSED#########
+##########LOGREG#########
 
-ROC_PS_log_pfm<-performanceMeasures(ROC_PS_log)
-PS_AUC_NB_log_all<-AUC(ROC_PS_log_pfm[[1]],ROC_PS_log_pfm[[2]])
+ROC_A_log_pfm<-performanceMeasures(ROC_A_log)
+A_AUC_NB_log_all<-AUC(ROC_A_log_pfm[[1]],ROC_A_log_pfm[[2]])
 
-ROC_CD_log_pfm<-performanceMeasures(ROC_CD_log)
-CD_AUC_NB_log_all<-AUC(ROC_CD_log_pfm[[1]],ROC_CD_log_pfm[[2]])
+ROC_B_log_pfm<-performanceMeasures(ROC_B_log)
+B_AUC_NB_log_all<-AUC(ROC_B_log_pfm[[1]],ROC_B_log_pfm[[2]])
 
-ROC_ICS_log_pfm<-performanceMeasures(ROC_ICS_log)
-ICS_AUC_NB_log_all<-AUC(ROC_ICS_log_pfm[[1]],ROC_ICS_log_pfm[[2]])
+ROC_C_log_pfm<-performanceMeasures(ROC_C_log)
+C_AUC_NB_log_all<-AUC(ROC_C_log_pfm[[1]],ROC_C_log_pfm[[2]])
 
-ROC_PS_log_pfm_PRTE<-performanceMeasures(ROC_PS_log_PRTE)
-PS_AUC_NB_log_PRTE<-AUC(ROC_PS_log_pfm_PRTE[[1]],ROC_PS_log_pfm_PRTE[[2]])
+ROC_D_log_pfm<-performanceMeasures(ROC_D_log)
+D_AUC_NB_log_all<-AUC(ROC_D_log_pfm[[1]],ROC_D_log_pfm[[2]])
 
-ROC_CD_log_pfm_PRTE<-performanceMeasures(ROC_CD_log_PRTE)
-CD_AUC_NB_log_PRTE<-AUC(ROC_CD_log_pfm_PRTE[[1]],ROC_CD_log_pfm_PRTE[[2]])
+ROC_E_log_pfm<-performanceMeasures(ROC_E_log)
+E_AUC_NB_log_all<-AUC(ROC_E_log_pfm[[1]],ROC_E_log_pfm[[2]])
 
-ROC_ICS_log_pfm_PRTE<-performanceMeasures(ROC_ICS_log_PRTE)
-ICS_AUC_NB_log_PRTE<-AUC(ROC_ICS_log_pfm_PRTE[[1]],ROC_ICS_log_pfm_PRTE[[2]])
+ROC_F_log_pfm<-performanceMeasures(ROC_F_log)
+F_AUC_NB_log_all<-AUC(ROC_F_log_pfm[[1]],ROC_F_log_pfm[[2]])
 
+ROC_G_log_pfm<-performanceMeasures(ROC_G_log)
+G_AUC_NB_log_all<-AUC(ROC_G_log_pfm[[1]],ROC_G_log_pfm[[2]])
 
-ROC_PS_log_pfm_PRH<-performanceMeasures(ROC_PS_log_PRH)
-PS_AUC_NB_log_PRH<-AUC(ROC_PS_log_pfm_PRH[[1]],ROC_PS_log_pfm_PRH[[2]])
+ROC_H_log_pfm<-performanceMeasures(ROC_H_log)
+H_AUC_NB_log_all<-AUC(ROC_H_log_pfm[[1]],ROC_H_log_pfm[[2]])
 
-ROC_CD_log_pfm_PRH<-performanceMeasures(ROC_CD_log_PRH)
-CD_AUC_NB_log_PRH<-AUC(ROC_CD_log_pfm_PRH[[1]],ROC_CD_log_pfm_PRH[[2]])
+ROC_I_log_pfm<-performanceMeasures(ROC_I_log)
+I_AUC_NB_log_all<-AUC(ROC_I_log_pfm[[1]],ROC_I_log_pfm[[2]])
 
-ROC_ICS_log_pfm_PRH<-performanceMeasures(ROC_ICS_log_PRH)
-ICS_AUC_NB_log_PRH<-AUC(ROC_ICS_log_pfm_PRH[[1]],ROC_ICS_log_pfm_PRH[[2]])
+ROC_J_log_pfm<-performanceMeasures(ROC_J_log)
+J_AUC_NB_log_all<-AUC(ROC_J_log_pfm[[1]],ROC_J_log_pfm[[2]])
 
+###LOG REG JUST PASSED
 
-ROC_PS_log_pfm_TEH<-performanceMeasures(ROC_PS_log_TEH)
-PS_AUC_NB_log_TEH<-AUC(ROC_PS_log_pfm_TEH[[1]],ROC_PS_log_pfm_TEH[[2]])
+ROC_K_log_pfm<-performanceMeasures(ROC_K_log)
+K_AUC_NB_log_all<-AUC(ROC_K_log_pfm[[1]],ROC_K_log_pfm[[2]])
 
-ROC_CD_log_pfm_TEH<-performanceMeasures(ROC_CD_log_TEH)
-CD_AUC_NB_log_TEH<-AUC(ROC_CD_log_pfm_TEH[[1]],ROC_CD_log_pfm_TEH[[2]])
+ROC_L_log_pfm<-performanceMeasures(ROC_L_log)
+L_AUC_NB_log_all<-AUC(ROC_L_log_pfm[[1]],ROC_L_log_pfm[[2]])
 
-ROC_ICS_log_pfm_TEH<-performanceMeasures(ROC_ICS_log_TEH)
-ICS_AUC_NB_log_TEH<-AUC(ROC_ICS_log_pfm_TEH[[1]],ROC_ICS_log_pfm_TEH[[2]])
+ROC_M_log_pfm<-performanceMeasures(ROC_M_log)
+M_AUC_NB_log_all<-AUC(ROC_M_log_pfm[[1]],ROC_M_log_pfm[[2]])
 
-ROC_PS_log_pfm_PR<-performanceMeasures(ROC_PS_log_PR)
-PS_AUC_NB_log_PR<-AUC(ROC_PS_log_pfm_PR[[1]],ROC_PS_log_pfm_PR[[2]])
+ROC_N_log_pfm<-performanceMeasures(ROC_N_log)
+N_AUC_NB_log_all<-AUC(ROC_N_log_pfm[[1]],ROC_N_log_pfm[[2]])
 
-ROC_CD_log_pfm_PR<-performanceMeasures(ROC_CD_log_PR)
-CD_AUC_NB_log_PR<-AUC(ROC_CD_log_pfm_PR[[1]],ROC_CD_log_pfm_PR[[2]])
+#########LDA#########
+###### PASSED######
+ROC_A_lda_pfm<-performanceMeasures(ROC_A_lda)
+A_AUC_NB_lda_all<-AUC(ROC_A_lda_pfm[[1]],ROC_A_lda_pfm[[2]])
 
-ROC_ICS_log_pfm_PR<-performanceMeasures(ROC_ICS_log_PR)
-ICS_AUC_NB_log_PR<-AUC(ROC_ICS_log_pfm_PR[[1]],ROC_ICS_log_pfm_PR[[2]])
+ROC_B_lda_pfm<-performanceMeasures(ROC_B_lda)
+B_AUC_NB_lda_all<-AUC(ROC_B_lda_pfm[[1]],ROC_B_lda_pfm[[2]])
 
-ROC_PS_log_pfm_TE<-performanceMeasures(ROC_PS_log_TE)
-PS_AUC_NB_log_TE<-AUC(ROC_PS_log_pfm_TE[[1]],ROC_PS_log_pfm_TE[[2]])
+ROC_C_lda_pfm<-performanceMeasures(ROC_C_lda)
+C_AUC_NB_lda_all<-AUC(ROC_C_lda_pfm[[1]],ROC_C_lda_pfm[[2]])
 
-ROC_CD_log_pfm_TE<-performanceMeasures(ROC_CD_log_TE)
-CD_AUC_NB_log_TE<-AUC(ROC_CD_log_pfm_TE[[1]],ROC_CD_log_pfm_TE[[2]])
+ROC_D_lda_pfm<-performanceMeasures(ROC_D_lda)
+D_AUC_NB_lda_all<-AUC(ROC_D_lda_pfm[[1]],ROC_D_lda_pfm[[2]])
 
-ROC_ICS_log_pfm_TE<-performanceMeasures(ROC_ICS_log_TE)
-ICS_AUC_NB_log_TE<-AUC(ROC_ICS_log_pfm_TE[[1]],ROC_ICS_log_pfm_TE[[2]])
+ROC_E_lda_pfm<-performanceMeasures(ROC_E_lda)
+E_AUC_NB_lda_all<-AUC(ROC_E_lda_pfm[[1]],ROC_E_lda_pfm[[2]])
 
-ROC_PS_log_pfm_H<-performanceMeasures(ROC_PS_log_H)
-PS_AUC_NB_log_H<-AUC(ROC_PS_log_pfm_H[[1]],ROC_PS_log_pfm_H[[2]])
+ROC_F_lda_pfm<-performanceMeasures(ROC_F_lda)
+F_AUC_NB_lda_all<-AUC(ROC_F_lda_pfm[[1]],ROC_F_lda_pfm[[2]])
 
-ROC_CD_log_pfm_H<-performanceMeasures(ROC_CD_log_H)
-CD_AUC_NB_log_H<-AUC(ROC_CD_log_pfm_H[[1]],ROC_CD_log_pfm_H[[2]])
+ROC_G_lda_pfm<-performanceMeasures(ROC_G_lda)
+G_AUC_NB_lda_all<-AUC(ROC_G_lda_pfm[[1]],ROC_G_lda_pfm[[2]])
 
-ROC_ICS_log_pfm_H<-performanceMeasures(ROC_ICS_log_H)
-ICS_AUC_NB_log_H<-AUC(ROC_ICS_log_pfm_H[[1]],ROC_ICS_log_pfm_H[[2]])
+ROC_H_lda_pfm<-performanceMeasures(ROC_H_lda)
+H_AUC_NB_lda_all<-AUC(ROC_H_lda_pfm[[1]],ROC_H_lda_pfm[[2]])
 
+ROC_I_lda_pfm<-performanceMeasures(ROC_I_lda)
+I_AUC_NB_lda_all<-AUC(ROC_I_lda_pfm[[1]],ROC_I_lda_pfm[[2]])
 
-#########LDA
+ROC_J_lda_pfm<-performanceMeasures(ROC_J_lda)
+J_AUC_NB_lda_all<-AUC(ROC_J_lda_pfm[[1]],ROC_J_lda_pfm[[2]])
+######JUST PASSED######
 
-ROC_PS_lda_pfm<-performanceMeasures(ROC_PS_log)
-PS_AUC_NB_lda_all<-AUC(ROC_PS_lda_pfm[[1]],ROC_PS_lda_pfm[[2]])
+ROC_K_lda_pfm<-performanceMeasures(ROC_K_lda)
+K_AUC_NB_lda_all<-AUC(ROC_K_lda_pfm[[1]],ROC_K_lda_pfm[[2]])
 
-ROC_CD_lda_pfm<-performanceMeasures(ROC_CD_log)
-CD_AUC_NB_lda_all<-AUC(ROC_CD_lda_pfm[[1]],ROC_CD_lda_pfm[[2]])
+ROC_L_lda_pfm<-performanceMeasures(ROC_L_lda)
+L_AUC_NB_lda_all<-AUC(ROC_L_lda_pfm[[1]],ROC_L_lda_pfm[[2]])
 
-ROC_ICS_lda_pfm<-performanceMeasures(ROC_ICS_log)
-ICS_AUC_NB_lda_all<-AUC(ROC_ICS_lda_pfm[[1]],ROC_ICS_lda_pfm[[2]])
+ROC_M_lda_pfm<-performanceMeasures(ROC_M_lda)
+M_AUC_NB_lda_all<-AUC(ROC_M_lda_pfm[[1]],ROC_M_lda_pfm[[2]])
 
-ROC_PS_lda_pfm_PRTE<-performanceMeasures(ROC_PS_lda_PRTE)
-PS_AUC_NB_lda_PRTE<-AUC(ROC_PS_lda_pfm_PRTE[[1]],ROC_PS_lda_pfm_PRTE[[2]])
+ROC_N_lda_pfm<-performanceMeasures(ROC_N_lda)
+N_AUC_NB_lda_all<-AUC(ROC_N_lda_pfm[[1]],ROC_N_lda_pfm[[2]])
 
-ROC_CD_lda_pfm_PRTE<-performanceMeasures(ROC_CD_lda_PRTE)
-CD_AUC_NB_lda_PRTE<-AUC(ROC_CD_lda_pfm_PRTE[[1]],ROC_CD_lda_pfm_PRTE[[2]])
 
-ROC_ICS_lda_pfm_PRTE<-performanceMeasures(ROC_ICS_lda_PRTE)
-ICS_AUC_NB_lda_PRTE<-AUC(ROC_ICS_lda_pfm_PRTE[[1]],ROC_ICS_lda_pfm_PRTE[[2]])
+##########QDA#########
+######PASSED######
+ROC_A_qda_pfm<-performanceMeasures(ROC_A_qda)
+A_AUC_NB_qda_all<-AUC(ROC_A_qda_pfm[[1]],ROC_A_qda_pfm[[2]])
 
+ROC_B_qda_pfm<-performanceMeasures(ROC_B_qda)
+B_AUC_NB_qda_all<-AUC(ROC_B_qda_pfm[[1]],ROC_B_qda_pfm[[2]])
 
-ROC_PS_lda_pfm_PRH<-performanceMeasures(ROC_PS_lda_PRH)
-PS_AUC_NB_lda_PRH<-AUC(ROC_PS_lda_pfm_PRH[[1]],ROC_PS_lda_pfm_PRH[[2]])
+ROC_C_qda_pfm<-performanceMeasures(ROC_C_qda)
+C_AUC_NB_qda_all<-AUC(ROC_C_qda_pfm[[1]],ROC_C_qda_pfm[[2]])
 
-ROC_CD_lda_pfm_PRH<-performanceMeasures(ROC_CD_lda_PRH)
-CD_AUC_NB_lda_PRH<-AUC(ROC_CD_lda_pfm_PRH[[1]],ROC_CD_lda_pfm_PRH[[2]])
+ROC_D_qda_pfm<-performanceMeasures(ROC_D_qda)
+D_AUC_NB_qda_all<-AUC(ROC_D_qda_pfm[[1]],ROC_D_qda_pfm[[2]])
 
-ROC_ICS_lda_pfm_PRH<-performanceMeasures(ROC_ICS_lda_PRH)
-ICS_AUC_NB_lda_PRH<-AUC(ROC_ICS_lda_pfm_PRH[[1]],ROC_ICS_lda_pfm_PRH[[2]])
+ROC_E_qda_pfm<-performanceMeasures(ROC_E_qda)
+E_AUC_NB_qda_all<-AUC(ROC_E_qda_pfm[[1]],ROC_E_qda_pfm[[2]])
 
+ROC_F_qda_pfm<-performanceMeasures(ROC_F_qda)
+F_AUC_NB_qda_all<-AUC(ROC_F_qda_pfm[[1]],ROC_F_qda_pfm[[2]])
 
-ROC_PS_lda_pfm_TEH<-performanceMeasures(ROC_PS_lda_TEH)
-PS_AUC_NB_lda_TEH<-AUC(ROC_PS_lda_pfm_TEH[[1]],ROC_PS_lda_pfm_TEH[[2]])
+ROC_G_qda_pfm<-performanceMeasures(ROC_G_qda)
+G_AUC_NB_qda_all<-AUC(ROC_G_qda_pfm[[1]],ROC_G_qda_pfm[[2]])
 
-ROC_CD_lda_pfm_TEH<-performanceMeasures(ROC_CD_lda_TEH)
-CD_AUC_NB_lda_TEH<-AUC(ROC_CD_lda_pfm_TEH[[1]],ROC_CD_lda_pfm_TEH[[2]])
+ROC_H_qda_pfm<-performanceMeasures(ROC_H_qda)
+H_AUC_NB_qda_all<-AUC(ROC_H_qda_pfm[[1]],ROC_H_qda_pfm[[2]])
 
-ROC_ICS_lda_pfm_TEH<-performanceMeasures(ROC_ICS_lda_TEH)
-ICS_AUC_NB_lda_TEH<-AUC(ROC_ICS_lda_pfm_TEH[[1]],ROC_ICS_lda_pfm_TEH[[2]])
+ROC_I_qda_pfm<-performanceMeasures(ROC_I_qda)
+I_AUC_NB_qda_all<-AUC(ROC_I_qda_pfm[[1]],ROC_I_qda_pfm[[2]])
 
-ROC_PS_lda_pfm_PR<-performanceMeasures(ROC_PS_lda_PR)
-PS_AUC_NB_lda_PR<-AUC(ROC_PS_lda_pfm_PR[[1]],ROC_PS_lda_pfm_PR[[2]])
+ROC_J_qda_pfm<-performanceMeasures(ROC_J_qda)
+J_AUC_NB_qda_all<-AUC(ROC_J_qda_pfm[[1]],ROC_J_qda_pfm[[2]])
 
-ROC_CD_lda_pfm_PR<-performanceMeasures(ROC_CD_lda_PR)
-CD_AUC_NB_lda_PR<-AUC(ROC_CD_lda_pfm_PR[[1]],ROC_CD_lda_pfm_PR[[2]])
+ROC_K_qda_pfm<-performanceMeasures(ROC_K_qda)
+K_AUC_NB_qda_all<-AUC(ROC_K_qda_pfm[[1]],ROC_K_qda_pfm[[2]])
 
-ROC_ICS_lda_pfm_PR<-performanceMeasures(ROC_ICS_lda_PR)
-ICS_AUC_NB_lda_PR<-AUC(ROC_ICS_lda_pfm_PR[[1]],ROC_ICS_lda_pfm_PR[[2]])
+ROC_L_qda_pfm<-performanceMeasures(ROC_L_qda)
+L_AUC_NB_qda_all<-AUC(ROC_L_qda_pfm[[1]],ROC_L_qda_pfm[[2]])
 
-ROC_PS_lda_pfm_TE<-performanceMeasures(ROC_PS_lda_TE)
-PS_AUC_NB_lda_TE<-AUC(ROC_PS_lda_pfm_TE[[1]],ROC_PS_lda_pfm_TE[[2]])
+ROC_M_qda_pfm<-performanceMeasures(ROC_M_qda)
+M_AUC_NB_qda_all<-AUC(ROC_M_qda_pfm[[1]],ROC_M_qda_pfm[[2]])
 
-ROC_CD_lda_pfm_TE<-performanceMeasures(ROC_CD_lda_TE)
-CD_AUC_NB_lda_TE<-AUC(ROC_CD_lda_pfm_TE[[1]],ROC_CD_lda_pfm_TE[[2]])
+ROC_N_qda_pfm<-performanceMeasures(ROC_N_qda)
+N_AUC_NB_qda_all<-AUC(ROC_N_qda_pfm[[1]],ROC_N_qda_pfm[[2]])
 
-ROC_ICS_lda_pfm_TE<-performanceMeasures(ROC_ICS_lda_TE)
-ICS_AUC_NB_lda_TE<-AUC(ROC_ICS_lda_pfm_TE[[1]],ROC_ICS_lda_pfm_TE[[2]])
+ROC_O_qda_pfm<-performanceMeasures(ROC_O_qda)
+O_AUC_NB_qda_all<-AUC(ROC_O_qda_pfm[[1]],ROC_O_qda_pfm[[2]])
 
-ROC_PS_lda_pfm_H<-performanceMeasures(ROC_PS_lda_H)
-PS_AUC_NB_lda_H<-AUC(ROC_PS_lda_pfm_H[[1]],ROC_PS_lda_pfm_H[[2]])
+ROC_P_qda_pfm<-performanceMeasures(ROC_P_qda)
+P_AUC_NB_qda_all<-AUC(ROC_P_qda_pfm[[1]],ROC_P_qda_pfm[[2]])
 
-ROC_CD_lda_pfm_H<-performanceMeasures(ROC_CD_lda_H)
-CD_AUC_NB_lda_H<-AUC(ROC_CD_lda_pfm_H[[1]],ROC_CD_lda_pfm_H[[2]])
+ROC_Q_qda_pfm<-performanceMeasures(ROC_Q_qda)
+Q_AUC_NB_qda_all<-AUC(ROC_Q_qda_pfm[[1]],ROC_Q_qda_pfm[[2]])
 
-ROC_ICS_lda_pfm_H<-performanceMeasures(ROC_ICS_lda_H)
-ICS_AUC_NB_lda_H<-AUC(ROC_ICS_lda_pfm_H[[1]],ROC_ICS_lda_pfm_H[[2]])
+ROC_R_qda_pfm<-performanceMeasures(ROC_R_qda)
+R_AUC_NB_qda_all<-AUC(ROC_R_qda_pfm[[1]],ROC_R_qda_pfm[[2]])
 
-#QDA
+ROC_S_qda_pfm<-performanceMeasures(ROC_S_qda)
+S_AUC_NB_qda_all<-AUC(ROC_S_qda_pfm[[1]],ROC_S_qda_pfm[[2]])
 
-ROC_PS_qda_pfm<-performanceMeasures(ROC_PS_log)
-PS_AUC_NB_qda_all<-AUC(ROC_PS_qda_pfm[[1]],ROC_PS_qda_pfm[[2]])
+ROC_T_qda_pfm<-performanceMeasures(ROC_T_qda)
+T_AUC_NB_qda_all<-AUC(ROC_T_qda_pfm[[1]],ROC_T_qda_pfm[[2]])
 
-ROC_CD_qda_pfm<-performanceMeasures(ROC_CD_log)
-CD_AUC_NB_qda_all<-AUC(ROC_CD_qda_pfm[[1]],ROC_CD_qda_pfm[[2]])
+ROC_U_qda_pfm<-performanceMeasures(ROC_U_qda)
+U_AUC_NB_qda_all<-AUC(ROC_U_qda_pfm[[1]],ROC_U_qda_pfm[[2]])
 
-ROC_ICS_qda_pfm<-performanceMeasures(ROC_ICS_log)
-ICS_AUC_NB_qda_all<-AUC(ROC_ICS_qda_pfm[[1]],ROC_ICS_qda_pfm[[2]])
+ROC_V_qda_pfm<-performanceMeasures(ROC_V_qda)
+V_AUC_NB_qda_all<-AUC(ROC_V_qda_pfm[[1]],ROC_V_qda_pfm[[2]])
+######JUST PASSED######
 
-ROC_PS_qda_pfm_PRTE<-performanceMeasures(ROC_PS_qda_PRTE)
-PS_AUC_NB_qda_PRTE<-AUC(ROC_PS_qda_pfm_PRTE[[1]],ROC_PS_qda_pfm_PRTE[[2]])
+ROC_W_qda_pfm<-performanceMeasures(ROC_W_qda)
+W_AUC_NB_qda_all<-AUC(ROC_W_qda_pfm[[1]],ROC_W_qda_pfm[[2]])
 
-ROC_CD_qda_pfm_PRTE<-performanceMeasures(ROC_CD_qda_PRTE)
-CD_AUC_NB_qda_PRTE<-AUC(ROC_CD_qda_pfm_PRTE[[1]],ROC_CD_qda_pfm_PRTE[[2]])
+ROC_X_qda_pfm<-performanceMeasures(ROC_X_qda)
+X_AUC_NB_qda_all<-AUC(ROC_X_qda_pfm[[1]],ROC_X_qda_pfm[[2]])
 
-ROC_ICS_qda_pfm_PRTE<-performanceMeasures(ROC_ICS_qda_PRTE)
-ICS_AUC_NB_qda_PRTE<-AUC(ROC_ICS_qda_pfm_PRTE[[1]],ROC_ICS_qda_pfm_PRTE[[2]])
+##########KNN#########
+###PASSED#####
+ROC_A_log_pfm<-performanceMeasures(ROC_A_log)
+A_AUC_NB_log_all<-AUC(ROC_A_log_pfm[[1]],ROC_A_log_pfm[[2]])
 
+ROC_B_log_pfm<-performanceMeasures(ROC_B_log)
+B_AUC_NB_log_all<-AUC(ROC_B_log_pfm[[1]],ROC_B_log_pfm[[2]])
 
-ROC_PS_qda_pfm_PRH<-performanceMeasures(ROC_PS_qda_PRH)
-PS_AUC_NB_qda_PRH<-AUC(ROC_PS_qda_pfm_PRH[[1]],ROC_PS_qda_pfm_PRH[[2]])
+ROC_C_log_pfm<-performanceMeasures(ROC_C_log)
+C_AUC_NB_log_all<-AUC(ROC_C_log_pfm[[1]],ROC_C_log_pfm[[2]])
 
-ROC_CD_qda_pfm_PRH<-performanceMeasures(ROC_CD_qda_PRH)
-CD_AUC_NB_qda_PRH<-AUC(ROC_CD_qda_pfm_PRH[[1]],ROC_CD_qda_pfm_PRH[[2]])
+ROC_D_log_pfm<-performanceMeasures(ROC_D_log)
+D_AUC_NB_log_all<-AUC(ROC_D_log_pfm[[1]],ROC_D_log_pfm[[2]])
+###JUST PASSED#####
 
-ROC_ICS_qda_pfm_PRH<-performanceMeasures(ROC_ICS_qda_PRH)
-ICS_AUC_NB_qda_PRH<-AUC(ROC_ICS_qda_pfm_PRH[[1]],ROC_ICS_qda_pfm_PRH[[2]])
+ROC_E_log_pfm<-performanceMeasures(ROC_E_log)
+E_AUC_NB_log_all<-AUC(ROC_E_log_pfm[[1]],ROC_E_log_pfm[[2]])
 
+ROC_F_log_pfm<-performanceMeasures(ROC_F_log)
+F_AUC_NB_log_all<-AUC(ROC_F_log_pfm[[1]],ROC_F_log_pfm[[2]])
 
-ROC_PS_qda_pfm_TEH<-performanceMeasures(ROC_PS_qda_TEH)
-PS_AUC_NB_qda_TEH<-AUC(ROC_PS_qda_pfm_TEH[[1]],ROC_PS_qda_pfm_TEH[[2]])
+ROC_G_log_pfm<-performanceMeasures(ROC_G_log)
+G_AUC_NB_log_all<-AUC(ROC_G_log_pfm[[1]],ROC_G_log_pfm[[2]])
 
-ROC_CD_qda_pfm_TEH<-performanceMeasures(ROC_CD_qda_TEH)
-CD_AUC_NB_qda_TEH<-AUC(ROC_CD_qda_pfm_TEH[[1]],ROC_CD_qda_pfm_TEH[[2]])
+ROC_H_log_pfm<-performanceMeasures(ROC_H_log)
+H_AUC_NB_log_all<-AUC(ROC_H_log_pfm[[1]],ROC_H_log_pfm[[2]])
 
-ROC_ICS_qda_pfm_TEH<-performanceMeasures(ROC_ICS_qda_TEH)
-ICS_AUC_NB_qda_TEH<-AUC(ROC_ICS_qda_pfm_TEH[[1]],ROC_ICS_qda_pfm_TEH[[2]])
 
-ROC_PS_qda_pfm_PR<-performanceMeasures(ROC_PS_qda_PR)
-PS_AUC_NB_qda_PR<-AUC(ROC_PS_qda_pfm_PR[[1]],ROC_PS_qda_pfm_PR[[2]])
-
-ROC_CD_qda_pfm_PR<-performanceMeasures(ROC_CD_qda_PR)
-CD_AUC_NB_qda_PR<-AUC(ROC_CD_qda_pfm_PR[[1]],ROC_CD_qda_pfm_PR[[2]])
-
-ROC_ICS_qda_pfm_PR<-performanceMeasures(ROC_ICS_qda_PR)
-ICS_AUC_NB_qda_PR<-AUC(ROC_ICS_qda_pfm_PR[[1]],ROC_ICS_qda_pfm_PR[[2]])
-
-ROC_PS_qda_pfm_TE<-performanceMeasures(ROC_PS_qda_TE)
-PS_AUC_NB_qda_TE<-AUC(ROC_PS_qda_pfm_TE[[1]],ROC_PS_qda_pfm_TE[[2]])
-
-ROC_CD_qda_pfm_TE<-performanceMeasures(ROC_CD_qda_TE)
-CD_AUC_NB_qda_TE<-AUC(ROC_CD_qda_pfm_TE[[1]],ROC_CD_qda_pfm_TE[[2]])
-
-ROC_ICS_qda_pfm_TE<-performanceMeasures(ROC_ICS_qda_TE)
-ICS_AUC_NB_qda_TE<-AUC(ROC_ICS_qda_pfm_TE[[1]],ROC_ICS_qda_pfm_TE[[2]])
-
-ROC_PS_qda_pfm_H<-performanceMeasures(ROC_PS_qda_H)
-PS_AUC_NB_qda_H<-AUC(ROC_PS_qda_pfm_H[[1]],ROC_PS_qda_pfm_H[[2]])
-
-ROC_CD_qda_pfm_H<-performanceMeasures(ROC_CD_qda_H)
-CD_AUC_NB_qda_H<-AUC(ROC_CD_qda_pfm_H[[1]],ROC_CD_qda_pfm_H[[2]])
-
-ROC_ICS_qda_pfm_H<-performanceMeasures(ROC_ICS_qda_H)
-ICS_AUC_NB_qda_H<-AUC(ROC_ICS_qda_pfm_H[[1]],ROC_ICS_qda_pfm_H[[2]])
-
-#KNN
-ROC_PS_knn_pfm<-performanceMeasures(ROC_PS_knn,M=20)
-PS_mSR_NB_knn_all<-colMeans(ROC_PS_knn_pfm[[4]])
-
-ROC_CD_knn_pfm<-performanceMeasures(ROC_CD_knn,M=20)
-CD_mSR_NB_knn_all<-colMeans(ROC_CD_knn_pfm[[4]])
-
-ROC_ICS_knn_pfm<-performanceMeasures(ROC_ICS_knn,M=20)
-ICS_mSR_NB_knn_all<-colMeans(ROC_ICS_knn_pfm[[4]])
-
-ROC_PS_knn_pfm_PRTE<-performanceMeasures(ROC_PS_knn,M=20)
-PS_mSR_NB_knn_PRTE<-colMeans(ROC_PS_knn_pfm_PRTE[[4]])
-
-ROC_CD_knn_pfm_PRTE<-performanceMeasures(ROC_CD_knn,M=20)
-CD_mSR_NB_knn_PRTE<-colMeans(ROC_CD_knn_pfm_PRTE[[4]])
-
-ROC_ICS_knn_pfm_PRTE<-performanceMeasures(ROC_ICS_knn,M=20)
-ICS_mSR_NB_knn_PRTE<-colMeans(ROC_ICS_knn_pfm_PRTE[[4]])
-
-ROC_PS_knn_pfm_PRH<-performanceMeasures(ROC_PS_knn,M=20)
-PS_mSR_NB_knn_PRH<-colMeans(ROC_PS_knn_pfm_PRH[[4]])
-
-ROC_CD_knn_pfm_PRH<-performanceMeasures(ROC_CD_knn,M=20)
-CD_mSR_NB_knn_PRH<-colMeans(ROC_CD_knn_pfm_PRH[[4]])
-
-ROC_ICS_knn_pfm_PRH<-performanceMeasures(ROC_ICS_knn,M=20)
-ICS_mSR_NB_knn_PRH<-colMeans(ROC_ICS_knn_pfm_PRH[[4]])
-
-ROC_PS_knn_pfm_TEH<-performanceMeasures(ROC_PS_knn,M=20)
-PS_mSR_NB_knn_TEH<-colMeans(ROC_PS_knn_pfm_TEH[[4]])
-
-ROC_CD_knn_pfm_TEH<-performanceMeasures(ROC_CD_knn,M=20)
-CD_mSR_NB_knn_TEH<-colMeans(ROC_CD_knn_pfm_TEH[[4]])
-
-ROC_ICS_knn_pfm_TEH<-performanceMeasures(ROC_ICS_knn,M=20)
-ICS_mSR_NB_knn_TEH<-colMeans(ROC_ICS_knn_pfm_TEH[[4]])
-
-ROC_PS_knn_pfm_PR<-performanceMeasures(ROC_PS_knn,M=20)
-PS_mSR_NB_knn_PR<-colMeans(ROC_PS_knn_pfm_PR[[4]])
-
-ROC_CD_knn_pfm_PR<-performanceMeasures(ROC_CD_knn,M=20)
-CD_mSR_NB_knn_PR<-colMeans(ROC_CD_knn_pfm_PR[[4]])
-
-ROC_ICS_knn_pfm_PR<-performanceMeasures(ROC_ICS_knn,M=20)
-ICS_mSR_NB_knn_PR<-colMeans(ROC_ICS_knn_pfm_PR[[4]])
-
-ROC_PS_knn_pfm_TE<-performanceMeasures(ROC_PS_knn,M=20)
-PS_mSR_NB_knn_TE<-colMeans(ROC_PS_knn_pfm_TE[[4]])
-
-ROC_CD_knn_pfm_TE<-performanceMeasures(ROC_CD_knn,M=20)
-CD_mSR_NB_knn_TE<-colMeans(ROC_CD_knn_pfm_TE[[4]])
-
-ROC_ICS_knn_pfm_TE<-performanceMeasures(ROC_ICS_knn,M=20)
-ICS_mSR_NB_knn_TE<-colMeans(ROC_ICS_knn_pfm_TE[[4]])
-
-ROC_PS_knn_pfm_H<-performanceMeasures(ROC_PS_knn,M=20)
-PS_mSR_NB_knn_all<-colMeans(ROC_PS_knn_pfm_H[[4]])
-
-ROC_CD_knn_pfm_H<-performanceMeasures(ROC_CD_knn,M=20)
-CD_mSR_NB_knn_H<-colMeans(ROC_CD_knn_pfm_H[[4]])
-
-ROC_ICS_knn_pfm_H<-performanceMeasures(ROC_ICS_knn,M=20)
-ICS_mSR_NB_knn_H<-colMeans(ROC_ICS_knn_pfm_H[[4]])
-
-#OUTCOME = JUSTPASSED
-#Logistic Regression
-
-ROC_PS_justpass_log_pfm<-performanceMeasures(ROC_PS_justpass_log)
-PS_AUC_NB_justpass_log_all<-AUC(ROC_PS_justpass_log_pfm[[1]],ROC_PS_justpass_log_pfm[[2]])
-
-ROC_CD_justpass_log_pfm<-performanceMeasures(ROC_CD_justpass_log)
-CD_AUC_NB_justpass_log_all<-AUC(ROC_CD_justpass_log_pfm[[1]],ROC_CD_justpass_log_pfm[[2]])
-
-ROC_ICS_justpass_log_pfm<-performanceMeasures(ROC_ICS_justpass_log)
-ICS_AUC_NB_justpass_log_all<-AUC(ROC_ICS_justpass_log_pfm[[1]],ROC_ICS_justpass_log_pfm[[2]])
-
-
-
-ROC_PS_justpass_log_pfm_PRTE<-performanceMeasures(ROC_PS_justpass_log_PRTE)
-PS_AUC_NB_justpass_log_PRTE<-AUC(ROC_PS_justpass_log_pfm_PRTE[[1]],ROC_PS_justpass_log_pfm_PRTE[[2]])
-
-ROC_CD_justpass_log_pfm_PRTE<-performanceMeasures(ROC_CD_justpass_log_PRTE)
-CD_AUC_NB_justpass_log_PRTE<-AUC(ROC_CD_justpass_log_pfm_PRTE[[1]],ROC_CD_justpass_log_pfm_PRTE[[2]])
-
-ROC_ICS_justpass_log_pfm_PRTE<-performanceMeasures(ROC_ICS_justpass_log_PRTE)
-ICS_AUC_NB_justpass_log_PRTE<-AUC(ROC_ICS_justpass_log_pfm_PRTE[[1]],ROC_ICS_justpass_log_pfm_PRTE[[2]])
-
-
-ROC_PS_justpass_log_pfm_PRH<-performanceMeasures(ROC_PS_justpass_log_PRH)
-PS_AUC_NB_justpass_log_PRH<-AUC(ROC_PS_justpass_log_pfm_PRH[[1]],ROC_PS_justpass_log_pfm_PRH[[2]])
-
-ROC_CD_justpass_log_pfm_PRH<-performanceMeasures(ROC_CD_justpass_log_PRH)
-CD_AUC_NB_justpass_log_PRH<-AUC(ROC_CD_justpass_log_pfm_PRH[[1]],ROC_CD_justpass_log_pfm_PRH[[2]])
-
-ROC_ICS_justpass_log_pfm_PRH<-performanceMeasures(ROC_ICS_justpass_log_PRH)
-ICS_AUC_NB_justpass_log_PRH<-AUC(ROC_ICS_justpass_log_pfm_PRH[[1]],ROC_ICS_justpass_log_pfm_PRH[[2]])
-
-
-ROC_PS_justpass_log_pfm_TEH<-performanceMeasures(ROC_PS_justpass_log_TEH)
-PS_AUC_NB_justpass_log_TEH<-AUC(ROC_PS_justpass_log_pfm_TEH[[1]],ROC_PS_justpass_log_pfm_TEH[[2]])
-
-ROC_CD_justpass_log_pfm_TEH<-performanceMeasures(ROC_CD_justpass_log_TEH)
-CD_AUC_NB_justpass_log_TEH<-AUC(ROC_CD_justpass_log_pfm_TEH[[1]],ROC_CD_justpass_log_pfm_TEH[[2]])
-
-ROC_ICS_justpass_log_pfm_TEH<-performanceMeasures(ROC_ICS_justpass_log_TEH)
-ICS_AUC_NB_justpass_log_TEH<-AUC(ROC_ICS_justpass_log_pfm_TEH[[1]],ROC_ICS_justpass_log_pfm_TEH[[2]])
-
-ROC_PS_justpass_log_pfm_PR<-performanceMeasures(ROC_PS_justpass_log_PR)
-PS_AUC_NB_justpass_log_PR<-AUC(ROC_PS_justpass_log_pfm_PR[[1]],ROC_PS_justpass_log_pfm_PR[[2]])
-
-ROC_CD_justpass_log_pfm_PR<-performanceMeasures(ROC_CD_justpass_log_PR)
-CD_AUC_NB_justpass_log_PR<-AUC(ROC_CD_justpass_log_pfm_PR[[1]],ROC_CD_justpass_log_pfm_PR[[2]])
-
-ROC_ICS_justpass_log_pfm_PR<-performanceMeasures(ROC_ICS_justpass_log_PR)
-ICS_AUC_NB_justpass_log_PR<-AUC(ROC_ICS_justpass_log_pfm_PR[[1]],ROC_ICS_justpass_log_pfm_PR[[2]])
-
-ROC_PS_justpass_log_pfm_TE<-performanceMeasures(ROC_PS_justpass_log_TE)
-PS_AUC_NB_justpass_log_TE<-AUC(ROC_PS_justpass_log_pfm_TE[[1]],ROC_PS_justpass_log_pfm_TE[[2]])
-
-ROC_CD_justpass_log_pfm_TE<-performanceMeasures(ROC_CD_justpass_log_TE)
-CD_AUC_NB_justpass_log_TE<-AUC(ROC_CD_justpass_log_pfm_TE[[1]],ROC_CD_justpass_log_pfm_TE[[2]])
-
-ROC_ICS_justpass_log_pfm_TE<-performanceMeasures(ROC_ICS_justpass_log_TE)
-ICS_AUC_NB_justpass_log_TE<-AUC(ROC_ICS_justpass_log_pfm_TE[[1]],ROC_ICS_justpass_log_pfm_TE[[2]])
-
-ROC_PS_justpass_log_pfm_H<-performanceMeasures(ROC_PS_justpass_log_H)
-PS_AUC_NB_justpass_log_H<-AUC(ROC_PS_justpass_log_pfm_H[[1]],ROC_PS_justpass_log_pfm_H[[2]])
-
-ROC_CD_justpass_log_pfm_H<-performanceMeasures(ROC_CD_justpass_log_H)
-CD_AUC_NB_justpass_log_H<-AUC(ROC_CD_justpass_log_pfm_H[[1]],ROC_CD_justpass_log_pfm_H[[2]])
-
-ROC_ICS_justpass_log_pfm_H<-performanceMeasures(ROC_ICS_justpass_log_H)
-ICS_AUC_NB_justpass_log_H<-AUC(ROC_ICS_justpass_log_pfm_H[[1]],ROC_ICS_justpass_log_pfm_H[[2]])
-
-
-#########LDA
-
-ROC_PS_justpass_lda_pfm<-performanceMeasures(ROC_PS_justpass_log)
-PS_AUC_NB_justpass_lda_all<-AUC(ROC_PS_justpass_lda_pfm[[1]],ROC_PS_justpass_lda_pfm[[2]])
-
-ROC_CD_justpass_lda_pfm<-performanceMeasures(ROC_CD_justpass_log)
-CD_AUC_NB_justpass_lda_all<-AUC(ROC_CD_justpass_lda_pfm[[1]],ROC_CD_justpass_lda_pfm[[2]])
-
-ROC_ICS_justpass_lda_pfm<-performanceMeasures(ROC_ICS_justpass_log)
-ICS_AUC_NB_justpass_lda_all<-AUC(ROC_ICS_justpass_lda_pfm[[1]],ROC_ICS_justpass_lda_pfm[[2]])
-
-ROC_PS_justpass_lda_pfm_PRTE<-performanceMeasures(ROC_PS_justpass_lda_PRTE)
-PS_AUC_NB_justpass_lda_PRTE<-AUC(ROC_PS_justpass_lda_pfm_PRTE[[1]],ROC_PS_justpass_lda_pfm_PRTE[[2]])
-
-ROC_CD_justpass_lda_pfm_PRTE<-performanceMeasures(ROC_CD_justpass_lda_PRTE)
-CD_AUC_NB_justpass_lda_PRTE<-AUC(ROC_CD_justpass_lda_pfm_PRTE[[1]],ROC_CD_justpass_lda_pfm_PRTE[[2]])
-
-ROC_ICS_justpass_lda_pfm_PRTE<-performanceMeasures(ROC_ICS_justpass_lda_PRTE)
-ICS_AUC_NB_justpass_lda_PRTE<-AUC(ROC_ICS_justpass_lda_pfm_PRTE[[1]],ROC_ICS_justpass_lda_pfm_PRTE[[2]])
-
-
-ROC_PS_justpass_lda_pfm_PRH<-performanceMeasures(ROC_PS_justpass_lda_PRH)
-PS_AUC_NB_justpass_lda_PRH<-AUC(ROC_PS_justpass_lda_pfm_PRH[[1]],ROC_PS_justpass_lda_pfm_PRH[[2]])
-
-ROC_CD_justpass_lda_pfm_PRH<-performanceMeasures(ROC_CD_justpass_lda_PRH)
-CD_AUC_NB_justpass_lda_PRH<-AUC(ROC_CD_justpass_lda_pfm_PRH[[1]],ROC_CD_justpass_lda_pfm_PRH[[2]])
-
-ROC_ICS_justpass_lda_pfm_PRH<-performanceMeasures(ROC_ICS_justpass_lda_PRH)
-ICS_AUC_NB_justpass_lda_PRH<-AUC(ROC_ICS_justpass_lda_pfm_PRH[[1]],ROC_ICS_justpass_lda_pfm_PRH[[2]])
-
-
-ROC_PS_justpass_lda_pfm_TEH<-performanceMeasures(ROC_PS_justpass_lda_TEH)
-PS_AUC_NB_justpass_lda_TEH<-AUC(ROC_PS_justpass_lda_pfm_TEH[[1]],ROC_PS_justpass_lda_pfm_TEH[[2]])
-
-ROC_CD_justpass_lda_pfm_TEH<-performanceMeasures(ROC_CD_justpass_lda_TEH)
-CD_AUC_NB_justpass_lda_TEH<-AUC(ROC_CD_justpass_lda_pfm_TEH[[1]],ROC_CD_justpass_lda_pfm_TEH[[2]])
-
-ROC_ICS_justpass_lda_pfm_TEH<-performanceMeasures(ROC_ICS_justpass_lda_TEH)
-ICS_AUC_NB_justpass_lda_TEH<-AUC(ROC_ICS_justpass_lda_pfm_TEH[[1]],ROC_ICS_justpass_lda_pfm_TEH[[2]])
-
-ROC_PS_justpass_lda_pfm_PR<-performanceMeasures(ROC_PS_justpass_lda_PR)
-PS_AUC_NB_justpass_lda_PR<-AUC(ROC_PS_justpass_lda_pfm_PR[[1]],ROC_PS_justpass_lda_pfm_PR[[2]])
-
-ROC_CD_justpass_lda_pfm_PR<-performanceMeasures(ROC_CD_justpass_lda_PR)
-CD_AUC_NB_justpass_lda_PR<-AUC(ROC_CD_justpass_lda_pfm_PR[[1]],ROC_CD_justpass_lda_pfm_PR[[2]])
-
-ROC_ICS_justpass_lda_pfm_PR<-performanceMeasures(ROC_ICS_justpass_lda_PR)
-ICS_AUC_NB_justpass_lda_PR<-AUC(ROC_ICS_justpass_lda_pfm_PR[[1]],ROC_ICS_justpass_lda_pfm_PR[[2]])
-
-ROC_PS_justpass_lda_pfm_TE<-performanceMeasures(ROC_PS_justpass_lda_TE)
-PS_AUC_NB_justpass_lda_TE<-AUC(ROC_PS_justpass_lda_pfm_TE[[1]],ROC_PS_justpass_lda_pfm_TE[[2]])
-
-ROC_CD_justpass_lda_pfm_TE<-performanceMeasures(ROC_CD_justpass_lda_TE)
-CD_AUC_NB_justpass_lda_TE<-AUC(ROC_CD_justpass_lda_pfm_TE[[1]],ROC_CD_justpass_lda_pfm_TE[[2]])
-
-ROC_ICS_justpass_lda_pfm_TE<-performanceMeasures(ROC_ICS_justpass_lda_TE)
-ICS_AUC_NB_justpass_lda_TE<-AUC(ROC_ICS_justpass_lda_pfm_TE[[1]],ROC_ICS_justpass_lda_pfm_TE[[2]])
-
-ROC_PS_justpass_lda_pfm_H<-performanceMeasures(ROC_PS_justpass_lda_H)
-PS_AUC_NB_justpass_lda_H<-AUC(ROC_PS_justpass_lda_pfm_H[[1]],ROC_PS_justpass_lda_pfm_H[[2]])
-
-ROC_CD_justpass_lda_pfm_H<-performanceMeasures(ROC_CD_justpass_lda_H)
-CD_AUC_NB_justpass_lda_H<-AUC(ROC_CD_justpass_lda_pfm_H[[1]],ROC_CD_justpass_lda_pfm_H[[2]])
-
-ROC_ICS_justpass_lda_pfm_H<-performanceMeasures(ROC_ICS_justpass_lda_H)
-ICS_AUC_NB_justpass_lda_H<-AUC(ROC_ICS_justpass_lda_pfm_H[[1]],ROC_ICS_justpass_lda_pfm_H[[2]])
-
-#QDA
-
-ROC_PS_justpass_qda_pfm<-performanceMeasures(ROC_PS_justpass_log)
-PS_AUC_NB_justpass_qda_all<-AUC(ROC_PS_justpass_qda_pfm[[1]],ROC_PS_justpass_qda_pfm[[2]])
-
-ROC_CD_justpass_qda_pfm<-performanceMeasures(ROC_CD_justpass_log)
-CD_AUC_NB_justpass_qda_all<-AUC(ROC_CD_justpass_qda_pfm[[1]],ROC_CD_justpass_qda_pfm[[2]])
-
-ROC_ICS_justpass_qda_pfm<-performanceMeasures(ROC_ICS_justpass_log)
-ICS_AUC_NB_justpass_qda_all<-AUC(ROC_ICS_justpass_qda_pfm[[1]],ROC_ICS_justpass_qda_pfm[[2]])
-
-ROC_PS_justpass_qda_pfm_PRTE<-performanceMeasures(ROC_PS_justpass_qda_PRTE)
-PS_AUC_NB_justpass_qda_PRTE<-AUC(ROC_PS_justpass_qda_pfm_PRTE[[1]],ROC_PS_justpass_qda_pfm_PRTE[[2]])
-
-ROC_CD_justpass_qda_pfm_PRTE<-performanceMeasures(ROC_CD_justpass_qda_PRTE)
-CD_AUC_NB_justpass_qda_PRTE<-AUC(ROC_CD_justpass_qda_pfm_PRTE[[1]],ROC_CD_justpass_qda_pfm_PRTE[[2]])
-
-ROC_ICS_justpass_qda_pfm_PRTE<-performanceMeasures(ROC_ICS_justpass_qda_PRTE)
-ICS_AUC_NB_justpass_qda_PRTE<-AUC(ROC_ICS_justpass_qda_pfm_PRTE[[1]],ROC_ICS_justpass_qda_pfm_PRTE[[2]])
-
-
-ROC_PS_justpass_qda_pfm_PRH<-performanceMeasures(ROC_PS_justpass_qda_PRH)
-PS_AUC_NB_justpass_qda_PRH<-AUC(ROC_PS_justpass_qda_pfm_PRH[[1]],ROC_PS_justpass_qda_pfm_PRH[[2]])
-
-ROC_CD_justpass_qda_pfm_PRH<-performanceMeasures(ROC_CD_justpass_qda_PRH)
-CD_AUC_NB_justpass_qda_PRH<-AUC(ROC_CD_justpass_qda_pfm_PRH[[1]],ROC_CD_justpass_qda_pfm_PRH[[2]])
-
-ROC_ICS_justpass_qda_pfm_PRH<-performanceMeasures(ROC_ICS_justpass_qda_PRH)
-ICS_AUC_NB_justpass_qda_PRH<-AUC(ROC_ICS_justpass_qda_pfm_PRH[[1]],ROC_ICS_justpass_qda_pfm_PRH[[2]])
-
-
-ROC_PS_justpass_qda_pfm_TEH<-performanceMeasures(ROC_PS_justpass_qda_TEH)
-PS_AUC_NB_justpass_qda_TEH<-AUC(ROC_PS_justpass_qda_pfm_TEH[[1]],ROC_PS_justpass_qda_pfm_TEH[[2]])
-
-ROC_CD_justpass_qda_pfm_TEH<-performanceMeasures(ROC_CD_justpass_qda_TEH)
-CD_AUC_NB_justpass_qda_TEH<-AUC(ROC_CD_justpass_qda_pfm_TEH[[1]],ROC_CD_justpass_qda_pfm_TEH[[2]])
-
-ROC_ICS_justpass_qda_pfm_TEH<-performanceMeasures(ROC_ICS_justpass_qda_TEH)
-ICS_AUC_NB_justpass_qda_TEH<-AUC(ROC_ICS_justpass_qda_pfm_TEH[[1]],ROC_ICS_justpass_qda_pfm_TEH[[2]])
-
-ROC_PS_justpass_qda_pfm_PR<-performanceMeasures(ROC_PS_justpass_qda_PR)
-PS_AUC_NB_justpass_qda_PR<-AUC(ROC_PS_justpass_qda_pfm_PR[[1]],ROC_PS_justpass_qda_pfm_PR[[2]])
-
-ROC_CD_justpass_qda_pfm_PR<-performanceMeasures(ROC_CD_justpass_qda_PR)
-CD_AUC_NB_justpass_qda_PR<-AUC(ROC_CD_justpass_qda_pfm_PR[[1]],ROC_CD_justpass_qda_pfm_PR[[2]])
-
-ROC_ICS_justpass_qda_pfm_PR<-performanceMeasures(ROC_ICS_justpass_qda_PR)
-ICS_AUC_NB_justpass_qda_PR<-AUC(ROC_ICS_justpass_qda_pfm_PR[[1]],ROC_ICS_justpass_qda_pfm_PR[[2]])
-
-ROC_PS_justpass_qda_pfm_TE<-performanceMeasures(ROC_PS_justpass_qda_TE)
-PS_AUC_NB_justpass_qda_TE<-AUC(ROC_PS_justpass_qda_pfm_TE[[1]],ROC_PS_justpass_qda_pfm_TE[[2]])
-
-ROC_CD_justpass_qda_pfm_TE<-performanceMeasures(ROC_CD_justpass_qda_TE)
-CD_AUC_NB_justpass_qda_TE<-AUC(ROC_CD_justpass_qda_pfm_TE[[1]],ROC_CD_justpass_qda_pfm_TE[[2]])
-
-ROC_ICS_justpass_qda_pfm_TE<-performanceMeasures(ROC_ICS_justpass_qda_TE)
-ICS_AUC_NB_justpass_qda_TE<-AUC(ROC_ICS_justpass_qda_pfm_TE[[1]],ROC_ICS_justpass_qda_pfm_TE[[2]])
-
-ROC_PS_justpass_qda_pfm_H<-performanceMeasures(ROC_PS_justpass_qda_H)
-PS_AUC_NB_justpass_qda_H<-AUC(ROC_PS_justpass_qda_pfm_H[[1]],ROC_PS_justpass_qda_pfm_H[[2]])
-
-ROC_CD_justpass_qda_pfm_H<-performanceMeasures(ROC_CD_justpass_qda_H)
-CD_AUC_NB_justpass_qda_H<-AUC(ROC_CD_justpass_qda_pfm_H[[1]],ROC_CD_justpass_qda_pfm_H[[2]])
-
-ROC_ICS_justpass_qda_pfm_H<-performanceMeasures(ROC_ICS_justpass_qda_H)
-ICS_AUC_NB_justpass_qda_H<-AUC(ROC_ICS_justpass_qda_pfm_H[[1]],ROC_ICS_justpass_qda_pfm_H[[2]])
-
-#KNN
-ROC_PS_justpass_knn_pfm<-performanceMeasures(ROC_PS_justpass_knn,M=20)
-PS_mSR_NB_justpass_knn_all<-colMeans(ROC_PS_justpass_knn_pfm[[4]])
-
-ROC_CD_justpass_knn_pfm<-performanceMeasures(ROC_CD_justpass_knn,M=20)
-CD_mSR_NB_justpass_knn_all<-colMeans(ROC_CD_justpass_knn_pfm[[4]])
-
-ROC_ICS_justpass_knn_pfm<-performanceMeasures(ROC_ICS_justpass_knn,M=20)
-ICS_mSR_NB_justpass_knn_all<-colMeans(ROC_ICS_justpass_knn_pfm[[4]])
-
-ROC_PS_justpass_knn_pfm_PRTE<-performanceMeasures(ROC_PS_justpass_knn,M=20)
-PS_mSR_NB_justpass_knn_PRTE<-colMeans(ROC_PS_justpass_knn_pfm_PRTE[[4]])
-
-ROC_CD_justpass_knn_pfm_PRTE<-performanceMeasures(ROC_CD_justpass_knn,M=20)
-CD_mSR_NB_justpass_knn_PRTE<-colMeans(ROC_CD_justpass_knn_pfm_PRTE[[4]])
-
-ROC_ICS_justpass_knn_pfm_PRTE<-performanceMeasures(ROC_ICS_justpass_knn,M=20)
-ICS_mSR_NB_justpass_knn_PRTE<-colMeans(ROC_ICS_justpass_knn_pfm_PRTE[[4]])
-
-ROC_PS_justpass_knn_pfm_PRH<-performanceMeasures(ROC_PS_justpass_knn,M=20)
-PS_mSR_NB_justpass_knn_PRH<-colMeans(ROC_PS_justpass_knn_pfm_PRH[[4]])
-
-ROC_CD_justpass_knn_pfm_PRH<-performanceMeasures(ROC_CD_justpass_knn,M=20)
-CD_mSR_NB_justpass_knn_PRH<-colMeans(ROC_CD_justpass_knn_pfm_PRH[[4]])
-
-ROC_ICS_justpass_knn_pfm_PRH<-performanceMeasures(ROC_ICS_justpass_knn,M=20)
-ICS_mSR_NB_justpass_knn_PRH<-colMeans(ROC_ICS_justpass_knn_pfm_PRH[[4]])
-
-ROC_PS_justpass_knn_pfm_TEH<-performanceMeasures(ROC_PS_justpass_knn,M=20)
-PS_mSR_NB_justpass_knn_TEH<-colMeans(ROC_PS_justpass_knn_pfm_TEH[[4]])
-
-ROC_CD_justpass_knn_pfm_TEH<-performanceMeasures(ROC_CD_justpass_knn,M=20)
-CD_mSR_NB_justpass_knn_TEH<-colMeans(ROC_CD_justpass_knn_pfm_TEH[[4]])
-
-ROC_ICS_justpass_knn_pfm_TEH<-performanceMeasures(ROC_ICS_justpass_knn,M=20)
-ICS_mSR_NB_justpass_knn_TEH<-colMeans(ROC_ICS_justpass_knn_pfm_TEH[[4]])
-
-ROC_PS_justpass_knn_pfm_PR<-performanceMeasures(ROC_PS_justpass_knn,M=20)
-PS_mSR_NB_justpass_knn_PR<-colMeans(ROC_PS_justpass_knn_pfm_PR[[4]])
-
-ROC_CD_justpass_knn_pfm_PR<-performanceMeasures(ROC_CD_justpass_knn,M=20)
-CD_mSR_NB_justpass_knn_PR<-colMeans(ROC_CD_justpass_knn_pfm_PR[[4]])
-
-ROC_ICS_justpass_knn_pfm_PR<-performanceMeasures(ROC_ICS_justpass_knn,M=20)
-ICS_mSR_NB_justpass_knn_PR<-colMeans(ROC_ICS_justpass_knn_pfm_PR[[4]])
-
-ROC_PS_justpass_knn_pfm_TE<-performanceMeasures(ROC_PS_justpass_knn,M=20)
-PS_mSR_NB_justpass_knn_TE<-colMeans(ROC_PS_justpass_knn_pfm_TE[[4]])
-
-ROC_CD_justpass_knn_pfm_TE<-performanceMeasures(ROC_CD_justpass_knn,M=20)
-CD_mSR_NB_justpass_knn_TE<-colMeans(ROC_CD_justpass_knn_pfm_TE[[4]])
-
-ROC_ICS_justpass_knn_pfm_TE<-performanceMeasures(ROC_ICS_justpass_knn,M=20)
-ICS_mSR_NB_justpass_knn_TE<-colMeans(ROC_ICS_justpass_knn_pfm_TE[[4]])
-
-ROC_PS_justpass_knn_pfm_H<-performanceMeasures(ROC_PS_justpass_knn,M=20)
-PS_mSR_NB_justpass_knn_all<-colMeans(ROC_PS_justpass_knn_pfm_H[[4]])
-
-ROC_CD_justpass_knn_pfm_H<-performanceMeasures(ROC_CD_justpass_knn,M=20)
-CD_mSR_NB_justpass_knn_H<-colMeans(ROC_CD_justpass_knn_pfm_H[[4]])
-
-ROC_ICS_justpass_knn_pfm_H<-performanceMeasures(ROC_ICS_justpass_knn,M=20)
-ICS_mSR_NB_justpass_knn_H<-colMeans(ROC_ICS_justpass_knn_pfm_H[[4]])
