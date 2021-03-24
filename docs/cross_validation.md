@@ -11,7 +11,7 @@ output:
 
 Goal for this document is to summarize results from the cross-validation methods we used: Leave One Out Cross-Validation aka LOOCV aka jackknife, and k-fold cross-validation with `k=5` and `k=10`.
 
-**Update 25 Jan:** Starting this file to document calculations I worked out in `passfail_XX_kfold.R` files. 
+**Update 24 Mar:** Tidied up data frame of success rates and made a facet grid plot. 
 
 
 ```
@@ -135,10 +135,10 @@ Now I'd like to put these into a long data frame so I can plot them more easily.
 
 ```r
 # see https://gist.github.com/aammd/9ae2f5cce9afd799bafb
-succRateLong <- enframe(allSuccRates) %>% 
+succRateWide <- enframe(allSuccRates) %>% 
   unnest(cols = value) %>% 
   separate(col = name, into = c("outcome", "name"), sep = "[.]")
-succRateLong
+succRateWide
 ```
 
 ```
@@ -158,3 +158,53 @@ succRateLong
 ## # ... with 50 more rows, and 1 more variable: nK <int>
 ```
 
+Finally, turn that wide frame (separate column for each week) into a long one (column for week number + single column for result). While I'm at it, factor-ize the name of the method used and reorder the levels. 
+
+
+```r
+succRateLong <- succRateWide %>% 
+  pivot_longer(cols = starts_with("Week"), names_to = "Week", names_prefix = "Week", 
+               names_transform = list(Week = as.integer), values_to = "succRate") %>% 
+  relocate(Week, .before = N)
+# Factor-ize and reorder
+succRateLong$outcome <- factor(succRateLong$outcome, levels = c("pass", "justpass"))
+succRateLong$method <- factor(succRateLong$name)  
+succRateLong$method <- fct_relevel(succRateLong$method, 
+                                   levels(succRateLong$method)[c(7, 9, 8, 4, 6, 5, 10, 1, 3, 2)])
+succRateLong
+```
+
+```
+## # A tibble: 420 x 9
+##    outcome name   Layer  Week     N Guessing    nK succRate method
+##    <fct>   <chr>  <chr> <int> <int>    <dbl> <int>    <dbl> <fct> 
+##  1 pass    logReg PS        1   142    0.831    NA    0.810 logReg
+##  2 pass    logReg PS        2   142    0.831    NA    0.859 logReg
+##  3 pass    logReg PS        3   142    0.831    NA    0.845 logReg
+##  4 pass    logReg PS        4   142    0.831    NA    0.838 logReg
+##  5 pass    logReg PS        5   142    0.831    NA    0.852 logReg
+##  6 pass    logReg PS        6   142    0.831    NA    0.845 logReg
+##  7 pass    logReg PS        7   142    0.831    NA    0.845 logReg
+##  8 pass    logReg CD        1   142    0.831    NA    0.803 logReg
+##  9 pass    logReg CD        2   142    0.831    NA    0.803 logReg
+## 10 pass    logReg CD        3   142    0.831    NA    0.831 logReg
+## # ... with 410 more rows
+```
+
+
+
+### Plot success rates
+
+Not sure I can put everything on one readable plot. What I'm trying to combine is my various success rate figures. Do a facet grid with `name` as the horizontal variable and `outcome` as the vertical?
+
+
+```r
+succRateLong %>% ggplot(mapping = aes(x = Week, y = succRate, color = Layer)) +
+  geom_line() + 
+  facet_grid(rows = vars(outcome), cols = vars(method)) + 
+  geom_hline(aes(yintercept = Guessing))
+```
+
+![](cross_validation_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+Hmm. This is the first time I've noticed that the k-fold calculations have a different (but same-as-each-other) value of success rate compared to the LOOCV/jackknife calculations. I can't think of a reason those should be different, so I need to check the `passfail_XX.R` files to figure out why.
