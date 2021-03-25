@@ -99,4 +99,10 @@ succRateLong %>% ggplot(mapping = aes(x = Week, y = succRate, color = Layer)) +
   
 ```
 
-Hmm. This is the first time I've noticed that the k-fold calculations have a different (but same-as-each-other) value of success rate compared to the LOOCV/jackknife calculations. I can't think of a reason those should be different, so I need to check the `passfail_XX.R` files to figure out why.
+Hmm. This is the first time I've noticed that the k-fold calculations have a different (but same-as-each-other) value of success rate compared to the LOOCV/jackknife calculations. Specifically, 
+
+```{r}
+succRateLong %>% filter(Week == 1, Layer == "PS")
+```
+
+I can't think of a reason those should be different, so I need to check the `passfail_XX.R` files to figure out why. (Update: Looks like the jackknife files were using `fci_pre` rather than `fci_pre_c` as a predictor; fix that and re-run.)

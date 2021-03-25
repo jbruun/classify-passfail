@@ -207,4 +207,37 @@ succRateLong %>% ggplot(mapping = aes(x = Week, y = succRate, color = Layer)) +
 
 ![](cross_validation_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
 
-Hmm. This is the first time I've noticed that the k-fold calculations have a different (but same-as-each-other) value of success rate compared to the LOOCV/jackknife calculations. I can't think of a reason those should be different, so I need to check the `passfail_XX.R` files to figure out why.
+Hmm. This is the first time I've noticed that the k-fold calculations have a different (but same-as-each-other) value of success rate compared to the LOOCV/jackknife calculations. Specifically, 
+
+
+```r
+succRateLong %>% filter(Week == 1, Layer == "PS")
+```
+
+```
+## # A tibble: 20 x 9
+##    outcome  name          Layer  Week     N Guessing    nK succRate method      
+##    <fct>    <chr>         <chr> <int> <int>    <dbl> <int>    <dbl> <fct>       
+##  1 pass     logReg        PS        1   142    0.831    NA    0.810 logReg      
+##  2 pass     logReg_kfold5 PS        1   166    0.771    NA    0.789 logReg_kfol~
+##  3 pass     logReg_kfold~ PS        1   166    0.771    NA    0.789 logReg_kfol~
+##  4 pass     lda           PS        1   142    0.831    NA    0.817 lda         
+##  5 pass     lda_kfold5    PS        1   166    0.771    NA    0.789 lda_kfold5  
+##  6 pass     lda_kfold10   PS        1   166    0.771    NA    0.783 lda_kfold10 
+##  7 pass     qda           PS        1   142    0.831    NA    0.831 qda         
+##  8 pass     knn           PS        1   142    0.831     2    0.810 knn         
+##  9 pass     knn_kfold5    PS        1   166    0.771     2    0.819 knn_kfold5  
+## 10 pass     knn_kfold10   PS        1   166    0.771     2    0.819 knn_kfold10 
+## 11 justpass logReg        PS        1    55    0.618    NA    0.709 logReg      
+## 12 justpass logReg_kfold5 PS        1    67    0.582    NA    0.687 logReg_kfol~
+## 13 justpass logReg_kfold~ PS        1    67    0.582    NA    0.642 logReg_kfol~
+## 14 justpass lda           PS        1    55    0.618    NA    0.673 lda         
+## 15 justpass lda_kfold5    PS        1    67    0.582    NA    0.657 lda_kfold5  
+## 16 justpass lda_kfold10   PS        1    67    0.582    NA    0.642 lda_kfold10 
+## 17 justpass qda           PS        1    55    0.618    NA    0.473 qda         
+## 18 justpass knn           PS        1    55    0.618     2    0.582 knn         
+## 19 justpass knn_kfold5    PS        1    67    0.582     2    0.597 knn_kfold5  
+## 20 justpass knn_kfold10   PS        1    67    0.582     2    0.687 knn_kfold10
+```
+
+I can't think of a reason those should be different, so I need to check the `passfail_XX.R` files to figure out why. (Update: Looks like the jackknife files were using `fci_pre` rather than `fci_pre_c` as a predictor; fix that and re-run.)
