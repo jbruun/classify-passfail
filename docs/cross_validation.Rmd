@@ -13,7 +13,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Goal for this document is to summarize results from the cross-validation methods we used: Leave One Out Cross-Validation aka LOOCV aka jackknife, and k-fold cross-validation with `k=5` and `k=10`.
 
-**Update 24 Mar:** Tidied up data frame of success rates and made a facet grid plot. 
+**Update 25 Mar:** Updated success rates (LOOCV files were using an outdated set of predictors) and remade the facet grid plot. 
 
 ```{r packages, echo = FALSE, message = FALSE}
 library(igraph)
@@ -99,10 +99,4 @@ succRateLong %>% ggplot(mapping = aes(x = Week, y = succRate, color = Layer)) +
   
 ```
 
-Hmm. This is the first time I've noticed that the k-fold calculations have a different (but same-as-each-other) value of success rate compared to the LOOCV/jackknife calculations. Specifically, 
-
-```{r}
-succRateLong %>% filter(Week == 1, Layer == "PS")
-```
-
-I can't think of a reason those should be different, so I need to check the `passfail_XX.R` files to figure out why. (Update: Looks like the jackknife files were using `fci_pre` rather than `fci_pre_c` as a predictor; fix that and re-run.)
+There's no CD layer line for qda because I got an error when running that, and the errors intensified for k-fold cross validation. So that looks like an unfruitful line to pursue. 
