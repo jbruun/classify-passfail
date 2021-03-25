@@ -23,14 +23,16 @@ centICS <- dfICS %>% group_split(Week)
 source("code/jackknife_functions.R")
 
 # Predict pass/fail
-predPS <- jackPredLog(centPS)
-predCD <- jackPredLog(centCD)
-predICS <- jackPredLog(centICS)
+preds <- c("gender", "cohort", "fci_pre_c", "PageRank", "tarEnt", "Hide")
+
+predPS <- jackPredLog(centPS, predictors = preds)
+predCD <- jackPredLog(centCD, predictors = preds)
+predICS <- jackPredLog(centICS, predictors = preds)
 
 # Predict just-pass/just-fail (2/0)
-predJustPS <- jackPredLog(centPS, outcome = "justpass")
-predJustCD <- jackPredLog(centCD, outcome = "justpass")
-predJustICS <- jackPredLog(centICS, outcome = "justpass")
+predJustPS <- jackPredLog(centPS, outcome = "justpass", predictors = preds)
+predJustCD <- jackPredLog(centCD, outcome = "justpass", predictors = preds)
+predJustICS <- jackPredLog(centICS, outcome = "justpass", predictors = preds)
 
 # Save pass/fail predictions
 save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
