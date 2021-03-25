@@ -26,14 +26,16 @@ centICS <- dfICS %>% group_split(Week)
 source("code/jackknife_functions.R")
 
 # Predict pass/fail
-predPS <- jackPredKNN(centPS, nK = 2)
-predCD <- jackPredKNN(centCD, nK = 2)
-predICS <- jackPredKNN(centICS, nK = 2)
+preds <- c("gender", "cohort", "fci_pre_c", "PageRank", "tarEnt", "Hide")
+
+predPS <- jackPredKNN(centPS, nK = 2, predictors = preds)
+predCD <- jackPredKNN(centCD, nK = 2, predictors = preds)
+predICS <- jackPredKNN(centICS, nK = 2, predictors = preds)
 
 # Predict just-pass/just-fail (2/0)
-predJustPS <- jackPredKNN(centPS, nK = 2, outcome = "justpass")
-predJustCD <- jackPredKNN(centCD, nK = 2, outcome = "justpass")
-predJustICS <- jackPredKNN(centICS, nK = 2, outcome = "justpass")
+predJustPS <- jackPredKNN(centPS, nK = 2, outcome = "justpass", predictors = preds)
+predJustCD <- jackPredKNN(centCD, nK = 2, outcome = "justpass", predictors = preds)
+predJustICS <- jackPredKNN(centICS, nK = 2, outcome = "justpass", predictors = preds)
 
 # Save pass/fail predictions
 allnK <- c(predPS$nK, predCD$nK, predICS$nK, predJustPS$nK, 
@@ -84,12 +86,12 @@ getSucc <- function(pPS, pCD, pICS, outcome = "pass") {
 
 succRate <- getSucc(predPS, predCD, predICS)
 
-write.csv(succRate,"succRate_knn.csv", row.names = FALSE)
+write.csv(succRate,"results/succRate_knn.csv", row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
 succRateJust <- getSucc(predJustPS, predJustCD, predJustICS, "justpass")
 
-write.csv(succRateJust,"succRateJust_knn.csv", row.names = FALSE)
+write.csv(succRateJust,"results/succRateJust_knn.csv", row.names = FALSE)
 
 
 ## Plotting success rates
