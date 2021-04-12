@@ -1,4 +1,6 @@
-## Models without networks measures
+## Leave one out cross-validation
+##Made ready for ROC curves
+## No network measures with FCI Classification 1-4 based on scores
 
 rm(list = ls())
 
