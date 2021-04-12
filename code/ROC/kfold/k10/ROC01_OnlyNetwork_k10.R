@@ -32,6 +32,7 @@ source("code/ROC_functions.R")
 #########LOGISTIC REGRESSION###########
 
 ######ALL NETWORK PREDICTORS######
+t1<-Sys.time()
 
 ROC_PS_log<-list()
 for(i in 1:100){
@@ -352,7 +353,7 @@ save(ROC_PS_log,ROC_CD_log,ROC_ICS_log, ROC_PS_justpass_log,ROC_CD_justpass_log,
 tend<-Sys.time()
 tend-tstart
 
-t1<-Sys.time()
+
 #########LINEAR DISCRIMINANT ANALYSIS###########
 #########LINEAR DISCRIMINANT ANALYSIS###########
 #########LINEAR DISCRIMINANT ANALYSIS ###########
