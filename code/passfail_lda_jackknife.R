@@ -24,14 +24,16 @@ centICS <- dfICS %>% group_split(Week)
 source("code/jackknife_functions.R")
 
 # Predict pass/fail
-predPS <- jackPredLDA(centPS)
-predCD <- jackPredLDA(centCD)
-predICS <- jackPredLDA(centICS)
+preds <- c("gender", "cohort", "fci_pre_c", "PageRank", "tarEnt", "Hide")
+
+predPS <- jackPredLDA(centPS, predictors = preds)
+predCD <- jackPredLDA(centCD, predictors = preds)
+predICS <- jackPredLDA(centICS, predictors = preds)
 
 # Predict just-pass/just-fail (2/0)
-predJustPS <- jackPredLDA(centPS, outcome = "justpass")
-predJustCD <- jackPredLDA(centCD, outcome = "justpass")
-predJustICS <- jackPredLDA(centICS, outcome = "justpass")
+predJustPS <- jackPredLDA(centPS, outcome = "justpass", predictors = preds)
+predJustCD <- jackPredLDA(centCD, outcome = "justpass", predictors = preds)
+predJustICS <- jackPredLDA(centICS, outcome = "justpass", predictors = preds)
 
 # Save pass/fail predictions
 save(predPS, predCD, predICS, predJustPS, predJustCD, predJustICS,
@@ -63,49 +65,4 @@ succRateJust <- data.frame(Layer = c("PS", "CD", "ICS"),
                                         mean(predJustCD$justpass == "1"),
                                         mean(predJustICS$justpass == "1")))
 
-write.csv(succRate,"results/succRateJust_lda.csv", row.names = FALSE)
-
-
-## OLD, NOT UPDATED YET 
-
-# What if we ignore FCIpre?
-predPSnoFCI <-jackPred(centPS,predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predCDnoFCI <-jackPred(centCD,predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predICSnoFCI <-jackPred(centICS,predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-succRatenoFCI <- rbind(sapply(predPSnoFCI[,3:9],function(x) mean(x==predPSnoFCI$Pass)),
-                       sapply(predCDnoFCI[,3:9],function(x) mean(x==predCDnoFCI$Pass)),
-                       sapply(predICSnoFCI[,3:9],function(x) mean(x==predICSnoFCI$Pass)))
-succRatenoFCI <- data.frame(Layer=c("PS","CD","ICS"),N=c(dim(predPSnoFCI)[1],dim(predCDnoFCI)[1],dim(predICSnoFCI)[1]),
-                            succRatenoFCI,
-                            Guessing=c(mean(predPSnoFCI$Pass=="Pass"),mean(predCDnoFCI$Pass=="Pass"),
-                                       mean(predICSnoFCI$Pass=="Pass")))
-
-predPSnoFCI02 <-jackPred(centPS,outcome="JustPass",predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predCDnoFCI02 <-jackPred(centCD,outcome="JustPass",predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-predICSnoFCI02 <-jackPred(centICS,outcome="JustPass",predictors=c("Gender","Section","PageRank","tarEnt","Hide"))
-succRatenoFCI02 <- rbind(sapply(predPSnoFCI02[,3:9],function(x) mean(x==predPSnoFCI02$JustPass)),
-                       sapply(predCDnoFCI02[,3:9],function(x) mean(x==predCDnoFCI02$JustPass)),
-                       sapply(predICSnoFCI02[,3:9],function(x) mean(x==predICSnoFCI02$JustPass)))
-succRatenoFCI02 <- data.frame(Layer=c("PS","CD","ICS"),N=c(dim(predPSnoFCI02)[1],dim(predCDnoFCI02)[1],dim(predICSnoFCI02)[1]),
-                              succRatenoFCI02,
-                              Guessing=c(mean(predPSnoFCI02$JustPass=="Pass2"),mean(predCDnoFCI02$JustPass=="Pass2"),
-                                       mean(predICSnoFCI02$JustPass=="Pass2")))
-
-write.csv(succRatenoFCI,"../succRatenoFCI.csv",row.names=FALSE)
-write.csv(succRatenoFCI02,"../succRatenoFCI02.csv",row.names=FALSE)
-
-# Save no-FCI weekly predictions
-save(predPSnoFCI,predCDnoFCI,predICSnoFCI,predPSnoFCI02,predCDnoFCI02,predICSnoFCI02,
-     file="../data/jackknife_predictions_noFCI.Rdata")
-
-
-
-# Plot it up
-longRate <- succRate[,c(1,3:9)] %>% gather(Week,SuccRate,-Layer) %>% mutate(Week=parse_number(Week))
-ggsucc <- ggplot(longRate,aes(x=Week,y=SuccRate,color=Layer))
-plotcolors <- unique(ggplot_build(ggsucc)$data[[1]][,1])
-p1 <- ggsucc + geom_line() + scale_y_continuous(limits=c(0.5,1))
-p1 + geom_hline(yintercept=succRate[1,10],linetype="dashed",color=plotcolors[1]) + 
-  geom_hline(yintercept=succRate[2,10],linetype="dashed",color=plotcolors[2]) +
-  geom_hline(yintercept=succRate[3,10],linetype="dashed",color=plotcolors[3])
-ggsave("../figures/succRate_jackknife.png",width=5,height=4,units="in",dpi=150)
+write.csv(succRateJust,"results/succRateJust_lda.csv", row.names = FALSE)
