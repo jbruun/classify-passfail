@@ -1,0 +1,108 @@
+---
+title: "Cross-validation notes"
+author: "Jesper Bruun & Adrienne Traxler"
+date: "25 Jan 2021--"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Goal for this document is to summarize results from the cross-validation methods we used: Leave One Out Cross-Validation aka LOOCV aka jackknife, and k-fold cross-validation with `k=5` and `k=10`.
+
+**Update 24 Mar:** Tidied up data frame of success rates and made a facet grid plot. 
+
+```{r packages, echo = FALSE, message = FALSE}
+library(igraph)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(tibble)
+library(forcats)
+```
+
+## Import data
+
+At this point, the following R scripts have already been run. 
+
+* For LOOCV: `passfail_logreg_jackknife`, `passfail_lda_jackknife`, `passfail_qda_jackknife`, and `passfail_knn_jackknife`. 
+* For k-fold cross-validation: `passfail_logreg_kfold`, `passfail_lda_lfold`, `passfail_qda_kfold` (ultimately not used, see notes below), and `passfail_knn_kfold`. 
+
+Each of those files saves the predictions in an .Rdata file in the `data` directory and the success rate table in the `results` directory. Results are saved separately for the full set of pass/fail outcomes and for students who were just on the pass/fail border (the justpass outcome, saved in `Just` files). The k-fold results were saved for `k=5` and `k=10`. 
+
+```{r}
+filelist <- list.files(path = "../results", pattern = "*.csv")
+infiles <- file.path("../results", filelist)
+infiles 
+allSuccRates <- lapply(infiles, read.csv) 
+summary(allSuccRates)
+```
+
+
+### Clean up and organize
+
+I want to name these appropriately and reorder them. Make sure each name is tagged with `pass` or `justpass` so I can use that below. 
+
+```{r}
+succLabels <- gsub("succRate", "", filelist) %>% 
+  gsub(".csv", "", .) %>% 
+  gsub("^_", "", .) %>% 
+  paste0("pass.", .) %>% 
+  gsub("^pass.Just_", "justpass.", .)
+names(allSuccRates) <- succLabels
+names(allSuccRates)
+
+# Reorder to (logReg, LDA, QDA, KNN, (repeats for justpass))
+newOrder <- c(8, 10, 9, 5, 7, 6, 11, 1, 3, 2)  
+allSuccRates <- allSuccRates[c(newOrder, newOrder + 11)]
+```
+
+Now I'd like to put these into a long data frame so I can plot them more easily. In the process, I separate the `pass`/`justpass` label into its own column. 
+
+```{r}
+# see https://gist.github.com/aammd/9ae2f5cce9afd799bafb
+succRateWide <- enframe(allSuccRates) %>% 
+  unnest(cols = value) %>% 
+  separate(col = name, into = c("outcome", "name"), sep = "[.]")
+succRateWide
+```
+
+Finally, turn that wide frame (separate column for each week) into a long one (column for week number + single column for result). While I'm at it, factor-ize the name of the method used and reorder the levels. 
+
+```{r}
+succRateLong <- succRateWide %>% 
+  pivot_longer(cols = starts_with("Week"), names_to = "Week", names_prefix = "Week", 
+               names_transform = list(Week = as.integer), values_to = "succRate") %>% 
+  relocate(Week, .before = N)
+# Factor-ize and reorder
+succRateLong$outcome <- factor(succRateLong$outcome, levels = c("pass", "justpass"))
+succRateLong$method <- factor(succRateLong$name)  
+succRateLong$method <- fct_relevel(succRateLong$method, 
+                                   levels(succRateLong$method)[c(7, 9, 8, 4, 6, 5, 10, 1, 3, 2)])
+succRateLong
+```
+
+
+
+### Plot success rates
+
+Not sure I can put everything on one readable plot. What I'm trying to combine is my various success rate figures. Do a facet grid with `name` as the horizontal variable and `outcome` as the vertical?
+
+```{r}
+succRateLong %>% ggplot(mapping = aes(x = Week, y = succRate, color = Layer)) +
+  geom_line() + 
+  facet_grid(rows = vars(outcome), cols = vars(method)) + 
+  geom_hline(aes(yintercept = Guessing))
+  
+```
+
+Hmm. This is the first time I've noticed that the k-fold calculations have a different (but same-as-each-other) value of success rate compared to the LOOCV/jackknife calculations. Specifically, 
+
+```{r}
+succRateLong %>% filter(Week == 1, Layer == "PS")
+```
+
+I can't think of a reason those should be different, so I need to check the `passfail_XX.R` files to figure out why. (Update: Looks like the jackknife files were using `fci_pre` rather than `fci_pre_c` as a predictor; fix that and re-run.)

@@ -1,7 +1,7 @@
-# Logstic regression on pass/fail centrality by removing single observations.
-# Last modified: 5/8/20 (updating to use Jesper's cleaned-up data)
+# Linear discriminant analysis on pass/fail centrality by removing single observations.
+# Last modified: 1/25/21 (standardize CSV file names)
 # 
-# Status: Jackknife prediction runs (at least on PS), next do justpass and success rates.
+# Status: Works.
 
 rm(list = ls())
 
@@ -50,7 +50,7 @@ succRate <- data.frame(Layer = c("PS","CD","ICS"),
                        Guessing = c(mean(predPS$pass == "1"), mean(predCD$pass == "1"),
                                     mean(predICS$pass == "1")))
 
-write.csv(succRate,"succRate.csv", row.names = FALSE)
+write.csv(succRate,"results/succRate_lda.csv", row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
 compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
@@ -63,7 +63,7 @@ succRateJust <- data.frame(Layer = c("PS", "CD", "ICS"),
                                         mean(predJustCD$justpass == "1"),
                                         mean(predJustICS$justpass == "1")))
 
-write.csv(succRateJust,"succRateJust.csv", row.names = FALSE)
+write.csv(succRate,"results/succRateJust_lda.csv", row.names = FALSE)
 
 
 ## OLD, NOT UPDATED YET 

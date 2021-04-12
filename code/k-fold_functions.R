@@ -9,22 +9,26 @@ chunk <- function(df, n) {
   split(x, cut(x, n, labels = FALSE))
 }
 
-
-# Logistic regression version
-# Input: List of weekly data frames, optional outcome (pass/justpass), number of
-#  chunks to divide data into, optional set of predictors to use, optional 
-#  probability threshold to predict outcome
-# Output: List of prediction vectors for that weekly aggregate network; each 
-#  chunk in the vector is predicted using the remaining chunks
-kfoldLog <- function(layer, outcome = "pass", k = 5, 
-                        predictors = c("gender", "cohort", "fci_pre", 
-                                       "PageRank", "tarEnt", "Hide"), p=0.5) {
-  # Check for valid input
+# Check for valid input to model fitting
+checkInput <- function(outcome) {
   if (outcome == "pass" | outcome == "justpass") {
     choices <- c("0", "1")
   } else {
-    stop("Not a valid outcome variable.")
+    stop("Not a valid outcome variable (must be pass or justpass).")
   }
+  return(choices)  
+}
+
+# Logistic regression version
+# Input: List of weekly data frames, outcome (pass/justpass), number of chunks 
+#  to divide data into, predictors to use, probability threshold for outcome
+# Output: Data frame of prediction vectors for that weekly aggregate network; 
+#  each chunk in the vector is predicted using the other k-1 chunks
+kfoldLog <- function(layer, outcome = "pass", k = 5, 
+                        predictors = c("gender", "cohort", "fci_pre", 
+                                       "PageRank", "tarEnt", "Hide"), p=0.5) {
+  choices <- checkInput(outcome)
+    
   # Remove incomplete rows
   userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
   
@@ -69,20 +73,15 @@ kfoldLog <- function(layer, outcome = "pass", k = 5,
 
 
 # Linear discriminant analysis (LDA) version
-# Input: List of weekly data frames, optional outcome (pass/justpass), number of
-#  chunks to divide data into, optional set of predictors to use, optional 
-#  probability threshold to predict outcome
-# Output: List of prediction vectors for that weekly aggregate network; each 
-#  chunk in the vector is predicted using the remaining chunks
+# Input: List of weekly data frames, outcome (pass/justpass), number of chunks 
+#  to divide data into, predictors to use, probability threshold for outcome
+# Output: Data frame of prediction vectors for that weekly aggregate network; 
+#  each chunk in the vector is predicted using the other k-1 chunks
 kfoldLDA <- function(layer, outcome = "pass", k = 5, 
                      predictors = c("gender", "cohort", "fci_pre", 
-                                    "PageRank", "tarEnt", "Hide"), p=0.5) {
-  # Check for valid input
-  if (outcome == "pass" | outcome == "justpass") {
-    choices <- c("0", "1")
-  } else {
-    stop("Not a valid outcome variable.")
-  }
+                                    "PageRank", "tarEnt", "Hide"), p = 0.5) {
+  choices <- checkInput(outcome)
+  
   # Remove incomplete rows
   userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
   
@@ -95,14 +94,21 @@ kfoldLDA <- function(layer, outcome = "pass", k = 5,
   
   # Loop through all weeks
   for(j in 1:length(layer)) {
-    # Data is complete cases
+    # Data is complete cases (outcome + all predictors)
     data <- data.frame(layer[[j]][userows, c(outcome, predictors)])
-    # Loop through all nodes
-    for(i in 1:dim(data)[1]) {
-      # Training set is data minus observation i
-      train <- !cases==i
-      lda.fit <- lda(data[,-1], grouping=data[,1], subset = train)
-      allprob[i, j] <- predict(lda.fit, newdata = data[i,-1])$posterior[2]
+    chunkrows <- chunk(data, n = k)
+    
+    # Loop through all chunks
+    for(i in 1:k) {
+      # Training set is data minus chunk i
+      #trainrows <- cases[-chunkrows[[i]]]
+      train <- data[-chunkrows[[i]], ]
+      test <- data[chunkrows[[i]], ]
+      
+      #lda.fit <- lda(data[, -1], grouping = data[, 1], subset = trainrows)
+      lda.fit <- lda(formula = as.formula(fitForm), data = train)
+      lda.pred <- predict(lda.fit, newdata = test)$posterior
+      allprob[chunkrows[[i]], j] <- lda.pred[, 2]  # NOT the same as predict(...)$posterior[2]
     }
   }
   allpred <- allprob
@@ -118,41 +124,46 @@ kfoldLDA <- function(layer, outcome = "pass", k = 5,
     alldata[, i+2] <- as.factor(alldata[, i+2])
   }
   
-  names(alldata) <- c("name", outcome, paste0("Week", c(1:length(layer))))
-  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1]))
+  names(alldata) <- c("name", outcome, paste0("Week", seq(layer)))
+  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1], ", k = ", k))
   return(alldata)
 }
 
 # Quadratic discriminant analysis (QDA) version
-# Input: List of weekly data frames, optional outcome (pass/justpass), optional 
-#  subset of predictors to use
-# Output: List of prediction vectors for that weekly aggregate network; each 
-#  node in the vector is predicted using all the other nodes
-
-jackPredQDA<- function(layer, outcome = "pass", 
-                       predictors = c("gender", "cohort", "fci_pre", "PageRank", 
-                                      "tarEnt", "Hide"),p=0.5) {
-  if (outcome == "pass" | outcome == "justpass") {
-    choices <- c("0", "1")
-  } else {
-    stop("Not a valid outcome variable.")
-  }
+# Input: List of weekly data frames, outcome (pass/justpass), number of chunks 
+#  to divide data into, predictors to use, probability threshold for outcome
+# Output: Data frame of prediction vectors for that weekly aggregate network; 
+#  each chunk in the vector is predicted using the other k-1 chunks
+kfoldQDA <- function(layer, outcome = "pass", k = 5, 
+                     predictors = c("gender", "cohort", "fci_pre", 
+                                    "PageRank", "tarEnt", "Hide"), p = 0.5) {
+  choices <- checkInput(outcome)
+  
   # remove incomplete rows
   userows <- complete.cases(layer[[length(layer)]][, c(outcome,predictors)])  
   
   allprob <- matrix(nrow = sum(userows), ncol = length(layer))
-  cases<-c(1:sum(userows))
+  cases <- c(1:sum(userows))
+  
+  # Build fitting input string using predictor names
   fitStr <- paste(predictors, collapse = " + ")
   fitForm <- paste0(outcome, " ~ ", fitStr)
+  
+  # Loop through all weeks
   for(j in 1:length(layer)) {
-    # data is complete cases
+    # Data is complete cases (outcome + all predictors)
     data <- data.frame(layer[[j]][userows, c(outcome, predictors)])
-    # Loop through all nodes
-    for(i in 1:dim(data)[1]) {
-      # training set is data minus observation i
-      train <- !cases==i
-      qda.fit <- qda(data[,-1], grouping=data[,1], subset = train)
-      allprob[i, j] <- predict(qda.fit, newdata = data[i,-1])$posterior[2]
+    chunkrows <- chunk(data, n = k)
+    
+    # Loop through all chunks
+    for(i in 1:k) {
+      # Training set is data minus chunk i
+      train <- data[-chunkrows[[i]], ]
+      test <- data[chunkrows[[i]], ]
+      
+      qda.fit <- qda(formula = as.formula(fitForm), data = train)
+      qda.pred <- predict(qda.fit, newdata = test)$posterior
+      allprob[chunkrows[[i]], j] <- qda.pred[, 2]
     }
   }
   allpred <- allprob
@@ -168,25 +179,20 @@ jackPredQDA<- function(layer, outcome = "pass",
   }
   
   names(alldata) <- c("name", outcome, paste0("Week", c(1:length(layer))))
-  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1]))
+  print(paste0("Fit: ", fitForm, ", complete N = ", dim(alldata)[1], ", k = ", k))
   return(alldata)
 }
 
 
 # K nearest neighbors version
-# Input: List of weekly data frames, optional outcome (pass/justpass), optional 
-#  subset of predictors to use
+# Input: List of weekly data frames, outcome (pass/justpass), number of chunks 
+#  to divide data into, number of neighbors, predictors to use
 # Output: List of prediction vectors for that weekly aggregate network; each 
 #  node in the vector is predicted using all the other nodes
-jackPredKNN <- function(layer, nK = 1, outcome = "pass", 
-                        predictors = c("gender", "cohort", "fci_pre", 
-                                       "PageRank", "tarEnt", "Hide")) {
-  # Check for valid input
-  if (outcome == "pass" | outcome == "justpass") {
-    choices <- c("0", "1")
-  } else {
-    stop("Not a valid outcome variable.")
-  }
+kfoldKNN <- function(layer, k = 5, outcome = "pass", nK = 1, 
+                     predictors = c("gender", "cohort", "fci_pre", 
+                                    "PageRank", "tarEnt", "Hide")) {
+  choices <- checkInput(outcome)
   
   # Input data (complete cases) and empty frame to store predictions 
   Nlayer <- length(layer)
@@ -200,25 +206,28 @@ jackPredKNN <- function(layer, nK = 1, outcome = "pass",
   # Loop through all weeks
   for(j in seq(Nlayer)) {
     data <- layer[[j]][userows, c(outcome, predictors)] # data is complete cases
+    chunkrows <- chunk(data, n = k)
     
-    # Loop through all nodes
-    for(i in 1:dim(data)[1]) {
-      # Training set is data minus observation i
+    # Loop through all chunks
+    for(i in 1:k) {
+      # Training set is data minus chunk i
       # Predictor matrices for training and test data
-      train <- as.matrix(data[-i, predictors])
-      test <- as.matrix(data[i, predictors])
+      #train <- as.matrix(data[-i, predictors])
+      #test <- as.matrix(data[i, predictors])
+      train <- data[-chunkrows[[i]], ]
+      test <- data[chunkrows[[i]], ]
       
       # Outcome vectors for training and test data
       # Can't just do data[-i, outcome], for explanation see
       # https://stackoverflow.com/questions/51063381/vector-from-tibble-has-length-0
-      trOutcome <- pull(data[-i, ], var = outcome)
-      teOutcome <- pull(data[i, ], var = outcome)
+      trOutcome <- pull(data[-chunkrows[[i]], ], var = outcome)
+      teOutcome <- pull(data[chunkrows[[i]], ], var = outcome)
       
       # Run KNN
       set.seed(2)
       # Logistic regression makes probabilities, which you translate into 
       # prediction; KNN does it all in one step
-      allpred[i, j] <- knn(train, test, trOutcome, k = nK)
+      allpred[chunkrows[[i]], j] <- class::knn(train, test, trOutcome, k = nK)
     }
   }
   
@@ -232,6 +241,6 @@ jackPredKNN <- function(layer, nK = 1, outcome = "pass",
   
   # Print info string and return predictions
   print(paste0("Fit: ", fitForm, ", #neighbors = ", nK, 
-               ", complete N = ", dim(allpred)[1]))
+               ", complete N = ", dim(allpred)[1], ", k = ", k))
   return(list(nK = nK, allpred = allpred))
 }

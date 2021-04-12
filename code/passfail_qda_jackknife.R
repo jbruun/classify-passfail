@@ -1,7 +1,7 @@
 # Quadratic Discriminant Analysis on pass/fail centrality by removing single observations.
-# Last modified: 6/8/20 (updating to use Jesper's cleaned-up data)
+# Last modified: 1/25/21 (standardize CSV file names)
 # 
-# Status: Jackknife prediction runs (at least on PS), next do justpass and success rates.
+# Status: Works.
 
 rm(list = ls())
 
@@ -95,7 +95,7 @@ succRateQDA <- data.frame(Layer = c("PS","CD","ICS"),
                        Guessing = c(mean(predPS$pass == "1"), mean(predCD$pass == "1"),
                                     mean(predICS$pass == "1")))
 
-write.csv(succRateQDA,"succRateQDA.csv", row.names = FALSE)
+write.csv(succRate,"results/succRate_qda.csv", row.names = FALSE)
 
 # Success rate for predictions on the pass/fail boundary
 compareJust <- rbind(sapply(predJustPS[, 3:9], function(x) mean(x == predJustPS$justpass)),
@@ -108,7 +108,7 @@ succRateJustQDA <- data.frame(Layer = c("PS", "CD", "ICS"),
                                         mean(predJustCD$justpass == "1"),
                                         mean(predJustICS$justpass == "1")))
 
-write.csv(succRateJustQDA,"succRateJustQDA.csv", row.names = FALSE)
+write.csv(succRate,"results/succRateJust_qda.csv", row.names = FALSE)
 
 
 ## OLD, NOT UPDATED YET 
