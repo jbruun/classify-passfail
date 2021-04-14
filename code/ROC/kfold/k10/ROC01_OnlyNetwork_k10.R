@@ -1,5 +1,5 @@
 # Logstic regression on pass/fail centrality with k-fold cross-validation.
-# Last modified: 12/3/20 (run and save k=5 results, check plot)
+# Last modified: 12/3/20 (run and save k=10 results, check plot)
 # 
 # Status: Works. 
 
@@ -348,7 +348,7 @@ save(ROC_PS_log,ROC_CD_log,ROC_ICS_log, ROC_PS_justpass_log,ROC_CD_justpass_log,
      ROC_PS_log_H,ROC_CD_log_H,ROC_ICS_log_H, ROC_PS_justpass_log_H,ROC_CD_justpass_log_H,ROC_ICS_justpass_log_H,
      ROC_PS_log_TE,ROC_CD_log_TE,ROC_ICS_log_TE, ROC_PS_justpass_log_TE,ROC_CD_justpass_log_TE,ROC_ICS_justpass_log_TE,
      ROC_PS_log_PR,ROC_CD_log_PR,ROC_ICS_log_PR, ROC_PS_justpass_log_PR,ROC_CD_justpass_log_PR,ROC_ICS_justpass_log_PR,
-     file="data/ROC_AUC/kfold/k5/ROC01_NB_logreg_k10.Rdata")
+     file="data/ROC_AUC/kfold/k10/ROC01_NB_logreg_k10.Rdata")
 
 tend<-Sys.time()
 tend-tstart
@@ -674,7 +674,7 @@ save(ROC_PS_lda,ROC_CD_lda,ROC_ICS_lda, ROC_PS_justpass_lda,ROC_CD_justpass_lda,
      ROC_PS_lda_H,ROC_CD_lda_H,ROC_ICS_lda_H, ROC_PS_justpass_lda_H,ROC_CD_justpass_lda_H,ROC_ICS_justpass_lda_H,
      ROC_PS_lda_TE,ROC_CD_lda_TE,ROC_ICS_lda_TE, ROC_PS_justpass_lda_TE,ROC_CD_justpass_lda_TE,ROC_ICS_justpass_lda_TE,
      ROC_PS_lda_PR,ROC_CD_lda_PR,ROC_ICS_lda_PR, ROC_PS_justpass_lda_PR,ROC_CD_justpass_lda_PR,ROC_ICS_justpass_lda_PR,
-     file="data/ROC_AUC/kfold/k5/ROC01_ROC_NB_lda_k10.Rdata")
+     file="data/ROC_AUC/kfold/k10/ROC01_ROC_NB_lda_k10.Rdata")
 
 
 
@@ -998,7 +998,7 @@ save(ROC_PS_qda,ROC_CD_qda,ROC_ICS_qda, ROC_PS_justpass_qda,ROC_CD_justpass_qda,
      ROC_PS_qda_H,ROC_CD_qda_H,ROC_ICS_qda_H, ROC_PS_justpass_qda_H,ROC_CD_justpass_qda_H,ROC_ICS_justpass_qda_H,
      ROC_PS_qda_TE,ROC_CD_qda_TE,ROC_ICS_qda_TE, ROC_PS_justpass_qda_TE,ROC_CD_justpass_qda_TE,ROC_ICS_justpass_qda_TE,
      ROC_PS_qda_PR,ROC_CD_qda_PR,ROC_ICS_qda_PR, ROC_PS_justpass_qda_PR,ROC_CD_justpass_qda_PR,ROC_ICS_justpass_qda_PR,
-     file="data/ROC_AUC/kfold/k5/ROC01_NB_qda_k10.Rdata")
+     file="data/ROC_AUC/kfold/k10/ROC01_NB_qda_k10.Rdata")
 
 
 
@@ -1322,7 +1322,7 @@ save(ROC_PS_knn,ROC_CD_knn,ROC_ICS_knn, ROC_PS_justpass_knn,ROC_CD_justpass_knn,
      ROC_PS_knn_H,ROC_CD_knn_H,ROC_ICS_knn_H, ROC_PS_justpass_knn_H,ROC_CD_justpass_knn_H,ROC_ICS_justpass_knn_H,
      ROC_PS_knn_TE,ROC_CD_knn_TE,ROC_ICS_knn_TE, ROC_PS_justpass_knn_TE,ROC_CD_justpass_knn_TE,ROC_ICS_justpass_knn_TE,
      ROC_PS_knn_PR,ROC_CD_knn_PR,ROC_ICS_knn_PR, ROC_PS_justpass_knn_PR,ROC_CD_justpass_knn_PR,ROC_ICS_justpass_knn_PR,
-     file="data/ROC_AUC/kfold/k5/ROC01_NB_knn_k10.Rdata")
+     file="data/ROC_AUC/kfold/k10/ROC01_NB_knn_k10.Rdata")
 
 t2<-Sys.time()
 t2-t1
