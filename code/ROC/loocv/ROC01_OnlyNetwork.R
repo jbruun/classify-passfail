@@ -29,27 +29,13 @@ source("code/ROC_functions.R")
 
 ######ALL NETWORK PREDICTORS######
 
-ROC_PS_log<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_log[[i]]<-ROC
-}
+
+predPS_x<-jackPredLog(centPS,predictors = c("PageRank","tarEnt", "Hide"))
 
 
-ROC_CD_log<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLog(centCD,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_log[[i]]<-ROC
-}
+predCD_x<-jackPredLog(centCD,predictors = c("PageRank","tarEnt", "Hide"))
 
-ROC_ICS_log<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLog(centICS,predictors = c("PageRank","tarEnt", "Hide"),p=i/100)
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_log[[i]]<-ROC
-}
+predICS_x<-jackPredLog(centICS,predictors = c("PageRank","tarEnt", "Hide"))
 
 ROC_PS_justpass_log<-list()
 for(i in 1:100){
