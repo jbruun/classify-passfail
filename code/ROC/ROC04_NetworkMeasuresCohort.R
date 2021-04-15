@@ -1,4 +1,5 @@
-#Logistic Regression
+## Leave one out cross-validation
+##Made ready for ROC curves
 ## Models with network  measures and FCI pre classes
 
 rm(list = ls())

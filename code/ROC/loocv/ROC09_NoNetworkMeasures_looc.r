@@ -1,21 +1,21 @@
-## Leave one out cross-validation
-##Made ready for ROC curves
-## No network measures with FCI Classification 1-4 based on scores
+## Models without networks measures
 
 rm(list = ls())
 
 library(igraph)
 library(dplyr)
-
+library(class)   # for knn
+library(tidyr)
+library(ggplot2)  # for plotting success rates
+library(MASS)
 
 
 # Import pass/fail centrality data
-#loadvars <- load("data/centPassFail.Rdata")
+loadvars <- load("data/centPassFail.Rdata")
 load("data/centrality_data_frames.Rdata")
-load("data/ROC_AUC/ROC_logreg.Rdata")
+load("data/ROC_logreg.Rdata")
 source("code/jackknife_functions.R")
 source("code/ROC_functions.R")
-
 
 ## Run jackknife logistic regression 
 
@@ -25,9 +25,44 @@ centCD <- dfCD %>% group_split(Week)
 centICS <- dfICS %>% group_split(Week)
 
 ###logistic regression passed
+predPS_log_F<-jackPredLog(centPS,predictors = c("fci_pre_c"))
+rocPS_log_F<-list()
+rocPS_log_F[[1]]<-roc(predPS_log_F$pass,as.numeric(predPS_log_F$Week1),auc=T,ci=T)
+rocPS_log_F[[2]]<-roc(predPS_log_F$pass,as.numeric(predPS_log_F$Week2),auc=T,ci=T)
+rocPS_log_F[[3]]<-roc(predPS_log_F$pass,as.numeric(predPS_log_F$Week3),auc=T,ci=T)
+rocPS_log_F[[4]]<-roc(predPS_log_F$pass,as.numeric(predPS_log_F$Week4),auc=T,ci=T)
+rocPS_log_F[[5]]<-roc(predPS_log_F$pass,as.numeric(predPS_log_F$Week5),auc=T,ci=T)
+rocPS_log_F[[6]]<-roc(predPS_log_F$pass,as.numeric(predPS_log_F$Week6),auc=T,ci=T)
+rocPS_log_F[[7]]<-roc(predPS_log_F$pass,as.numeric(predPS_log_F$Week7),auc=T,ci=T)
+PS_log_F_auc<-c(rocPS_log_F[[1]]$auc,rocPS_log_F[[2]]$auc,rocPS_log_F[[3]]$auc,rocPS_log_F[[4]]$auc,
+                  rocPS_log_F[[5]]$auc,rocPS_log_F[[6]]$auc,rocPS_log_F[[7]]$auc)
+PS_log_F_ciL<-c(rocPS_log_F[[1]]$ci[1],rocPS_log_F[[2]]$ci[1],rocPS_log_F[[3]]$ci[1],rocPS_log_F[[4]]$ci[1],
+                  rocPS_log_F[[5]]$ci[1],rocPS_log_F[[6]]$ci[1],rocPS_log_F[[7]]$ci[1])
+PS_log_F_ciH<-c(rocPS_log_F[[1]]$ci[3],rocPS_log_F[[2]]$ci[3],rocPS_log_F[[3]]$ci[3],rocPS_log_F[[4]]$ci[3],
+                  rocPS_log_F[[5]]$ci[3],rocPS_log_F[[6]]$ci[3],rocPS_log_F[[7]]$ci[3])
+x<-c(1:7)
+plot(x, PS_log_F_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Weeks", ylab="AUC and CI",
+     main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_log_F_ciL, x, PS_log_F_ciH, length=0.05, angle=90, code=3)
+
+plot(rocPS_log_F[[1]])
+lines(rocPS_log_F[[2]],col="yellow")
+lines(rocPS_log_F[[3]],col="blue")
+lines(rocPS_log_F[[4]],col="magenta")
+lines(rocPS_log_F[[5]],col="red")
+lines(rocPS_log_F[[6]],col="green")
+lines(rocPS_log_F[[7]],col="purple")
+
+
+
+
 ROC_GCF_log<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("gender", "cohort", "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLog(centPS,predictors = c("gender", "cohort", "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GCF_log[[i]]<-ROC
 }
@@ -67,7 +102,7 @@ GC_AUC_log<-simple_auc(ROC_GC_TPR_log,ROC_GC_FPR_log)
 
 ROC_GF_log<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("gender",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLog(centPS,predictors = c("gender",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GF_log[[i]]<-ROC
 }
@@ -86,9 +121,9 @@ GF_AUC_log<-simple_auc(ROC_GF_TPR_log,ROC_GF_FPR_log)
 
 ROC_CF_log<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("cohort",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLog(centPS,predictors = c("cohort",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
-  ROC_GF_log[[i]]<-ROC
+  ROC_CF_log[[i]]<-ROC
 }
 ROC_CF_TPR_log<-vector()
 ROC_CF_FPR_log<-vector()
@@ -145,7 +180,7 @@ C_AUC_log<-simple_auc(ROC_C_TPR_log,ROC_C_FPR_log)
 
 ROC_F_log<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS,predictors = c("fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLog(centPS,predictors = c("fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_F_log[[i]]<-ROC
 }
@@ -166,7 +201,7 @@ F_AUC_log<-simple_auc(ROC_F_TPR_log,ROC_F_FPR_log)
 ##Logistic regression Just passed
 ROC_GCF_log<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS, outcome="justpass",predictors = c("gender", "cohort", "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLog(centPS, outcome="justpass",predictors = c("gender", "cohort", "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GCF_log[[i]]<-ROC
 }
@@ -206,7 +241,7 @@ GC_AUC_justpass_log<-simple_auc(ROC_GC_TPR_log,ROC_GC_FPR_log)
 
 ROC_GF_log<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS, outcome="justpass",predictors = c("gender",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLog(centPS, outcome="justpass",predictors = c("gender",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GF_log[[i]]<-ROC
 }
@@ -225,9 +260,9 @@ GF_AUC_justpass_log<-simple_auc(ROC_GF_TPR_log,ROC_GF_FPR_log)
 
 ROC_CF_log<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS, outcome="justpass",predictors = c("cohort",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLog(centPS, outcome="justpass",predictors = c("cohort",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
-  ROC_GF_log[[i]]<-ROC
+  ROC_CF_log[[i]]<-ROC
 }
 ROC_CF_TPR_log<-vector()
 ROC_CF_FPR_log<-vector()
@@ -284,7 +319,7 @@ C_AUC_justpass_log<-simple_auc(ROC_C_TPR_log,ROC_C_FPR_log)
 
 ROC_F_log<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLog(centPS, outcome="justpass",predictors = c("fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLog(centPS, outcome="justpass",predictors = c("fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_F_log[[i]]<-ROC
 }
@@ -304,7 +339,7 @@ F_AUC_justpass_log<-simple_auc(ROC_F_TPR_log,ROC_F_FPR_log)
 
 save(ROC_GCF_log,ROC_GC_log,ROC_GF_log, ROC_CF_log,ROC_F_log,ROC_C_log,ROC_F_log,
      ROC_GCF_justpass_log,ROC_GC_justpass_log,ROC_GF_justpass_log, ROC_CF_justpass_log,
-     ROC_F_justpass_log,ROC_C_justpass_log,ROC_F_justpass_log,file="data/ROC_AUC/ROC10_NN_logreg.Rdata")
+     ROC_F_justpass_log,ROC_C_justpass_log,ROC_F_justpass_log,file="data/ROC_AUC/ROC09_NN_logreg.Rdata")
 
 ##########LDA############
 ##########LDA############
@@ -314,7 +349,7 @@ save(ROC_GCF_log,ROC_GC_log,ROC_GF_log, ROC_CF_log,ROC_F_log,ROC_C_log,ROC_F_log
 ###linear discriminant analysis passed
 ROC_GCF_lda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,predictors = c("gender", "cohort", "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLDA(centPS,predictors = c("gender", "cohort", "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GCF_lda[[i]]<-ROC
 }
@@ -354,7 +389,7 @@ GC_AUC_lda<-simple_auc(ROC_GC_TPR_lda,ROC_GC_FPR_lda)
 
 ROC_GF_lda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,predictors = c("gender",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLDA(centPS,predictors = c("gender",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GF_lda[[i]]<-ROC
 }
@@ -373,9 +408,9 @@ GF_AUC_lda<-simple_auc(ROC_GF_TPR_lda,ROC_GF_FPR_lda)
 
 ROC_CF_lda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,predictors = c("cohort",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLDA(centPS,predictors = c("cohort",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
-  ROC_GF_lda[[i]]<-ROC
+  ROC_CF_lda[[i]]<-ROC
 }
 ROC_CF_TPR_lda<-vector()
 ROC_CF_FPR_lda<-vector()
@@ -432,7 +467,7 @@ C_AUC_lda<-simple_auc(ROC_C_TPR_lda,ROC_C_FPR_lda)
 
 ROC_F_lda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,predictors = c("fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLDA(centPS,predictors = c("fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_F_lda[[i]]<-ROC
 }
@@ -453,7 +488,7 @@ F_AUC_lda<-simple_auc(ROC_F_TPR_lda,ROC_F_FPR_lda)
 ##Linear Discriminant Analysis Just passed
 ROC_GCF_lda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS, outcome="justpass",predictors = c("gender", "cohort", "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLDA(centPS, outcome="justpass",predictors = c("gender", "cohort", "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GCF_lda[[i]]<-ROC
 }
@@ -493,7 +528,7 @@ GC_AUC_justpass_lda<-simple_auc(ROC_GC_TPR_lda,ROC_GC_FPR_lda)
 
 ROC_GF_lda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS, outcome="justpass",predictors = c("gender",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLDA(centPS, outcome="justpass",predictors = c("gender",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GF_lda[[i]]<-ROC
 }
@@ -512,9 +547,9 @@ GF_AUC_justpass_lda<-simple_auc(ROC_GF_TPR_lda,ROC_GF_FPR_lda)
 
 ROC_CF_lda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS, outcome="justpass",predictors = c("cohort",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLDA(centPS, outcome="justpass",predictors = c("cohort",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
-  ROC_GF_lda[[i]]<-ROC
+  ROC_CF_lda[[i]]<-ROC
 }
 ROC_CF_TPR_lda<-vector()
 ROC_CF_FPR_lda<-vector()
@@ -571,7 +606,7 @@ C_AUC_justpass_lda<-simple_auc(ROC_C_TPR_lda,ROC_C_FPR_lda)
 
 ROC_F_lda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS, outcome="justpass",predictors = c("fci_pre_c"),p=i/100)
+  predPS_x<-jackPredLDA(centPS, outcome="justpass",predictors = c("fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_F_lda[[i]]<-ROC
 }
@@ -591,7 +626,7 @@ F_AUC_justpass_lda<-simple_auc(ROC_F_TPR_lda,ROC_F_FPR_lda)
 
 save(ROC_GCF_lda,ROC_GC_lda,ROC_GF_lda, ROC_CF_lda,ROC_F_lda,ROC_C_lda,ROC_F_lda,
      ROC_GCF_justpass_lda,ROC_GC_justpass_lda,ROC_GF_justpass_lda, ROC_CF_justpass_lda,
-     ROC_F_justpass_lda,ROC_C_justpass_lda,ROC_F_justpass_lda,file="data/ROC_AUC/ROC10_NN_ldareg.Rdata")
+     ROC_F_justpass_lda,ROC_C_justpass_lda,ROC_F_justpass_lda,file="data/ROC_AUC/ROC09_NN_ldareg.Rdata")
 
 
 ##########QDA############
@@ -599,10 +634,10 @@ save(ROC_GCF_lda,ROC_GC_lda,ROC_GF_lda, ROC_CF_lda,ROC_F_lda,ROC_C_lda,ROC_F_lda
 ##########QDA############
 ##########QDA############
 ##########QDA############
-###linear discriminant analysis passed
+###quadratic discriminant analysis passed
 ROC_GCF_qda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,predictors = c("gender", "cohort", "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredQDA(centPS,predictors = c("gender", "cohort", "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GCF_qda[[i]]<-ROC
 }
@@ -642,7 +677,7 @@ GC_AUC_qda<-simple_auc(ROC_GC_TPR_qda,ROC_GC_FPR_qda)
 
 ROC_GF_qda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,predictors = c("gender",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredQDA(centPS,predictors = c("gender",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GF_qda[[i]]<-ROC
 }
@@ -661,9 +696,9 @@ GF_AUC_qda<-simple_auc(ROC_GF_TPR_qda,ROC_GF_FPR_qda)
 
 ROC_CF_qda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,predictors = c("cohort",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredQDA(centPS,predictors = c("cohort",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
-  ROC_GF_qda[[i]]<-ROC
+  ROC_CF_qda[[i]]<-ROC
 }
 ROC_CF_TPR_qda<-vector()
 ROC_CF_FPR_qda<-vector()
@@ -720,7 +755,7 @@ C_AUC_qda<-simple_auc(ROC_C_TPR_qda,ROC_C_FPR_qda)
 
 ROC_F_qda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,predictors = c("fci_pre_c"),p=i/100)
+  predPS_x<-jackPredQDA(centPS,predictors = c("fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_F_qda[[i]]<-ROC
 }
@@ -738,10 +773,10 @@ for (i in 1:100){
 
 F_AUC_qda<-simple_auc(ROC_F_TPR_qda,ROC_F_FPR_qda)
 
-##Linear Discriminant Analysis Just passed
+##Quadratic Discriminant Analysis Just passed
 ROC_GCF_qda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS, outcome="justpass",predictors = c("gender", "cohort", "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredQDA(centPS, outcome="justpass",predictors = c("gender", "cohort", "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GCF_qda[[i]]<-ROC
 }
@@ -781,7 +816,7 @@ GC_AUC_justpass_qda<-simple_auc(ROC_GC_TPR_qda,ROC_GC_FPR_qda)
 
 ROC_GF_qda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS, outcome="justpass",predictors = c("gender",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredQDA(centPS, outcome="justpass",predictors = c("gender",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_GF_qda[[i]]<-ROC
 }
@@ -800,9 +835,9 @@ GF_AUC_justpass_qda<-simple_auc(ROC_GF_TPR_qda,ROC_GF_FPR_qda)
 
 ROC_CF_qda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS, outcome="justpass",predictors = c("cohort",  "fci_pre_c"),p=i/100)
+  predPS_x<-jackPredQDA(centPS, outcome="justpass",predictors = c("cohort",  "fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
-  ROC_GF_qda[[i]]<-ROC
+  ROC_CF_qda[[i]]<-ROC
 }
 ROC_CF_TPR_qda<-vector()
 ROC_CF_FPR_qda<-vector()
@@ -859,7 +894,7 @@ C_AUC_justpass_qda<-simple_auc(ROC_C_TPR_qda,ROC_C_FPR_qda)
 
 ROC_F_qda<-list()
 for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS, outcome="justpass",predictors = c("fci_pre_c"),p=i/100)
+  predPS_x<-jackPredQDA(centPS, outcome="justpass",predictors = c("fci_pre"),p=i/100)
   ROC<-ROCplusWeeks(predPS_x)
   ROC_F_qda[[i]]<-ROC
 }
@@ -879,18 +914,17 @@ F_AUC_justpass_qda<-simple_auc(ROC_F_TPR_qda,ROC_F_FPR_qda)
 
 save(ROC_GCF_qda,ROC_GC_qda,ROC_GF_qda, ROC_CF_qda,ROC_F_qda,ROC_C_qda,ROC_F_qda,
      ROC_GCF_justpass_qda,ROC_GC_justpass_qda,ROC_GF_justpass_qda, ROC_CF_justpass_qda,
-     ROC_F_justpass_qda,ROC_C_justpass_qda,ROC_F_justpass_qda,file="data/ROC_AUC/ROC10_NN_qdareg.Rdata")
+     ROC_F_justpass_qda,ROC_C_justpass_qda,ROC_F_justpass_qda,file="data/ROC_AUC/ROC09_NN_qdareg.Rdata")
 
 ##########KNN############
 ##########KNN############
 ##########KNN############
 ##########KNN############
 ##########KNN############
-
 ###K-Nearest Neigbors
 GCF_knn<-list()
 for(i in 1:10){
-  predPS_x<-jackPredKNN(centPS, predictors = c("gender", "cohort", "fci_pre_c"), nK=i)
+  predPS_x<-jackPredKNN(centPS, predictors = c("gender", "cohort", "fci_pre"), nK=i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   GCF_knn[[i]]<-ROC
 }
@@ -924,7 +958,7 @@ for (i in 1:10){
 
 GF_knn<-list()
 for(i in 1:10){
-  predPS_x<-jackPredKNN(centPS, predictors = c("gender", "fci_pre_c"), nK=i)
+  predPS_x<-jackPredKNN(centPS, predictors = c("gender", "fci_pre"), nK=i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   GF_knn[[i]]<-ROC
 }
@@ -940,7 +974,7 @@ for (i in 1:10){
 }
 CF_knn<-list()
 for(i in 1:10){
-  predPS_x<-jackPredKNN(centPS, predictors = c("cohort", "fci_pre_c"), nK=i)
+  predPS_x<-jackPredKNN(centPS, predictors = c("cohort", "fci_pre"), nK=i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   CF_knn[[i]]<-ROC
 }
@@ -957,7 +991,7 @@ for (i in 1:10){
 
 F_knn<-list()
 for(i in 1:10){
-  predPS_x<-jackPredKNN(centPS, predictors = c("fci_pre_c"), nK=i)
+  predPS_x<-jackPredKNN(centPS, predictors = c("fci_pre"), nK=i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   F_knn[[i]]<-ROC
 }
@@ -1007,7 +1041,7 @@ for (i in 1:10){
 ###K-Nearest Neigbors just passed
 GCF_knn_JP<-list()
 for(i in 1:10){
-  predPS_x<-jackPredKNN(centPS, outcome="justpass", predictors = c("gender", "cohort", "fci_pre_c"), nK=i)
+  predPS_x<-jackPredKNN(centPS, outcome="justpass", predictors = c("gender", "cohort", "fci_pre"), nK=i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   GCF_knn_JP[[i]]<-ROC
 }
@@ -1041,7 +1075,7 @@ for (i in 1:10){
 
 GF_knn_JP<-list()
 for(i in 1:10){
-  predPS_x<-jackPredKNN(centPS, outcome="justpass",predictors = c("gender", "fci_pre_c"), nK=i)
+  predPS_x<-jackPredKNN(centPS, outcome="justpass",predictors = c("gender", "fci_pre"), nK=i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   GF_knn_JP[[i]]<-ROC
 }
@@ -1057,7 +1091,7 @@ for (i in 1:10){
 }
 CF_knn_JP<-list()
 for(i in 1:10){
-  predPS_x<-jackPredKNN(centPS, outcome="justpass",predictors = c("cohort", "fci_pre_c"), nK=i)
+  predPS_x<-jackPredKNN(centPS, outcome="justpass",predictors = c("cohort", "fci_pre"), nK=i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   CF_knn_JP[[i]]<-ROC
 }
@@ -1074,7 +1108,7 @@ for (i in 1:10){
 
 F_knn_JP<-list()
 for(i in 1:10){
-  predPS_x<-jackPredKNN(centPS, outcome="justpass",predictors = c("fci_pre_c"), nK=i)
+  predPS_x<-jackPredKNN(centPS, outcome="justpass",predictors = c("fci_pre"), nK=i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   F_knn_JP[[i]]<-ROC
 }
@@ -1138,4 +1172,6 @@ KNNP<-c(max(GCF_SR_knn_JP),max(GF_SR_knn_JP),max(GC_SR_knn_JP),max(CF_SR_knn_JP)
 OnlyBackground_JP<-data.frame(logistic=logRegP, LDA=ldaP,QDA=qdaP,KNN=KNNP)
 rownames(OnlyBackground_JP)<-c("GCF","GF","GC","CF","F","G","C")
 
-save(OnlyBackground,OnlyBackground_JP,file="data/ROC_AUC/AUC10_SR_NN_fcipre.Rdata")
+save(OnlyBackground,OnlyBackground_JP,file="data/ROC_AUC/AUC09_SR_NN_fcipre.Rdata")
+
+
