@@ -91,7 +91,7 @@ succRateLong
 
 Not sure I can put everything on one readable plot. What I'm trying to combine is my various success rate figures. Do a facet grid with `name` as the horizontal variable and `outcome` as the vertical?
 
-```{r}
+```{r, succ-rate-plot, fig.dim = c(9.5, 6)}
 succRateLong %>% ggplot(mapping = aes(x = Week, y = succRate, color = Layer)) +
   geom_line() + 
   facet_grid(rows = vars(outcome), cols = vars(method)) + 
@@ -100,3 +100,16 @@ succRateLong %>% ggplot(mapping = aes(x = Week, y = succRate, color = Layer)) +
 ```
 
 There's no CD layer line for qda because I got an error when running that, and the errors intensified for k-fold cross validation. So that looks like an unfruitful line to pursue. 
+
+
+**Thoughts:**
+
+Now that I finally have them all collected side-by-side, what's the picture? 
+
+* Results by outcome: `pass` is generally more stable from week-to-week than `justpass`. That could be a sample size thing (probably) or possibly less consistent attendance. 
+
+* Methods: QDA and KNN are more variable and perform worse for `pass` than logistic regression or LDA do. That's less true for `justpass`, though KNN still bounces around a lot. 
+
+* Network layer: For the `pass` outcome and logreg or LDA, the three lines track each other pretty well. For `justpass`, ICS emerges as the usually-best case. An exception is the cross-validation runs of K nearest neighbors, where CD is drastically better in week 1 and then drops down. 
+
+* Leave One Out vs. K-fold cross validation: Comparing success rates on the two types of cross validation for the `pass` outcome. They look very similar for logistic regression and LDA, and k-fold is slightly worse for KNN. For the `justpass` outcome, k-fold with `k = 5` looks a bit better for logistic regression and LDA, and basically the same for KNN (barring that week 1 CD spike). 
