@@ -1,4 +1,6 @@
-## Models without background measures
+## Leave one out cross-validation
+##Made ready for ROC curves
+## Mixed layer models without FCI C predictor
 
 rm(list = ls())
 tstart<-Sys.time()

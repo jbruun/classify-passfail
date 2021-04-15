@@ -1,4 +1,6 @@
-## Models without background measures
+## Leave one out cross-validation
+##Made ready for ROC curves
+## Mixed layer models without background measures
 
 rm(list = ls())
 tstart<-Sys.time()
