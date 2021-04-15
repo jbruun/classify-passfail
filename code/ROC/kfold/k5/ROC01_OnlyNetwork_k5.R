@@ -25,6 +25,7 @@ centICS <- dfICS %>% group_split(Week)
 
 source("code/k-fold_functions.R")
 source("code/ROC_functions.R")
+t1<-Sys.time()
 
 #########LOGISTIC REGRESSION###########
 #########LOGISTIC REGRESSION###########
@@ -347,12 +348,11 @@ save(ROC_PS_log,ROC_CD_log,ROC_ICS_log, ROC_PS_justpass_log,ROC_CD_justpass_log,
      ROC_PS_log_H,ROC_CD_log_H,ROC_ICS_log_H, ROC_PS_justpass_log_H,ROC_CD_justpass_log_H,ROC_ICS_justpass_log_H,
      ROC_PS_log_TE,ROC_CD_log_TE,ROC_ICS_log_TE, ROC_PS_justpass_log_TE,ROC_CD_justpass_log_TE,ROC_ICS_justpass_log_TE,
      ROC_PS_log_PR,ROC_CD_log_PR,ROC_ICS_log_PR, ROC_PS_justpass_log_PR,ROC_CD_justpass_log_PR,ROC_ICS_justpass_log_PR,
-     file="data/ROC_AUC/kfold/k5/ROC01_NB_logreg_k5.Rdata")
+     file="data/ROC_AUC/kfold/k5/ROC01_NB_log_k5.Rdata")
 
-tend<-Sys.time()
-tend-tstart
 
-t1<-Sys.time()
+
+
 #########LINEAR DISCRIMINANT ANALYSIS###########
 #########LINEAR DISCRIMINANT ANALYSIS###########
 #########LINEAR DISCRIMINANT ANALYSIS ###########
