@@ -1368,7 +1368,8 @@ for(i in 1:20){
 }
 
 x<-c(1:7)
-plot(x,ROC_PS_knn[[1]]$SR,type="b",ylim=c(0.6,0.8))
+plot(x,ROC_PS_knn[[1]]$SR,type="b",ylim=c(0.6,0.8),xlab="Course Week", main="K-Nearest Neighbor Models",
+     sub="Pass/fail (n=166), PR-TE-H",ylab="Succes Rate")
 lines(x,ROC_PS_knn[[2]]$SR,type="b",pch=2)
 lines(x,ROC_PS_knn[[3]]$SR,type="b",pch=3)
 lines(x,ROC_PS_knn[[4]]$SR,type="b",pch=4)
@@ -1460,7 +1461,7 @@ for(i in 1:20){
   ROC_PS_justpass_knn[[i]]<-ROC
 }
 x<-c(1:7)
-plot(x,ROC_PS_justpass_knn[[1]]$SR,type="b",ylim=c(0.6,0.8))
+plot(x,ROC_PS_justpass_knn[[1]]$SR,type="b",ylim=c(0,1))
 lines(x,ROC_PS_justpass_knn[[2]]$SR,type="b",pch=2)
 lines(x,ROC_PS_justpass_knn[[3]]$SR,type="b",pch=3)
 lines(x,ROC_PS_justpass_knn[[4]]$SR,type="b",pch=4)
@@ -1540,7 +1541,7 @@ lines(x,ROC_ICS_justpass_knn[[17]]$SR,type="b",pch=17)
 lines(x,ROC_ICS_justpass_knn[[18]]$SR,type="b",pch=18)
 lines(x,ROC_ICS_justpass_knn[[19]]$SR,type="b",pch=19)
 lines(x,ROC_ICS_justpass_knn[[20]]$SR,type="b",pch=20)
-abline(h=0.77)
+abline(h=0.58)
 
 ######PAGERANK TARGET ENTROPY NETWORK PREDICTORS######
 

@@ -51,6 +51,7 @@ plot(x, PS_log_PTHF_auc,
 )
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, PS_log_PTHF_ciL, x, PS_log_PTHF_ciH, length=0.05, angle=90, code=3)
+abline(h=lazy)
 
 plot(rocPS_log_PTHF[[1]])
 lines(rocPS_log_PTHF[[2]],col="yellow")

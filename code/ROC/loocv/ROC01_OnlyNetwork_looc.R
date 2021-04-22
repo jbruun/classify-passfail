@@ -29,7 +29,7 @@ source("code/ROC_functions.R")
 #########LOGISTIC REGRESSION###########
 
 ######ALL NETWORK PREDICTORS######
-
+lazy<-table(predPS_log_PTH$pass)[2]/sum(table(predICS_jp_log_PTH$pass))
 
 predPS_log_PTH<-jackPredLog(centPS,predictors = c("PageRank","tarEnt", "Hide"))
 rocPS_log_PTH<-list()
@@ -46,6 +46,9 @@ PS_log_PTH_ciL<-c(rocPS_log_PTH[[1]]$ci[1],rocPS_log_PTH[[2]]$ci[1],rocPS_log_PT
                   rocPS_log_PTH[[5]]$ci[1],rocPS_log_PTH[[6]]$ci[1],rocPS_log_PTH[[7]]$ci[1])
 PS_log_PTH_ciH<-c(rocPS_log_PTH[[1]]$ci[3],rocPS_log_PTH[[2]]$ci[3],rocPS_log_PTH[[3]]$ci[3],rocPS_log_PTH[[4]]$ci[3],
                   rocPS_log_PTH[[5]]$ci[3],rocPS_log_PTH[[6]]$ci[3],rocPS_log_PTH[[7]]$ci[3])
+
+lazy<-table(predPS_log_PTH$pass)[2]/sum(table(predPS_log_PTH$pass))
+
 x<-c(1:7)
 plot(x, PS_log_PTH_auc,
      ylim=range(c(0, 1)),
@@ -54,6 +57,7 @@ plot(x, PS_log_PTH_auc,
 )
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, PS_log_PTH_ciL, x, PS_log_PTH_ciH, length=0.05, angle=90, code=3)
+abline(h = lazy)
 
 plot(rocPS_log_PTH[[1]])
 lines(rocPS_log_PTH[[2]],col="yellow")
@@ -73,6 +77,20 @@ rocCD_log_PTH[[4]]<-roc(predCD_log_PTH$pass,as.numeric(predCD_log_PTH$Week4),auc
 rocCD_log_PTH[[5]]<-roc(predCD_log_PTH$pass,as.numeric(predCD_log_PTH$Week5),auc=T,ci=T)
 rocCD_log_PTH[[6]]<-roc(predCD_log_PTH$pass,as.numeric(predCD_log_PTH$Week6),auc=T,ci=T)
 rocCD_log_PTH[[7]]<-roc(predCD_log_PTH$pass,as.numeric(predCD_log_PTH$Week7),auc=T,ci=T)
+CD_log_PTH_auc<-c(rocCD_log_PTH[[1]]$auc,rocCD_log_PTH[[2]]$auc,rocCD_log_PTH[[3]]$auc,rocCD_log_PTH[[4]]$auc,
+                  rocCD_log_PTH[[5]]$auc,rocCD_log_PTH[[6]]$auc,rocCD_log_PTH[[7]]$auc)
+CD_log_PTH_ciL<-c(rocCD_log_PTH[[1]]$ci[1],rocCD_log_PTH[[2]]$ci[1],rocCD_log_PTH[[3]]$ci[1],rocCD_log_PTH[[4]]$ci[1],
+                  rocCD_log_PTH[[5]]$ci[1],rocCD_log_PTH[[6]]$ci[1],rocCD_log_PTH[[7]]$ci[1])
+CD_log_PTH_ciH<-c(rocCD_log_PTH[[1]]$ci[3],rocCD_log_PTH[[2]]$ci[3],rocCD_log_PTH[[3]]$ci[3],rocCD_log_PTH[[4]]$ci[3],
+                  rocCD_log_PTH[[5]]$ci[3],rocCD_log_PTH[[6]]$ci[3],rocCD_log_PTH[[7]]$ci[3])
+
+lines(x, CD_log_PTH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Weeks", ylab="AUC and CI",
+     main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, CD_log_PTH_ciL, x, CD_log_PTH_ciH, length=0.05, angle=90, code=3)
 
 predICS_log_PTH<-jackPredLog(centICS,predictors = c("PageRank","tarEnt", "Hide"))
 rocICS_log_PTH<-list()
@@ -83,6 +101,22 @@ rocICS_log_PTH[[4]]<-roc(predICS_log_PTH$pass,as.numeric(predICS_log_PTH$Week4),
 rocICS_log_PTH[[5]]<-roc(predICS_log_PTH$pass,as.numeric(predICS_log_PTH$Week5),auc=T,ci=T)
 rocICS_log_PTH[[6]]<-roc(predICS_log_PTH$pass,as.numeric(predICS_log_PTH$Week6),auc=T,ci=T)
 rocICS_log_PTH[[7]]<-roc(predICS_log_PTH$pass,as.numeric(predICS_log_PTH$Week7),auc=T,ci=T)
+ICS_log_PTH_auc<-c(rocICS_log_PTH[[1]]$auc,rocICS_log_PTH[[2]]$auc,rocICS_log_PTH[[3]]$auc,rocICS_log_PTH[[4]]$auc,
+                  rocICS_log_PTH[[5]]$auc,rocICS_log_PTH[[6]]$auc,rocICS_log_PTH[[7]]$auc)
+ICS_log_PTH_ciL<-c(rocICS_log_PTH[[1]]$ci[1],rocICS_log_PTH[[2]]$ci[1],rocICS_log_PTH[[3]]$ci[1],rocICS_log_PTH[[4]]$ci[1],
+                  rocICS_log_PTH[[5]]$ci[1],rocICS_log_PTH[[6]]$ci[1],rocICS_log_PTH[[7]]$ci[1])
+ICS_log_PTH_ciH<-c(rocICS_log_PTH[[1]]$ci[3],rocICS_log_PTH[[2]]$ci[3],rocICS_log_PTH[[3]]$ci[3],rocICS_log_PTH[[4]]$ci[3],
+                  rocICS_log_PTH[[5]]$ci[3],rocICS_log_PTH[[6]]$ci[3],rocICS_log_PTH[[7]]$ci[3])
+
+lines(x, ICS_log_PTH_auc,
+      ylim=range(c(0, 1)),
+      pch=19, xlab="Weeks", ylab="AUC and CI",
+      main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ICS_log_PTH_ciL, x, ICS_log_PTH_ciH, length=0.05, angle=90, code=3)
+##JUSTPASSED
+lazy<-table(predICS_jp_log_PTH$justpass)[2]/sum(table(predICS_jp_log_PTH$justpass))
 
 predPS_jp_log_PTH<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
 rocPS_jp_log_PTH<-list()
@@ -100,6 +134,8 @@ PS_jp_log_PTH_ciL<-c(rocPS_jp_log_PTH[[1]]$ci[1],rocPS_jp_log_PTH[[2]]$ci[1],roc
                   rocPS_jp_log_PTH[[5]]$ci[1],rocPS_jp_log_PTH[[6]]$ci[1],rocPS_jp_log_PTH[[7]]$ci[1])
 PS_jp_log_PTH_ciH<-c(rocPS_jp_log_PTH[[1]]$ci[3],rocPS_jp_log_PTH[[2]]$ci[3],rocPS_jp_log_PTH[[3]]$ci[3],rocPS_jp_log_PTH[[4]]$ci[3],
                   rocPS_jp_log_PTH[[5]]$ci[3],rocPS_jp_log_PTH[[6]]$ci[3],rocPS_jp_log_PTH[[7]]$ci[3])
+
+lazyjp<-table(predPS_jp_log_PTH$justpass)[2]/sum(table(predPS_jp_log_PTH$justpass))
 x<-c(1:7)
 plot(x, PS_jp_log_PTH_auc,
      ylim=range(c(0, 1)),
@@ -108,29 +144,60 @@ plot(x, PS_jp_log_PTH_auc,
 )
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, PS_jp_log_PTH_ciL, x, PS_jp_log_PTH_ciH, length=0.05, angle=90, code=3)
+abline(h=lazyjp)
 
 
 predCD_jp_log_PTH<-jackPredLog(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
-rocPS_log_PTH<-list()
-rocPS_log_PTH[[1]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week1),auc=T,ci=T)
-rocPS_log_PTH[[2]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week2),auc=T,ci=T)
-rocPS_log_PTH[[3]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week3),auc=T,ci=T)
-rocPS_log_PTH[[4]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week4),auc=T,ci=T)
-rocPS_log_PTH[[5]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week5),auc=T,ci=T)
-rocPS_log_PTH[[6]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week6),auc=T,ci=T)
-rocPS_log_PTH[[7]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week7),auc=T,ci=T)
+rocCD_jp_log_PTH<-list()
+rocCD_jp_log_PTH[[1]]<-roc(predCD_jp_log_PTH$justpass,as.numeric(predCD_jp_log_PTH$Week1),auc=T,ci=T)
+rocCD_jp_log_PTH[[2]]<-roc(predCD_jp_log_PTH$justpass,as.numeric(predCD_jp_log_PTH$Week2),auc=T,ci=T)
+rocCD_jp_log_PTH[[3]]<-roc(predCD_jp_log_PTH$justpass,as.numeric(predCD_jp_log_PTH$Week3),auc=T,ci=T)
+rocCD_jp_log_PTH[[4]]<-roc(predCD_jp_log_PTH$justpass,as.numeric(predCD_jp_log_PTH$Week4),auc=T,ci=T)
+rocCD_jp_log_PTH[[5]]<-roc(predCD_jp_log_PTH$justpass,as.numeric(predCD_jp_log_PTH$Week5),auc=T,ci=T)
+rocCD_jp_log_PTH[[6]]<-roc(predCD_jp_log_PTH$justpass,as.numeric(predCD_jp_log_PTH$Week6),auc=T,ci=T)
+rocCD_jp_log_PTH[[7]]<-roc(predCD_jp_log_PTH$justpass,as.numeric(predCD_jp_log_PTH$Week7),auc=T,ci=T)
+
+CD_jp_log_PTH_auc<-c(rocCD_jp_log_PTH[[1]]$auc,rocCD_jp_log_PTH[[2]]$auc,rocCD_jp_log_PTH[[3]]$auc,rocCD_jp_log_PTH[[4]]$auc,
+                     rocCD_jp_log_PTH[[5]]$auc,rocCD_jp_log_PTH[[6]]$auc,rocCD_jp_log_PTH[[7]]$auc)
+CD_jp_log_PTH_ciL<-c(rocCD_jp_log_PTH[[1]]$ci[1],rocCD_jp_log_PTH[[2]]$ci[1],rocCD_jp_log_PTH[[3]]$ci[1],rocCD_jp_log_PTH[[4]]$ci[1],
+                     rocCD_jp_log_PTH[[5]]$ci[1],rocCD_jp_log_PTH[[6]]$ci[1],rocCD_jp_log_PTH[[7]]$ci[1])
+CD_jp_log_PTH_ciH<-c(rocCD_jp_log_PTH[[1]]$ci[3],rocCD_jp_log_PTH[[2]]$ci[3],rocCD_jp_log_PTH[[3]]$ci[3],rocCD_jp_log_PTH[[4]]$ci[3],
+                     rocCD_jp_log_PTH[[5]]$ci[3],rocCD_jp_log_PTH[[6]]$ci[3],rocCD_jp_log_PTH[[7]]$ci[3])
+
+x<-c(1:7)
+lines(x, CD_jp_log_PTH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Weeks", ylab="AUC and CI",
+     main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, CD_jp_log_PTH_ciL, x, CD_jp_log_PTH_ciH, length=0.05, angle=90, code=3)
 
 predICS_jp_log_PTH<-jackPredLog(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
-rocPS_log_PTH<-list()
-rocPS_log_PTH[[1]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week1),auc=T,ci=T)
-rocPS_log_PTH[[2]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week2),auc=T,ci=T)
-rocPS_log_PTH[[3]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week3),auc=T,ci=T)
-rocPS_log_PTH[[4]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week4),auc=T,ci=T)
-rocPS_log_PTH[[5]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week5),auc=T,ci=T)
-rocPS_log_PTH[[6]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week6),auc=T,ci=T)
-rocPS_log_PTH[[7]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week7),auc=T,ci=T)
+rocICS_jp_log_PTH<-list()
+rocICS_jp_log_PTH[[1]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_log_PTH$Week1),auc=T,ci=T)
+rocICS_jp_log_PTH[[2]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_log_PTH$Week2),auc=T,ci=T)
+rocICS_jp_log_PTH[[3]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_log_PTH$Week3),auc=T,ci=T)
+rocICS_jp_log_PTH[[4]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_log_PTH$Week4),auc=T,ci=T)
+rocICS_jp_log_PTH[[5]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_log_PTH$Week5),auc=T,ci=T)
+rocICS_jp_log_PTH[[6]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_log_PTH$Week6),auc=T,ci=T)
+rocICS_jp_log_PTH[[7]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_log_PTH$Week7),auc=T,ci=T)
 
+ICS_jp_log_PTH_auc<-c(rocICS_jp_log_PTH[[1]]$auc,rocICS_jp_log_PTH[[2]]$auc,rocICS_jp_log_PTH[[3]]$auc,rocICS_jp_log_PTH[[4]]$auc,
+                     rocICS_jp_log_PTH[[5]]$auc,rocICS_jp_log_PTH[[6]]$auc,rocICS_jp_log_PTH[[7]]$auc)
+ICS_jp_log_PTH_ciL<-c(rocICS_jp_log_PTH[[1]]$ci[1],rocICS_jp_log_PTH[[2]]$ci[1],rocICS_jp_log_PTH[[3]]$ci[1],rocICS_jp_log_PTH[[4]]$ci[1],
+                     rocICS_jp_log_PTH[[5]]$ci[1],rocICS_jp_log_PTH[[6]]$ci[1],rocICS_jp_log_PTH[[7]]$ci[1])
+ICS_jp_log_PTH_ciH<-c(rocICS_jp_log_PTH[[1]]$ci[3],rocICS_jp_log_PTH[[2]]$ci[3],rocICS_jp_log_PTH[[3]]$ci[3],rocICS_jp_log_PTH[[4]]$ci[3],
+                     rocICS_jp_log_PTH[[5]]$ci[3],rocICS_jp_log_PTH[[6]]$ci[3],rocICS_jp_log_PTH[[7]]$ci[3])
 
+x<-c(1:7)
+lines(x, ICS_jp_log_PTH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Weeks", ylab="AUC and CI",
+     main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ICS_jp_log_PTH_ciL, x, ICS_jp_log_PTH_ciH, length=0.05, angle=90, code=3)
 
 ######PAGERANK TARGET ENTROPY NETWORK PREDICTORS######
 
@@ -413,45 +480,164 @@ save(ROC_PS_log,ROC_CD_log,ROC_ICS_log, ROC_PS_justpass_log,ROC_CD_justpass_log,
 
 ######ALL NETWORK PREDICTORS######
 
-
 predPS_lda_PTH<-jackPredLDA(centPS,predictors = c("PageRank","tarEnt", "Hide"))
+rocPS_lda_PTH<-list()
+rocPS_lda_PTH[[1]]<-roc(predPS_lda_PTH$pass,as.numeric(predPS_lda_PTH$Week1),auc=T,ci=T)
+rocPS_lda_PTH[[2]]<-roc(predPS_lda_PTH$pass,as.numeric(predPS_lda_PTH$Week2),auc=T,ci=T)
+rocPS_lda_PTH[[3]]<-roc(predPS_lda_PTH$pass,as.numeric(predPS_lda_PTH$Week3),auc=T,ci=T)
+rocPS_lda_PTH[[4]]<-roc(predPS_lda_PTH$pass,as.numeric(predPS_lda_PTH$Week4),auc=T,ci=T)
+rocPS_lda_PTH[[5]]<-roc(predPS_lda_PTH$pass,as.numeric(predPS_lda_PTH$Week5),auc=T,ci=T)
+rocPS_lda_PTH[[6]]<-roc(predPS_lda_PTH$pass,as.numeric(predPS_lda_PTH$Week6),auc=T,ci=T)
+rocPS_lda_PTH[[7]]<-roc(predPS_lda_PTH$pass,as.numeric(predPS_lda_PTH$Week7),auc=T,ci=T)
+PS_lda_PTH_auc<-c(rocPS_lda_PTH[[1]]$auc,rocPS_lda_PTH[[2]]$auc,rocPS_lda_PTH[[3]]$auc,rocPS_lda_PTH[[4]]$auc,
+                  rocPS_lda_PTH[[5]]$auc,rocPS_lda_PTH[[6]]$auc,rocPS_lda_PTH[[7]]$auc)
+PS_lda_PTH_ciL<-c(rocPS_lda_PTH[[1]]$ci[1],rocPS_lda_PTH[[2]]$ci[1],rocPS_lda_PTH[[3]]$ci[1],rocPS_lda_PTH[[4]]$ci[1],
+                  rocPS_lda_PTH[[5]]$ci[1],rocPS_lda_PTH[[6]]$ci[1],rocPS_lda_PTH[[7]]$ci[1])
+PS_lda_PTH_ciH<-c(rocPS_lda_PTH[[1]]$ci[3],rocPS_lda_PTH[[2]]$ci[3],rocPS_lda_PTH[[3]]$ci[3],rocPS_lda_PTH[[4]]$ci[3],
+                  rocPS_lda_PTH[[5]]$ci[3],rocPS_lda_PTH[[6]]$ci[3],rocPS_lda_PTH[[7]]$ci[3])
+
+lazy<-table(predPS_lda_PTH$pass)[2]/sum(table(predPS_lda_PTH$pass))
+
+x<-c(1:7)
+plot(x, PS_lda_PTH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Weeks", ylab="AUC and CI",
+     main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_lda_PTH_ciL, x, PS_lda_PTH_ciH, length=0.05, angle=90, code=3)
+abline(h = lazy)
+
+predCD_lda_PTH<-jackPredLDA(centCD,predictors = c("PageRank","tarEnt", "Hide"))
+rocCD_lda_PTH<-list()
+rocCD_lda_PTH[[1]]<-roc(predCD_lda_PTH$pass,as.numeric(predCD_lda_PTH$Week1),auc=T,ci=T)
+rocCD_lda_PTH[[2]]<-roc(predCD_lda_PTH$pass,as.numeric(predCD_lda_PTH$Week2),auc=T,ci=T)
+rocCD_lda_PTH[[3]]<-roc(predCD_lda_PTH$pass,as.numeric(predCD_lda_PTH$Week3),auc=T,ci=T)
+rocCD_lda_PTH[[4]]<-roc(predCD_lda_PTH$pass,as.numeric(predCD_lda_PTH$Week4),auc=T,ci=T)
+rocCD_lda_PTH[[5]]<-roc(predCD_lda_PTH$pass,as.numeric(predCD_lda_PTH$Week5),auc=T,ci=T)
+rocCD_lda_PTH[[6]]<-roc(predCD_lda_PTH$pass,as.numeric(predCD_lda_PTH$Week6),auc=T,ci=T)
+rocCD_lda_PTH[[7]]<-roc(predCD_lda_PTH$pass,as.numeric(predCD_lda_PTH$Week7),auc=T,ci=T)
+CD_lda_PTH_auc<-c(rocCD_lda_PTH[[1]]$auc,rocCD_lda_PTH[[2]]$auc,rocCD_lda_PTH[[3]]$auc,rocCD_lda_PTH[[4]]$auc,
+                  rocCD_lda_PTH[[5]]$auc,rocCD_lda_PTH[[6]]$auc,rocCD_lda_PTH[[7]]$auc)
+CD_lda_PTH_ciL<-c(rocCD_lda_PTH[[1]]$ci[1],rocCD_lda_PTH[[2]]$ci[1],rocCD_lda_PTH[[3]]$ci[1],rocCD_lda_PTH[[4]]$ci[1],
+                  rocCD_lda_PTH[[5]]$ci[1],rocCD_lda_PTH[[6]]$ci[1],rocCD_lda_PTH[[7]]$ci[1])
+CD_lda_PTH_ciH<-c(rocCD_lda_PTH[[1]]$ci[3],rocCD_lda_PTH[[2]]$ci[3],rocCD_lda_PTH[[3]]$ci[3],rocCD_lda_PTH[[4]]$ci[3],
+                  rocCD_lda_PTH[[5]]$ci[3],rocCD_lda_PTH[[6]]$ci[3],rocCD_lda_PTH[[7]]$ci[3])
+
+lines(x, CD_lda_PTH_auc,
+      ylim=range(c(0, 1)),
+      pch=19, xlab="Weeks", ylab="AUC and CI",
+      main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, CD_lda_PTH_ciL, x, CD_lda_PTH_ciH, length=0.05, angle=90, code=3)
+
+predICS_lda_PTH<-jackPredLDA(centICS,predictors = c("PageRank","tarEnt", "Hide"))
+rocICS_lda_PTH<-list()
+rocICS_lda_PTH[[1]]<-roc(predICS_lda_PTH$pass,as.numeric(predICS_lda_PTH$Week1),auc=T,ci=T)
+rocICS_lda_PTH[[2]]<-roc(predICS_lda_PTH$pass,as.numeric(predICS_lda_PTH$Week2),auc=T,ci=T)
+rocICS_lda_PTH[[3]]<-roc(predICS_lda_PTH$pass,as.numeric(predICS_lda_PTH$Week3),auc=T,ci=T)
+rocICS_lda_PTH[[4]]<-roc(predICS_lda_PTH$pass,as.numeric(predICS_lda_PTH$Week4),auc=T,ci=T)
+rocICS_lda_PTH[[5]]<-roc(predICS_lda_PTH$pass,as.numeric(predICS_lda_PTH$Week5),auc=T,ci=T)
+rocICS_lda_PTH[[6]]<-roc(predICS_lda_PTH$pass,as.numeric(predICS_lda_PTH$Week6),auc=T,ci=T)
+rocICS_lda_PTH[[7]]<-roc(predICS_lda_PTH$pass,as.numeric(predICS_lda_PTH$Week7),auc=T,ci=T)
+ICS_lda_PTH_auc<-c(rocICS_lda_PTH[[1]]$auc,rocICS_lda_PTH[[2]]$auc,rocICS_lda_PTH[[3]]$auc,rocICS_lda_PTH[[4]]$auc,
+                   rocICS_lda_PTH[[5]]$auc,rocICS_lda_PTH[[6]]$auc,rocICS_lda_PTH[[7]]$auc)
+ICS_lda_PTH_ciL<-c(rocICS_lda_PTH[[1]]$ci[1],rocICS_lda_PTH[[2]]$ci[1],rocICS_lda_PTH[[3]]$ci[1],rocICS_lda_PTH[[4]]$ci[1],
+                   rocICS_lda_PTH[[5]]$ci[1],rocICS_lda_PTH[[6]]$ci[1],rocICS_lda_PTH[[7]]$ci[1])
+ICS_lda_PTH_ciH<-c(rocICS_lda_PTH[[1]]$ci[3],rocICS_lda_PTH[[2]]$ci[3],rocICS_lda_PTH[[3]]$ci[3],rocICS_lda_PTH[[4]]$ci[3],
+                   rocICS_lda_PTH[[5]]$ci[3],rocICS_lda_PTH[[6]]$ci[3],rocICS_lda_PTH[[7]]$ci[3])
+
+lines(x, ICS_lda_PTH_auc,
+      ylim=range(c(0, 1)),
+      pch=19, xlab="Weeks", ylab="AUC and CI",
+      main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ICS_lda_PTH_ciL, x, ICS_lda_PTH_ciH, length=0.05, angle=90, code=3)
+##JUSTPASSED
+lazy<-table(predICS_jp_lda_PTH$justpass)[2]/sum(table(predICS_jp_lda_PTH$justpass))
+
+predPS_jp_lda_PTH<-jackPredLDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+rocPS_jp_lda_PTH<-list()
+rocPS_jp_lda_PTH[[1]]<-roc(predPS_jp_lda_PTH$justpass,as.numeric(predPS_jp_lda_PTH$Week1),auc=T,ci=T)
+rocPS_jp_lda_PTH[[2]]<-roc(predPS_jp_lda_PTH$justpass,as.numeric(predPS_jp_lda_PTH$Week2),auc=T,ci=T)
+rocPS_jp_lda_PTH[[3]]<-roc(predPS_jp_lda_PTH$justpass,as.numeric(predPS_jp_lda_PTH$Week3),auc=T,ci=T)
+rocPS_jp_lda_PTH[[4]]<-roc(predPS_jp_lda_PTH$justpass,as.numeric(predPS_jp_lda_PTH$Week4),auc=T,ci=T)
+rocPS_jp_lda_PTH[[5]]<-roc(predPS_jp_lda_PTH$justpass,as.numeric(predPS_jp_lda_PTH$Week5),auc=T,ci=T)
+rocPS_jp_lda_PTH[[6]]<-roc(predPS_jp_lda_PTH$justpass,as.numeric(predPS_jp_lda_PTH$Week6),auc=T,ci=T)
+rocPS_jp_lda_PTH[[7]]<-roc(predPS_jp_lda_PTH$justpass,as.numeric(predPS_jp_lda_PTH$Week7),auc=T,ci=T)
+
+PS_jp_lda_PTH_auc<-c(rocPS_jp_lda_PTH[[1]]$auc,rocPS_jp_lda_PTH[[2]]$auc,rocPS_jp_lda_PTH[[3]]$auc,rocPS_jp_lda_PTH[[4]]$auc,
+                     rocPS_jp_lda_PTH[[5]]$auc,rocPS_jp_lda_PTH[[6]]$auc,rocPS_jp_lda_PTH[[7]]$auc)
+PS_jp_lda_PTH_ciL<-c(rocPS_jp_lda_PTH[[1]]$ci[1],rocPS_jp_lda_PTH[[2]]$ci[1],rocPS_jp_lda_PTH[[3]]$ci[1],rocPS_jp_lda_PTH[[4]]$ci[1],
+                     rocPS_jp_lda_PTH[[5]]$ci[1],rocPS_jp_lda_PTH[[6]]$ci[1],rocPS_jp_lda_PTH[[7]]$ci[1])
+PS_jp_lda_PTH_ciH<-c(rocPS_jp_lda_PTH[[1]]$ci[3],rocPS_jp_lda_PTH[[2]]$ci[3],rocPS_jp_lda_PTH[[3]]$ci[3],rocPS_jp_lda_PTH[[4]]$ci[3],
+                     rocPS_jp_lda_PTH[[5]]$ci[3],rocPS_jp_lda_PTH[[6]]$ci[3],rocPS_jp_lda_PTH[[7]]$ci[3])
+
+lazyjp<-table(predPS_jp_lda_PTH$justpass)[2]/sum(table(predPS_jp_lda_PTH$justpass))
+x<-c(1:7)
+plot(x, PS_jp_lda_PTH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Weeks", ylab="AUC and CI",
+     main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_jp_lda_PTH_ciL, x, PS_jp_lda_PTH_ciH, length=0.05, angle=90, code=3)
+abline(h=lazyjp)
 
 
-ROC_CD_lda<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD,predictors = c("PageRank","tarEnt", "Hide"))
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_lda[[i]]<-ROC
-}
+predCD_jp_lda_PTH<-jackPredLDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+rocCD_jp_lda_PTH<-list()
+rocCD_jp_lda_PTH[[1]]<-roc(predCD_jp_lda_PTH$justpass,as.numeric(predCD_jp_lda_PTH$Week1),auc=T,ci=T)
+rocCD_jp_lda_PTH[[2]]<-roc(predCD_jp_lda_PTH$justpass,as.numeric(predCD_jp_lda_PTH$Week2),auc=T,ci=T)
+rocCD_jp_lda_PTH[[3]]<-roc(predCD_jp_lda_PTH$justpass,as.numeric(predCD_jp_lda_PTH$Week3),auc=T,ci=T)
+rocCD_jp_lda_PTH[[4]]<-roc(predCD_jp_lda_PTH$justpass,as.numeric(predCD_jp_lda_PTH$Week4),auc=T,ci=T)
+rocCD_jp_lda_PTH[[5]]<-roc(predCD_jp_lda_PTH$justpass,as.numeric(predCD_jp_lda_PTH$Week5),auc=T,ci=T)
+rocCD_jp_lda_PTH[[6]]<-roc(predCD_jp_lda_PTH$justpass,as.numeric(predCD_jp_lda_PTH$Week6),auc=T,ci=T)
+rocCD_jp_lda_PTH[[7]]<-roc(predCD_jp_lda_PTH$justpass,as.numeric(predCD_jp_lda_PTH$Week7),auc=T,ci=T)
 
-ROC_ICS_lda<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS,predictors = c("PageRank","tarEnt", "Hide"))
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_lda[[i]]<-ROC
-}
+CD_jp_lda_PTH_auc<-c(rocCD_jp_lda_PTH[[1]]$auc,rocCD_jp_lda_PTH[[2]]$auc,rocCD_jp_lda_PTH[[3]]$auc,rocCD_jp_lda_PTH[[4]]$auc,
+                     rocCD_jp_lda_PTH[[5]]$auc,rocCD_jp_lda_PTH[[6]]$auc,rocCD_jp_lda_PTH[[7]]$auc)
+CD_jp_lda_PTH_ciL<-c(rocCD_jp_lda_PTH[[1]]$ci[1],rocCD_jp_lda_PTH[[2]]$ci[1],rocCD_jp_lda_PTH[[3]]$ci[1],rocCD_jp_lda_PTH[[4]]$ci[1],
+                     rocCD_jp_lda_PTH[[5]]$ci[1],rocCD_jp_lda_PTH[[6]]$ci[1],rocCD_jp_lda_PTH[[7]]$ci[1])
+CD_jp_lda_PTH_ciH<-c(rocCD_jp_lda_PTH[[1]]$ci[3],rocCD_jp_lda_PTH[[2]]$ci[3],rocCD_jp_lda_PTH[[3]]$ci[3],rocCD_jp_lda_PTH[[4]]$ci[3],
+                     rocCD_jp_lda_PTH[[5]]$ci[3],rocCD_jp_lda_PTH[[6]]$ci[3],rocCD_jp_lda_PTH[[7]]$ci[3])
 
-ROC_PS_justpass_lda<-list()
-for(i in 1:100){
-  predPS_x<-jackPredLDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_lda[[i]]<-ROC
-}
+x<-c(1:7)
+lines(x, CD_jp_lda_PTH_auc,
+      ylim=range(c(0, 1)),
+      pch=19, xlab="Weeks", ylab="AUC and CI",
+      main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, CD_jp_lda_PTH_ciL, x, CD_jp_lda_PTH_ciH, length=0.05, angle=90, code=3)
 
-ROC_CD_justpass_lda<-list()
-for(i in 1:100){
-  predCD_x<-jackPredLDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_lda[[i]]<-ROC
-}
+predICS_jp_lda_PTH<-jackPredLDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+rocICS_jp_lda_PTH<-list()
+rocICS_jp_lda_PTH[[1]]<-roc(predICS_jp_lda_PTH$justpass,as.numeric(predICS_jp_lda_PTH$Week1),auc=T,ci=T)
+rocICS_jp_lda_PTH[[2]]<-roc(predICS_jp_lda_PTH$justpass,as.numeric(predICS_jp_lda_PTH$Week2),auc=T,ci=T)
+rocICS_jp_lda_PTH[[3]]<-roc(predICS_jp_lda_PTH$justpass,as.numeric(predICS_jp_lda_PTH$Week3),auc=T,ci=T)
+rocICS_jp_lda_PTH[[4]]<-roc(predICS_jp_lda_PTH$justpass,as.numeric(predICS_jp_lda_PTH$Week4),auc=T,ci=T)
+rocICS_jp_lda_PTH[[5]]<-roc(predICS_jp_lda_PTH$justpass,as.numeric(predICS_jp_lda_PTH$Week5),auc=T,ci=T)
+rocICS_jp_lda_PTH[[6]]<-roc(predICS_jp_lda_PTH$justpass,as.numeric(predICS_jp_lda_PTH$Week6),auc=T,ci=T)
+rocICS_jp_lda_PTH[[7]]<-roc(predICS_jp_lda_PTH$justpass,as.numeric(predICS_jp_lda_PTH$Week7),auc=T,ci=T)
 
-ROC_ICS_justpass_lda<-list()
-for(i in 1:100){
-  predICS_x<-jackPredLDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_lda[[i]]<-ROC
-}
+ICS_jp_lda_PTH_auc<-c(rocICS_jp_lda_PTH[[1]]$auc,rocICS_jp_lda_PTH[[2]]$auc,rocICS_jp_lda_PTH[[3]]$auc,rocICS_jp_lda_PTH[[4]]$auc,
+                      rocICS_jp_lda_PTH[[5]]$auc,rocICS_jp_lda_PTH[[6]]$auc,rocICS_jp_lda_PTH[[7]]$auc)
+ICS_jp_lda_PTH_ciL<-c(rocICS_jp_lda_PTH[[1]]$ci[1],rocICS_jp_lda_PTH[[2]]$ci[1],rocICS_jp_lda_PTH[[3]]$ci[1],rocICS_jp_lda_PTH[[4]]$ci[1],
+                      rocICS_jp_lda_PTH[[5]]$ci[1],rocICS_jp_lda_PTH[[6]]$ci[1],rocICS_jp_lda_PTH[[7]]$ci[1])
+ICS_jp_lda_PTH_ciH<-c(rocICS_jp_lda_PTH[[1]]$ci[3],rocICS_jp_lda_PTH[[2]]$ci[3],rocICS_jp_lda_PTH[[3]]$ci[3],rocICS_jp_lda_PTH[[4]]$ci[3],
+                      rocICS_jp_lda_PTH[[5]]$ci[3],rocICS_jp_lda_PTH[[6]]$ci[3],rocICS_jp_lda_PTH[[7]]$ci[3])
 
+x<-c(1:7)
+lines(x, ICS_jp_lda_PTH_auc,
+      ylim=range(c(0, 1)),
+      pch=19, xlab="Weeks", ylab="AUC and CI",
+      main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ICS_jp_lda_PTH_ciL, x, ICS_jp_lda_PTH_ciH, length=0.05, angle=90, code=3)
 ######PAGERANK TARGET ENTROPY NETWORK PREDICTORS######
 
 ROC_PS_lda_PRTE<-list()
@@ -733,44 +919,164 @@ save(ROC_PS_lda,ROC_CD_lda,ROC_ICS_lda, ROC_PS_justpass_lda,ROC_CD_justpass_lda,
 #########QUADRATIC DISCRIMINANT ANALYSIS ###########
 
 ######ALL NETWORK PREDICTORS######
-
-
 predPS_qda_PTH<-jackPredQDA(centPS,predictors = c("PageRank","tarEnt", "Hide"))
+rocPS_qda_PTH<-list()
+rocPS_qda_PTH[[1]]<-roc(predPS_qda_PTH$pass,as.numeric(predPS_qda_PTH$Week1),auc=T,ci=T)
+rocPS_qda_PTH[[2]]<-roc(predPS_qda_PTH$pass,as.numeric(predPS_qda_PTH$Week2),auc=T,ci=T)
+rocPS_qda_PTH[[3]]<-roc(predPS_qda_PTH$pass,as.numeric(predPS_qda_PTH$Week3),auc=T,ci=T)
+rocPS_qda_PTH[[4]]<-roc(predPS_qda_PTH$pass,as.numeric(predPS_qda_PTH$Week4),auc=T,ci=T)
+rocPS_qda_PTH[[5]]<-roc(predPS_qda_PTH$pass,as.numeric(predPS_qda_PTH$Week5),auc=T,ci=T)
+rocPS_qda_PTH[[6]]<-roc(predPS_qda_PTH$pass,as.numeric(predPS_qda_PTH$Week6),auc=T,ci=T)
+rocPS_qda_PTH[[7]]<-roc(predPS_qda_PTH$pass,as.numeric(predPS_qda_PTH$Week7),auc=T,ci=T)
+PS_qda_PTH_auc<-c(rocPS_qda_PTH[[1]]$auc,rocPS_qda_PTH[[2]]$auc,rocPS_qda_PTH[[3]]$auc,rocPS_qda_PTH[[4]]$auc,
+                  rocPS_qda_PTH[[5]]$auc,rocPS_qda_PTH[[6]]$auc,rocPS_qda_PTH[[7]]$auc)
+PS_qda_PTH_ciL<-c(rocPS_qda_PTH[[1]]$ci[1],rocPS_qda_PTH[[2]]$ci[1],rocPS_qda_PTH[[3]]$ci[1],rocPS_qda_PTH[[4]]$ci[1],
+                  rocPS_qda_PTH[[5]]$ci[1],rocPS_qda_PTH[[6]]$ci[1],rocPS_qda_PTH[[7]]$ci[1])
+PS_qda_PTH_ciH<-c(rocPS_qda_PTH[[1]]$ci[3],rocPS_qda_PTH[[2]]$ci[3],rocPS_qda_PTH[[3]]$ci[3],rocPS_qda_PTH[[4]]$ci[3],
+                  rocPS_qda_PTH[[5]]$ci[3],rocPS_qda_PTH[[6]]$ci[3],rocPS_qda_PTH[[7]]$ci[3])
 
-ROC_CD_qda<-list()
-for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD,predictors = c("PageRank","tarEnt", "Hide"))
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_qda[[i]]<-ROC
-}
+lazy<-table(predPS_qda_PTH$pass)[2]/sum(table(predPS_qda_PTH$pass))
 
-ROC_ICS_qda<-list()
-for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS,predictors = c("PageRank","tarEnt", "Hide"))
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_qda[[i]]<-ROC
-}
+x<-c(1:7)
+plot(x, PS_qda_PTH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Weeks", ylab="AUC and CI",
+     main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_qda_PTH_ciL, x, PS_qda_PTH_ciH, length=0.05, angle=90, code=3)
+abline(h = lazy)
 
-ROC_PS_justpass_qda<-list()
-for(i in 1:100){
-  predPS_x<-jackPredQDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
-  ROC<-ROCplusWeeks(predPS_x)
-  ROC_PS_justpass_qda[[i]]<-ROC
-}
+predCD_qda_PTH<-jackPredQDA(centCD,predictors = c("PageRank","tarEnt", "Hide"))
+rocCD_qda_PTH<-list()
+rocCD_qda_PTH[[1]]<-roc(predCD_qda_PTH$pass,as.numeric(predCD_qda_PTH$Week1),auc=T,ci=T)
+rocCD_qda_PTH[[2]]<-roc(predCD_qda_PTH$pass,as.numeric(predCD_qda_PTH$Week2),auc=T,ci=T)
+rocCD_qda_PTH[[3]]<-roc(predCD_qda_PTH$pass,as.numeric(predCD_qda_PTH$Week3),auc=T,ci=T)
+rocCD_qda_PTH[[4]]<-roc(predCD_qda_PTH$pass,as.numeric(predCD_qda_PTH$Week4),auc=T,ci=T)
+rocCD_qda_PTH[[5]]<-roc(predCD_qda_PTH$pass,as.numeric(predCD_qda_PTH$Week5),auc=T,ci=T)
+rocCD_qda_PTH[[6]]<-roc(predCD_qda_PTH$pass,as.numeric(predCD_qda_PTH$Week6),auc=T,ci=T)
+rocCD_qda_PTH[[7]]<-roc(predCD_qda_PTH$pass,as.numeric(predCD_qda_PTH$Week7),auc=T,ci=T)
+CD_qda_PTH_auc<-c(rocCD_qda_PTH[[1]]$auc,rocCD_qda_PTH[[2]]$auc,rocCD_qda_PTH[[3]]$auc,rocCD_qda_PTH[[4]]$auc,
+                  rocCD_qda_PTH[[5]]$auc,rocCD_qda_PTH[[6]]$auc,rocCD_qda_PTH[[7]]$auc)
+CD_qda_PTH_ciL<-c(rocCD_qda_PTH[[1]]$ci[1],rocCD_qda_PTH[[2]]$ci[1],rocCD_qda_PTH[[3]]$ci[1],rocCD_qda_PTH[[4]]$ci[1],
+                  rocCD_qda_PTH[[5]]$ci[1],rocCD_qda_PTH[[6]]$ci[1],rocCD_qda_PTH[[7]]$ci[1])
+CD_qda_PTH_ciH<-c(rocCD_qda_PTH[[1]]$ci[3],rocCD_qda_PTH[[2]]$ci[3],rocCD_qda_PTH[[3]]$ci[3],rocCD_qda_PTH[[4]]$ci[3],
+                  rocCD_qda_PTH[[5]]$ci[3],rocCD_qda_PTH[[6]]$ci[3],rocCD_qda_PTH[[7]]$ci[3])
 
-ROC_CD_justpass_qda<-list()
-for(i in 1:100){
-  predCD_x<-jackPredQDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
-  ROC<-ROCplusWeeks(predCD_x)
-  ROC_CD_justpass_qda[[i]]<-ROC
-}
+lines(x, CD_qda_PTH_auc,
+      ylim=range(c(0, 1)),
+      pch=19, xlab="Weeks", ylab="AUC and CI",
+      main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, CD_qda_PTH_ciL, x, CD_qda_PTH_ciH, length=0.05, angle=90, code=3)
 
-ROC_ICS_justpass_qda<-list()
-for(i in 1:100){
-  predICS_x<-jackPredQDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
-  ROC<-ROCplusWeeks(predICS_x)
-  ROC_ICS_justpass_qda[[i]]<-ROC
-}
+predICS_qda_PTH<-jackPredQDA(centICS,predictors = c("PageRank","tarEnt", "Hide"))
+rocICS_qda_PTH<-list()
+rocICS_qda_PTH[[1]]<-roc(predICS_qda_PTH$pass,as.numeric(predICS_qda_PTH$Week1),auc=T,ci=T)
+rocICS_qda_PTH[[2]]<-roc(predICS_qda_PTH$pass,as.numeric(predICS_qda_PTH$Week2),auc=T,ci=T)
+rocICS_qda_PTH[[3]]<-roc(predICS_qda_PTH$pass,as.numeric(predICS_qda_PTH$Week3),auc=T,ci=T)
+rocICS_qda_PTH[[4]]<-roc(predICS_qda_PTH$pass,as.numeric(predICS_qda_PTH$Week4),auc=T,ci=T)
+rocICS_qda_PTH[[5]]<-roc(predICS_qda_PTH$pass,as.numeric(predICS_qda_PTH$Week5),auc=T,ci=T)
+rocICS_qda_PTH[[6]]<-roc(predICS_qda_PTH$pass,as.numeric(predICS_qda_PTH$Week6),auc=T,ci=T)
+rocICS_qda_PTH[[7]]<-roc(predICS_qda_PTH$pass,as.numeric(predICS_qda_PTH$Week7),auc=T,ci=T)
+ICS_qda_PTH_auc<-c(rocICS_qda_PTH[[1]]$auc,rocICS_qda_PTH[[2]]$auc,rocICS_qda_PTH[[3]]$auc,rocICS_qda_PTH[[4]]$auc,
+                   rocICS_qda_PTH[[5]]$auc,rocICS_qda_PTH[[6]]$auc,rocICS_qda_PTH[[7]]$auc)
+ICS_qda_PTH_ciL<-c(rocICS_qda_PTH[[1]]$ci[1],rocICS_qda_PTH[[2]]$ci[1],rocICS_qda_PTH[[3]]$ci[1],rocICS_qda_PTH[[4]]$ci[1],
+                   rocICS_qda_PTH[[5]]$ci[1],rocICS_qda_PTH[[6]]$ci[1],rocICS_qda_PTH[[7]]$ci[1])
+ICS_qda_PTH_ciH<-c(rocICS_qda_PTH[[1]]$ci[3],rocICS_qda_PTH[[2]]$ci[3],rocICS_qda_PTH[[3]]$ci[3],rocICS_qda_PTH[[4]]$ci[3],
+                   rocICS_qda_PTH[[5]]$ci[3],rocICS_qda_PTH[[6]]$ci[3],rocICS_qda_PTH[[7]]$ci[3])
+
+lines(x, ICS_qda_PTH_auc,
+      ylim=range(c(0, 1)),
+      pch=19, xlab="Weeks", ylab="AUC and CI",
+      main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ICS_qda_PTH_ciL, x, ICS_qda_PTH_ciH, length=0.05, angle=90, code=3)
+##JUSTPASSED
+lazy<-table(predICS_jp_qda_PTH$justpass)[2]/sum(table(predICS_jp_qda_PTH$justpass))
+
+predPS_jp_qda_PTH<-jackPredQDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+rocPS_jp_qda_PTH<-list()
+rocPS_jp_qda_PTH[[1]]<-roc(predPS_jp_qda_PTH$justpass,as.numeric(predPS_jp_qda_PTH$Week1),auc=T,ci=T)
+rocPS_jp_qda_PTH[[2]]<-roc(predPS_jp_qda_PTH$justpass,as.numeric(predPS_jp_qda_PTH$Week2),auc=T,ci=T)
+rocPS_jp_qda_PTH[[3]]<-roc(predPS_jp_qda_PTH$justpass,as.numeric(predPS_jp_qda_PTH$Week3),auc=T,ci=T)
+rocPS_jp_qda_PTH[[4]]<-roc(predPS_jp_qda_PTH$justpass,as.numeric(predPS_jp_qda_PTH$Week4),auc=T,ci=T)
+rocPS_jp_qda_PTH[[5]]<-roc(predPS_jp_qda_PTH$justpass,as.numeric(predPS_jp_qda_PTH$Week5),auc=T,ci=T)
+rocPS_jp_qda_PTH[[6]]<-roc(predPS_jp_qda_PTH$justpass,as.numeric(predPS_jp_qda_PTH$Week6),auc=T,ci=T)
+rocPS_jp_qda_PTH[[7]]<-roc(predPS_jp_qda_PTH$justpass,as.numeric(predPS_jp_qda_PTH$Week7),auc=T,ci=T)
+
+PS_jp_qda_PTH_auc<-c(rocPS_jp_qda_PTH[[1]]$auc,rocPS_jp_qda_PTH[[2]]$auc,rocPS_jp_qda_PTH[[3]]$auc,rocPS_jp_qda_PTH[[4]]$auc,
+                     rocPS_jp_qda_PTH[[5]]$auc,rocPS_jp_qda_PTH[[6]]$auc,rocPS_jp_qda_PTH[[7]]$auc)
+PS_jp_qda_PTH_ciL<-c(rocPS_jp_qda_PTH[[1]]$ci[1],rocPS_jp_qda_PTH[[2]]$ci[1],rocPS_jp_qda_PTH[[3]]$ci[1],rocPS_jp_qda_PTH[[4]]$ci[1],
+                     rocPS_jp_qda_PTH[[5]]$ci[1],rocPS_jp_qda_PTH[[6]]$ci[1],rocPS_jp_qda_PTH[[7]]$ci[1])
+PS_jp_qda_PTH_ciH<-c(rocPS_jp_qda_PTH[[1]]$ci[3],rocPS_jp_qda_PTH[[2]]$ci[3],rocPS_jp_qda_PTH[[3]]$ci[3],rocPS_jp_qda_PTH[[4]]$ci[3],
+                     rocPS_jp_qda_PTH[[5]]$ci[3],rocPS_jp_qda_PTH[[6]]$ci[3],rocPS_jp_qda_PTH[[7]]$ci[3])
+
+lazyjp<-table(predPS_jp_qda_PTH$justpass)[2]/sum(table(predPS_jp_qda_PTH$justpass))
+x<-c(1:7)
+plot(x, PS_jp_qda_PTH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Weeks", ylab="AUC and CI",
+     main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_jp_qda_PTH_ciL, x, PS_jp_qda_PTH_ciH, length=0.05, angle=90, code=3)
+abline(h=lazyjp)
+
+
+predCD_jp_qda_PTH<-jackPredQDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide")) #produces error: Error in qda.default(x, grouping, ...) : rank deficiency in group 1 
+rocCD_jp_qda_PTH<-list()
+rocCD_jp_qda_PTH[[1]]<-roc(predCD_jp_qda_PTH$justpass,as.numeric(predCD_jp_qda_PTH$Week1),auc=T,ci=T)
+rocCD_jp_qda_PTH[[2]]<-roc(predCD_jp_qda_PTH$justpass,as.numeric(predCD_jp_qda_PTH$Week2),auc=T,ci=T)
+rocCD_jp_qda_PTH[[3]]<-roc(predCD_jp_qda_PTH$justpass,as.numeric(predCD_jp_qda_PTH$Week3),auc=T,ci=T)
+rocCD_jp_qda_PTH[[4]]<-roc(predCD_jp_qda_PTH$justpass,as.numeric(predCD_jp_qda_PTH$Week4),auc=T,ci=T)
+rocCD_jp_qda_PTH[[5]]<-roc(predCD_jp_qda_PTH$justpass,as.numeric(predCD_jp_qda_PTH$Week5),auc=T,ci=T)
+rocCD_jp_qda_PTH[[6]]<-roc(predCD_jp_qda_PTH$justpass,as.numeric(predCD_jp_qda_PTH$Week6),auc=T,ci=T)
+rocCD_jp_qda_PTH[[7]]<-roc(predCD_jp_qda_PTH$justpass,as.numeric(predCD_jp_qda_PTH$Week7),auc=T,ci=T)
+
+CD_jp_qda_PTH_auc<-c(rocCD_jp_qda_PTH[[1]]$auc,rocCD_jp_qda_PTH[[2]]$auc,rocCD_jp_qda_PTH[[3]]$auc,rocCD_jp_qda_PTH[[4]]$auc,
+                     rocCD_jp_qda_PTH[[5]]$auc,rocCD_jp_qda_PTH[[6]]$auc,rocCD_jp_qda_PTH[[7]]$auc)
+CD_jp_qda_PTH_ciL<-c(rocCD_jp_qda_PTH[[1]]$ci[1],rocCD_jp_qda_PTH[[2]]$ci[1],rocCD_jp_qda_PTH[[3]]$ci[1],rocCD_jp_qda_PTH[[4]]$ci[1],
+                     rocCD_jp_qda_PTH[[5]]$ci[1],rocCD_jp_qda_PTH[[6]]$ci[1],rocCD_jp_qda_PTH[[7]]$ci[1])
+CD_jp_qda_PTH_ciH<-c(rocCD_jp_qda_PTH[[1]]$ci[3],rocCD_jp_qda_PTH[[2]]$ci[3],rocCD_jp_qda_PTH[[3]]$ci[3],rocCD_jp_qda_PTH[[4]]$ci[3],
+                     rocCD_jp_qda_PTH[[5]]$ci[3],rocCD_jp_qda_PTH[[6]]$ci[3],rocCD_jp_qda_PTH[[7]]$ci[3])
+
+x<-c(1:7)
+lines(x, CD_jp_qda_PTH_auc,
+      ylim=range(c(0, 1)),
+      pch=19, xlab="Weeks", ylab="AUC and CI",
+      main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, CD_jp_qda_PTH_ciL, x, CD_jp_qda_PTH_ciH, length=0.05, angle=90, code=3)
+
+predICS_jp_qda_PTH<-jackPredQDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+rocICS_jp_qda_PTH<-list()
+rocICS_jp_qda_PTH[[1]]<-roc(predICS_jp_qda_PTH$justpass,as.numeric(predICS_jp_qda_PTH$Week1),auc=T,ci=T)
+rocICS_jp_qda_PTH[[2]]<-roc(predICS_jp_qda_PTH$justpass,as.numeric(predICS_jp_qda_PTH$Week2),auc=T,ci=T)
+rocICS_jp_qda_PTH[[3]]<-roc(predICS_jp_qda_PTH$justpass,as.numeric(predICS_jp_qda_PTH$Week3),auc=T,ci=T)
+rocICS_jp_qda_PTH[[4]]<-roc(predICS_jp_qda_PTH$justpass,as.numeric(predICS_jp_qda_PTH$Week4),auc=T,ci=T)
+rocICS_jp_qda_PTH[[5]]<-roc(predICS_jp_qda_PTH$justpass,as.numeric(predICS_jp_qda_PTH$Week5),auc=T,ci=T)
+rocICS_jp_qda_PTH[[6]]<-roc(predICS_jp_qda_PTH$justpass,as.numeric(predICS_jp_qda_PTH$Week6),auc=T,ci=T)
+rocICS_jp_qda_PTH[[7]]<-roc(predICS_jp_qda_PTH$justpass,as.numeric(predICS_jp_qda_PTH$Week7),auc=T,ci=T)
+
+ICS_jp_qda_PTH_auc<-c(rocICS_jp_qda_PTH[[1]]$auc,rocICS_jp_qda_PTH[[2]]$auc,rocICS_jp_qda_PTH[[3]]$auc,rocICS_jp_qda_PTH[[4]]$auc,
+                      rocICS_jp_qda_PTH[[5]]$auc,rocICS_jp_qda_PTH[[6]]$auc,rocICS_jp_qda_PTH[[7]]$auc)
+ICS_jp_qda_PTH_ciL<-c(rocICS_jp_qda_PTH[[1]]$ci[1],rocICS_jp_qda_PTH[[2]]$ci[1],rocICS_jp_qda_PTH[[3]]$ci[1],rocICS_jp_qda_PTH[[4]]$ci[1],
+                      rocICS_jp_qda_PTH[[5]]$ci[1],rocICS_jp_qda_PTH[[6]]$ci[1],rocICS_jp_qda_PTH[[7]]$ci[1])
+ICS_jp_qda_PTH_ciH<-c(rocICS_jp_qda_PTH[[1]]$ci[3],rocICS_jp_qda_PTH[[2]]$ci[3],rocICS_jp_qda_PTH[[3]]$ci[3],rocICS_jp_qda_PTH[[4]]$ci[3],
+                      rocICS_jp_qda_PTH[[5]]$ci[3],rocICS_jp_qda_PTH[[6]]$ci[3],rocICS_jp_qda_PTH[[7]]$ci[3])
+
+x<-c(1:7)
+lines(x, ICS_jp_qda_PTH_auc,
+      ylim=range(c(0, 1)),
+      pch=19, xlab="Weeks", ylab="AUC and CI",
+      main="AUC with Confidence Intervals",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ICS_jp_qda_PTH_ciL, x, ICS_jp_qda_PTH_ciH, length=0.05, angle=90, code=3)
 
 ######PAGERANK TARGET ENTROPY NETWORK PREDICTORS######
 
@@ -1056,8 +1362,8 @@ save(ROC_PS_qda,ROC_CD_qda,ROC_ICS_qda, ROC_PS_justpass_qda,ROC_CD_justpass_qda,
 t1<-Sys.time()
 ROC_PS_knn<-list()
 for(i in 1:20){
-  predPS_knn_PTH<-jackPredKNN(centPS,predictors = c("PageRank","tarEnt", "Hide"),nK = 3)
-  ROC<-ROCplusWeeks(predPS_x$allpred)
+  predPS_knn_PTH<-jackPredKNN(centPS,predictors = c("PageRank","tarEnt", "Hide"),nK = i)
+  ROC<-ROCplusWeeks(predPS_knn_PTH$allpred)
   ROC_PS_knn[[i]]<-ROC
 }
 
