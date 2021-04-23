@@ -3210,6 +3210,7 @@ abline(h=lazy_jp)
 #########K NEAREST NEIGHBORS###########
 
 ######ALL NETWORK PREDICTORS######
+######ALL NETWORK PREDICTORS######
 t1<-Sys.time()
 ROC_PS_knn<-list()
 for(i in 1:20){
@@ -3218,12 +3219,62 @@ for(i in 1:20){
   ROC_PS_knn[[i]]<-ROC
 }
 
+x<-c(1:7)
+plot(x,ROC_PS_knn[[1]]$SR,type="b",ylim=c(0.6,0.8),xlab="Course Week", main="K-Nearest Neighbor Models",
+     sub="Pass/fail (n=166), PR-TE-H",ylab="Succes Rate")
+lines(x,ROC_PS_knn[[2]]$SR,type="b",pch=2)
+lines(x,ROC_PS_knn[[3]]$SR,type="b",pch=3)
+lines(x,ROC_PS_knn[[4]]$SR,type="b",pch=4)
+lines(x,ROC_PS_knn[[5]]$SR,type="b",pch=5)
+lines(x,ROC_PS_knn[[6]]$SR,type="b",pch=6)
+lines(x,ROC_PS_knn[[7]]$SR,type="b",pch=7)
+lines(x,ROC_PS_knn[[8]]$SR,type="b",pch=8)
+lines(x,ROC_PS_knn[[9]]$SR,type="b",pch=9)
+lines(x,ROC_PS_knn[[10]]$SR,type="b",pch=10)
+lines(x,ROC_PS_knn[[11]]$SR,type="b",pch=11)
+lines(x,ROC_PS_knn[[12]]$SR,type="b",pch=12)
+lines(x,ROC_PS_knn[[13]]$SR,type="b",pch=13)
+lines(x,ROC_PS_knn[[14]]$SR,type="b",pch=14)
+lines(x,ROC_PS_knn[[15]]$SR,type="b",pch=15)
+lines(x,ROC_PS_knn[[16]]$SR,type="b",pch=16)
+lines(x,ROC_PS_knn[[17]]$SR,type="b",pch=17)
+lines(x,ROC_PS_knn[[18]]$SR,type="b",pch=18)
+lines(x,ROC_PS_knn[[19]]$SR,type="b",pch=19)
+lines(x,ROC_PS_knn[[20]]$SR,type="b",pch=20)
+abline(h=0.77)
+
+
+
+
 ROC_CD_knn<-list()
 for(i in 1:20){
   predCD_x<-jackPredKNN(centCD,predictors = c("PageRank","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_knn[[i]]<-ROC
 }
+
+x<-c(1:7)
+plot(x,ROC_CD_knn[[1]]$SR,type="b",ylim=c(0.6,0.8))
+lines(x,ROC_CD_knn[[2]]$SR,type="b",pch=2)
+lines(x,ROC_CD_knn[[3]]$SR,type="b",pch=3)
+lines(x,ROC_CD_knn[[4]]$SR,type="b",pch=4)
+lines(x,ROC_CD_knn[[5]]$SR,type="b",pch=5)
+lines(x,ROC_CD_knn[[6]]$SR,type="b",pch=6)
+lines(x,ROC_CD_knn[[7]]$SR,type="b",pch=7)
+lines(x,ROC_CD_knn[[8]]$SR,type="b",pch=8)
+lines(x,ROC_CD_knn[[9]]$SR,type="b",pch=9)
+lines(x,ROC_CD_knn[[10]]$SR,type="b",pch=10)
+lines(x,ROC_CD_knn[[11]]$SR,type="b",pch=11)
+lines(x,ROC_CD_knn[[12]]$SR,type="b",pch=12)
+lines(x,ROC_CD_knn[[13]]$SR,type="b",pch=13)
+lines(x,ROC_CD_knn[[14]]$SR,type="b",pch=14)
+lines(x,ROC_CD_knn[[15]]$SR,type="b",pch=15)
+lines(x,ROC_CD_knn[[16]]$SR,type="b",pch=16)
+lines(x,ROC_CD_knn[[17]]$SR,type="b",pch=17)
+lines(x,ROC_CD_knn[[18]]$SR,type="b",pch=18)
+lines(x,ROC_CD_knn[[19]]$SR,type="b",pch=19)
+lines(x,ROC_CD_knn[[20]]$SR,type="b",pch=20)
+abline(h=0.77)
 
 ROC_ICS_knn<-list()
 for(i in 1:20){
@@ -3232,12 +3283,57 @@ for(i in 1:20){
   ROC_ICS_knn[[i]]<-ROC
 }
 
+x<-c(1:7)
+plot(x,ROC_ICS_knn[[1]]$SR,type="b",ylim=c(0.6,0.8))
+lines(x,ROC_ICS_knn[[2]]$SR,type="b",pch=2)
+lines(x,ROC_ICS_knn[[3]]$SR,type="b",pch=3)
+lines(x,ROC_ICS_knn[[4]]$SR,type="b",pch=4)
+lines(x,ROC_ICS_knn[[5]]$SR,type="b",pch=5)
+lines(x,ROC_ICS_knn[[6]]$SR,type="b",pch=6)
+lines(x,ROC_ICS_knn[[7]]$SR,type="b",pch=7)
+lines(x,ROC_ICS_knn[[8]]$SR,type="b",pch=8)
+lines(x,ROC_ICS_knn[[9]]$SR,type="b",pch=9)
+lines(x,ROC_ICS_knn[[10]]$SR,type="b",pch=10)
+lines(x,ROC_ICS_knn[[11]]$SR,type="b",pch=11)
+lines(x,ROC_ICS_knn[[12]]$SR,type="b",pch=12)
+lines(x,ROC_ICS_knn[[13]]$SR,type="b",pch=13)
+lines(x,ROC_ICS_knn[[14]]$SR,type="b",pch=14)
+lines(x,ROC_ICS_knn[[15]]$SR,type="b",pch=15)
+lines(x,ROC_ICS_knn[[16]]$SR,type="b",pch=16)
+lines(x,ROC_ICS_knn[[17]]$SR,type="b",pch=17)
+lines(x,ROC_ICS_knn[[18]]$SR,type="b",pch=18)
+lines(x,ROC_ICS_knn[[19]]$SR,type="b",pch=19)
+lines(x,ROC_ICS_knn[[20]]$SR,type="b",pch=20)
+abline(h=0.77)
+
 ROC_PS_justpass_knn<-list()
 for(i in 1:20){
   predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   ROC_PS_justpass_knn[[i]]<-ROC
 }
+x<-c(1:7)
+plot(x,ROC_PS_justpass_knn[[1]]$SR,type="b",ylim=c(0,1))
+lines(x,ROC_PS_justpass_knn[[2]]$SR,type="b",pch=2)
+lines(x,ROC_PS_justpass_knn[[3]]$SR,type="b",pch=3)
+lines(x,ROC_PS_justpass_knn[[4]]$SR,type="b",pch=4)
+lines(x,ROC_PS_justpass_knn[[5]]$SR,type="b",pch=5)
+lines(x,ROC_PS_justpass_knn[[6]]$SR,type="b",pch=6)
+lines(x,ROC_PS_justpass_knn[[7]]$SR,type="b",pch=7)
+lines(x,ROC_PS_justpass_knn[[8]]$SR,type="b",pch=8)
+lines(x,ROC_PS_justpass_knn[[9]]$SR,type="b",pch=9)
+lines(x,ROC_PS_justpass_knn[[10]]$SR,type="b",pch=10)
+lines(x,ROC_PS_justpass_knn[[11]]$SR,type="b",pch=11)
+lines(x,ROC_PS_justpass_knn[[12]]$SR,type="b",pch=12)
+lines(x,ROC_PS_justpass_knn[[13]]$SR,type="b",pch=13)
+lines(x,ROC_PS_justpass_knn[[14]]$SR,type="b",pch=14)
+lines(x,ROC_PS_justpass_knn[[15]]$SR,type="b",pch=15)
+lines(x,ROC_PS_justpass_knn[[16]]$SR,type="b",pch=16)
+lines(x,ROC_PS_justpass_knn[[17]]$SR,type="b",pch=17)
+lines(x,ROC_PS_justpass_knn[[18]]$SR,type="b",pch=18)
+lines(x,ROC_PS_justpass_knn[[19]]$SR,type="b",pch=19)
+lines(x,ROC_PS_justpass_knn[[20]]$SR,type="b",pch=20)
+abline(h=0.58)
 
 ROC_CD_justpass_knn<-list()
 for(i in 1:20){
@@ -3246,12 +3342,58 @@ for(i in 1:20){
   ROC_CD_justpass_knn[[i]]<-ROC
 }
 
+x<-c(1:7)
+plot(x,ROC_CD_justpass_knn[[1]]$SR,type="b",ylim=c(0.6,0.8))
+lines(x,ROC_CD_justpass_knn[[2]]$SR,type="b",pch=2)
+lines(x,ROC_CD_justpass_knn[[3]]$SR,type="b",pch=3)
+lines(x,ROC_CD_justpass_knn[[4]]$SR,type="b",pch=4)
+lines(x,ROC_CD_justpass_knn[[5]]$SR,type="b",pch=5)
+lines(x,ROC_CD_justpass_knn[[6]]$SR,type="b",pch=6)
+lines(x,ROC_CD_justpass_knn[[7]]$SR,type="b",pch=7)
+lines(x,ROC_CD_justpass_knn[[8]]$SR,type="b",pch=8)
+lines(x,ROC_CD_justpass_knn[[9]]$SR,type="b",pch=9)
+lines(x,ROC_CD_justpass_knn[[10]]$SR,type="b",pch=10)
+lines(x,ROC_CD_justpass_knn[[11]]$SR,type="b",pch=11)
+lines(x,ROC_CD_justpass_knn[[12]]$SR,type="b",pch=12)
+lines(x,ROC_CD_justpass_knn[[13]]$SR,type="b",pch=13)
+lines(x,ROC_CD_justpass_knn[[14]]$SR,type="b",pch=14)
+lines(x,ROC_CD_justpass_knn[[15]]$SR,type="b",pch=15)
+lines(x,ROC_CD_justpass_knn[[16]]$SR,type="b",pch=16)
+lines(x,ROC_CD_justpass_knn[[17]]$SR,type="b",pch=17)
+lines(x,ROC_CD_justpass_knn[[18]]$SR,type="b",pch=18)
+lines(x,ROC_CD_justpass_knn[[19]]$SR,type="b",pch=19)
+lines(x,ROC_CD_justpass_knn[[20]]$SR,type="b",pch=20)
+abline(h=0.58)
+
 ROC_ICS_justpass_knn<-list()
 for(i in 1:20){
   predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_justpass_knn[[i]]<-ROC
 }
+
+x<-c(1:7)
+plot(x,ROC_ICS_justpass_knn[[1]]$SR,type="b",ylim=c(0.6,0.8))
+lines(x,ROC_ICS_justpass_knn[[2]]$SR,type="b",pch=2)
+lines(x,ROC_ICS_justpass_knn[[3]]$SR,type="b",pch=3)
+lines(x,ROC_ICS_justpass_knn[[4]]$SR,type="b",pch=4)
+lines(x,ROC_ICS_justpass_knn[[5]]$SR,type="b",pch=5)
+lines(x,ROC_ICS_justpass_knn[[6]]$SR,type="b",pch=6)
+lines(x,ROC_ICS_justpass_knn[[7]]$SR,type="b",pch=7)
+lines(x,ROC_ICS_justpass_knn[[8]]$SR,type="b",pch=8)
+lines(x,ROC_ICS_justpass_knn[[9]]$SR,type="b",pch=9)
+lines(x,ROC_ICS_justpass_knn[[10]]$SR,type="b",pch=10)
+lines(x,ROC_ICS_justpass_knn[[11]]$SR,type="b",pch=11)
+lines(x,ROC_ICS_justpass_knn[[12]]$SR,type="b",pch=12)
+lines(x,ROC_ICS_justpass_knn[[13]]$SR,type="b",pch=13)
+lines(x,ROC_ICS_justpass_knn[[14]]$SR,type="b",pch=14)
+lines(x,ROC_ICS_justpass_knn[[15]]$SR,type="b",pch=15)
+lines(x,ROC_ICS_justpass_knn[[16]]$SR,type="b",pch=16)
+lines(x,ROC_ICS_justpass_knn[[17]]$SR,type="b",pch=17)
+lines(x,ROC_ICS_justpass_knn[[18]]$SR,type="b",pch=18)
+lines(x,ROC_ICS_justpass_knn[[19]]$SR,type="b",pch=19)
+lines(x,ROC_ICS_justpass_knn[[20]]$SR,type="b",pch=20)
+abline(h=0.58)
 
 ######PAGERANK TARGET ENTROPY NETWORK PREDICTORS######
 
