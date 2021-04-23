@@ -13,45 +13,102 @@ background$justpass<-as.numeric(background$justpass)
 
 
 #Distributions of variables
-genderPlot <- ggplot(background, aes(x=gender)) + geom_bar() + labs(title="Gender")
-plot(genderPlot)
-fciPlot<-ggplot(background, aes(x=fci_pre_0)) + geom_bar() + labs(title="FCI pre-test scores")
-plot(fciPlot)
-fciPlotClasses<-ggplot(background, aes(x=fci_pre_c)) + geom_bar() + labs(title="FCI pre-test score classes")
-plot(fciPlotClasses)
-agePlot<-ggplot(background, aes(x=age)) + geom_bar() + labs(title="Age")
-plot(agePlot)
-cohortPlot<-ggplot(background, aes(x=cohort)) + geom_bar() + labs(title="Cohort")
-plot(cohortPlot)
-plotPass<-ggplot(background, aes(x=pass)) + geom_bar() + labs(title="Pass")
-plot(plotPass)
-plotjustPass<-ggplot(background, aes(x=justpass)) + geom_bar() + labs(title="Just pass")
-plot(plotjustPass)
+dev.off()
+par(cex=0.7)
+par(oma = c(4,1,1,1), mfrow = c(3, 3), mar = c(2, 2, 1, 1))
+plot(sort(centPS[[1]]$PageRank,decreasing = T),log="xy",pch=1, 
+      main="",ylab="PageRank",xlab="Ranked students",cex=0.8)
+points(sort(centPS[[2]]$PageRank,decreasing = T),log = "xy",col="darkred",pch=2,cex=0.8)
+points(sort(centPS[[3]]$PageRank,decreasing = T),log = "xy",col="darkblue",pch=3,cex=0.8)
+points(sort(centPS[[4]]$PageRank,decreasing = T),log = "xy",col="brown",pch=4,cex=0.8)
+points(sort(centPS[[5]]$PageRank,decreasing = T),log = "xy",col="orange",pch=5,cex=0.8)
+points(sort(centPS[[6]]$PageRank,decreasing = T),log = "xy",col="purple",pch=6,cex=0.8)
+points(sort(centPS[[7]]$PageRank,decreasing = T),log = "xy",col="khaki",pch=7,cex=0.8)
 
-pr_w1_Plot <- ggplot(centPS[[1]], aes(x=PageRank)) + geom_bar() + labs(title="PageRank week 1")
-plot(sort(centPS[[1]]$PageRank,decreasing = T),log = "xy")
-plot(sort(centPS[[2]]$PageRank,decreasing = T),log = "xy")
-plot(sort(centPS[[3]]$PageRank,decreasing = T),log = "xy")
-plot(sort(centPS[[4]]$PageRank,decreasing = T),log = "xy")
-plot(sort(centPS[[5]]$PageRank,decreasing = T),log = "xy")
-plot(sort(centPS[[6]]$PageRank,decreasing = T),log = "xy")
-plot(sort(centPS[[7]]$PageRank,decreasing = T),log = "xy")
 
-plot(sort(centPS[[1]]$Hide,decreasing = T))
-plot(sort(centPS[[2]]$Hide,decreasing = T))
-plot(sort(centPS[[3]]$Hide,decreasing = T))
-plot(sort(centPS[[4]]$Hide,decreasing = T))
-plot(sort(centPS[[5]]$Hide,decreasing = T))
-plot(sort(centPS[[6]]$Hide,decreasing = T))
-plot(sort(centPS[[7]]$Hide,decreasing = T))
+plot(sort(centPS[[1]]$tarEnt,decreasing = T),pch=1,ylim=c(0,5),
+     main="Problem solving layer",ylab="Target Entropy",xlab="Ranked students")
+points(sort(centPS[[2]]$tarEnt,decreasing = T),col="darkred",pch=2,cex=0.8)
+points(sort(centPS[[3]]$tarEnt,decreasing = T),col="darkblue",pch=3,cex=0.8)
+points(sort(centPS[[4]]$tarEnt,decreasing = T),col="brown",pch=4,cex=0.8)
+points(sort(centPS[[5]]$tarEnt,decreasing = T),col="orange",pch=5,cex=0.8)
+points(sort(centPS[[6]]$tarEnt,decreasing = T),col="purple",pch=6,cex=0.8)
+points(sort(centPS[[7]]$tarEnt,decreasing = T),col="khaki",pch=7,cex=0.8)
 
-plot(sort(centPS[[1]]$tarEnt,decreasing = T))
-plot(sort(centPS[[2]]$tarEnt,decreasing = T))
-plot(sort(centPS[[3]]$tarEnt,decreasing = T))
-plot(sort(centPS[[4]]$tarEnt,decreasing = T))
-plot(sort(centPS[[5]]$tarEnt,decreasing = T))
-plot(sort(centPS[[6]]$tarEnt,decreasing = T))
-plot(sort(centPS[[7]]$tarEnt,decreasing = T))
+
+plot(sort(centPS[[1]]$Hide,decreasing = T),pch=1,ylim=c(0,3500),
+     main="",ylab="Hide",xlab="Ranked students",cex=0.8)
+points(sort(centPS[[2]]$Hide,decreasing = T),col="darkred",pch=2,cex=0.8)
+points(sort(centPS[[3]]$Hide,decreasing = T),col="darkblue",pch=3,cex=0.8)
+points(sort(centPS[[4]]$Hide,decreasing = T),col="brown",pch=4,cex=0.8)
+points(sort(centPS[[5]]$Hide,decreasing = T),col="orange",pch=5,cex=0.8)
+points(sort(centPS[[6]]$Hide,decreasing = T),col="purple",pch=6,cex=0.8)
+points(sort(centPS[[7]]$Hide,decreasing = T),col="khaki",pch=7,cex=0.8)
+
+plot(sort(centCD[[1]]$PageRank,decreasing = T),log="xy",pch=1, 
+     main="",ylab="PageRank",xlab="Ranked students",cex=0.8)
+points(sort(centCD[[2]]$PageRank,decreasing = T),log = "xy",col="darkred",pch=2,cex=0.8)
+points(sort(centCD[[3]]$PageRank,decreasing = T),log = "xy",col="darkblue",pch=3,cex=0.8)
+points(sort(centCD[[4]]$PageRank,decreasing = T),log = "xy",col="brown",pch=4,cex=0.8)
+points(sort(centCD[[5]]$PageRank,decreasing = T),log = "xy",col="orange",pch=5,cex=0.8)
+points(sort(centCD[[6]]$PageRank,decreasing = T),log = "xy",col="purple",pch=6,cex=0.8)
+points(sort(centCD[[7]]$PageRank,decreasing = T),log = "xy",col="khaki",pch=7,cex=0.8)
+
+
+plot(sort(centCD[[1]]$tarEnt,decreasing = T),pch=1,ylim=c(0,5),
+     main="Concept discussion layer",ylab="Target Entropy",xlab="Ranked students")
+points(sort(centCD[[2]]$tarEnt,decreasing = T),col="darkred",pch=2,cex=0.8)
+points(sort(centCD[[3]]$tarEnt,decreasing = T),col="darkblue",pch=3,cex=0.8)
+points(sort(centCD[[4]]$tarEnt,decreasing = T),col="brown",pch=4,cex=0.8)
+points(sort(centCD[[5]]$tarEnt,decreasing = T),col="orange",pch=5,cex=0.8)
+points(sort(centCD[[6]]$tarEnt,decreasing = T),col="purple",pch=6,cex=0.8)
+points(sort(centCD[[7]]$tarEnt,decreasing = T),col="khaki",pch=7,cex=0.8)
+
+
+plot(sort(centCD[[1]]$Hide,decreasing = T),pch=1,ylim=c(0,3500),
+     main="",ylab="Hide",xlab="Ranked students",cex=0.8)
+points(sort(centCD[[2]]$Hide,decreasing = T),col="darkred",pch=2,cex=0.8)
+points(sort(centCD[[3]]$Hide,decreasing = T),col="darkblue",pch=3,cex=0.8)
+points(sort(centCD[[4]]$Hide,decreasing = T),col="brown",pch=4,cex=0.8)
+points(sort(centCD[[5]]$Hide,decreasing = T),col="orange",pch=5,cex=0.8)
+points(sort(centCD[[6]]$Hide,decreasing = T),col="purple",pch=6,cex=0.8)
+points(sort(centCD[[7]]$Hide,decreasing = T),col="khaki",pch=7,cex=0.8)
+
+plot(sort(centICS[[1]]$PageRank,decreasing = T),log="xy",pch=1, 
+     main="",ylab="PageRank",xlab="Ranked students",cex=0.8)
+points(sort(centICS[[2]]$PageRank,decreasing = T),log = "xy",col="darkred",pch=2,cex=0.8)
+points(sort(centICS[[3]]$PageRank,decreasing = T),log = "xy",col="darkblue",pch=3,cex=0.8)
+points(sort(centICS[[4]]$PageRank,decreasing = T),log = "xy",col="brown",pch=4,cex=0.8)
+points(sort(centICS[[5]]$PageRank,decreasing = T),log = "xy",col="orange",pch=5,cex=0.8)
+points(sort(centICS[[6]]$PageRank,decreasing = T),log = "xy",col="purple",pch=6,cex=0.8)
+points(sort(centICS[[7]]$PageRank,decreasing = T),log = "xy",col="khaki",pch=7,cex=0.8)
+
+
+plot(sort(centICS[[1]]$tarEnt,decreasing = T),pch=1,ylim=c(0,5),
+     main="In-class social layer",ylab="Target Entropy",xlab="Ranked students")
+points(sort(centICS[[2]]$tarEnt,decreasing = T),col="darkred",pch=2,cex=0.8)
+points(sort(centICS[[3]]$tarEnt,decreasing = T),col="darkblue",pch=3,cex=0.8)
+points(sort(centICS[[4]]$tarEnt,decreasing = T),col="brown",pch=4,cex=0.8)
+points(sort(centICS[[5]]$tarEnt,decreasing = T),col="orange",pch=5,cex=0.8)
+points(sort(centICS[[6]]$tarEnt,decreasing = T),col="purple",pch=6,cex=0.8)
+points(sort(centICS[[7]]$tarEnt,decreasing = T),col="khaki",pch=7,cex=0.8)
+
+
+plot(sort(centICS[[1]]$Hide,decreasing = T),pch=1,ylim=c(0,3500),
+     main="",ylab="Hide",xlab="Ranked students",cex=0.8)
+points(sort(centICS[[2]]$Hide,decreasing = T),col="darkred",pch=2,cex=0.8)
+points(sort(centICS[[3]]$Hide,decreasing = T),col="darkblue",pch=3,cex=0.8)
+points(sort(centICS[[4]]$Hide,decreasing = T),col="brown",pch=4,cex=0.8)
+points(sort(centICS[[5]]$Hide,decreasing = T),col="orange",pch=5,cex=0.8)
+points(sort(centICS[[6]]$Hide,decreasing = T),col="purple",pch=6,cex=0.8)
+points(sort(centICS[[7]]$Hide,decreasing = T),col="khaki",pch=7,cex=0.8)
+
+par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(0, 0, 0, 0), new = TRUE)
+plot(0, 0, type = 'l', bty = 'n', xaxt = 'n', yaxt = 'n')
+legend('bottom',legend = c("Week 1","Week 2","Week 3","Week 4","Week 5","Week 6","Week 7"), 
+       col = c("black","darkred","darkblue","brown","orange", "purple","khaki"), 
+       pch=c(1:7), xpd = TRUE, horiz = TRUE, cex = 1, 
+       seg.len=1, bty = 'n')
 
 hist(centPS[[1]]$PageRank)
 hist(centPS[[2]]$PageRank)
@@ -95,19 +152,15 @@ table(background$pass,background$cohort)
 
 
 #FCI PRE
+
 p <- ggplot(background, aes(x=pass, y=fci_pre)) + 
   geom_boxplot()
 # Box plot with dot plot
 p + geom_dotplot(binaxis='y', stackdir='center', dotsize=1)
 
-#FCI PRE ZERO IF NOT REGISTERED
-p <- ggplot(background, aes(x=pass, y=fci_pre_0)) + 
-  geom_boxplot()
-# Box plot with dot plot
-p + geom_dotplot(binaxis='y', stackdir='center', dotsize=1)
 
-#FCI PRE ZERO IF NOT REGISTERED
-table(background$pass,background$fci_pre_c)
+
+
 
 ##NETWORK MEASURES
 #PS
