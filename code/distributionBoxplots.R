@@ -112,11 +112,241 @@ table(background$pass,background$fci_pre_c)
 ##NETWORK MEASURES
 #PS
 p <- ggplot(centPS[[1]], aes(x=pass, y=PageRank)) + 
-  geom_boxplot()
+  geom_boxplot(notch = T)
 # Box plot with dot plot
-p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.2,binwidth = )
+p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = 0.0001)
 
 p <- ggplot(centPS[[2]], aes(x=pass, y=PageRank)) + 
-  geom_boxplot()
+  geom_boxplot(notch = T)
 # Box plot with dot plot
-p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.2,binwidth = )
+p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = )
+
+p <- ggplot(centPS[[3]], aes(x=pass, y=PageRank)) + 
+  geom_boxplot(notch = T)
+# Box plot with dot plot
+p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = )
+
+p <- ggplot(centPS[[4]], aes(x=pass, y=PageRank)) + 
+  geom_boxplot(notch = T)
+# Box plot with dot plot
+p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = )
+
+p <- ggplot(centPS[[5]], aes(x=pass, y=PageRank)) + 
+  geom_boxplot(notch = T)
+# Box plot with dot plot
+p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = )
+
+p <- ggplot(centPS[[6]], aes(x=pass, y=PageRank)) + 
+  geom_boxplot(notch = T)
+# Box plot with dot plot
+p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = )
+
+p <- ggplot(centPS[[7]], aes(x=pass, y=PageRank)) + 
+  geom_boxplot(notch = T)
+# Box plot with dot plot
+p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = 0.001)
+
+boxplot(PageRank~Week:pass, notch=T,
+        data=dfPS,
+        main="PS layer passing and failing",
+        xlab="Week",
+        ylab="PageRank",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+boxplot(PageRank~Week:pass, notch=T,
+        data=dfCD,
+        main="CD layer passing and failing",
+        xlab="Week",
+        ylab="PageRank",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+
+boxplot(PageRank~Week:pass, notch=T,
+        data=dfICS,
+        main="ICS layer passing and failing",
+        xlab="Week",
+        ylab="PageRank",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+boxplot(tarEnt~Week:pass, notch=T,
+        data=dfPS,
+        main="PS layer passing and failing",
+        xlab="Week",
+        ylab="tarEnt",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+boxplot(tarEnt~Week:pass, notch=T,
+        data=dfCD,
+        main="CD layer passing and failing",
+        xlab="Week",
+        ylab="tarEnt",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+
+boxplot(tarEnt~Week:pass, notch=T,
+        data=dfICS,
+        main="ICS layer passing and failing",
+        xlab="Week",
+        ylab="tarEnt",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+boxplot(Hide~Week:pass, notch=T,
+        data=dfPS,
+        main="PS layer passing and failing",
+        xlab="Week",
+        ylab="Hide",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+boxplot(Hide~Week:pass, notch=T,
+        data=dfCD,
+        main="CD layer passing and failing",
+        xlab="Week",
+        ylab="Hide",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+
+boxplot(Hide~Week:pass, notch=T,
+        data=dfICS,
+        main="ICS layer passing and failing",
+        xlab="Week",
+        ylab="Hide",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+
+boxplot(PageRank~Week:justpass, notch=T,
+        data=dfPS,
+        main="PS layer justpassing and failing",
+        xlab="Week",
+        ylab="PageRank",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+boxplot(PageRank~Week:justpass, notch=T,
+        data=dfCD,
+        main="CD layer justpassing and failing",
+        xlab="Week",
+        ylab="PageRank",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+
+boxplot(PageRank~Week:justpass, notch=T,
+        data=dfICS,
+        main="ICS layer justpassing and failing",
+        xlab="Week",
+        ylab="PageRank",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+boxplot(tarEnt~Week:justpass, notch=T,
+        data=dfPS,
+        main="PS layer justpassing and failing",
+        xlab="Week",
+        ylab="tarEnt",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+boxplot(tarEnt~Week:justpass, notch=T,
+        data=dfCD,
+        main="CD layer justpassing and failing",
+        xlab="Week",
+        ylab="tarEnt",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+
+boxplot(tarEnt~Week:justpass, notch=T,
+        data=dfICS,
+        main="ICS layer justpassing and failing",
+        xlab="Week",
+        ylab="tarEnt",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+boxplot(Hide~Week:justpass, notch=T,
+        data=dfPS,
+        main="PS layer justpassing and failing",
+        xlab="Week",
+        ylab="Hide",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+boxplot(Hide~Week:justpass, notch=T,
+        data=dfCD,
+        main="CD layer justpassing and failing",
+        xlab="Week",
+        ylab="Hide",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
+
+
+boxplot(Hide~Week:justpass, notch=T,
+        data=dfICS,
+        main="ICS layer justpassing and failing",
+        xlab="Week",
+        ylab="Hide",
+        col="orange",
+        border="brown",
+        lex.order=T,
+        sep=":"
+)
