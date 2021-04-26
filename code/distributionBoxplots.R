@@ -163,42 +163,10 @@ p + geom_dotplot(binaxis='y', stackdir='center', dotsize=1)
 
 
 ##NETWORK MEASURES
-#PS
-p <- ggplot(centPS[[1]], aes(x=pass, y=PageRank)) + 
-  geom_boxplot(notch = T)
-# Box plot with dot plot
-p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = 0.0001)
 
-p <- ggplot(centPS[[2]], aes(x=pass, y=PageRank)) + 
-  geom_boxplot(notch = T)
-# Box plot with dot plot
-p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = )
-
-p <- ggplot(centPS[[3]], aes(x=pass, y=PageRank)) + 
-  geom_boxplot(notch = T)
-# Box plot with dot plot
-p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = )
-
-p <- ggplot(centPS[[4]], aes(x=pass, y=PageRank)) + 
-  geom_boxplot(notch = T)
-# Box plot with dot plot
-p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = )
-
-p <- ggplot(centPS[[5]], aes(x=pass, y=PageRank)) + 
-  geom_boxplot(notch = T)
-# Box plot with dot plot
-p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = )
-
-p <- ggplot(centPS[[6]], aes(x=pass, y=PageRank)) + 
-  geom_boxplot(notch = T)
-# Box plot with dot plot
-p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = )
-
-p <- ggplot(centPS[[7]], aes(x=pass, y=PageRank)) + 
-  geom_boxplot(notch = T)
-# Box plot with dot plot
-p + geom_dotplot(binaxis='y', stackdir='center', dotsize=0.3,binwidth = 0.001)
-
+dev.off()
+#par(oma = c(4,1,1,1), mfrow = c(3, 3), mar = c(2, 2, 1, 1))
+#par(mfrow=c(3,1))
 boxplot(PageRank~Week:pass, notch=T,
         data=dfPS,
         main="PS layer passing and failing",
@@ -235,22 +203,22 @@ boxplot(PageRank~Week:pass, notch=T,
 
 boxplot(tarEnt~Week:pass, notch=T,
         data=dfPS,
-        main="PS layer passing and failing",
+        
         xlab="Week",
         ylab="tarEnt",
-        col="orange",
-        border="brown",
+        col="dodgerblue",
+        border="blue",
         lex.order=T,
         sep=":"
 )
 
 boxplot(tarEnt~Week:pass, notch=T,
         data=dfCD,
-        main="CD layer passing and failing",
+        
         xlab="Week",
         ylab="tarEnt",
-        col="orange",
-        border="brown",
+        col="plum",
+        border="purple",
         lex.order=T,
         sep=":"
 )
@@ -258,7 +226,7 @@ boxplot(tarEnt~Week:pass, notch=T,
 
 boxplot(tarEnt~Week:pass, notch=T,
         data=dfICS,
-        main="ICS layer passing and failing",
+        
         xlab="Week",
         ylab="tarEnt",
         col="orange",
@@ -269,22 +237,22 @@ boxplot(tarEnt~Week:pass, notch=T,
 
 boxplot(Hide~Week:pass, notch=T,
         data=dfPS,
-        main="PS layer passing and failing",
+        
         xlab="Week",
         ylab="Hide",
-        col="orange",
-        border="brown",
+        col="dodgerblue",
+        border="blue",
         lex.order=T,
         sep=":"
 )
 
 boxplot(Hide~Week:pass, notch=T,
         data=dfCD,
-        main="CD layer passing and failing",
+        
         xlab="Week",
         ylab="Hide",
-        col="orange",
-        border="brown",
+        col="plum",
+        border="purple",
         lex.order=T,
         sep=":"
 )
@@ -292,7 +260,7 @@ boxplot(Hide~Week:pass, notch=T,
 
 boxplot(Hide~Week:pass, notch=T,
         data=dfICS,
-        main="ICS layer passing and failing",
+        
         xlab="Week",
         ylab="Hide",
         col="orange",
@@ -302,13 +270,14 @@ boxplot(Hide~Week:pass, notch=T,
 )
 
 
+
 boxplot(PageRank~Week:justpass, notch=T,
         data=dfPS,
         main="PS layer justpassing and failing",
         xlab="Week",
         ylab="PageRank",
-        col="orange",
-        border="brown",
+        col="dodgerblue",
+        border="blue",
         lex.order=T,
         sep=":"
 )
@@ -318,8 +287,8 @@ boxplot(PageRank~Week:justpass, notch=T,
         main="CD layer justpassing and failing",
         xlab="Week",
         ylab="PageRank",
-        col="orange",
-        border="brown",
+        col="plum",
+        border="purple",
         lex.order=T,
         sep=":"
 )
@@ -341,8 +310,8 @@ boxplot(tarEnt~Week:justpass, notch=T,
         main="PS layer justpassing and failing",
         xlab="Week",
         ylab="tarEnt",
-        col="orange",
-        border="brown",
+        col="dodgerblue",
+        border="blue",
         lex.order=T,
         sep=":"
 )
@@ -375,8 +344,8 @@ boxplot(Hide~Week:justpass, notch=T,
         main="PS layer justpassing and failing",
         xlab="Week",
         ylab="Hide",
-        col="orange",
-        border="brown",
+        col="dodgerblue",
+        border="blue",
         lex.order=T,
         sep=":"
 )
@@ -403,6 +372,330 @@ boxplot(Hide~Week:justpass, notch=T,
         lex.order=T,
         sep=":"
 )
+
+#####Statistical Tests######
+ksDiff <- function(data, indices,pv,cm){
+  dt<-data[indices,]
+  if(pv=="pass"){
+    if(cm=="PageRank"){
+        c(ks.test(dt$PageRank[dt$pass==1], dt$PageRank[dt$pass==0])$statistic)
+      }else if (cm=="tarEnt"){
+        c(ks.test(dt$tarEnt[dt$pass==1], dt$tarEnt[dt$pass==0])$statistic)
+      }else if (cm=="Hide"){
+        c(ks.test(dt$Hide[dt$pass==1], dt$Hide[dt$pass==0])$statistic)
+    }
+      
+  }else{
+    if(cm=="PageRank"){
+      c(ks.test(dt$PageRank[dt$justpass==1], dt$PageRank[dt$justpass==0])$statistic)
+    }else if (cm=="tarEnt"){
+      c(ks.test(dt$tarEnt[dt$justpass==1], dt$tarEnt[dt$justpass==0])$statistic)
+    }else if (cm=="Hide"){
+      c(ks.test(dt$Hide[dt$justpass==1], dt$Hide[dt$justpass==0])$statistic)
+    }
+  }
+}
+
+wilcoxDiff <- function(data, indices,pv,cm){
+  dt<-data[indices,]
+  if(pv=="pass"){
+    if(cm=="PageRank"){
+      c(wilcox.test(dt$PageRank[dt$pass==1], dt$PageRank[dt$pass==0])$statistic)
+    }else if (cm=="tarEnt"){
+      c(wilcox.test(dt$tarEnt[dt$pass==1], dt$tarEnt[dt$pass==0])$statistic)
+    }else if (cm=="Hide"){
+      c(wilcox.test(dt$Hide[dt$pass==1], dt$Hide[dt$pass==0])$statistic)
+    }
+    
+  }else{
+    if(cm=="PageRank"){
+      c(wilcox.test(dt$PageRank[dt$justpass==1], dt$PageRank[dt$justpass==0])$statistic)
+    }else if (cm=="tarEnt"){
+      c(wilcox.test(dt$tarEnt[dt$justpass==1], dt$tarEnt[dt$justpass==0])$statistic)
+    }else if (cm=="Hide"){
+      c(wilcox.test(dt$Hide[dt$justpass==1], dt$Hide[dt$justpass==0])$statistic)
+    }
+  }
+}
+
+tDiff <- function(data, indices,pv,cm){
+  dt<-data[indices,]
+  if(pv=="pass"){
+    if(cm=="PageRank"){
+      c(t.test(dt$PageRank[dt$pass==1], dt$PageRank[dt$pass==0])$statistic)
+    }else if (cm=="tarEnt"){
+      c(t.test(dt$tarEnt[dt$pass==1], dt$tarEnt[dt$pass==0])$statistic)
+    }else if (cm=="Hide"){
+      c(t.test(dt$Hide[dt$pass==1], dt$Hide[dt$pass==0])$statistic)
+    }
+    
+  }else{
+    if(cm=="PageRank"){
+      c(t.test(dt$PageRank[dt$justpass==1], dt$PageRank[dt$justpass==0])$statistic)
+    }else if (cm=="tarEnt"){
+      c(t.test(dt$tarEnt[dt$justpass==1], dt$tarEnt[dt$justpass==0])$statistic)
+    }else if (cm=="Hide"){
+      c(t.test(dt$Hide[dt$justpass==1], dt$Hide[dt$justpass==0])$statistic)
+    }
+  }
+}
+
+##KS tests
+D<-matrix(NA,ncol=7,nrow=9)
+p<-matrix(NA,ncol=7,nrow=9)
+for(i in 1:7){
+  D[1,i]<-ks.test(centPS[[i]]$PageRank[centPS[[i]]$pass==1],centPS[[i]]$PageRank[centPS[[i]]$pass==0])$statistic 
+  D[2,i]<-ks.test(centCD[[i]]$PageRank[centCD[[i]]$pass==1],centCD[[i]]$PageRank[centCD[[i]]$pass==0])$statistic
+  D[3,i]<-ks.test(centICS[[i]]$PageRank[centICS[[i]]$pass==1],centICS[[i]]$PageRank[centICS[[i]]$pass==0])$statistic
+  D[4,i]<-ks.test(centPS[[i]]$tarEnt[centPS[[i]]$pass==1],centPS[[i]]$tarEnt[centPS[[i]]$pass==0])$statistic 
+  D[5,i]<-ks.test(centCD[[i]]$tarEnt[centCD[[i]]$pass==1],centCD[[i]]$tarEnt[centCD[[i]]$pass==0])$statistic
+  D[6,i]<-ks.test(centICS[[i]]$tarEnt[centICS[[i]]$pass==1],centICS[[i]]$tarEnt[centICS[[i]]$pass==0])$statistic
+  D[7,i]<-ks.test(centPS[[i]]$Hide[centPS[[i]]$pass==1],centPS[[i]]$Hide[centPS[[i]]$pass==0])$statistic 
+  D[8,i]<-ks.test(centCD[[i]]$Hide[centCD[[i]]$pass==1],centCD[[i]]$Hide[centCD[[i]]$pass==0])$statistic
+  D[9,i]<-ks.test(centICS[[i]]$Hide[centICS[[i]]$pass==1],centICS[[i]]$Hide[centICS[[i]]$pass==0])$statistic
+  p[1,i]<-ks.test(centPS[[i]]$PageRank[centPS[[i]]$pass==1],centPS[[i]]$PageRank[centPS[[i]]$pass==0])$p.value 
+  p[2,i]<-ks.test(centCD[[i]]$PageRank[centCD[[i]]$pass==1],centCD[[i]]$PageRank[centCD[[i]]$pass==0])$p.value
+  p[3,i]<-ks.test(centICS[[i]]$PageRank[centICS[[i]]$pass==1],centICS[[i]]$PageRank[centICS[[i]]$pass==0])$p.value
+  p[4,i]<-ks.test(centPS[[i]]$tarEnt[centPS[[i]]$pass==1],centPS[[i]]$tarEnt[centPS[[i]]$pass==0])$p.value 
+  p[5,i]<-ks.test(centCD[[i]]$tarEnt[centCD[[i]]$pass==1],centCD[[i]]$tarEnt[centCD[[i]]$pass==0])$p.value
+  p[6,i]<-ks.test(centICS[[i]]$tarEnt[centICS[[i]]$pass==1],centICS[[i]]$tarEnt[centICS[[i]]$pass==0])$p.value
+  p[7,i]<-ks.test(centPS[[i]]$Hide[centPS[[i]]$pass==1],centPS[[i]]$Hide[centPS[[i]]$pass==0])$p.value 
+  p[8,i]<-ks.test(centCD[[i]]$Hide[centCD[[i]]$pass==1],centCD[[i]]$Hide[centCD[[i]]$pass==0])$p.value
+  p[9,i]<-ks.test(centICS[[i]]$Hide[centICS[[i]]$pass==1],centICS[[i]]$Hide[centICS[[i]]$pass==0])$p.value
+}
+
+Dj<-matrix(NA,ncol=7,nrow=9)
+pj<-matrix(NA,ncol=7,nrow=9)
+for(i in 1:7){
+  Dj[1,i]<-ks.test(centPS[[i]]$PageRank[centPS[[i]]$justpass==1],centPS[[i]]$PageRank[centPS[[i]]$justpass==0])$statistic 
+  Dj[2,i]<-ks.test(centCD[[i]]$PageRank[centCD[[i]]$justpass==1],centCD[[i]]$PageRank[centCD[[i]]$justpass==0])$statistic
+  Dj[3,i]<-ks.test(centICS[[i]]$PageRank[centICS[[i]]$justpass==1],centICS[[i]]$PageRank[centICS[[i]]$justpass==0])$statistic
+  Dj[4,i]<-ks.test(centPS[[i]]$tarEnt[centPS[[i]]$justpass==1],centPS[[i]]$tarEnt[centPS[[i]]$justpass==0])$statistic 
+  Dj[5,i]<-ks.test(centCD[[i]]$tarEnt[centCD[[i]]$justpass==1],centCD[[i]]$tarEnt[centCD[[i]]$justpass==0])$statistic
+  Dj[6,i]<-ks.test(centICS[[i]]$tarEnt[centICS[[i]]$justpass==1],centICS[[i]]$tarEnt[centICS[[i]]$justpass==0])$statistic
+  Dj[7,i]<-ks.test(centPS[[i]]$Hide[centPS[[i]]$justpass==1],centPS[[i]]$Hide[centPS[[i]]$justpass==0])$statistic 
+  Dj[8,i]<-ks.test(centCD[[i]]$Hide[centCD[[i]]$justpass==1],centCD[[i]]$Hide[centCD[[i]]$justpass==0])$statistic
+  Dj[9,i]<-ks.test(centICS[[i]]$Hide[centICS[[i]]$justpass==1],centICS[[i]]$Hide[centICS[[i]]$justpass==0])$statistic
+  pj[1,i]<-ks.test(centPS[[i]]$PageRank[centPS[[i]]$justpass==1],centPS[[i]]$PageRank[centPS[[i]]$justpass==0])$p.value 
+  pj[2,i]<-ks.test(centCD[[i]]$PageRank[centCD[[i]]$justpass==1],centCD[[i]]$PageRank[centCD[[i]]$justpass==0])$p.value
+  pj[3,i]<-ks.test(centICS[[i]]$PageRank[centICS[[i]]$justpass==1],centICS[[i]]$PageRank[centICS[[i]]$justpass==0])$p.value
+  pj[4,i]<-ks.test(centPS[[i]]$tarEnt[centPS[[i]]$justpass==1],centPS[[i]]$tarEnt[centPS[[i]]$justpass==0])$p.value 
+  pj[5,i]<-ks.test(centCD[[i]]$tarEnt[centCD[[i]]$justpass==1],centCD[[i]]$tarEnt[centCD[[i]]$justpass==0])$p.value
+  pj[6,i]<-ks.test(centICS[[i]]$tarEnt[centICS[[i]]$justpass==1],centICS[[i]]$tarEnt[centICS[[i]]$justpass==0])$p.value
+  pj[7,i]<-ks.test(centPS[[i]]$Hide[centPS[[i]]$justpass==1],centPS[[i]]$Hide[centPS[[i]]$justpass==0])$p.value 
+  pj[8,i]<-ks.test(centCD[[i]]$Hide[centCD[[i]]$justpass==1],centCD[[i]]$Hide[centCD[[i]]$justpass==0])$p.value
+  pj[9,i]<-ks.test(centICS[[i]]$Hide[centICS[[i]]$justpass==1],centICS[[i]]$Hide[centICS[[i]]$justpass==0])$p.value
+}
+
+plot(c(D),c(p),log="y",xlim = c(0.2,0.45))
+points(c(Dj),c(pj),log="y",pch=2)
+abline(h=0.05)
+abline(h=0.01)
+abline(h=0.001)
+abline(h=0.0001)
+abline(v=0.302)
+#PS
+ks_PS_PR<-list()
+for (i in 1:7){
+  ks_PS_PR[[i]]<-boot(centPS[[i]], ksDiff, R=1000,pv="pass",cm="PageRank")
+}
+ks_PS_PR_D<-c(ks_PS_PR[[1]]$t0,ks_PS_PR[[2]]$t0,ks_PS_PR[[3]]$t0,ks_PS_PR[[4]]$t0,ks_PS_PR[[5]]$t0,
+              ks_PS_PR[[6]]$t0,ks_PS_PR[[7]]$t0)
+ks_PS_PR_D_SD<-c(sd(ks_PS_PR[[1]]$t),sd(ks_PS_PR[[2]]$t),sd(ks_PS_PR[[3]]$t),sd(ks_PS_PR[[4]]$t),sd(ks_PS_PR[[5]]$t),
+                 sd(ks_PS_PR[[6]]$t),sd(ks_PS_PR[[7]]$t))
+
+
+ks_PS_TE<-list()
+for (i in 1:7){
+  ks_PS_TE[[i]]<-boot(centPS[[i]], ksDiff, R=1000,pv="pass",cm="tarEnt")
+}
+ks_PS_TE_D<-c(ks_PS_TE[[1]]$t0,ks_PS_TE[[2]]$t0,ks_PS_TE[[3]]$t0,ks_PS_TE[[4]]$t0,ks_PS_TE[[5]]$t0,
+              ks_PS_TE[[6]]$t0,ks_PS_TE[[7]]$t0)
+ks_PS_TE_D_SD<-c(sd(ks_PS_TE[[1]]$t),sd(ks_PS_TE[[2]]$t),sd(ks_PS_TE[[3]]$t),sd(ks_PS_TE[[4]]$t),sd(ks_PS_TE[[5]]$t),
+                 sd(ks_PS_TE[[6]]$t),sd(ks_PS_TE[[7]]$t))
+
+ks_PS_H<-list()
+for (i in 1:7){
+  ks_PS_H[[i]]<-boot(centPS[[i]], ksDiff, R=1000,pv="pass",cm="Hide")
+}
+ks_PS_H_D<-c(ks_PS_H[[1]]$t0,ks_PS_H[[2]]$t0,ks_PS_H[[3]]$t0,ks_PS_H[[4]]$t0,ks_PS_H[[5]]$t0,
+              ks_PS_H[[6]]$t0,ks_PS_H[[7]]$t0)
+ks_PS_H_D_SD<-c(sd(ks_PS_H[[1]]$t),sd(ks_PS_H[[2]]$t),sd(ks_PS_H[[3]]$t),sd(ks_PS_H[[4]]$t),sd(ks_PS_H[[5]]$t),
+                 sd(ks_PS_H[[6]]$t),sd(ks_PS_H[[7]]$t))
+x<-c(1:7)
+plot(x, ks_PS_PR_D,
+     ylim=range(0, max(ks_PS_PR_D_ciH)),
+     pch=19, xlab="Weeks", ylab="KS statistic",
+     main="Per week difference",type="b"
+)
+lines(x,ks_PS_TE_D,type="b",col="darkblue",pch=4)
+lines(x,ks_PS_H_D,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ks_PS_PR_D-ks_PS_PR_D_SD, x, ks_PS_PR_D+ks_PS_PR_D_SD, length=0.05, angle=90, code=3)
+arrows(x, ks_PS_TE_D-ks_PS_TE_D_SD, x, ks_PS_TE_D+ks_PS_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x, ks_PS_H_D-ks_PS_H_D_SD, x, ks_PS_H_D+ks_PS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
+
+#WILCOX TESTS
+W<-matrix(NA,ncol=7,nrow=9)
+p<-matrix(NA,ncol=7,nrow=9)
+for(i in 1:7){
+  W[1,i]<-wilcox.test(centPS[[i]]$PageRank[centPS[[i]]$pass==1],centPS[[i]]$PageRank[centPS[[i]]$pass==0])$statistic 
+  W[2,i]<-wilcox.test(centCD[[i]]$PageRank[centCD[[i]]$pass==1],centCD[[i]]$PageRank[centCD[[i]]$pass==0])$statistic
+  W[3,i]<-wilcox.test(centICS[[i]]$PageRank[centICS[[i]]$pass==1],centICS[[i]]$PageRank[centICS[[i]]$pass==0])$statistic
+  W[4,i]<-wilcox.test(centPS[[i]]$tarEnt[centPS[[i]]$pass==1],centPS[[i]]$tarEnt[centPS[[i]]$pass==0])$statistic 
+  W[5,i]<-wilcox.test(centCD[[i]]$tarEnt[centCD[[i]]$pass==1],centCD[[i]]$tarEnt[centCD[[i]]$pass==0])$statistic
+  W[6,i]<-wilcox.test(centICS[[i]]$tarEnt[centICS[[i]]$pass==1],centICS[[i]]$tarEnt[centICS[[i]]$pass==0])$statistic
+  W[7,i]<-wilcox.test(centPS[[i]]$Hide[centPS[[i]]$pass==1],centPS[[i]]$Hide[centPS[[i]]$pass==0])$statistic 
+  W[8,i]<-wilcox.test(centCD[[i]]$Hide[centCD[[i]]$pass==1],centCD[[i]]$Hide[centCD[[i]]$pass==0])$statistic
+  W[9,i]<-wilcox.test(centICS[[i]]$Hide[centICS[[i]]$pass==1],centICS[[i]]$Hide[centICS[[i]]$pass==0])$statistic
+  p[1,i]<-wilcox.test(centPS[[i]]$PageRank[centPS[[i]]$pass==1],centPS[[i]]$PageRank[centPS[[i]]$pass==0])$p.value 
+  p[2,i]<-wilcox.test(centCD[[i]]$PageRank[centCD[[i]]$pass==1],centCD[[i]]$PageRank[centCD[[i]]$pass==0])$p.value
+  p[3,i]<-wilcox.test(centICS[[i]]$PageRank[centICS[[i]]$pass==1],centICS[[i]]$PageRank[centICS[[i]]$pass==0])$p.value
+  p[4,i]<-wilcox.test(centPS[[i]]$tarEnt[centPS[[i]]$pass==1],centPS[[i]]$tarEnt[centPS[[i]]$pass==0])$p.value 
+  p[5,i]<-wilcox.test(centCD[[i]]$tarEnt[centCD[[i]]$pass==1],centCD[[i]]$tarEnt[centCD[[i]]$pass==0])$p.value
+  p[6,i]<-wilcox.test(centICS[[i]]$tarEnt[centICS[[i]]$pass==1],centICS[[i]]$tarEnt[centICS[[i]]$pass==0])$p.value
+  p[7,i]<-wilcox.test(centPS[[i]]$Hide[centPS[[i]]$pass==1],centPS[[i]]$Hide[centPS[[i]]$pass==0])$p.value 
+  p[8,i]<-wilcox.test(centCD[[i]]$Hide[centCD[[i]]$pass==1],centCD[[i]]$Hide[centCD[[i]]$pass==0])$p.value
+  p[9,i]<-wilcox.test(centICS[[i]]$Hide[centICS[[i]]$pass==1],centICS[[i]]$Hide[centICS[[i]]$pass==0])$p.value
+}
+
+Wj<-matrix(NA,ncol=7,nrow=9)
+pj<-matrix(NA,ncol=7,nrow=9)
+for(i in 1:7){
+  Wj[1,i]<-wilcox.test(centPS[[i]]$PageRank[centPS[[i]]$justpass==1],centPS[[i]]$PageRank[centPS[[i]]$justpass==0])$statistic 
+  Wj[2,i]<-wilcox.test(centCD[[i]]$PageRank[centCD[[i]]$justpass==1],centCD[[i]]$PageRank[centCD[[i]]$justpass==0])$statistic
+  Wj[3,i]<-wilcox.test(centICS[[i]]$PageRank[centICS[[i]]$justpass==1],centICS[[i]]$PageRank[centICS[[i]]$justpass==0])$statistic
+  Wj[4,i]<-wilcox.test(centPS[[i]]$tarEnt[centPS[[i]]$justpass==1],centPS[[i]]$tarEnt[centPS[[i]]$justpass==0])$statistic 
+  Wj[5,i]<-wilcox.test(centCD[[i]]$tarEnt[centCD[[i]]$justpass==1],centCD[[i]]$tarEnt[centCD[[i]]$justpass==0])$statistic
+  Wj[6,i]<-wilcox.test(centICS[[i]]$tarEnt[centICS[[i]]$justpass==1],centICS[[i]]$tarEnt[centICS[[i]]$justpass==0])$statistic
+  Wj[7,i]<-wilcox.test(centPS[[i]]$Hide[centPS[[i]]$justpass==1],centPS[[i]]$Hide[centPS[[i]]$justpass==0])$statistic 
+  Wj[8,i]<-wilcox.test(centCD[[i]]$Hide[centCD[[i]]$justpass==1],centCD[[i]]$Hide[centCD[[i]]$justpass==0])$statistic
+  Wj[9,i]<-wilcox.test(centICS[[i]]$Hide[centICS[[i]]$justpass==1],centICS[[i]]$Hide[centICS[[i]]$justpass==0])$statistic
+  pj[1,i]<-wilcox.test(centPS[[i]]$PageRank[centPS[[i]]$justpass==1],centPS[[i]]$PageRank[centPS[[i]]$justpass==0])$p.value 
+  pj[2,i]<-wilcox.test(centCD[[i]]$PageRank[centCD[[i]]$justpass==1],centCD[[i]]$PageRank[centCD[[i]]$justpass==0])$p.value
+  pj[3,i]<-wilcox.test(centICS[[i]]$PageRank[centICS[[i]]$justpass==1],centICS[[i]]$PageRank[centICS[[i]]$justpass==0])$p.value
+  pj[4,i]<-wilcox.test(centPS[[i]]$tarEnt[centPS[[i]]$justpass==1],centPS[[i]]$tarEnt[centPS[[i]]$justpass==0])$p.value 
+  pj[5,i]<-wilcox.test(centCD[[i]]$tarEnt[centCD[[i]]$justpass==1],centCD[[i]]$tarEnt[centCD[[i]]$justpass==0])$p.value
+  pj[6,i]<-wilcox.test(centICS[[i]]$tarEnt[centICS[[i]]$justpass==1],centICS[[i]]$tarEnt[centICS[[i]]$justpass==0])$p.value
+  pj[7,i]<-wilcox.test(centPS[[i]]$Hide[centPS[[i]]$justpass==1],centPS[[i]]$Hide[centPS[[i]]$justpass==0])$p.value 
+  pj[8,i]<-wilcox.test(centCD[[i]]$Hide[centCD[[i]]$justpass==1],centCD[[i]]$Hide[centCD[[i]]$justpass==0])$p.value
+  pj[9,i]<-wilcox.test(centICS[[i]]$Hide[centICS[[i]]$justpass==1],centICS[[i]]$Hide[centICS[[i]]$justpass==0])$p.value
+}
+
+plot(c(W),c(p),xlim=c(2800,3500),log="y")
+points(c(Wj),c(pj),pch=2,log="y")
+abline(h=0.05)
+abline(h=0.01)
+abline(h=0.001)
+abline(h=0.0001)
+abline(v=2940)
+abline(v=3100)
+abline(v=3300)
+abline(v=3450)
+
+wilcox_PS_PR<-list()
+for (i in 1:7){
+  wilcox_PS_PR[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
+}
+wilcox_PS_PR_D<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0,wilcox_PS_PR[[4]]$t0,wilcox_PS_PR[[5]]$t0,
+              wilcox_PS_PR[[6]]$t0,wilcox_PS_PR[[7]]$t0)
+wilcox_PS_PR_D_ciL<-c(boot.ci(wilcox_PS_PR[[1]])$bca[4],boot.ci(wilcox_PS_PR[[2]])$bca[4],boot.ci(wilcox_PS_PR[[3]])$bca[4],
+                  boot.ci(wilcox_PS_PR[[4]])$bca[4],boot.ci(wilcox_PS_PR[[5]])$bca[4],boot.ci(wilcox_PS_PR[[6]])$bca[4],
+                  boot.ci(wilcox_PS_PR[[7]])$bca[4])
+wilcox_PS_PR_D_ciH<-c(boot.ci(wilcox_PS_PR[[1]])$bca[5],boot.ci(wilcox_PS_PR[[2]])$bca[5],boot.ci(wilcox_PS_PR[[3]])$bca[5],
+                  boot.ci(wilcox_PS_PR[[5]])$bca[5],boot.ci(wilcox_PS_PR[[5]])$bca[5],boot.ci(wilcox_PS_PR[[6]])$bca[5],
+                  boot.ci(wilcox_PS_PR[[7]])$bca[5])
+plot(x, wilcox_PS_PR_D,
+     ylim=range(0, max(wilcox_PS_PR_D_ciH)),
+     pch=19, xlab="Weeks", ylab="Wilcox statistic",
+     main="Per week difference",type="b"
+)
+
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, wilcox_PS_PR_D_ciL, x, wilcox_PS_PR_D_ciH, length=0.05, angle=90, code=3)
+
+
+
+#T-TESTS
+W<-matrix(NA,ncol=7,nrow=9)
+p<-matrix(NA,ncol=7,nrow=9)
+for(i in 1:7){
+  W[1,i]<-t.test(centPS[[i]]$PageRank[centPS[[i]]$pass==1],centPS[[i]]$PageRank[centPS[[i]]$pass==0])$statistic 
+  W[2,i]<-t.test(centCD[[i]]$PageRank[centCD[[i]]$pass==1],centCD[[i]]$PageRank[centCD[[i]]$pass==0])$statistic
+  W[3,i]<-t.test(centICS[[i]]$PageRank[centICS[[i]]$pass==1],centICS[[i]]$PageRank[centICS[[i]]$pass==0])$statistic
+  W[4,i]<-t.test(centPS[[i]]$tarEnt[centPS[[i]]$pass==1],centPS[[i]]$tarEnt[centPS[[i]]$pass==0])$statistic 
+  W[5,i]<-t.test(centCD[[i]]$tarEnt[centCD[[i]]$pass==1],centCD[[i]]$tarEnt[centCD[[i]]$pass==0])$statistic
+  W[6,i]<-t.test(centICS[[i]]$tarEnt[centICS[[i]]$pass==1],centICS[[i]]$tarEnt[centICS[[i]]$pass==0])$statistic
+  W[7,i]<-t.test(centPS[[i]]$Hide[centPS[[i]]$pass==1],centPS[[i]]$Hide[centPS[[i]]$pass==0])$statistic 
+  W[8,i]<-t.test(centCD[[i]]$Hide[centCD[[i]]$pass==1],centCD[[i]]$Hide[centCD[[i]]$pass==0])$statistic
+  W[9,i]<-t.test(centICS[[i]]$Hide[centICS[[i]]$pass==1],centICS[[i]]$Hide[centICS[[i]]$pass==0])$statistic
+  p[1,i]<-t.test(centPS[[i]]$PageRank[centPS[[i]]$pass==1],centPS[[i]]$PageRank[centPS[[i]]$pass==0])$p.value 
+  p[2,i]<-t.test(centCD[[i]]$PageRank[centCD[[i]]$pass==1],centCD[[i]]$PageRank[centCD[[i]]$pass==0])$p.value
+  p[3,i]<-t.test(centICS[[i]]$PageRank[centICS[[i]]$pass==1],centICS[[i]]$PageRank[centICS[[i]]$pass==0])$p.value
+  p[4,i]<-t.test(centPS[[i]]$tarEnt[centPS[[i]]$pass==1],centPS[[i]]$tarEnt[centPS[[i]]$pass==0])$p.value 
+  p[5,i]<-t.test(centCD[[i]]$tarEnt[centCD[[i]]$pass==1],centCD[[i]]$tarEnt[centCD[[i]]$pass==0])$p.value
+  p[6,i]<-t.test(centICS[[i]]$tarEnt[centICS[[i]]$pass==1],centICS[[i]]$tarEnt[centICS[[i]]$pass==0])$p.value
+  p[7,i]<-t.test(centPS[[i]]$Hide[centPS[[i]]$pass==1],centPS[[i]]$Hide[centPS[[i]]$pass==0])$p.value 
+  p[8,i]<-t.test(centCD[[i]]$Hide[centCD[[i]]$pass==1],centCD[[i]]$Hide[centCD[[i]]$pass==0])$p.value
+  p[9,i]<-t.test(centICS[[i]]$Hide[centICS[[i]]$pass==1],centICS[[i]]$Hide[centICS[[i]]$pass==0])$p.value
+}
+
+Wj<-matrix(NA,ncol=7,nrow=9)
+pj<-matrix(NA,ncol=7,nrow=9)
+for(i in 1:7){
+  Wj[1,i]<-t.test(centPS[[i]]$PageRank[centPS[[i]]$justpass==1],centPS[[i]]$PageRank[centPS[[i]]$justpass==0])$statistic 
+  Wj[2,i]<-t.test(centCD[[i]]$PageRank[centCD[[i]]$justpass==1],centCD[[i]]$PageRank[centCD[[i]]$justpass==0])$statistic
+  Wj[3,i]<-t.test(centICS[[i]]$PageRank[centICS[[i]]$justpass==1],centICS[[i]]$PageRank[centICS[[i]]$justpass==0])$statistic
+  Wj[4,i]<-t.test(centPS[[i]]$tarEnt[centPS[[i]]$justpass==1],centPS[[i]]$tarEnt[centPS[[i]]$justpass==0])$statistic 
+  Wj[5,i]<-t.test(centCD[[i]]$tarEnt[centCD[[i]]$justpass==1],centCD[[i]]$tarEnt[centCD[[i]]$justpass==0])$statistic
+  Wj[6,i]<-t.test(centICS[[i]]$tarEnt[centICS[[i]]$justpass==1],centICS[[i]]$tarEnt[centICS[[i]]$justpass==0])$statistic
+  Wj[7,i]<-t.test(centPS[[i]]$Hide[centPS[[i]]$justpass==1],centPS[[i]]$Hide[centPS[[i]]$justpass==0])$statistic 
+  Wj[8,i]<-t.test(centCD[[i]]$Hide[centCD[[i]]$justpass==1],centCD[[i]]$Hide[centCD[[i]]$justpass==0])$statistic
+  Wj[9,i]<-t.test(centICS[[i]]$Hide[centICS[[i]]$justpass==1],centICS[[i]]$Hide[centICS[[i]]$justpass==0])$statistic
+  pj[1,i]<-t.test(centPS[[i]]$PageRank[centPS[[i]]$justpass==1],centPS[[i]]$PageRank[centPS[[i]]$justpass==0])$p.value 
+  pj[2,i]<-t.test(centCD[[i]]$PageRank[centCD[[i]]$justpass==1],centCD[[i]]$PageRank[centCD[[i]]$justpass==0])$p.value
+  pj[3,i]<-t.test(centICS[[i]]$PageRank[centICS[[i]]$justpass==1],centICS[[i]]$PageRank[centICS[[i]]$justpass==0])$p.value
+  pj[4,i]<-t.test(centPS[[i]]$tarEnt[centPS[[i]]$justpass==1],centPS[[i]]$tarEnt[centPS[[i]]$justpass==0])$p.value 
+  pj[5,i]<-t.test(centCD[[i]]$tarEnt[centCD[[i]]$justpass==1],centCD[[i]]$tarEnt[centCD[[i]]$justpass==0])$p.value
+  pj[6,i]<-t.test(centICS[[i]]$tarEnt[centICS[[i]]$justpass==1],centICS[[i]]$tarEnt[centICS[[i]]$justpass==0])$p.value
+  pj[7,i]<-t.test(centPS[[i]]$Hide[centPS[[i]]$justpass==1],centPS[[i]]$Hide[centPS[[i]]$justpass==0])$p.value 
+  pj[8,i]<-t.test(centCD[[i]]$Hide[centCD[[i]]$justpass==1],centCD[[i]]$Hide[centCD[[i]]$justpass==0])$p.value
+  pj[9,i]<-t.test(centICS[[i]]$Hide[centICS[[i]]$justpass==1],centICS[[i]]$Hide[centICS[[i]]$justpass==0])$p.value
+}
+
+plot(c(W),c(p))
+plot(c(Wj),c(pj),pch=2)
+abline(h=0.05)
+abline(h=0.01)
+abline(h=0.001)
+
+
+t_PS_PR<-list()
+for (i in 1:7){
+  t_PS_PR[[i]]<-boot(centPS[[i]], tDiff, R=1000,pv="pass",cm="PageRank")
+}
+t_PS_PR_D<-c(t_PS_PR[[1]]$t0,t_PS_PR[[2]]$t0,t_PS_PR[[3]]$t0,t_PS_PR[[4]]$t0,t_PS_PR[[5]]$t0,
+                  t_PS_PR[[6]]$t0,t_PS_PR[[7]]$t0)
+t_PS_PR_D_ciL<-c(boot.ci(t_PS_PR[[1]])$bca[4],boot.ci(t_PS_PR[[2]])$bca[4],boot.ci(t_PS_PR[[3]])$bca[4],
+                      boot.ci(t_PS_PR[[4]])$bca[4],boot.ci(t_PS_PR[[5]])$bca[4],boot.ci(t_PS_PR[[6]])$bca[4],
+                      boot.ci(t_PS_PR[[7]])$bca[4])
+t_PS_PR_D_ciH<-c(boot.ci(t_PS_PR[[1]])$bca[5],boot.ci(t_PS_PR[[2]])$bca[5],boot.ci(t_PS_PR[[3]])$bca[5],
+                      boot.ci(t_PS_PR[[5]])$bca[5],boot.ci(t_PS_PR[[5]])$bca[5],boot.ci(t_PS_PR[[6]])$bca[5],
+                      boot.ci(t_PS_PR[[7]])$bca[5])
+plot(x, t_PS_PR_D,
+     ylim=range(0, max(t_PS_PR_D_ciH)),
+     pch=19, xlab="Weeks", ylab="t-test statistic",
+     main="Per week difference",type="b"
+)
+
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, t_PS_PR_D_ciL, x, t_PS_PR_D_ciH, length=0.05, angle=90, code=3)
+
+
+
+
+
+####Week by week correlation of centrality measures
 
 
 corKen <- function(data, indices,i){
@@ -412,6 +705,8 @@ corKen <- function(data, indices,i){
       
 
 }
+
+
 
 PS_PR<-data.frame(centPS[[1]]$PageRank,centPS[[2]]$PageRank,centPS[[3]]$PageRank,centPS[[4]]$PageRank,centPS[[5]]$PageRank,centPS[[6]]$PageRank,centPS[[7]]$PageRank)
 x<-c(1:166)
