@@ -493,11 +493,10 @@ abline(h=0.05)
 abline(h=0.01)
 abline(h=0.001)
 abline(h=0.0001)
-<<<<<<< HEAD
+
 abline(v=0.41)
-=======
 abline(v=0.302)
->>>>>>> 1d855b0e3993b246c7d2b576e4dc8333a5cef51b
+
 #PS
 ks_PS_PR<-list()
 for (i in 1:7){

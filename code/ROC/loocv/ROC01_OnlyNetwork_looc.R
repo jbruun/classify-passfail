@@ -65,9 +65,8 @@ PS_log_PTH_ciL<-c(rocPS_log_PTH[[1]]$ci[1],rocPS_log_PTH[[2]]$ci[1],rocPS_log_PT
                   rocPS_log_PTH[[5]]$ci[1],rocPS_log_PTH[[6]]$ci[1],rocPS_log_PTH[[7]]$ci[1])
 PS_log_PTH_ciH<-c(rocPS_log_PTH[[1]]$ci[3],rocPS_log_PTH[[2]]$ci[3],rocPS_log_PTH[[3]]$ci[3],rocPS_log_PTH[[4]]$ci[3],
                   rocPS_log_PTH[[5]]$ci[3],rocPS_log_PTH[[6]]$ci[3],rocPS_log_PTH[[7]]$ci[3])
-<<<<<<< HEAD
 ##CD layer
-=======
+
 
 lazy<-table(predPS_log_PTH$pass)[2]/sum(table(predPS_log_PTH$pass))
 
@@ -90,7 +89,6 @@ lines(rocPS_log_PTH[[6]],col="green")
 lines(rocPS_log_PTH[[7]],col="purple")
 
 
->>>>>>> 378bedd6afbf25f21a502f19c01fa97e27ce21c3
 predCD_log_PTH<-jackPredLog(centCD,predictors = c("PageRank","tarEnt", "Hide"))
 rocCD_log_PTH<-list()
 rocCD_log_PTH[[1]]<-roc(predCD_log_PTH$pass,as.numeric(predCD_log_PTH$Week1),auc=T,ci=T)
