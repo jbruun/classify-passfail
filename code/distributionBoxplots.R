@@ -1,4 +1,10 @@
-library(ggplot2)
+library(igraph)
+library(dplyr)
+library(class)   # for knn
+library(tidyr)
+library(ggplot2)  # for plotting success rates
+library(MASS)
+library(boot)
 load("data/centrality_data_frames.Rdata")
 # Turn long data frame into list of weekly frames
 centPS <- dfPS %>% group_split(Week)
@@ -14,10 +20,11 @@ background$justpass<-as.numeric(background$justpass)
 
 #Distributions of variables
 dev.off()
+pdf(file="plots/distributionCentralityMeasures.pdf",width = 8.3, height = 5.8)
 par(cex=0.7)
 par(oma = c(4,1,1,1), mfrow = c(3, 3), mar = c(2, 2, 1, 1))
 plot(sort(centPS[[1]]$PageRank,decreasing = T),log="xy",pch=1, 
-      main="",ylab="PageRank",xlab="Ranked students",cex=0.8)
+      sub="PageRank",ylab="PageRank",xlab="Ranked students",cex=0.8)
 points(sort(centPS[[2]]$PageRank,decreasing = T),log = "xy",col="darkred",pch=2,cex=0.8)
 points(sort(centPS[[3]]$PageRank,decreasing = T),log = "xy",col="darkblue",pch=3,cex=0.8)
 points(sort(centPS[[4]]$PageRank,decreasing = T),log = "xy",col="brown",pch=4,cex=0.8)
@@ -109,7 +116,7 @@ legend('bottom',legend = c("Week 1","Week 2","Week 3","Week 4","Week 5","Week 6"
        col = c("black","darkred","darkblue","brown","orange", "purple","khaki"), 
        pch=c(1:7), xpd = TRUE, horiz = TRUE, cex = 1, 
        seg.len=1, bty = 'n')
-
+dev.off()
 hist(centPS[[1]]$PageRank)
 hist(centPS[[2]]$PageRank)
 hist(centPS[[3]]$PageRank)
@@ -165,9 +172,8 @@ p + geom_dotplot(binaxis='y', stackdir='center', dotsize=1)
 ##NETWORK MEASURES
 
 dev.off()
-#par(oma = c(4,1,1,1), mfrow = c(3, 3), mar = c(2, 2, 1, 1))
-#par(mfrow=c(3,1))
-boxplot(PageRank~Week:pass, notch=T,
+pdf(file="plots/pageRankPassFailPS.pdf",width = 8.3, height = 5.8)
+boxplot(PageRank~Week:pf, notch=T,
         data=dfPS,
         main="PS layer passing and failing",
         xlab="Week",
@@ -177,7 +183,8 @@ boxplot(PageRank~Week:pass, notch=T,
         lex.order=T,
         sep=":"
 )
-
+dev.off()
+pdf(file="plots/pageRankPassFailCD.pdf",width = 8.3, height = 5.8)
 boxplot(PageRank~Week:pass, notch=T,
         data=dfCD,
         main="CD layer passing and failing",
@@ -188,8 +195,8 @@ boxplot(PageRank~Week:pass, notch=T,
         lex.order=T,
         sep=":"
 )
-
-
+dev.off()
+pdf(file="plots/pageRankPassFailICS.pdf",width = 8.3, height = 5.8)
 boxplot(PageRank~Week:pass, notch=T,
         data=dfICS,
         main="ICS layer passing and failing",
@@ -200,10 +207,11 @@ boxplot(PageRank~Week:pass, notch=T,
         lex.order=T,
         sep=":"
 )
-
+dev.off()
+pdf(file="plots/tarEntPassFailPS.pdf",width = 8.3, height = 5.8)
 boxplot(tarEnt~Week:pass, notch=T,
         data=dfPS,
-        
+        main="PS layer passing and failing",
         xlab="Week",
         ylab="tarEnt",
         col="dodgerblue",
@@ -211,10 +219,12 @@ boxplot(tarEnt~Week:pass, notch=T,
         lex.order=T,
         sep=":"
 )
+dev.off()
+pdf(file="plots/tarEntPassFailCD.pdf",width = 8.3, height = 5.8)
 
 boxplot(tarEnt~Week:pass, notch=T,
         data=dfCD,
-        
+        main="CD layer passing and failing",
         xlab="Week",
         ylab="tarEnt",
         col="plum",
@@ -223,10 +233,11 @@ boxplot(tarEnt~Week:pass, notch=T,
         sep=":"
 )
 
-
+dev.off()
+pdf(file="plots/tarEntPassFailICS.pdf",width = 8.3, height = 5.8)
 boxplot(tarEnt~Week:pass, notch=T,
         data=dfICS,
-        
+        main="ICS layer passing and failing",
         xlab="Week",
         ylab="tarEnt",
         col="orange",
@@ -234,10 +245,11 @@ boxplot(tarEnt~Week:pass, notch=T,
         lex.order=T,
         sep=":"
 )
-
+dev.off()
+pdf(file="plots/hidePassFailPS.pdf",width = 8.3, height = 5.8)
 boxplot(Hide~Week:pass, notch=T,
         data=dfPS,
-        
+        main="PS layer passing and failing",
         xlab="Week",
         ylab="Hide",
         col="dodgerblue",
@@ -245,10 +257,11 @@ boxplot(Hide~Week:pass, notch=T,
         lex.order=T,
         sep=":"
 )
-
+dev.off()
+pdf(file="plots/hidePassFailCD.pdf",width = 8.3, height = 5.8)
 boxplot(Hide~Week:pass, notch=T,
         data=dfCD,
-        
+        main="CD layer passing and failing",
         xlab="Week",
         ylab="Hide",
         col="plum",
@@ -257,10 +270,11 @@ boxplot(Hide~Week:pass, notch=T,
         sep=":"
 )
 
-
+dev.off()
+pdf(file="plots/hidePassFailICS.pdf",width = 8.3, height = 5.8)
 boxplot(Hide~Week:pass, notch=T,
         data=dfICS,
-        
+        main="ICS layer passing and failing",
         xlab="Week",
         ylab="Hide",
         col="orange",
@@ -269,9 +283,9 @@ boxplot(Hide~Week:pass, notch=T,
         sep=":"
 )
 
-
-
-boxplot(PageRank~Week:justpass, notch=T,
+dev.off()
+pdf(file="plots/pageRankJustPassFailPS.pdf",width = 8.3, height = 5.8)
+boxplot(PageRank~Week:jpf, notch=T,
         data=dfPS,
         main="PS layer justpassing and failing",
         xlab="Week",
@@ -281,7 +295,8 @@ boxplot(PageRank~Week:justpass, notch=T,
         lex.order=T,
         sep=":"
 )
-
+dev.off()
+pdf(file="plots/pageRankJustPassFailCD.pdf",width = 8.3, height = 5.8)
 boxplot(PageRank~Week:justpass, notch=T,
         data=dfCD,
         main="CD layer justpassing and failing",
@@ -293,7 +308,8 @@ boxplot(PageRank~Week:justpass, notch=T,
         sep=":"
 )
 
-
+dev.off()
+pdf(file="plots/pageRankJustPassFailICS.pdf",width = 8.3, height = 5.8)
 boxplot(PageRank~Week:justpass, notch=T,
         data=dfICS,
         main="ICS layer justpassing and failing",
@@ -304,7 +320,8 @@ boxplot(PageRank~Week:justpass, notch=T,
         lex.order=T,
         sep=":"
 )
-
+dev.off()
+pdf(file="plots/tarEntJustPassFailPS.pdf",width = 8.3, height = 5.8)
 boxplot(tarEnt~Week:justpass, notch=T,
         data=dfPS,
         main="PS layer justpassing and failing",
@@ -315,7 +332,8 @@ boxplot(tarEnt~Week:justpass, notch=T,
         lex.order=T,
         sep=":"
 )
-
+dev.off()
+pdf(file="plots/tarEntJustPassFailCD.pdf",width = 8.3, height = 5.8)
 boxplot(tarEnt~Week:justpass, notch=T,
         data=dfCD,
         main="CD layer justpassing and failing",
@@ -326,8 +344,8 @@ boxplot(tarEnt~Week:justpass, notch=T,
         lex.order=T,
         sep=":"
 )
-
-
+dev.off()
+pdf(file="plots/tarEntJustPassFailICS.pdf",width = 8.3, height = 5.8)
 boxplot(tarEnt~Week:justpass, notch=T,
         data=dfICS,
         main="ICS layer justpassing and failing",
@@ -338,7 +356,8 @@ boxplot(tarEnt~Week:justpass, notch=T,
         lex.order=T,
         sep=":"
 )
-
+dev.off()
+pdf(file="plots/hideJustPassFailPS.pdf",width = 8.3, height = 5.8)
 boxplot(Hide~Week:justpass, notch=T,
         data=dfPS,
         main="PS layer justpassing and failing",
@@ -349,7 +368,8 @@ boxplot(Hide~Week:justpass, notch=T,
         lex.order=T,
         sep=":"
 )
-
+dev.off()
+pdf(file="plots/hideJustPassFailCD.pdf",width = 8.3, height = 5.8)
 boxplot(Hide~Week:justpass, notch=T,
         data=dfCD,
         main="CD layer justpassing and failing",
@@ -361,7 +381,8 @@ boxplot(Hide~Week:justpass, notch=T,
         sep=":"
 )
 
-
+dev.off()
+pdf(file="plots/hideJustPassFailICS.pdf",width = 8.3, height = 5.8)
 boxplot(Hide~Week:justpass, notch=T,
         data=dfICS,
         main="ICS layer justpassing and failing",
@@ -372,7 +393,7 @@ boxplot(Hide~Week:justpass, notch=T,
         lex.order=T,
         sep=":"
 )
-
+dev.off()
 #####Statistical Tests######
 ksDiff <- function(data, indices,pv,cm){
   dt<-data[indices,]
@@ -493,12 +514,14 @@ abline(h=0.05)
 abline(h=0.01)
 abline(h=0.001)
 abline(h=0.0001)
-<<<<<<< HEAD
-abline(v=0.41)
-=======
-abline(v=0.302)
->>>>>>> 1d855b0e3993b246c7d2b576e4dc8333a5cef51b
+abline(v=0.41) #p<1e-4
+abline(v=0.36)#p<1e-3
+abline(v=0.302)#p<1e-2
+abline(v=0.25)#p<5*1e-2
+
 #PS
+dev.off()
+par(mfrow=c(3,1))
 ks_PS_PR<-list()
 for (i in 1:7){
   ks_PS_PR[[i]]<-boot(centPS[[i]], ksDiff, R=1000,pv="pass",cm="PageRank")
@@ -528,9 +551,9 @@ ks_PS_H_D_SD<-c(sd(ks_PS_H[[1]]$t),sd(ks_PS_H[[2]]$t),sd(ks_PS_H[[3]]$t),sd(ks_P
                  sd(ks_PS_H[[6]]$t),sd(ks_PS_H[[7]]$t))
 x<-c(1:7)
 plot(x, ks_PS_PR_D,
-     ylim=range(0, max(ks_PS_PR_D_ciH)),
-     pch=19, xlab="Weeks", ylab="KS statistic",
-     main="Per week difference",type="b"
+     ylim=range(0, max(ks_PS_PR_D+ks_PS_PR_D_SD)),
+     pch=19, xlab="Weeks", ylab="D",
+     main="Per week KS-test for differences: pass vs. fail",type="b",sub="Problem Solving Layer"
 )
 lines(x,ks_PS_TE_D,type="b",col="darkblue",pch=4)
 lines(x,ks_PS_H_D,type="b",col="darkred",pch=5)
@@ -538,7 +561,99 @@ lines(x,ks_PS_H_D,type="b",col="darkred",pch=5)
 arrows(x, ks_PS_PR_D-ks_PS_PR_D_SD, x, ks_PS_PR_D+ks_PS_PR_D_SD, length=0.05, angle=90, code=3)
 arrows(x, ks_PS_TE_D-ks_PS_TE_D_SD, x, ks_PS_TE_D+ks_PS_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
 arrows(x, ks_PS_H_D-ks_PS_H_D_SD, x, ks_PS_H_D+ks_PS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=0.25) #p=0.05 line
+text(x = 6, y = 0.235, "0.05 threshhold") 
+legend(4.5,0.15,legend=c("Pagerank","Target Entropy","Hide"),col=c("black","darkblue","darkred"),pch=c(1,4,5))
+#CD
+ks_CD_PR<-list()
+for (i in 1:7){
+  ks_CD_PR[[i]]<-boot(centCD[[i]], ksDiff, R=1000,pv="pass",cm="PageRank")
+}
+ks_CD_PR_D<-c(ks_CD_PR[[1]]$t0,ks_CD_PR[[2]]$t0,ks_CD_PR[[3]]$t0,ks_CD_PR[[4]]$t0,ks_CD_PR[[5]]$t0,
+              ks_CD_PR[[6]]$t0,ks_CD_PR[[7]]$t0)
+ks_CD_PR_D_SD<-c(sd(ks_CD_PR[[1]]$t),sd(ks_CD_PR[[2]]$t),sd(ks_CD_PR[[3]]$t),sd(ks_CD_PR[[4]]$t),sd(ks_CD_PR[[5]]$t),
+                 sd(ks_CD_PR[[6]]$t),sd(ks_CD_PR[[7]]$t))
 
+
+ks_CD_TE<-list()
+for (i in 1:7){
+  ks_CD_TE[[i]]<-boot(centCD[[i]], ksDiff, R=1000,pv="pass",cm="tarEnt")
+}
+ks_CD_TE_D<-c(ks_CD_TE[[1]]$t0,ks_CD_TE[[2]]$t0,ks_CD_TE[[3]]$t0,ks_CD_TE[[4]]$t0,ks_CD_TE[[5]]$t0,
+              ks_CD_TE[[6]]$t0,ks_CD_TE[[7]]$t0)
+ks_CD_TE_D_SD<-c(sd(ks_CD_TE[[1]]$t),sd(ks_CD_TE[[2]]$t),sd(ks_CD_TE[[3]]$t),sd(ks_CD_TE[[4]]$t),sd(ks_CD_TE[[5]]$t),
+                 sd(ks_CD_TE[[6]]$t),sd(ks_CD_TE[[7]]$t))
+
+ks_CD_H<-list()
+for (i in 1:7){
+  ks_CD_H[[i]]<-boot(centCD[[i]], ksDiff, R=1000,pv="pass",cm="Hide")
+}
+ks_CD_H_D<-c(ks_CD_H[[1]]$t0,ks_CD_H[[2]]$t0,ks_CD_H[[3]]$t0,ks_CD_H[[4]]$t0,ks_CD_H[[5]]$t0,
+             ks_CD_H[[6]]$t0,ks_CD_H[[7]]$t0)
+ks_CD_H_D_SD<-c(sd(ks_CD_H[[1]]$t),sd(ks_CD_H[[2]]$t),sd(ks_CD_H[[3]]$t),sd(ks_CD_H[[4]]$t),sd(ks_CD_H[[5]]$t),
+                sd(ks_CD_H[[6]]$t),sd(ks_CD_H[[7]]$t))
+x<-c(1:7)
+plot(x, ks_CD_PR_D,
+     ylim=range(0, max(ks_CD_PR_D+ks_CD_PR_D_SD)),
+     pch=19, xlab="Weeks", ylab="D",
+     main="Per week KS-test for differences: pass vs. fail",type="b",sub="Concept Discussion Layer"
+)
+lines(x,ks_CD_TE_D,type="b",col="darkblue",pch=4)
+lines(x,ks_CD_H_D,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ks_CD_PR_D-ks_CD_PR_D_SD, x, ks_CD_PR_D+ks_CD_PR_D_SD, length=0.05, angle=90, code=3)
+arrows(x, ks_CD_TE_D-ks_CD_TE_D_SD, x, ks_CD_TE_D+ks_CD_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x, ks_CD_H_D-ks_CD_H_D_SD, x, ks_CD_H_D+ks_CD_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=0.25) #p=0.05 line
+text(x = 6, y = 0.235, "0.05 threshhold") 
+legend(4.5,0.15,legend=c("Pagerank","Target Entropy","Hide"),col=c("black","darkblue","darkred"),pch=c(1,4,5))
+
+#ICS
+ks_ICS_PR<-list()
+for (i in 1:7){
+  ks_ICS_PR[[i]]<-boot(centICS[[i]], ksDiff, R=1000,pv="pass",cm="PageRank")
+}
+ks_ICS_PR_D<-c(ks_ICS_PR[[1]]$t0,ks_ICS_PR[[2]]$t0,ks_ICS_PR[[3]]$t0,ks_ICS_PR[[4]]$t0,ks_ICS_PR[[5]]$t0,
+              ks_ICS_PR[[6]]$t0,ks_ICS_PR[[7]]$t0)
+ks_ICS_PR_D_SD<-c(sd(ks_ICS_PR[[1]]$t),sd(ks_ICS_PR[[2]]$t),sd(ks_ICS_PR[[3]]$t),sd(ks_ICS_PR[[4]]$t),sd(ks_ICS_PR[[5]]$t),
+                 sd(ks_ICS_PR[[6]]$t),sd(ks_ICS_PR[[7]]$t))
+
+
+ks_ICS_TE<-list()
+for (i in 1:7){
+  ks_ICS_TE[[i]]<-boot(centICS[[i]], ksDiff, R=1000,pv="pass",cm="tarEnt")
+}
+ks_ICS_TE_D<-c(ks_ICS_TE[[1]]$t0,ks_ICS_TE[[2]]$t0,ks_ICS_TE[[3]]$t0,ks_ICS_TE[[4]]$t0,ks_ICS_TE[[5]]$t0,
+              ks_ICS_TE[[6]]$t0,ks_ICS_TE[[7]]$t0)
+ks_ICS_TE_D_SD<-c(sd(ks_ICS_TE[[1]]$t),sd(ks_ICS_TE[[2]]$t),sd(ks_ICS_TE[[3]]$t),sd(ks_ICS_TE[[4]]$t),sd(ks_ICS_TE[[5]]$t),
+                 sd(ks_ICS_TE[[6]]$t),sd(ks_ICS_TE[[7]]$t))
+
+ks_ICS_H<-list()
+for (i in 1:7){
+  ks_ICS_H[[i]]<-boot(centICS[[i]], ksDiff, R=1000,pv="pass",cm="Hide")
+}
+ks_ICS_H_D<-c(ks_ICS_H[[1]]$t0,ks_ICS_H[[2]]$t0,ks_ICS_H[[3]]$t0,ks_ICS_H[[4]]$t0,ks_ICS_H[[5]]$t0,
+             ks_ICS_H[[6]]$t0,ks_ICS_H[[7]]$t0)
+ks_ICS_H_D_SD<-c(sd(ks_ICS_H[[1]]$t),sd(ks_ICS_H[[2]]$t),sd(ks_ICS_H[[3]]$t),sd(ks_ICS_H[[4]]$t),sd(ks_ICS_H[[5]]$t),
+                sd(ks_ICS_H[[6]]$t),sd(ks_ICS_H[[7]]$t))
+x<-c(1:7)
+plot(x, ks_ICS_PR_D,
+     ylim=range(0, max(ks_ICS_PR_D+ks_ICS_PR_D_SD)),
+     pch=19, xlab="Weeks", ylab="D",
+     main="Per week KS-test for differences: pass vs. fail",type="b",sub="Concept Discussion Layer"
+)
+lines(x,ks_ICS_TE_D,type="b",col="darkblue",pch=4)
+lines(x,ks_ICS_H_D,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ks_ICS_PR_D-ks_ICS_PR_D_SD, x, ks_ICS_PR_D+ks_ICS_PR_D_SD, length=0.05, angle=90, code=3)
+arrows(x, ks_ICS_TE_D-ks_ICS_TE_D_SD, x, ks_ICS_TE_D+ks_ICS_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x, ks_ICS_H_D-ks_ICS_H_D_SD, x, ks_ICS_H_D+ks_ICS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=0.25) #p=0.05 line
+text(x = 6, y = 0.235, "0.05 threshhold") 
+abline(h=0.302) #p=0.01 line
+text(x = 6, y = 0.290, "0.01 threshhold") 
+legend(4.5,0.15,legend=c("Pagerank","Target Entropy","Hide"),col=c("black","darkblue","darkred"),pch=c(1,4,5))
+dev.off()
 #WILCOX TESTS
 W<-matrix(NA,ncol=7,nrow=9)
 p<-matrix(NA,ncol=7,nrow=9)
