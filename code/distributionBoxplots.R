@@ -849,7 +849,6 @@ arrows(x, wilcox_PS_PR_W-wilcox_PR_PR_W_SD, x, wilcox_PS_PR_W+wilcox_PR_PR_W_SD,
 arrows(x+0.15, wilcox_PS_TE_W-wilcox_PS_TE_W_SD, x+0.15, wilcox_PS_TE_W+wilcox_PS_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, wilcox_PS_H_W-wilcox_PS_H_W_SD, x-0.15, wilcox_PS_H_W+wilcox_PS_H_W_SD, length=0.05, angle=90, code=3,col="darkred")
 abline(h=2940,col="red")
->>>>>>> cd1f9531228a6dad729daec9047faa82066c684d
 
 wilcox_PS_H<-list()
 for (i in 1:7){
@@ -962,7 +961,7 @@ corKen <- function(data, indices,i){
 
 }
 
-
+####PAGE RANK####
 
 PS_PR<-data.frame(centPS[[1]]$PageRank,centPS[[2]]$PageRank,centPS[[3]]$PageRank,centPS[[4]]$PageRank,centPS[[5]]$PageRank,centPS[[6]]$PageRank,centPS[[7]]$PageRank)
 x<-c(1:166)
@@ -1011,7 +1010,7 @@ arrows(y, CD_PR_rankcor[,2], y, CD_PR_rankcor[,3], length=0.05, angle=90, code=3
 arrows(y, ICS_PR_rankcor[,2], y, ICS_PR_rankcor[,3], length=0.05, angle=90, code=3,col="darkred")
 legend(4,0.4,c("Problem Solving","Concept Discussion","In-Class Social"),pch=c(19,4,5),col = c("black","darkblue","darkred"))
 
-################TARGET ENTROPY
+####TARGET ENTROPY####
 PS_TE<-data.frame(centPS[[1]]$tarEnt,centPS[[2]]$tarEnt,centPS[[3]]$tarEnt,centPS[[4]]$tarEnt,centPS[[5]]$tarEnt,centPS[[6]]$tarEnt,centPS[[7]]$tarEnt)
 x<-c(1:166)
 PS_TE_rankcor<-matrix(data=NA,nrow=6,ncol=3)
@@ -1060,7 +1059,7 @@ arrows(y, ICS_TE_rankcor[,2], y, ICS_TE_rankcor[,3], length=0.05, angle=90, code
 legend(4,0.4,c("Problem Solving","Concept Discussion","In-Class Social"),pch=c(19,4,5),col = c("black","darkblue","darkred"))
 
 
-######HIDE#######
+####HIDE#####
 PS_H<-data.frame(centPS[[1]]$Hide,centPS[[2]]$Hide,centPS[[3]]$Hide,centPS[[4]]$Hide,centPS[[5]]$Hide,centPS[[6]]$Hide,centPS[[7]]$Hide)
 x<-c(1:166)
 PS_H_rankcor<-matrix(data=NA,nrow=6,ncol=3)
