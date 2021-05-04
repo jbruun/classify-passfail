@@ -461,7 +461,7 @@ tDiff <- function(data, indices,pv,cm){
   }
 }
 
-##KS tests
+######KS tests#######
 D<-matrix(NA,ncol=7,nrow=9)
 p<-matrix(NA,ncol=7,nrow=9)
 for(i in 1:7){
@@ -520,8 +520,7 @@ abline(v=0.302)#p<1e-2
 abline(v=0.25)#p<5*1e-2
 
 #PS
-dev.off()
-par(mfrow=c(3,1))
+
 ks_PS_PR<-list()
 for (i in 1:7){
   ks_PS_PR[[i]]<-boot(centPS[[i]], ksDiff, R=1000,pv="pass",cm="PageRank")
@@ -549,21 +548,7 @@ ks_PS_H_D<-c(ks_PS_H[[1]]$t0,ks_PS_H[[2]]$t0,ks_PS_H[[3]]$t0,ks_PS_H[[4]]$t0,ks_
               ks_PS_H[[6]]$t0,ks_PS_H[[7]]$t0)
 ks_PS_H_D_SD<-c(sd(ks_PS_H[[1]]$t),sd(ks_PS_H[[2]]$t),sd(ks_PS_H[[3]]$t),sd(ks_PS_H[[4]]$t),sd(ks_PS_H[[5]]$t),
                  sd(ks_PS_H[[6]]$t),sd(ks_PS_H[[7]]$t))
-x<-c(1:7)
-plot(x, ks_PS_PR_D,
-     ylim=range(0, max(ks_PS_PR_D+ks_PS_PR_D_SD)),
-     pch=19, xlab="Weeks", ylab="D",
-     main="Per week KS-test for differences: pass vs. fail",type="b",sub="Problem Solving Layer"
-)
-lines(x,ks_PS_TE_D,type="b",col="darkblue",pch=4)
-lines(x,ks_PS_H_D,type="b",col="darkred",pch=5)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, ks_PS_PR_D-ks_PS_PR_D_SD, x, ks_PS_PR_D+ks_PS_PR_D_SD, length=0.05, angle=90, code=3)
-arrows(x, ks_PS_TE_D-ks_PS_TE_D_SD, x, ks_PS_TE_D+ks_PS_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x, ks_PS_H_D-ks_PS_H_D_SD, x, ks_PS_H_D+ks_PS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
-abline(h=0.25) #p=0.05 line
-text(x = 6, y = 0.235, "0.05 threshhold") 
-legend(4.5,0.15,legend=c("Pagerank","Target Entropy","Hide"),col=c("black","darkblue","darkred"),pch=c(1,4,5))
+
 #CD
 ks_CD_PR<-list()
 for (i in 1:7){
@@ -592,21 +577,7 @@ ks_CD_H_D<-c(ks_CD_H[[1]]$t0,ks_CD_H[[2]]$t0,ks_CD_H[[3]]$t0,ks_CD_H[[4]]$t0,ks_
              ks_CD_H[[6]]$t0,ks_CD_H[[7]]$t0)
 ks_CD_H_D_SD<-c(sd(ks_CD_H[[1]]$t),sd(ks_CD_H[[2]]$t),sd(ks_CD_H[[3]]$t),sd(ks_CD_H[[4]]$t),sd(ks_CD_H[[5]]$t),
                 sd(ks_CD_H[[6]]$t),sd(ks_CD_H[[7]]$t))
-x<-c(1:7)
-plot(x, ks_CD_PR_D,
-     ylim=range(0, max(ks_CD_PR_D+ks_CD_PR_D_SD)),
-     pch=19, xlab="Weeks", ylab="D",
-     main="Per week KS-test for differences: pass vs. fail",type="b",sub="Concept Discussion Layer"
-)
-lines(x,ks_CD_TE_D,type="b",col="darkblue",pch=4)
-lines(x,ks_CD_H_D,type="b",col="darkred",pch=5)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, ks_CD_PR_D-ks_CD_PR_D_SD, x, ks_CD_PR_D+ks_CD_PR_D_SD, length=0.05, angle=90, code=3)
-arrows(x, ks_CD_TE_D-ks_CD_TE_D_SD, x, ks_CD_TE_D+ks_CD_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x, ks_CD_H_D-ks_CD_H_D_SD, x, ks_CD_H_D+ks_CD_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
-abline(h=0.25) #p=0.05 line
-text(x = 6, y = 0.235, "0.05 threshhold") 
-legend(4.5,0.15,legend=c("Pagerank","Target Entropy","Hide"),col=c("black","darkblue","darkred"),pch=c(1,4,5))
+
 
 #ICS
 ks_ICS_PR<-list()
@@ -636,25 +607,69 @@ ks_ICS_H_D<-c(ks_ICS_H[[1]]$t0,ks_ICS_H[[2]]$t0,ks_ICS_H[[3]]$t0,ks_ICS_H[[4]]$t
              ks_ICS_H[[6]]$t0,ks_ICS_H[[7]]$t0)
 ks_ICS_H_D_SD<-c(sd(ks_ICS_H[[1]]$t),sd(ks_ICS_H[[2]]$t),sd(ks_ICS_H[[3]]$t),sd(ks_ICS_H[[4]]$t),sd(ks_ICS_H[[5]]$t),
                 sd(ks_ICS_H[[6]]$t),sd(ks_ICS_H[[7]]$t))
+
+#####PLOT WEEKLY KS-DIFFERENCES####
+
+dev.off()
+pdf(file="plots/kstestsPerWeek.pdf",width = 4.1, height = 5.3)
+par(cex=0.7)
+par(oma = c(4,1,1,1), mfrow = c(3, 1), mar = c(2, 2, 1, 1))
+x<-c(1:7)
+plot(x, ks_PS_PR_D,
+     ylim=range(0, max(ks_PS_PR_D+ks_PS_PR_D_SD)),
+     pch=19, xlab="Weeks", ylab="D",
+     main="Per week KS-test for differences: pass vs. fail",type="b",sub="Problem Solving Layer"
+)
+lines(x+0.15,ks_PS_TE_D,type="b",col="darkblue",pch=4)
+lines(x-0.15,ks_PS_H_D,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ks_PS_PR_D-ks_PS_PR_D_SD, x, ks_PS_PR_D+ks_PS_PR_D_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, ks_PS_TE_D-ks_PS_TE_D_SD, x+0.15, ks_PS_TE_D+ks_PS_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, ks_PS_H_D-ks_PS_H_D_SD, x-0.15, ks_PS_H_D+ks_PS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=0.25, col="red") #p=0.05 line
+text(x = 7, y = 0.235, "*") 
+
+x<-c(1:7)
+plot(x, ks_CD_PR_D,
+     ylim=range(0, max(ks_CD_PR_D+ks_CD_PR_D_SD)),
+     pch=19, xlab="Weeks", ylab="D",
+    type="b",sub="Concept Discussion Layer"
+)
+lines(x+0.15,ks_CD_TE_D,type="b",col="darkblue",pch=4)
+lines(x-0.15,ks_CD_H_D,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ks_CD_PR_D-ks_CD_PR_D_SD, x, ks_CD_PR_D+ks_CD_PR_D_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, ks_CD_TE_D-ks_CD_TE_D_SD, x+0.15, ks_CD_TE_D+ks_CD_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, ks_CD_H_D-ks_CD_H_D_SD, x-0.15, ks_CD_H_D+ks_CD_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=0.25, col="red") #p=0.05 line
+text(x = 7, y = 0.235, "*") 
+
+
 x<-c(1:7)
 plot(x, ks_ICS_PR_D,
      ylim=range(0, max(ks_ICS_PR_D+ks_ICS_PR_D_SD)),
      pch=19, xlab="Weeks", ylab="D",
-     main="Per week KS-test for differences: pass vs. fail",type="b",sub="Concept Discussion Layer"
+     type="b",sub="Concept Discussion Layer"
 )
-lines(x,ks_ICS_TE_D,type="b",col="darkblue",pch=4)
-lines(x,ks_ICS_H_D,type="b",col="darkred",pch=5)
+lines(x+0.15,ks_ICS_TE_D,type="b",col="darkblue",pch=4)
+lines(x-0.15,ks_ICS_H_D,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, ks_ICS_PR_D-ks_ICS_PR_D_SD, x, ks_ICS_PR_D+ks_ICS_PR_D_SD, length=0.05, angle=90, code=3)
-arrows(x, ks_ICS_TE_D-ks_ICS_TE_D_SD, x, ks_ICS_TE_D+ks_ICS_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x, ks_ICS_H_D-ks_ICS_H_D_SD, x, ks_ICS_H_D+ks_ICS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
-abline(h=0.25) #p=0.05 line
-text(x = 6, y = 0.235, "0.05 threshhold") 
-abline(h=0.302) #p=0.01 line
-text(x = 6, y = 0.290, "0.01 threshhold") 
-legend(4.5,0.15,legend=c("Pagerank","Target Entropy","Hide"),col=c("black","darkblue","darkred"),pch=c(1,4,5))
+arrows(x+0.15, ks_ICS_TE_D-ks_ICS_TE_D_SD, x+0.15, ks_ICS_TE_D+ks_ICS_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, ks_ICS_H_D-ks_ICS_H_D_SD, x-0.15, ks_ICS_H_D+ks_ICS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=0.25, col="red") #p=0.05 line
+text(x = 7, y = 0.235, "*") 
+abline(h=0.30, col="blue") #p=0.01 line
+text(x = 7, y = 0.290, "**") 
+
+par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(1, 0, 0, 0), new = TRUE)
+plot(0, 0, type = 'l', bty = 'n', xaxt = 'n', yaxt = 'n')
+legend('bottom',legend = c("PageRank","Target Entropy","Hide"), 
+     col = c("black","darkblue","darkred"), 
+     pch=c(1,4,5), xpd = TRUE, horiz = TRUE, cex = 1, 
+     seg.len=1, bty = 'n')
 dev.off()
-#WILCOX TESTS
+####WILCOX TESTS####
 W<-matrix(NA,ncol=7,nrow=9)
 p<-matrix(NA,ncol=7,nrow=9)
 for(i in 1:7){
@@ -711,30 +726,130 @@ abline(v=2940)
 abline(v=3100)
 abline(v=3300)
 abline(v=3450)
-
+####WILCOX PS LAYER####
 wilcox_PS_PR<-list()
 for (i in 1:7){
   wilcox_PS_PR[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
 }
-wilcox_PS_PR_D<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0,wilcox_PS_PR[[4]]$t0,wilcox_PS_PR[[5]]$t0,
+wilcox_PS_PR_W<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0,wilcox_PS_PR[[4]]$t0,wilcox_PS_PR[[5]]$t0,
               wilcox_PS_PR[[6]]$t0,wilcox_PS_PR[[7]]$t0)
-wilcox_PS_PR_D_ciL<-c(boot.ci(wilcox_PS_PR[[1]])$bca[4],boot.ci(wilcox_PS_PR[[2]])$bca[4],boot.ci(wilcox_PS_PR[[3]])$bca[4],
-                  boot.ci(wilcox_PS_PR[[4]])$bca[4],boot.ci(wilcox_PS_PR[[5]])$bca[4],boot.ci(wilcox_PS_PR[[6]])$bca[4],
-                  boot.ci(wilcox_PS_PR[[7]])$bca[4])
-wilcox_PS_PR_D_ciH<-c(boot.ci(wilcox_PS_PR[[1]])$bca[5],boot.ci(wilcox_PS_PR[[2]])$bca[5],boot.ci(wilcox_PS_PR[[3]])$bca[5],
-                  boot.ci(wilcox_PS_PR[[5]])$bca[5],boot.ci(wilcox_PS_PR[[5]])$bca[5],boot.ci(wilcox_PS_PR[[6]])$bca[5],
-                  boot.ci(wilcox_PS_PR[[7]])$bca[5])
-plot(x, wilcox_PS_PR_D,
-     ylim=range(0, max(wilcox_PS_PR_D_ciH)),
-     pch=19, xlab="Weeks", ylab="Wilcox statistic",
+wilcox_PR_PR_W_SD<-c(sd(wilcox_PS_PR[[1]]$t),sd(wilcox_PS_PR[[2]]$t),sd(wilcox_PS_PR[[3]]$t),sd(wilcox_PS_PR[[4]]$t),sd(wilcox_PS_PR[[5]]$t),
+                  sd(wilcox_PS_PR[[6]]$t),sd(wilcox_PS_PR[[7]]$t))
+
+wilcox_PS_TE<-list()
+for (i in 1:7){
+  wilcox_PS_TE[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_PS_TE_W<-c(wilcox_PS_TE[[1]]$t0,wilcox_PS_TE[[2]]$t0,wilcox_PS_TE[[3]]$t0,wilcox_PS_TE[[4]]$t0,wilcox_PS_TE[[5]]$t0,
+                  wilcox_PS_TE[[6]]$t0,wilcox_PS_TE[[7]]$t0)
+wilcox_PS_TE_W_SD<-c(sd(wilcox_PS_TE[[1]]$t),sd(wilcox_PS_TE[[2]]$t),sd(wilcox_PS_TE[[3]]$t),sd(wilcox_PS_TE[[4]]$t),sd(wilcox_PS_TE[[5]]$t),
+                     sd(wilcox_PS_TE[[6]]$t),sd(wilcox_PS_TE[[7]]$t))
+
+wilcox_PS_H<-list()
+for (i in 1:7){
+  wilcox_PS_H[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_PS_H_W<-c(wilcox_PS_H[[1]]$t0,wilcox_PS_H[[2]]$t0,wilcox_PS_H[[3]]$t0,wilcox_PS_H[[4]]$t0,wilcox_PS_H[[5]]$t0,
+                  wilcox_PS_H[[6]]$t0,wilcox_PS_H[[7]]$t0)
+wilcox_PS_H_W_SD<-c(sd(wilcox_PS_H[[1]]$t),sd(wilcox_PS_H[[2]]$t),sd(wilcox_PS_H[[3]]$t),sd(wilcox_PS_H[[4]]$t),sd(wilcox_PS_H[[5]]$t),
+                     sd(wilcox_PS_H[[6]]$t),sd(wilcox_PS_H[[7]]$t))
+
+plot(x, wilcox_PS_PR_W,
+     ylim=range(0, max(wilcox_PS_PR_W+wilcox_PR_PR_W_SD)),
+     pch=19, xlab="Weeks", ylab="W",
      main="Per week difference",type="b"
 )
-
+lines(x+0.15,wilcox_PS_TE_W,type="b",col="darkblue",pch=4)
+lines(x-0.15,wilcox_PS_H_W,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
-arrows(x, wilcox_PS_PR_D_ciL, x, wilcox_PS_PR_D_ciH, length=0.05, angle=90, code=3)
+arrows(x, wilcox_PS_PR_W-wilcox_PR_PR_W_SD, x, wilcox_PS_PR_W+wilcox_PR_PR_W_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, wilcox_PS_TE_W-wilcox_PS_TE_W_SD, x+0.15, wilcox_PS_TE_W+wilcox_PS_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, wilcox_PS_H_W-wilcox_PS_H_W_SD, x-0.15, wilcox_PS_H_W+wilcox_PS_H_W_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=2940,col="red")
 
 
+####WILCOX CD LAYER####
+wilcox_PS_PR<-list()
+for (i in 1:7){
+  wilcox_PS_PR[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
+}
+wilcox_PS_PR_W<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0,wilcox_PS_PR[[4]]$t0,wilcox_PS_PR[[5]]$t0,
+                  wilcox_PS_PR[[6]]$t0,wilcox_PS_PR[[7]]$t0)
+wilcox_PR_PR_W_SD<-c(sd(wilcox_PS_PR[[1]]$t),sd(wilcox_PS_PR[[2]]$t),sd(wilcox_PS_PR[[3]]$t),sd(wilcox_PS_PR[[4]]$t),sd(wilcox_PS_PR[[5]]$t),
+                     sd(wilcox_PS_PR[[6]]$t),sd(wilcox_PS_PR[[7]]$t))
 
+wilcox_PS_TE<-list()
+for (i in 1:7){
+  wilcox_PS_TE[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_PS_TE_W<-c(wilcox_PS_TE[[1]]$t0,wilcox_PS_TE[[2]]$t0,wilcox_PS_TE[[3]]$t0,wilcox_PS_TE[[4]]$t0,wilcox_PS_TE[[5]]$t0,
+                  wilcox_PS_TE[[6]]$t0,wilcox_PS_TE[[7]]$t0)
+wilcox_PS_TE_W_SD<-c(sd(wilcox_PS_TE[[1]]$t),sd(wilcox_PS_TE[[2]]$t),sd(wilcox_PS_TE[[3]]$t),sd(wilcox_PS_TE[[4]]$t),sd(wilcox_PS_TE[[5]]$t),
+                     sd(wilcox_PS_TE[[6]]$t),sd(wilcox_PS_TE[[7]]$t))
+
+wilcox_PS_H<-list()
+for (i in 1:7){
+  wilcox_PS_H[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_PS_H_W<-c(wilcox_PS_H[[1]]$t0,wilcox_PS_H[[2]]$t0,wilcox_PS_H[[3]]$t0,wilcox_PS_H[[4]]$t0,wilcox_PS_H[[5]]$t0,
+                 wilcox_PS_H[[6]]$t0,wilcox_PS_H[[7]]$t0)
+wilcox_PS_H_W_SD<-c(sd(wilcox_PS_H[[1]]$t),sd(wilcox_PS_H[[2]]$t),sd(wilcox_PS_H[[3]]$t),sd(wilcox_PS_H[[4]]$t),sd(wilcox_PS_H[[5]]$t),
+                    sd(wilcox_PS_H[[6]]$t),sd(wilcox_PS_H[[7]]$t))
+
+plot(x, wilcox_PS_PR_W,
+     ylim=range(0, max(wilcox_PS_PR_W+wilcox_PR_PR_W_SD)),
+     pch=19, xlab="Weeks", ylab="W",
+     main="Per week difference",type="b"
+)
+lines(x+0.15,wilcox_PS_TE_W,type="b",col="darkblue",pch=4)
+lines(x-0.15,wilcox_PS_H_W,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, wilcox_PS_PR_W-wilcox_PR_PR_W_SD, x, wilcox_PS_PR_W+wilcox_PR_PR_W_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, wilcox_PS_TE_W-wilcox_PS_TE_W_SD, x+0.15, wilcox_PS_TE_W+wilcox_PS_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, wilcox_PS_H_W-wilcox_PS_H_W_SD, x-0.15, wilcox_PS_H_W+wilcox_PS_H_W_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=2940,col="red")
+
+
+####WILCOX ICS LAYER####
+wilcox_PS_PR<-list()
+for (i in 1:7){
+  wilcox_PS_PR[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
+}
+wilcox_PS_PR_W<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0,wilcox_PS_PR[[4]]$t0,wilcox_PS_PR[[5]]$t0,
+                  wilcox_PS_PR[[6]]$t0,wilcox_PS_PR[[7]]$t0)
+wilcox_PR_PR_W_SD<-c(sd(wilcox_PS_PR[[1]]$t),sd(wilcox_PS_PR[[2]]$t),sd(wilcox_PS_PR[[3]]$t),sd(wilcox_PS_PR[[4]]$t),sd(wilcox_PS_PR[[5]]$t),
+                     sd(wilcox_PS_PR[[6]]$t),sd(wilcox_PS_PR[[7]]$t))
+
+wilcox_PS_TE<-list()
+for (i in 1:7){
+  wilcox_PS_TE[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_PS_TE_W<-c(wilcox_PS_TE[[1]]$t0,wilcox_PS_TE[[2]]$t0,wilcox_PS_TE[[3]]$t0,wilcox_PS_TE[[4]]$t0,wilcox_PS_TE[[5]]$t0,
+                  wilcox_PS_TE[[6]]$t0,wilcox_PS_TE[[7]]$t0)
+wilcox_PS_TE_W_SD<-c(sd(wilcox_PS_TE[[1]]$t),sd(wilcox_PS_TE[[2]]$t),sd(wilcox_PS_TE[[3]]$t),sd(wilcox_PS_TE[[4]]$t),sd(wilcox_PS_TE[[5]]$t),
+                     sd(wilcox_PS_TE[[6]]$t),sd(wilcox_PS_TE[[7]]$t))
+
+wilcox_PS_H<-list()
+for (i in 1:7){
+  wilcox_PS_H[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_PS_H_W<-c(wilcox_PS_H[[1]]$t0,wilcox_PS_H[[2]]$t0,wilcox_PS_H[[3]]$t0,wilcox_PS_H[[4]]$t0,wilcox_PS_H[[5]]$t0,
+                 wilcox_PS_H[[6]]$t0,wilcox_PS_H[[7]]$t0)
+wilcox_PS_H_W_SD<-c(sd(wilcox_PS_H[[1]]$t),sd(wilcox_PS_H[[2]]$t),sd(wilcox_PS_H[[3]]$t),sd(wilcox_PS_H[[4]]$t),sd(wilcox_PS_H[[5]]$t),
+                    sd(wilcox_PS_H[[6]]$t),sd(wilcox_PS_H[[7]]$t))
+
+plot(x, wilcox_PS_PR_W,
+     ylim=range(0, max(wilcox_PS_PR_W+wilcox_PR_PR_W_SD)),
+     pch=19, xlab="Weeks", ylab="W",
+     main="Per week difference",type="b"
+)
+lines(x+0.15,wilcox_PS_TE_W,type="b",col="darkblue",pch=4)
+lines(x-0.15,wilcox_PS_H_W,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, wilcox_PS_PR_W-wilcox_PR_PR_W_SD, x, wilcox_PS_PR_W+wilcox_PR_PR_W_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, wilcox_PS_TE_W-wilcox_PS_TE_W_SD, x+0.15, wilcox_PS_TE_W+wilcox_PS_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, wilcox_PS_H_W-wilcox_PS_H_W_SD, x-0.15, wilcox_PS_H_W+wilcox_PS_H_W_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=2940,col="red")
 #T-TESTS
 W<-matrix(NA,ncol=7,nrow=9)
 p<-matrix(NA,ncol=7,nrow=9)
@@ -814,7 +929,7 @@ arrows(x, t_PS_PR_D_ciL, x, t_PS_PR_D_ciH, length=0.05, angle=90, code=3)
 
 
 
-####Week by week correlation of centrality measures
+####Week by week correlation of centrality measures####
 
 
 corKen <- function(data, indices,i){
