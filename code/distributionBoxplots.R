@@ -761,6 +761,7 @@ plot(x, wilcox_PS_PR_W,
 )
 lines(x+0.15,wilcox_PS_TE_W,type="b",col="darkblue",pch=4)
 lines(x-0.15,wilcox_PS_H_W,type="b",col="darkred",pch=5)
+<<<<<<< HEAD
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, wilcox_PS_PR_W-wilcox_PR_PR_W_SD, x, wilcox_PS_PR_W+wilcox_PR_PR_W_SD, length=0.05, angle=90, code=3)
 arrows(x+0.15, wilcox_PS_TE_W-wilcox_PS_TE_W_SD, x+0.15, wilcox_PS_TE_W+wilcox_PS_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
@@ -803,12 +804,17 @@ plot(x, wilcox_PS_PR_W,
 )
 lines(x+0.15,wilcox_PS_TE_W,type="b",col="darkblue",pch=4)
 lines(x-0.15,wilcox_PS_H_W,type="b",col="darkred",pch=5)
+=======
+>>>>>>> cd1f9531228a6dad729daec9047faa82066c684d
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, wilcox_PS_PR_W-wilcox_PR_PR_W_SD, x, wilcox_PS_PR_W+wilcox_PR_PR_W_SD, length=0.05, angle=90, code=3)
 arrows(x+0.15, wilcox_PS_TE_W-wilcox_PS_TE_W_SD, x+0.15, wilcox_PS_TE_W+wilcox_PS_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, wilcox_PS_H_W-wilcox_PS_H_W_SD, x-0.15, wilcox_PS_H_W+wilcox_PS_H_W_SD, length=0.05, angle=90, code=3,col="darkred")
 abline(h=2940,col="red")
+<<<<<<< HEAD
 
+=======
+>>>>>>> cd1f9531228a6dad729daec9047faa82066c684d
 
 ####WILCOX ICS LAYER####
 wilcox_PS_PR<-list()
@@ -820,6 +826,19 @@ wilcox_PS_PR_W<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0
 wilcox_PR_PR_W_SD<-c(sd(wilcox_PS_PR[[1]]$t),sd(wilcox_PS_PR[[2]]$t),sd(wilcox_PS_PR[[3]]$t),sd(wilcox_PS_PR[[4]]$t),sd(wilcox_PS_PR[[5]]$t),
                      sd(wilcox_PS_PR[[6]]$t),sd(wilcox_PS_PR[[7]]$t))
 
+<<<<<<< HEAD
+=======
+####WILCOX CD LAYER####
+wilcox_PS_PR<-list()
+for (i in 1:7){
+  wilcox_PS_PR[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
+}
+wilcox_PS_PR_W<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0,wilcox_PS_PR[[4]]$t0,wilcox_PS_PR[[5]]$t0,
+                  wilcox_PS_PR[[6]]$t0,wilcox_PS_PR[[7]]$t0)
+wilcox_PR_PR_W_SD<-c(sd(wilcox_PS_PR[[1]]$t),sd(wilcox_PS_PR[[2]]$t),sd(wilcox_PS_PR[[3]]$t),sd(wilcox_PS_PR[[4]]$t),sd(wilcox_PS_PR[[5]]$t),
+                     sd(wilcox_PS_PR[[6]]$t),sd(wilcox_PS_PR[[7]]$t))
+
+>>>>>>> cd1f9531228a6dad729daec9047faa82066c684d
 wilcox_PS_TE<-list()
 for (i in 1:7){
   wilcox_PS_TE[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
@@ -828,6 +847,31 @@ wilcox_PS_TE_W<-c(wilcox_PS_TE[[1]]$t0,wilcox_PS_TE[[2]]$t0,wilcox_PS_TE[[3]]$t0
                   wilcox_PS_TE[[6]]$t0,wilcox_PS_TE[[7]]$t0)
 wilcox_PS_TE_W_SD<-c(sd(wilcox_PS_TE[[1]]$t),sd(wilcox_PS_TE[[2]]$t),sd(wilcox_PS_TE[[3]]$t),sd(wilcox_PS_TE[[4]]$t),sd(wilcox_PS_TE[[5]]$t),
                      sd(wilcox_PS_TE[[6]]$t),sd(wilcox_PS_TE[[7]]$t))
+<<<<<<< HEAD
+=======
+
+wilcox_PS_H<-list()
+for (i in 1:7){
+  wilcox_PS_H[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_PS_H_W<-c(wilcox_PS_H[[1]]$t0,wilcox_PS_H[[2]]$t0,wilcox_PS_H[[3]]$t0,wilcox_PS_H[[4]]$t0,wilcox_PS_H[[5]]$t0,
+                 wilcox_PS_H[[6]]$t0,wilcox_PS_H[[7]]$t0)
+wilcox_PS_H_W_SD<-c(sd(wilcox_PS_H[[1]]$t),sd(wilcox_PS_H[[2]]$t),sd(wilcox_PS_H[[3]]$t),sd(wilcox_PS_H[[4]]$t),sd(wilcox_PS_H[[5]]$t),
+                    sd(wilcox_PS_H[[6]]$t),sd(wilcox_PS_H[[7]]$t))
+
+plot(x, wilcox_PS_PR_W,
+     ylim=range(0, max(wilcox_PS_PR_W+wilcox_PR_PR_W_SD)),
+     pch=19, xlab="Weeks", ylab="W",
+     main="Per week difference",type="b"
+)
+lines(x+0.15,wilcox_PS_TE_W,type="b",col="darkblue",pch=4)
+lines(x-0.15,wilcox_PS_H_W,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, wilcox_PS_PR_W-wilcox_PR_PR_W_SD, x, wilcox_PS_PR_W+wilcox_PR_PR_W_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, wilcox_PS_TE_W-wilcox_PS_TE_W_SD, x+0.15, wilcox_PS_TE_W+wilcox_PS_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, wilcox_PS_H_W-wilcox_PS_H_W_SD, x-0.15, wilcox_PS_H_W+wilcox_PS_H_W_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=2940,col="red")
+>>>>>>> cd1f9531228a6dad729daec9047faa82066c684d
 
 wilcox_PS_H<-list()
 for (i in 1:7){
