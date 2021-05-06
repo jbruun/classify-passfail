@@ -492,7 +492,7 @@ abline(h=0.05)
 abline(h=0.01)
 abline(h=0.001)
 abline(h=0.0001)
-<<<<<<< HEAD
+
 
 abline(v=0.41)
 abline(v=0.302)
