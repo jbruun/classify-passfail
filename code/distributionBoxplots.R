@@ -486,23 +486,31 @@ for(i in 1:7){
   pj[9,i]<-ks.test(centICS[[i]]$Hide[centICS[[i]]$justpass==1],centICS[[i]]$Hide[centICS[[i]]$justpass==0])$p.value
 }
 
-plot(c(D),c(p),log="y",xlim = c(0.2,0.45))
-points(c(Dj),c(pj),log="y",pch=2)
+plot(c(D),c(p),log="y",xlim = c(0.2,0.45), xlab = "D",ylab="p-value",main="Results from KS-tests pass/fail")
 abline(h=0.05)
 abline(h=0.01)
 abline(h=0.001)
 abline(h=0.0001)
-
-
-abline(v=0.41)
-abline(v=0.302)
-=======
 abline(v=0.41) #p<1e-4
 abline(v=0.36)#p<1e-3
 abline(v=0.302)#p<1e-2
 abline(v=0.25)#p<5*1e-2
->>>>>>> 747b02e7569fcdd3833398ba49c3e2fc679b305b
+text(0.407,1.2,"****",)
+text(0.357,1.2,"***")
+text(0.299,1.2,"**")
+text(0.247,1.2,"*")
 
+
+plot(c(Dj),c(pj),log="y",xlim = c(0.3,0.45),ylim=c(0.001,0.1), xlab = "D",ylab="p-value",main="Results from KS-tests just pass/fail")
+abline(h=0.05)
+abline(h=0.01)
+abline(h=0.001)
+abline(v=0.336)#p<0.05
+abline(v=0.403)#p<0.01
+
+text(0.333,0.1,"*",)
+text(0.400,0.1,"**")
+####Perform bootstrap KS tests####
 #PS
 
 ks_PS_PR<-list()
@@ -595,64 +603,227 @@ ks_ICS_H_D_SD<-c(sd(ks_ICS_H[[1]]$t),sd(ks_ICS_H[[2]]$t),sd(ks_ICS_H[[3]]$t),sd(
 #####PLOT WEEKLY KS-DIFFERENCES####
 
 dev.off()
-pdf(file="plots/kstestsPerWeek.pdf",width = 4.1, height = 5.3)
-par(cex=0.7)
-par(oma = c(4,1,1,1), mfrow = c(3, 1), mar = c(2, 2, 1, 1))
+pdf(file="plots/kstestsPerWeekPR.pdf",width = 5.3, height = 4.1)
 x<-c(1:7)
 plot(x, ks_PS_PR_D,
      ylim=range(0, max(ks_PS_PR_D+ks_PS_PR_D_SD)),
-     pch=19, xlab="Weeks", ylab="D",
-     main="Per week KS-test for differences: pass vs. fail",type="b",sub="Problem Solving Layer"
+     pch=19, xlab="Week", ylab="D",
+     main="Per week KS-test for differences: pass vs. fail",type="b",sub="PageRank"
 )
-lines(x+0.15,ks_PS_TE_D,type="b",col="darkblue",pch=4)
-lines(x-0.15,ks_PS_H_D,type="b",col="darkred",pch=5)
+lines(x+0.15,ks_CD_PR_D,type="b",col="darkblue",pch=4)
+lines(x-0.15,ks_ICS_PR_D,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, ks_PS_PR_D-ks_PS_PR_D_SD, x, ks_PS_PR_D+ks_PS_PR_D_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, ks_PS_TE_D-ks_PS_TE_D_SD, x+0.15, ks_PS_TE_D+ks_PS_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, ks_PS_H_D-ks_PS_H_D_SD, x-0.15, ks_PS_H_D+ks_PS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
-abline(h=0.25, col="red") #p=0.05 line
+arrows(x+0.15, ks_CD_PR_D-ks_CD_PR_D_SD, x+0.15, ks_CD_PR_D+ks_CD_PR_D_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, ks_ICS_PR_D-ks_ICS_PR_D_SD, x-0.15, ks_ICS_PR_D+ks_ICS_PR_D_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=0.25) #p=0.05 line
 text(x = 7, y = 0.235, "*") 
+abline(h=0.302) #p=0.01 line
+text(x = 7, y = 0.292, "**") 
+abline(h=0.36) #p=0.01 line
+text(x = 7, y = 0.35, "***") 
+legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
+dev.off()
 
+
+pdf(file="plots/kstestsPerWeekTE.pdf",width = 5.3, height = 4.1)
 x<-c(1:7)
-plot(x, ks_CD_PR_D,
-     ylim=range(0, max(ks_CD_PR_D+ks_CD_PR_D_SD)),
-     pch=19, xlab="Weeks", ylab="D",
-    type="b",sub="Concept Discussion Layer"
+plot(x, ks_PS_TE_D,
+     ylim=range(0, max(ks_PS_TE_D+ks_PS_TE_D_SD)),
+     pch=19, xlab="Week", ylab="D",
+     main="Per week KS-test for differences: pass vs. fail",type="b",sub="Target Entropy"
 )
 lines(x+0.15,ks_CD_TE_D,type="b",col="darkblue",pch=4)
-lines(x-0.15,ks_CD_H_D,type="b",col="darkred",pch=5)
+lines(x-0.15,ks_ICS_TE_D,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
-arrows(x, ks_CD_PR_D-ks_CD_PR_D_SD, x, ks_CD_PR_D+ks_CD_PR_D_SD, length=0.05, angle=90, code=3)
+arrows(x, ks_PS_TE_D-ks_PS_TE_D_SD, x, ks_PS_TE_D+ks_PS_TE_D_SD, length=0.05, angle=90, code=3)
 arrows(x+0.15, ks_CD_TE_D-ks_CD_TE_D_SD, x+0.15, ks_CD_TE_D+ks_CD_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, ks_CD_H_D-ks_CD_H_D_SD, x-0.15, ks_CD_H_D+ks_CD_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
-abline(h=0.25, col="red") #p=0.05 line
+arrows(x-0.15, ks_ICS_TE_D-ks_ICS_TE_D_SD, x-0.15, ks_ICS_TE_D+ks_ICS_TE_D_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=0.25) #p=0.05 line
 text(x = 7, y = 0.235, "*") 
-
-
+abline(h=0.302) #p=0.01 line
+text(x = 7, y = 0.292, "**") 
+abline(h=0.36) #p=0.01 line
+text(x = 7, y = 0.35, "***") 
+legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
+dev.off()
+pdf(file="plots/kstestsPerWeekH.pdf",width = 5.3, height = 4.1)
 x<-c(1:7)
-plot(x, ks_ICS_PR_D,
-     ylim=range(0, max(ks_ICS_PR_D+ks_ICS_PR_D_SD)),
-     pch=19, xlab="Weeks", ylab="D",
-     type="b",sub="Concept Discussion Layer"
+plot(x, ks_PS_H_D,
+     ylim=range(0, max(ks_ICS_H_D+ks_ICS_H_D_SD)),
+     pch=19, xlab="Week", ylab="D",
+     main="Per week KS-test for differences: pass vs. fail",type="b",sub="Hide"
 )
-lines(x+0.15,ks_ICS_TE_D,type="b",col="darkblue",pch=4)
+lines(x+0.15,ks_CD_H_D,type="b",col="darkblue",pch=4)
 lines(x-0.15,ks_ICS_H_D,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
-arrows(x, ks_ICS_PR_D-ks_ICS_PR_D_SD, x, ks_ICS_PR_D+ks_ICS_PR_D_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, ks_ICS_TE_D-ks_ICS_TE_D_SD, x+0.15, ks_ICS_TE_D+ks_ICS_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x, ks_PS_H_D-ks_PS_H_D_SD, x, ks_PS_H_D+ks_PS_H_D_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, ks_CD_H_D-ks_CD_H_D_SD, x+0.15, ks_CD_H_D+ks_CD_H_D_SD, length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, ks_ICS_H_D-ks_ICS_H_D_SD, x-0.15, ks_ICS_H_D+ks_ICS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
-abline(h=0.25, col="red") #p=0.05 line
+abline(h=0.25) #p=0.05 line
 text(x = 7, y = 0.235, "*") 
-abline(h=0.30, col="blue") #p=0.01 line
-text(x = 7, y = 0.290, "**") 
-
-par(fig = c(0, 1, 0, 1), oma = c(0, 0, 0, 0), mar = c(1, 0, 0, 0), new = TRUE)
-plot(0, 0, type = 'l', bty = 'n', xaxt = 'n', yaxt = 'n')
-legend('bottom',legend = c("PageRank","Target Entropy","Hide"), 
-     col = c("black","darkblue","darkred"), 
-     pch=c(1,4,5), xpd = TRUE, horiz = TRUE, cex = 1, 
-     seg.len=1, bty = 'n')
+abline(h=0.302) #p=0.01 line
+text(x = 7, y = 0.292, "**") 
+abline(h=0.36) #p=0.01 line
+text(x = 7, y = 0.35, "***") 
+legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
 dev.off()
+
+####JP Perform bootstrap####
+#PS
+
+ks_jp_PS_PR<-list()
+for (i in 1:7){
+  ks_jp_PS_PR[[i]]<-boot(centPS[[i]], ksDiff, R=1000,pv="justpass",cm="PageRank")
+}
+ks_jp_PS_PR_D<-c(ks_jp_PS_PR[[1]]$t0,ks_jp_PS_PR[[2]]$t0,ks_jp_PS_PR[[3]]$t0,ks_jp_PS_PR[[4]]$t0,ks_jp_PS_PR[[5]]$t0,
+              ks_jp_PS_PR[[6]]$t0,ks_jp_PS_PR[[7]]$t0)
+ks_jp_PS_PR_D_SD<-c(sd(ks_jp_PS_PR[[1]]$t),sd(ks_jp_PS_PR[[2]]$t),sd(ks_jp_PS_PR[[3]]$t),sd(ks_jp_PS_PR[[4]]$t),sd(ks_jp_PS_PR[[5]]$t),
+                 sd(ks_jp_PS_PR[[6]]$t),sd(ks_jp_PS_PR[[7]]$t))
+
+
+ks_jp_PS_TE<-list()
+for (i in 1:7){
+  ks_jp_PS_TE[[i]]<-boot(centPS[[i]], ksDiff, R=1000,pv="justpass",cm="tarEnt")
+}
+ks_jp_PS_TE_D<-c(ks_jp_PS_TE[[1]]$t0,ks_jp_PS_TE[[2]]$t0,ks_jp_PS_TE[[3]]$t0,ks_jp_PS_TE[[4]]$t0,ks_jp_PS_TE[[5]]$t0,
+              ks_jp_PS_TE[[6]]$t0,ks_jp_PS_TE[[7]]$t0)
+ks_jp_PS_TE_D_SD<-c(sd(ks_jp_PS_TE[[1]]$t),sd(ks_jp_PS_TE[[2]]$t),sd(ks_jp_PS_TE[[3]]$t),sd(ks_jp_PS_TE[[4]]$t),sd(ks_jp_PS_TE[[5]]$t),
+                 sd(ks_jp_PS_TE[[6]]$t),sd(ks_jp_PS_TE[[7]]$t))
+
+ks_jp_PS_H<-list()
+for (i in 1:7){
+  ks_jp_PS_H[[i]]<-boot(centPS[[i]], ksDiff, R=1000,pv="justpass",cm="Hide")
+}
+ks_jp_PS_H_D<-c(ks_jp_PS_H[[1]]$t0,ks_jp_PS_H[[2]]$t0,ks_jp_PS_H[[3]]$t0,ks_jp_PS_H[[4]]$t0,ks_jp_PS_H[[5]]$t0,
+             ks_jp_PS_H[[6]]$t0,ks_jp_PS_H[[7]]$t0)
+ks_jp_PS_H_D_SD<-c(sd(ks_jp_PS_H[[1]]$t),sd(ks_jp_PS_H[[2]]$t),sd(ks_jp_PS_H[[3]]$t),sd(ks_jp_PS_H[[4]]$t),sd(ks_jp_PS_H[[5]]$t),
+                sd(ks_jp_PS_H[[6]]$t),sd(ks_jp_PS_H[[7]]$t))
+
+#CD
+ks_jp_CD_PR<-list()
+for (i in 1:7){
+  ks_jp_CD_PR[[i]]<-boot(centCD[[i]], ksDiff, R=1000,pv="justpass",cm="PageRank")
+}
+ks_jp_CD_PR_D<-c(ks_jp_CD_PR[[1]]$t0,ks_jp_CD_PR[[2]]$t0,ks_jp_CD_PR[[3]]$t0,ks_jp_CD_PR[[4]]$t0,ks_jp_CD_PR[[5]]$t0,
+              ks_jp_CD_PR[[6]]$t0,ks_jp_CD_PR[[7]]$t0)
+ks_jp_CD_PR_D_SD<-c(sd(ks_jp_CD_PR[[1]]$t),sd(ks_jp_CD_PR[[2]]$t),sd(ks_jp_CD_PR[[3]]$t),sd(ks_jp_CD_PR[[4]]$t),sd(ks_jp_CD_PR[[5]]$t),
+                 sd(ks_jp_CD_PR[[6]]$t),sd(ks_jp_CD_PR[[7]]$t))
+
+
+ks_jp_CD_TE<-list()
+for (i in 1:7){
+  ks_jp_CD_TE[[i]]<-boot(centCD[[i]], ksDiff, R=1000,pv="justpass",cm="tarEnt")
+}
+ks_jp_CD_TE_D<-c(ks_jp_CD_TE[[1]]$t0,ks_jp_CD_TE[[2]]$t0,ks_jp_CD_TE[[3]]$t0,ks_jp_CD_TE[[4]]$t0,ks_jp_CD_TE[[5]]$t0,
+              ks_jp_CD_TE[[6]]$t0,ks_jp_CD_TE[[7]]$t0)
+ks_jp_CD_TE_D_SD<-c(sd(ks_jp_CD_TE[[1]]$t),sd(ks_jp_CD_TE[[2]]$t),sd(ks_jp_CD_TE[[3]]$t),sd(ks_jp_CD_TE[[4]]$t),sd(ks_jp_CD_TE[[5]]$t),
+                 sd(ks_jp_CD_TE[[6]]$t),sd(ks_jp_CD_TE[[7]]$t))
+
+ks_jp_CD_H<-list()
+for (i in 1:7){
+  ks_jp_CD_H[[i]]<-boot(centCD[[i]], ksDiff, R=1000,pv="justpass",cm="Hide")
+}
+ks_jp_CD_H_D<-c(ks_jp_CD_H[[1]]$t0,ks_jp_CD_H[[2]]$t0,ks_jp_CD_H[[3]]$t0,ks_jp_CD_H[[4]]$t0,ks_jp_CD_H[[5]]$t0,
+             ks_jp_CD_H[[6]]$t0,ks_jp_CD_H[[7]]$t0)
+ks_jp_CD_H_D_SD<-c(sd(ks_jp_CD_H[[1]]$t),sd(ks_jp_CD_H[[2]]$t),sd(ks_jp_CD_H[[3]]$t),sd(ks_jp_CD_H[[4]]$t),sd(ks_jp_CD_H[[5]]$t),
+                sd(ks_jp_CD_H[[6]]$t),sd(ks_jp_CD_H[[7]]$t))
+
+
+#ICS
+ks_jp_ICS_PR<-list()
+for (i in 1:7){
+  ks_jp_ICS_PR[[i]]<-boot(centICS[[i]], ksDiff, R=1000,pv="justpass",cm="PageRank")
+}
+ks_jp_ICS_PR_D<-c(ks_jp_ICS_PR[[1]]$t0,ks_jp_ICS_PR[[2]]$t0,ks_jp_ICS_PR[[3]]$t0,ks_jp_ICS_PR[[4]]$t0,ks_jp_ICS_PR[[5]]$t0,
+               ks_jp_ICS_PR[[6]]$t0,ks_jp_ICS_PR[[7]]$t0)
+ks_jp_ICS_PR_D_SD<-c(sd(ks_jp_ICS_PR[[1]]$t),sd(ks_jp_ICS_PR[[2]]$t),sd(ks_jp_ICS_PR[[3]]$t),sd(ks_jp_ICS_PR[[4]]$t),sd(ks_jp_ICS_PR[[5]]$t),
+                  sd(ks_jp_ICS_PR[[6]]$t),sd(ks_jp_ICS_PR[[7]]$t))
+
+
+ks_jp_ICS_TE<-list()
+for (i in 1:7){
+  ks_jp_ICS_TE[[i]]<-boot(centICS[[i]], ksDiff, R=1000,pv="justpass",cm="tarEnt")
+}
+ks_jp_ICS_TE_D<-c(ks_jp_ICS_TE[[1]]$t0,ks_jp_ICS_TE[[2]]$t0,ks_jp_ICS_TE[[3]]$t0,ks_jp_ICS_TE[[4]]$t0,ks_jp_ICS_TE[[5]]$t0,
+               ks_jp_ICS_TE[[6]]$t0,ks_jp_ICS_TE[[7]]$t0)
+ks_jp_ICS_TE_D_SD<-c(sd(ks_jp_ICS_TE[[1]]$t),sd(ks_jp_ICS_TE[[2]]$t),sd(ks_jp_ICS_TE[[3]]$t),sd(ks_jp_ICS_TE[[4]]$t),sd(ks_jp_ICS_TE[[5]]$t),
+                  sd(ks_jp_ICS_TE[[6]]$t),sd(ks_jp_ICS_TE[[7]]$t))
+
+ks_jp_ICS_H<-list()
+for (i in 1:7){
+  ks_jp_ICS_H[[i]]<-boot(centICS[[i]], ksDiff, R=1000,pv="justpass",cm="Hide")
+}
+ks_jp_ICS_H_D<-c(ks_jp_ICS_H[[1]]$t0,ks_jp_ICS_H[[2]]$t0,ks_jp_ICS_H[[3]]$t0,ks_jp_ICS_H[[4]]$t0,ks_jp_ICS_H[[5]]$t0,
+              ks_jp_ICS_H[[6]]$t0,ks_jp_ICS_H[[7]]$t0)
+ks_jp_ICS_H_D_SD<-c(sd(ks_jp_ICS_H[[1]]$t),sd(ks_jp_ICS_H[[2]]$t),sd(ks_jp_ICS_H[[3]]$t),sd(ks_jp_ICS_H[[4]]$t),sd(ks_jp_ICS_H[[5]]$t),
+                 sd(ks_jp_ICS_H[[6]]$t),sd(ks_jp_ICS_H[[7]]$t))
+
+#####PLOT JP WEEKLY KS-DIFFERENCES####
+
+dev.off()
+pdf(file="plots/kstestsPerWeekPR_jp.pdf",width = 5.3, height = 4.1)
+x<-c(1:7)
+plot(x, ks_jp_PS_PR_D,
+     ylim=range(0, max(ks_jp_ICS_PR_D+ks_jp_ICS_PR_D_SD)),
+     pch=19, xlab="Week", ylab="D",
+     main="Per week KS-test for differences: just pass vs. just fail",type="b",sub="PageRank"
+)
+lines(x+0.15,ks_jp_CD_PR_D,type="b",col="darkblue",pch=4)
+lines(x-0.15,ks_jp_ICS_PR_D,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ks_jp_PS_PR_D-ks_jp_PS_PR_D_SD, x, ks_jp_PS_PR_D+ks_jp_PS_PR_D_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, ks_jp_CD_PR_D-ks_jp_CD_PR_D_SD, x+0.15, ks_jp_CD_PR_D+ks_jp_CD_PR_D_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, ks_jp_ICS_PR_D-ks_jp_ICS_PR_D_SD, x-0.15, ks_jp_ICS_PR_D+ks_jp_ICS_PR_D_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=0.336) #p=0.05 line
+text(x = 7, y = 0.333, "*") 
+abline(h=0.403) #p=0.01 line
+text(x = 7, y = 0.400, "**") 
+legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
+dev.off()
+
+
+pdf(file="plots/kstestsPerWeekTE_jp.pdf",width = 5.3, height = 4.1)
+x<-c(1:7)
+plot(x, ks_jp_PS_TE_D,
+     ylim=range(0, max(ks_jp_ICS_TE_D+ks_jp_ICS_TE_D_SD)),
+     pch=19, xlab="Week", ylab="D",
+     main="Per week KS-test for differences: pass vs. fail",type="b",sub="PageRank"
+)
+lines(x+0.15,ks_jp_CD_TE_D,type="b",col="darkblue",pch=4)
+lines(x-0.15,ks_jp_ICS_TE_D,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ks_jp_PS_TE_D-ks_jp_PS_TE_D_SD, x, ks_jp_PS_TE_D+ks_jp_PS_TE_D_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, ks_jp_CD_TE_D-ks_jp_CD_TE_D_SD, x+0.15, ks_jp_CD_TE_D+ks_jp_CD_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, ks_jp_ICS_TE_D-ks_jp_ICS_TE_D_SD, x-0.15, ks_jp_ICS_TE_D+ks_jp_ICS_TE_D_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=0.336) #p=0.05 line
+text(x = 7, y = 0.333, "*") 
+abline(h=0.403) #p=0.01 line
+text(x = 7, y = 0.400, "**") 
+legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
+dev.off()
+
+pdf(file="plots/kstestsPerWeekH_jp.pdf",width = 5.3, height = 4.1)
+x<-c(1:7)
+plot(x, ks_jp_PS_H_D,
+     ylim=range(0, max(ks_jp_ICS_H_D+ks_jp_ICS_H_D_SD)),
+     pch=19, xlab="Week", ylab="D",
+     main="Per week KS-test for differences: pass vs. fail",type="b",sub="PageRank"
+)
+lines(x+0.15,ks_jp_CD_H_D,type="b",col="darkblue",pch=4)
+lines(x-0.15,ks_jp_ICS_H_D,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, ks_jp_PS_H_D-ks_jp_PS_H_D_SD, x, ks_jp_PS_H_D+ks_jp_PS_H_D_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, ks_jp_CD_H_D-ks_jp_CD_H_D_SD, x+0.15, ks_jp_CD_H_D+ks_jp_CD_H_D_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, ks_jp_ICS_H_D-ks_jp_ICS_H_D_SD, x-0.15, ks_jp_ICS_H_D+ks_jp_ICS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=0.336) #p=0.05 line
+text(x = 7, y = 0.333, "*") 
+abline(h=0.403) #p=0.01 line
+text(x = 7, y = 0.400, "**")  
+legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
+dev.off()
+
+
 ####WILCOX TESTS####
 W<-matrix(NA,ncol=7,nrow=9)
 p<-matrix(NA,ncol=7,nrow=9)
@@ -700,8 +871,8 @@ for(i in 1:7){
   pj[9,i]<-wilcox.test(centICS[[i]]$Hide[centICS[[i]]$justpass==1],centICS[[i]]$Hide[centICS[[i]]$justpass==0])$p.value
 }
 
-plot(c(W),c(p),xlim=c(2800,3500),log="y")
-points(c(Wj),c(pj),pch=2,log="y")
+plot(c(W),c(p),xlim=c(1400,3600),log="y",xlab="W",ylab="p-value",main="Results from Wilcoxon-tests pass/fail")
+
 abline(h=0.05)
 abline(h=0.01)
 abline(h=0.001)
@@ -710,6 +881,34 @@ abline(v=2940)
 abline(v=3100)
 abline(v=3300)
 abline(v=3450)
+text(2910,1.2,"*")
+text(3070,1.2,"**")
+text(3270,1.2,"***")
+text(3420,1.2,"****")
+abline(v=1920)
+abline(v=1760)
+abline(v=1580)
+text(1900,1.2,"*")
+text(1730,1.2,"**")
+text(1550,1.2,"***")
+
+plot(c(Wj),c(pj),xlim=c(300,900),log="y",xlab="W",ylab="p-value",main="Results from Wilcoxon-tests just pass/fail")
+
+abline(h=0.05)
+abline(h=0.01)
+abline(h=0.001)
+abline(h=0.0001)
+abline(v=806) #p<0.001
+abline(v=750) #p<0.01
+abline(v=700) #p<0.05
+abline(v=392) #p<0.05
+abline(v=343) #p<0.01
+text(697,1.2,"*")
+text(747,1.2,"**")
+text(803,1.2,"***")
+text(389,1.2,"*")
+text(340,1.2,"**")
+
 ####WILCOX PS LAYER####
 wilcox_PS_PR<-list()
 for (i in 1:7){
@@ -810,8 +1009,7 @@ wilcox_PS_PR_W<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0
 wilcox_PR_PR_W_SD<-c(sd(wilcox_PS_PR[[1]]$t),sd(wilcox_PS_PR[[2]]$t),sd(wilcox_PS_PR[[3]]$t),sd(wilcox_PS_PR[[4]]$t),sd(wilcox_PS_PR[[5]]$t),
                      sd(wilcox_PS_PR[[6]]$t),sd(wilcox_PS_PR[[7]]$t))
 
-<<<<<<< HEAD
-=======
+
 ####WILCOX CD LAYER####
 wilcox_PS_PR<-list()
 for (i in 1:7){
@@ -822,7 +1020,7 @@ wilcox_PS_PR_W<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0
 wilcox_PR_PR_W_SD<-c(sd(wilcox_PS_PR[[1]]$t),sd(wilcox_PS_PR[[2]]$t),sd(wilcox_PS_PR[[3]]$t),sd(wilcox_PS_PR[[4]]$t),sd(wilcox_PS_PR[[5]]$t),
                      sd(wilcox_PS_PR[[6]]$t),sd(wilcox_PS_PR[[7]]$t))
 
->>>>>>> cd1f9531228a6dad729daec9047faa82066c684d
+
 wilcox_PS_TE<-list()
 for (i in 1:7){
   wilcox_PS_TE[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
