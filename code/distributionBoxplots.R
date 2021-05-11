@@ -509,7 +509,7 @@ abline(h=0.001)
 abline(v=0.336)#p<0.05
 abline(v=0.403)#p<0.01
 
-=======
+
 
 
 plot(c(Dj),c(pj),log="y",xlim = c(0.3,0.45),ylim=c(0.001,0.1), xlab = "D",ylab="p-value",main="Results from KS-tests just pass/fail")
@@ -519,11 +519,11 @@ abline(h=0.001)
 abline(v=0.336)#p<0.05
 abline(v=0.403)#p<0.01
 
->>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+
 text(0.333,0.1,"*",)
 text(0.400,0.1,"**")
 ####Perform bootstrap KS tests####
-#PS
+#PS####
 
 ks_PS_PR<-list()
 for (i in 1:7){
@@ -553,7 +553,7 @@ ks_PS_H_D<-c(ks_PS_H[[1]]$t0,ks_PS_H[[2]]$t0,ks_PS_H[[3]]$t0,ks_PS_H[[4]]$t0,ks_
 ks_PS_H_D_SD<-c(sd(ks_PS_H[[1]]$t),sd(ks_PS_H[[2]]$t),sd(ks_PS_H[[3]]$t),sd(ks_PS_H[[4]]$t),sd(ks_PS_H[[5]]$t),
                  sd(ks_PS_H[[6]]$t),sd(ks_PS_H[[7]]$t))
 
-#CD
+#CD####
 ks_CD_PR<-list()
 for (i in 1:7){
   ks_CD_PR[[i]]<-boot(centCD[[i]], ksDiff, R=1000,pv="pass",cm="PageRank")
@@ -583,7 +583,7 @@ ks_CD_H_D_SD<-c(sd(ks_CD_H[[1]]$t),sd(ks_CD_H[[2]]$t),sd(ks_CD_H[[3]]$t),sd(ks_C
                 sd(ks_CD_H[[6]]$t),sd(ks_CD_H[[7]]$t))
 
 
-#ICS
+#ICS####
 ks_ICS_PR<-list()
 for (i in 1:7){
   ks_ICS_PR[[i]]<-boot(centICS[[i]], ksDiff, R=1000,pv="pass",cm="PageRank")
@@ -634,11 +634,11 @@ abline(h=0.302) #p=0.01 line
 text(x = 7, y = 0.292, "**") 
 abline(h=0.36) #p=0.01 line
 text(x = 7, y = 0.35, "***") 
-<<<<<<< HEAD
+
 legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
-=======
+
 legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
->>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+
 dev.off()
 
 
@@ -661,11 +661,11 @@ abline(h=0.302) #p=0.01 line
 text(x = 7, y = 0.292, "**") 
 abline(h=0.36) #p=0.01 line
 text(x = 7, y = 0.35, "***") 
-<<<<<<< HEAD
+
 legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
-=======
+
 legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
->>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+
 dev.off()
 pdf(file="plots/kstestsPerWeekH.pdf",width = 5.3, height = 4.1)
 x<-c(1:7)
@@ -686,11 +686,11 @@ abline(h=0.302) #p=0.01 line
 text(x = 7, y = 0.292, "**") 
 abline(h=0.36) #p=0.01 line
 text(x = 7, y = 0.35, "***") 
-<<<<<<< HEAD
+
 legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
-=======
+
 legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
->>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+
 dev.off()
 
 ####JP Perform bootstrap####
@@ -933,11 +933,8 @@ text(803,1.2,"***")
 text(389,1.2,"*")
 text(340,1.2,"**")
 
-<<<<<<< HEAD
-####WILCOX PS LAYER###
-=======
 ####WILCOX PS LAYER####
->>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+
 wilcox_PS_PR<-list()
 for (i in 1:7){
   wilcox_PS_PR[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
@@ -965,75 +962,65 @@ wilcox_PS_H_W<-c(wilcox_PS_H[[1]]$t0,wilcox_PS_H[[2]]$t0,wilcox_PS_H[[3]]$t0,wil
 wilcox_PS_H_W_SD<-c(sd(wilcox_PS_H[[1]]$t),sd(wilcox_PS_H[[2]]$t),sd(wilcox_PS_H[[3]]$t),sd(wilcox_PS_H[[4]]$t),sd(wilcox_PS_H[[5]]$t),
                      sd(wilcox_PS_H[[6]]$t),sd(wilcox_PS_H[[7]]$t))
 
-
-
-
-####WILCOX CD LAYER###
-wilcox_PS_PR<-list()
-for (i in 1:7){
-  wilcox_PS_PR[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
-}
-wilcox_PS_PR_W<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0,wilcox_PS_PR[[4]]$t0,wilcox_PS_PR[[5]]$t0,
-                  wilcox_PS_PR[[6]]$t0,wilcox_PS_PR[[7]]$t0)
-wilcox_PR_PR_W_SD<-c(sd(wilcox_PS_PR[[1]]$t),sd(wilcox_PS_PR[[2]]$t),sd(wilcox_PS_PR[[3]]$t),sd(wilcox_PS_PR[[4]]$t),sd(wilcox_PS_PR[[5]]$t),
-                     sd(wilcox_PS_PR[[6]]$t),sd(wilcox_PS_PR[[7]]$t))
-
-wilcox_PS_TE<-list()
-for (i in 1:7){
-  wilcox_PS_TE[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
-}
-wilcox_PS_TE_W<-c(wilcox_PS_TE[[1]]$t0,wilcox_PS_TE[[2]]$t0,wilcox_PS_TE[[3]]$t0,wilcox_PS_TE[[4]]$t0,wilcox_PS_TE[[5]]$t0,
-                  wilcox_PS_TE[[6]]$t0,wilcox_PS_TE[[7]]$t0)
-wilcox_PS_TE_W_SD<-c(sd(wilcox_PS_TE[[1]]$t),sd(wilcox_PS_TE[[2]]$t),sd(wilcox_PS_TE[[3]]$t),sd(wilcox_PS_TE[[4]]$t),sd(wilcox_PS_TE[[5]]$t),
-                     sd(wilcox_PS_TE[[6]]$t),sd(wilcox_PS_TE[[7]]$t))
-
-wilcox_PS_H<-list()
-for (i in 1:7){
-  wilcox_PS_H[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
-}
-wilcox_PS_H_W<-c(wilcox_PS_H[[1]]$t0,wilcox_PS_H[[2]]$t0,wilcox_PS_H[[3]]$t0,wilcox_PS_H[[4]]$t0,wilcox_PS_H[[5]]$t0,
-                 wilcox_PS_H[[6]]$t0,wilcox_PS_H[[7]]$t0)
-wilcox_PS_H_W_SD<-c(sd(wilcox_PS_H[[1]]$t),sd(wilcox_PS_H[[2]]$t),sd(wilcox_PS_H[[3]]$t),sd(wilcox_PS_H[[4]]$t),sd(wilcox_PS_H[[5]]$t),
-                    sd(wilcox_PS_H[[6]]$t),sd(wilcox_PS_H[[7]]$t))
-
-
-
-####WILCOX ICS LAYER###
-wilcox_PS_PR<-list()
-for (i in 1:7){
-  wilcox_PS_PR[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
-}
-wilcox_PS_PR_W<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0,wilcox_PS_PR[[4]]$t0,wilcox_PS_PR[[5]]$t0,
-                  wilcox_PS_PR[[6]]$t0,wilcox_PS_PR[[7]]$t0)
-wilcox_PR_PR_W_SD<-c(sd(wilcox_PS_PR[[1]]$t),sd(wilcox_PS_PR[[2]]$t),sd(wilcox_PS_PR[[3]]$t),sd(wilcox_PS_PR[[4]]$t),sd(wilcox_PS_PR[[5]]$t),
-                     sd(wilcox_PS_PR[[6]]$t),sd(wilcox_PS_PR[[7]]$t))
-
-<<<<<<< HEAD
-
-=======
-
 ####WILCOX CD LAYER####
-wilcox_PS_PR<-list()
+wilcox_CD_PR<-list()
 for (i in 1:7){
-  wilcox_PS_PR[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
+  wilcox_CD_PR[[i]]<-boot(centCD[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
 }
-wilcox_PS_PR_W<-c(wilcox_PS_PR[[1]]$t0,wilcox_PS_PR[[2]]$t0,wilcox_PS_PR[[3]]$t0,wilcox_PS_PR[[4]]$t0,wilcox_PS_PR[[5]]$t0,
-                  wilcox_PS_PR[[6]]$t0,wilcox_PS_PR[[7]]$t0)
-wilcox_PR_PR_W_SD<-c(sd(wilcox_PS_PR[[1]]$t),sd(wilcox_PS_PR[[2]]$t),sd(wilcox_PS_PR[[3]]$t),sd(wilcox_PS_PR[[4]]$t),sd(wilcox_PS_PR[[5]]$t),
-                     sd(wilcox_PS_PR[[6]]$t),sd(wilcox_PS_PR[[7]]$t))
+wilcox_CD_PR_W<-c(wilcox_CD_PR[[1]]$t0,wilcox_CD_PR[[2]]$t0,wilcox_CD_PR[[3]]$t0,wilcox_CD_PR[[4]]$t0,wilcox_CD_PR[[5]]$t0,
+                  wilcox_CD_PR[[6]]$t0,wilcox_CD_PR[[7]]$t0)
+wilcox_PR_PR_W_SD<-c(sd(wilcox_CD_PR[[1]]$t),sd(wilcox_CD_PR[[2]]$t),sd(wilcox_CD_PR[[3]]$t),sd(wilcox_CD_PR[[4]]$t),sd(wilcox_CD_PR[[5]]$t),
+                     sd(wilcox_CD_PR[[6]]$t),sd(wilcox_CD_PR[[7]]$t))
+
+wilcox_CD_TE<-list()
+for (i in 1:7){
+  wilcox_CD_TE[[i]]<-boot(centCD[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_CD_TE_W<-c(wilcox_CD_TE[[1]]$t0,wilcox_CD_TE[[2]]$t0,wilcox_CD_TE[[3]]$t0,wilcox_CD_TE[[4]]$t0,wilcox_CD_TE[[5]]$t0,
+                  wilcox_CD_TE[[6]]$t0,wilcox_CD_TE[[7]]$t0)
+wilcox_CD_TE_W_SD<-c(sd(wilcox_CD_TE[[1]]$t),sd(wilcox_CD_TE[[2]]$t),sd(wilcox_CD_TE[[3]]$t),sd(wilcox_CD_TE[[4]]$t),sd(wilcox_CD_TE[[5]]$t),
+                     sd(wilcox_CD_TE[[6]]$t),sd(wilcox_CD_TE[[7]]$t))
+
+wilcox_CD_H<-list()
+for (i in 1:7){
+  wilcox_CD_H[[i]]<-boot(centCD[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_CD_H_W<-c(wilcox_CD_H[[1]]$t0,wilcox_CD_H[[2]]$t0,wilcox_CD_H[[3]]$t0,wilcox_CD_H[[4]]$t0,wilcox_CD_H[[5]]$t0,
+                 wilcox_CD_H[[6]]$t0,wilcox_CD_H[[7]]$t0)
+wilcox_CD_H_W_SD<-c(sd(wilcox_CD_H[[1]]$t),sd(wilcox_CD_H[[2]]$t),sd(wilcox_CD_H[[3]]$t),sd(wilcox_CD_H[[4]]$t),sd(wilcox_CD_H[[5]]$t),
+                    sd(wilcox_CD_H[[6]]$t),sd(wilcox_CD_H[[7]]$t))
 
 
-wilcox_PS_TE<-list()
+
+####WILCOX ICS LAYER####
+wilcox_ICS_PR<-list()
 for (i in 1:7){
-  wilcox_PS_TE[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+  wilcox_ICS_PR[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
 }
-wilcox_PS_TE_W<-c(wilcox_PS_TE[[1]]$t0,wilcox_PS_TE[[2]]$t0,wilcox_PS_TE[[3]]$t0,wilcox_PS_TE[[4]]$t0,wilcox_PS_TE[[5]]$t0,
-                  wilcox_PS_TE[[6]]$t0,wilcox_PS_TE[[7]]$t0)
-wilcox_PS_TE_W_SD<-c(sd(wilcox_PS_TE[[1]]$t),sd(wilcox_PS_TE[[2]]$t),sd(wilcox_PS_TE[[3]]$t),sd(wilcox_PS_TE[[4]]$t),sd(wilcox_PS_TE[[5]]$t),
-                     sd(wilcox_PS_TE[[6]]$t),sd(wilcox_PS_TE[[7]]$t))
-<<<<<<< HEAD
-=======
->>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+wilcox_ICS_PR_W<-c(wilcox_ICS_PR[[1]]$t0,wilcox_ICS_PR[[2]]$t0,wilcox_ICS_PR[[3]]$t0,wilcox_ICS_PR[[4]]$t0,wilcox_ICS_PR[[5]]$t0,
+                  wilcox_ICS_PR[[6]]$t0,wilcox_ICS_PR[[7]]$t0)
+wilcox_PR_PR_W_SD<-c(sd(wilcox_ICS_PR[[1]]$t),sd(wilcox_ICS_PR[[2]]$t),sd(wilcox_ICS_PR[[3]]$t),sd(wilcox_ICS_PR[[4]]$t),sd(wilcox_ICS_PR[[5]]$t),
+                     sd(wilcox_ICS_PR[[6]]$t),sd(wilcox_ICS_PR[[7]]$t))
+
+wilcox_ICS_TE<-list()
+for (i in 1:7){
+  wilcox_ICS_TE[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_ICS_TE_W<-c(wilcox_ICS_TE[[1]]$t0,wilcox_ICS_TE[[2]]$t0,wilcox_ICS_TE[[3]]$t0,wilcox_ICS_TE[[4]]$t0,wilcox_ICS_TE[[5]]$t0,
+                  wilcox_ICS_TE[[6]]$t0,wilcox_ICS_TE[[7]]$t0)
+wilcox_ICS_TE_W_SD<-c(sd(wilcox_ICS_TE[[1]]$t),sd(wilcox_ICS_TE[[2]]$t),sd(wilcox_ICS_TE[[3]]$t),sd(wilcox_ICS_TE[[4]]$t),sd(wilcox_ICS_TE[[5]]$t),
+                     sd(wilcox_ICS_TE[[6]]$t),sd(wilcox_ICS_TE[[7]]$t))
+
+wilcox_ICS_H<-list()
+for (i in 1:7){
+  wilcox_ICS_H[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_ICS_H_W<-c(wilcox_ICS_H[[1]]$t0,wilcox_ICS_H[[2]]$t0,wilcox_ICS_H[[3]]$t0,wilcox_ICS_H[[4]]$t0,wilcox_ICS_H[[5]]$t0,
+                 wilcox_ICS_H[[6]]$t0,wilcox_ICS_H[[7]]$t0)
+wilcox_ICS_H_W_SD<-c(sd(wilcox_ICS_H[[1]]$t),sd(wilcox_ICS_H[[2]]$t),sd(wilcox_ICS_H[[3]]$t),sd(wilcox_ICS_H[[4]]$t),sd(wilcox_ICS_H[[5]]$t),
+                    sd(wilcox_ICS_H[[6]]$t),sd(wilcox_ICS_H[[7]]$t))
+
+
 
 
 ####PLOT WEEKLY WILCOXON TESTS####
@@ -1072,83 +1059,133 @@ arrows(x, wilcox_PS_PR_W-wilcox_PR_PR_W_SD, x, wilcox_PS_PR_W+wilcox_PR_PR_W_SD,
 arrows(x+0.15, wilcox_PS_TE_W-wilcox_PS_TE_W_SD, x+0.15, wilcox_PS_TE_W+wilcox_PS_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, wilcox_PS_H_W-wilcox_PS_H_W_SD, x-0.15, wilcox_PS_H_W+wilcox_PS_H_W_SD, length=0.05, angle=90, code=3,col="darkred")
 abline(h=2940,col="red")
-#T-TESTS
-W<-matrix(NA,ncol=7,nrow=9)
-p<-matrix(NA,ncol=7,nrow=9)
-for(i in 1:7){
-  W[1,i]<-t.test(centPS[[i]]$PageRank[centPS[[i]]$pass==1],centPS[[i]]$PageRank[centPS[[i]]$pass==0])$statistic 
-  W[2,i]<-t.test(centCD[[i]]$PageRank[centCD[[i]]$pass==1],centCD[[i]]$PageRank[centCD[[i]]$pass==0])$statistic
-  W[3,i]<-t.test(centICS[[i]]$PageRank[centICS[[i]]$pass==1],centICS[[i]]$PageRank[centICS[[i]]$pass==0])$statistic
-  W[4,i]<-t.test(centPS[[i]]$tarEnt[centPS[[i]]$pass==1],centPS[[i]]$tarEnt[centPS[[i]]$pass==0])$statistic 
-  W[5,i]<-t.test(centCD[[i]]$tarEnt[centCD[[i]]$pass==1],centCD[[i]]$tarEnt[centCD[[i]]$pass==0])$statistic
-  W[6,i]<-t.test(centICS[[i]]$tarEnt[centICS[[i]]$pass==1],centICS[[i]]$tarEnt[centICS[[i]]$pass==0])$statistic
-  W[7,i]<-t.test(centPS[[i]]$Hide[centPS[[i]]$pass==1],centPS[[i]]$Hide[centPS[[i]]$pass==0])$statistic 
-  W[8,i]<-t.test(centCD[[i]]$Hide[centCD[[i]]$pass==1],centCD[[i]]$Hide[centCD[[i]]$pass==0])$statistic
-  W[9,i]<-t.test(centICS[[i]]$Hide[centICS[[i]]$pass==1],centICS[[i]]$Hide[centICS[[i]]$pass==0])$statistic
-  p[1,i]<-t.test(centPS[[i]]$PageRank[centPS[[i]]$pass==1],centPS[[i]]$PageRank[centPS[[i]]$pass==0])$p.value 
-  p[2,i]<-t.test(centCD[[i]]$PageRank[centCD[[i]]$pass==1],centCD[[i]]$PageRank[centCD[[i]]$pass==0])$p.value
-  p[3,i]<-t.test(centICS[[i]]$PageRank[centICS[[i]]$pass==1],centICS[[i]]$PageRank[centICS[[i]]$pass==0])$p.value
-  p[4,i]<-t.test(centPS[[i]]$tarEnt[centPS[[i]]$pass==1],centPS[[i]]$tarEnt[centPS[[i]]$pass==0])$p.value 
-  p[5,i]<-t.test(centCD[[i]]$tarEnt[centCD[[i]]$pass==1],centCD[[i]]$tarEnt[centCD[[i]]$pass==0])$p.value
-  p[6,i]<-t.test(centICS[[i]]$tarEnt[centICS[[i]]$pass==1],centICS[[i]]$tarEnt[centICS[[i]]$pass==0])$p.value
-  p[7,i]<-t.test(centPS[[i]]$Hide[centPS[[i]]$pass==1],centPS[[i]]$Hide[centPS[[i]]$pass==0])$p.value 
-  p[8,i]<-t.test(centCD[[i]]$Hide[centCD[[i]]$pass==1],centCD[[i]]$Hide[centCD[[i]]$pass==0])$p.value
-  p[9,i]<-t.test(centICS[[i]]$Hide[centICS[[i]]$pass==1],centICS[[i]]$Hide[centICS[[i]]$pass==0])$p.value
-}
 
-Wj<-matrix(NA,ncol=7,nrow=9)
-pj<-matrix(NA,ncol=7,nrow=9)
-for(i in 1:7){
-  Wj[1,i]<-t.test(centPS[[i]]$PageRank[centPS[[i]]$justpass==1],centPS[[i]]$PageRank[centPS[[i]]$justpass==0])$statistic 
-  Wj[2,i]<-t.test(centCD[[i]]$PageRank[centCD[[i]]$justpass==1],centCD[[i]]$PageRank[centCD[[i]]$justpass==0])$statistic
-  Wj[3,i]<-t.test(centICS[[i]]$PageRank[centICS[[i]]$justpass==1],centICS[[i]]$PageRank[centICS[[i]]$justpass==0])$statistic
-  Wj[4,i]<-t.test(centPS[[i]]$tarEnt[centPS[[i]]$justpass==1],centPS[[i]]$tarEnt[centPS[[i]]$justpass==0])$statistic 
-  Wj[5,i]<-t.test(centCD[[i]]$tarEnt[centCD[[i]]$justpass==1],centCD[[i]]$tarEnt[centCD[[i]]$justpass==0])$statistic
-  Wj[6,i]<-t.test(centICS[[i]]$tarEnt[centICS[[i]]$justpass==1],centICS[[i]]$tarEnt[centICS[[i]]$justpass==0])$statistic
-  Wj[7,i]<-t.test(centPS[[i]]$Hide[centPS[[i]]$justpass==1],centPS[[i]]$Hide[centPS[[i]]$justpass==0])$statistic 
-  Wj[8,i]<-t.test(centCD[[i]]$Hide[centCD[[i]]$justpass==1],centCD[[i]]$Hide[centCD[[i]]$justpass==0])$statistic
-  Wj[9,i]<-t.test(centICS[[i]]$Hide[centICS[[i]]$justpass==1],centICS[[i]]$Hide[centICS[[i]]$justpass==0])$statistic
-  pj[1,i]<-t.test(centPS[[i]]$PageRank[centPS[[i]]$justpass==1],centPS[[i]]$PageRank[centPS[[i]]$justpass==0])$p.value 
-  pj[2,i]<-t.test(centCD[[i]]$PageRank[centCD[[i]]$justpass==1],centCD[[i]]$PageRank[centCD[[i]]$justpass==0])$p.value
-  pj[3,i]<-t.test(centICS[[i]]$PageRank[centICS[[i]]$justpass==1],centICS[[i]]$PageRank[centICS[[i]]$justpass==0])$p.value
-  pj[4,i]<-t.test(centPS[[i]]$tarEnt[centPS[[i]]$justpass==1],centPS[[i]]$tarEnt[centPS[[i]]$justpass==0])$p.value 
-  pj[5,i]<-t.test(centCD[[i]]$tarEnt[centCD[[i]]$justpass==1],centCD[[i]]$tarEnt[centCD[[i]]$justpass==0])$p.value
-  pj[6,i]<-t.test(centICS[[i]]$tarEnt[centICS[[i]]$justpass==1],centICS[[i]]$tarEnt[centICS[[i]]$justpass==0])$p.value
-  pj[7,i]<-t.test(centPS[[i]]$Hide[centPS[[i]]$justpass==1],centPS[[i]]$Hide[centPS[[i]]$justpass==0])$p.value 
-  pj[8,i]<-t.test(centCD[[i]]$Hide[centCD[[i]]$justpass==1],centCD[[i]]$Hide[centCD[[i]]$justpass==0])$p.value
-  pj[9,i]<-t.test(centICS[[i]]$Hide[centICS[[i]]$justpass==1],centICS[[i]]$Hide[centICS[[i]]$justpass==0])$p.value
-}
+####JP WILCOX PS LAYER####
 
-plot(c(W),c(p))
-plot(c(Wj),c(pj),pch=2)
-abline(h=0.05)
-abline(h=0.01)
-abline(h=0.001)
-
-
-t_PS_PR<-list()
+wilcox_jp_PS_PR<-list()
 for (i in 1:7){
-  t_PS_PR[[i]]<-boot(centPS[[i]], tDiff, R=1000,pv="pass",cm="PageRank")
+  wilcox_jp_PS_PR[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
 }
-t_PS_PR_D<-c(t_PS_PR[[1]]$t0,t_PS_PR[[2]]$t0,t_PS_PR[[3]]$t0,t_PS_PR[[4]]$t0,t_PS_PR[[5]]$t0,
-                  t_PS_PR[[6]]$t0,t_PS_PR[[7]]$t0)
-t_PS_PR_D_ciL<-c(boot.ci(t_PS_PR[[1]])$bca[4],boot.ci(t_PS_PR[[2]])$bca[4],boot.ci(t_PS_PR[[3]])$bca[4],
-                      boot.ci(t_PS_PR[[4]])$bca[4],boot.ci(t_PS_PR[[5]])$bca[4],boot.ci(t_PS_PR[[6]])$bca[4],
-                      boot.ci(t_PS_PR[[7]])$bca[4])
-t_PS_PR_D_ciH<-c(boot.ci(t_PS_PR[[1]])$bca[5],boot.ci(t_PS_PR[[2]])$bca[5],boot.ci(t_PS_PR[[3]])$bca[5],
-                      boot.ci(t_PS_PR[[5]])$bca[5],boot.ci(t_PS_PR[[5]])$bca[5],boot.ci(t_PS_PR[[6]])$bca[5],
-                      boot.ci(t_PS_PR[[7]])$bca[5])
-plot(x, t_PS_PR_D,
-     ylim=range(0, max(t_PS_PR_D_ciH)),
-     pch=19, xlab="Weeks", ylab="t-test statistic",
+wilcox_jp_PS_PR_W<-c(wilcox_jp_PS_PR[[1]]$t0,wilcox_jp_PS_PR[[2]]$t0,wilcox_jp_PS_PR[[3]]$t0,wilcox_jp_PS_PR[[4]]$t0,wilcox_jp_PS_PR[[5]]$t0,
+                  wilcox_jp_PS_PR[[6]]$t0,wilcox_jp_PS_PR[[7]]$t0)
+wilcox_jp_PR_PR_W_SD<-c(sd(wilcox_jp_PS_PR[[1]]$t),sd(wilcox_jp_PS_PR[[2]]$t),sd(wilcox_jp_PS_PR[[3]]$t),sd(wilcox_jp_PS_PR[[4]]$t),sd(wilcox_jp_PS_PR[[5]]$t),
+                     sd(wilcox_jp_PS_PR[[6]]$t),sd(wilcox_jp_PS_PR[[7]]$t))
+
+wilcox_jp_PS_TE<-list()
+for (i in 1:7){
+  wilcox_jp_PS_TE[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_jp_PS_TE_W<-c(wilcox_jp_PS_TE[[1]]$t0,wilcox_jp_PS_TE[[2]]$t0,wilcox_jp_PS_TE[[3]]$t0,wilcox_jp_PS_TE[[4]]$t0,wilcox_jp_PS_TE[[5]]$t0,
+                  wilcox_jp_PS_TE[[6]]$t0,wilcox_jp_PS_TE[[7]]$t0)
+wilcox_jp_PS_TE_W_SD<-c(sd(wilcox_jp_PS_TE[[1]]$t),sd(wilcox_jp_PS_TE[[2]]$t),sd(wilcox_jp_PS_TE[[3]]$t),sd(wilcox_jp_PS_TE[[4]]$t),sd(wilcox_jp_PS_TE[[5]]$t),
+                     sd(wilcox_jp_PS_TE[[6]]$t),sd(wilcox_jp_PS_TE[[7]]$t))
+
+wilcox_jp_PS_H<-list()
+for (i in 1:7){
+  wilcox_jp_PS_H[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_jp_PS_H_W<-c(wilcox_jp_PS_H[[1]]$t0,wilcox_jp_PS_H[[2]]$t0,wilcox_jp_PS_H[[3]]$t0,wilcox_jp_PS_H[[4]]$t0,wilcox_jp_PS_H[[5]]$t0,
+                 wilcox_jp_PS_H[[6]]$t0,wilcox_jp_PS_H[[7]]$t0)
+wilcox_jp_PS_H_W_SD<-c(sd(wilcox_jp_PS_H[[1]]$t),sd(wilcox_jp_PS_H[[2]]$t),sd(wilcox_jp_PS_H[[3]]$t),sd(wilcox_jp_PS_H[[4]]$t),sd(wilcox_jp_PS_H[[5]]$t),
+                    sd(wilcox_jp_PS_H[[6]]$t),sd(wilcox_jp_PS_H[[7]]$t))
+
+####JP WILCOX CD LAYER####
+wilcox_jp_CD_PR<-list()
+for (i in 1:7){
+  wilcox_jp_CD_PR[[i]]<-boot(centCD[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
+}
+wilcox_jp_CD_PR_W<-c(wilcox_jp_CD_PR[[1]]$t0,wilcox_jp_CD_PR[[2]]$t0,wilcox_jp_CD_PR[[3]]$t0,wilcox_jp_CD_PR[[4]]$t0,wilcox_jp_CD_PR[[5]]$t0,
+                  wilcox_jp_CD_PR[[6]]$t0,wilcox_jp_CD_PR[[7]]$t0)
+wilcox_jp_PR_PR_W_SD<-c(sd(wilcox_jp_CD_PR[[1]]$t),sd(wilcox_jp_CD_PR[[2]]$t),sd(wilcox_jp_CD_PR[[3]]$t),sd(wilcox_jp_CD_PR[[4]]$t),sd(wilcox_jp_CD_PR[[5]]$t),
+                     sd(wilcox_jp_CD_PR[[6]]$t),sd(wilcox_jp_CD_PR[[7]]$t))
+
+wilcox_jp_CD_TE<-list()
+for (i in 1:7){
+  wilcox_jp_CD_TE[[i]]<-boot(centCD[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_jp_CD_TE_W<-c(wilcox_jp_CD_TE[[1]]$t0,wilcox_jp_CD_TE[[2]]$t0,wilcox_jp_CD_TE[[3]]$t0,wilcox_jp_CD_TE[[4]]$t0,wilcox_jp_CD_TE[[5]]$t0,
+                  wilcox_jp_CD_TE[[6]]$t0,wilcox_jp_CD_TE[[7]]$t0)
+wilcox_jp_CD_TE_W_SD<-c(sd(wilcox_jp_CD_TE[[1]]$t),sd(wilcox_jp_CD_TE[[2]]$t),sd(wilcox_jp_CD_TE[[3]]$t),sd(wilcox_jp_CD_TE[[4]]$t),sd(wilcox_jp_CD_TE[[5]]$t),
+                     sd(wilcox_jp_CD_TE[[6]]$t),sd(wilcox_jp_CD_TE[[7]]$t))
+
+wilcox_jp_CD_H<-list()
+for (i in 1:7){
+  wilcox_jp_CD_H[[i]]<-boot(centCD[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_jp_CD_H_W<-c(wilcox_jp_CD_H[[1]]$t0,wilcox_jp_CD_H[[2]]$t0,wilcox_jp_CD_H[[3]]$t0,wilcox_jp_CD_H[[4]]$t0,wilcox_jp_CD_H[[5]]$t0,
+                 wilcox_jp_CD_H[[6]]$t0,wilcox_jp_CD_H[[7]]$t0)
+wilcox_jp_CD_H_W_SD<-c(sd(wilcox_jp_CD_H[[1]]$t),sd(wilcox_jp_CD_H[[2]]$t),sd(wilcox_jp_CD_H[[3]]$t),sd(wilcox_jp_CD_H[[4]]$t),sd(wilcox_jp_CD_H[[5]]$t),
+                    sd(wilcox_jp_CD_H[[6]]$t),sd(wilcox_jp_CD_H[[7]]$t))
+
+
+
+####JP WILCOX ICS LAYER####
+wilcox_jp_ICS_PR<-list()
+for (i in 1:7){
+  wilcox_jp_ICS_PR[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
+}
+wilcox_jp_ICS_PR_W<-c(wilcox_jp_ICS_PR[[1]]$t0,wilcox_jp_ICS_PR[[2]]$t0,wilcox_jp_ICS_PR[[3]]$t0,wilcox_jp_ICS_PR[[4]]$t0,wilcox_jp_ICS_PR[[5]]$t0,
+                   wilcox_jp_ICS_PR[[6]]$t0,wilcox_jp_ICS_PR[[7]]$t0)
+wilcox_jp_PR_PR_W_SD<-c(sd(wilcox_jp_ICS_PR[[1]]$t),sd(wilcox_jp_ICS_PR[[2]]$t),sd(wilcox_jp_ICS_PR[[3]]$t),sd(wilcox_jp_ICS_PR[[4]]$t),sd(wilcox_jp_ICS_PR[[5]]$t),
+                     sd(wilcox_jp_ICS_PR[[6]]$t),sd(wilcox_jp_ICS_PR[[7]]$t))
+
+wilcox_jp_ICS_TE<-list()
+for (i in 1:7){
+  wilcox_jp_ICS_TE[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_jp_ICS_TE_W<-c(wilcox_jp_ICS_TE[[1]]$t0,wilcox_jp_ICS_TE[[2]]$t0,wilcox_jp_ICS_TE[[3]]$t0,wilcox_jp_ICS_TE[[4]]$t0,wilcox_jp_ICS_TE[[5]]$t0,
+                   wilcox_jp_ICS_TE[[6]]$t0,wilcox_jp_ICS_TE[[7]]$t0)
+wilcox_jp_ICS_TE_W_SD<-c(sd(wilcox_jp_ICS_TE[[1]]$t),sd(wilcox_jp_ICS_TE[[2]]$t),sd(wilcox_jp_ICS_TE[[3]]$t),sd(wilcox_jp_ICS_TE[[4]]$t),sd(wilcox_jp_ICS_TE[[5]]$t),
+                      sd(wilcox_jp_ICS_TE[[6]]$t),sd(wilcox_jp_ICS_TE[[7]]$t))
+
+wilcox_jp_ICS_H<-list()
+for (i in 1:7){
+  wilcox_jp_ICS_H[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_jp_ICS_H_W<-c(wilcox_jp_ICS_H[[1]]$t0,wilcox_jp_ICS_H[[2]]$t0,wilcox_jp_ICS_H[[3]]$t0,wilcox_jp_ICS_H[[4]]$t0,wilcox_jp_ICS_H[[5]]$t0,
+                  wilcox_jp_ICS_H[[6]]$t0,wilcox_jp_ICS_H[[7]]$t0)
+wilcox_jp_ICS_H_W_SD<-c(sd(wilcox_jp_ICS_H[[1]]$t),sd(wilcox_jp_ICS_H[[2]]$t),sd(wilcox_jp_ICS_H[[3]]$t),sd(wilcox_jp_ICS_H[[4]]$t),sd(wilcox_jp_ICS_H[[5]]$t),
+                     sd(wilcox_jp_ICS_H[[6]]$t),sd(wilcox_jp_ICS_H[[7]]$t))
+
+
+
+
+####PLOT WEEKLY WILCOXON TESTS####
+
+plot(x, wilcox_jp_PS_PR_W,
+     ylim=range(0, max(wilcox_jp_PS_PR_W+wilcox_jp_PR_PR_W_SD)),
+     pch=19, xlab="Weeks", ylab="W",
      main="Per week difference",type="b"
 )
-
+lines(x+0.15,wilcox_jp_PS_TE_W,type="b",col="darkblue",pch=4)
+lines(x-0.15,wilcox_jp_PS_H_W,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
-arrows(x, t_PS_PR_D_ciL, x, t_PS_PR_D_ciH, length=0.05, angle=90, code=3)
+arrows(x, wilcox_jp_PS_PR_W-wilcox_jp_PR_PR_W_SD, x, wilcox_jp_PS_PR_W+wilcox_jp_PR_PR_W_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, wilcox_jp_PS_TE_W-wilcox_jp_PS_TE_W_SD, x+0.15, wilcox_jp_PS_TE_W+wilcox_jp_PS_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, wilcox_jp_PS_H_W-wilcox_jp_PS_H_W_SD, x-0.15, wilcox_jp_PS_H_W+wilcox_jp_PS_H_W_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=2940,col="red")
 
+wilcox_jp_PS_H<-list()
+for (i in 1:7){
+  wilcox_jp_PS_H[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+}
+wilcox_jp_PS_H_W<-c(wilcox_jp_PS_H[[1]]$t0,wilcox_jp_PS_H[[2]]$t0,wilcox_jp_PS_H[[3]]$t0,wilcox_jp_PS_H[[4]]$t0,wilcox_jp_PS_H[[5]]$t0,
+                 wilcox_jp_PS_H[[6]]$t0,wilcox_jp_PS_H[[7]]$t0)
+wilcox_jp_PS_H_W_SD<-c(sd(wilcox_jp_PS_H[[1]]$t),sd(wilcox_jp_PS_H[[2]]$t),sd(wilcox_jp_PS_H[[3]]$t),sd(wilcox_jp_PS_H[[4]]$t),sd(wilcox_jp_PS_H[[5]]$t),
+                    sd(wilcox_jp_PS_H[[6]]$t),sd(wilcox_jp_PS_H[[7]]$t))
 
-
+plot(x, wilcox_jp_PS_PR_W,
+     ylim=range(0, max(wilcox_jp_PS_PR_W+wilcox_jp_PR_PR_W_SD)),
+     pch=19, xlab="Weeks", ylab="W",
+     main="Per week difference",type="b"
+)
+lines(x+0.15,wilcox_jp_PS_TE_W,type="b",col="darkblue",pch=4)
+lines(x-0.15,wilcox_jp_PS_H_W,type="b",col="darkred",pch=5)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, wilcox_jp_PS_PR_W-wilcox_jp_PR_PR_W_SD, x, wilcox_jp_PS_PR_W+wilcox_jp_PR_PR_W_SD, length=0.05, angle=90, code=3)
+arrows(x+0.15, wilcox_jp_PS_TE_W-wilcox_jp_PS_TE_W_SD, x+0.15, wilcox_jp_PS_TE_W+wilcox_jp_PS_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, wilcox_jp_PS_H_W-wilcox_jp_PS_H_W_SD, x-0.15, wilcox_jp_PS_H_W+wilcox_jp_PS_H_W_SD, length=0.05, angle=90, code=3,col="darkred")
+abline(h=2940,col="red")
 
 
 ####Week by week correlation of centrality measures####
