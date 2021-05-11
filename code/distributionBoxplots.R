@@ -1058,7 +1058,7 @@ wilcox_ICS_H<-list()
 for (i in 1:7){
   wilcox_ICS_H[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="Hide")
 }
-<<<<<<< HEAD
+
 wilcox_ICS_H_W<-c(wilcox_ICS_H[[1]]$t0,wilcox_ICS_H[[2]]$t0,wilcox_ICS_H[[3]]$t0,wilcox_ICS_H[[4]]$t0,wilcox_ICS_H[[5]]$t0,
                  wilcox_ICS_H[[6]]$t0,wilcox_ICS_H[[7]]$t0)
 wilcox_ICS_H_W_SD<-c(sd(wilcox_ICS_H[[1]]$t),sd(wilcox_ICS_H[[2]]$t),sd(wilcox_ICS_H[[3]]$t),sd(wilcox_ICS_H[[4]]$t),sd(wilcox_ICS_H[[5]]$t),
