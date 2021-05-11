@@ -1046,7 +1046,6 @@ wilcox_PR_PR_W_SD<-c(sd(wilcox_ICS_PR[[1]]$t),sd(wilcox_ICS_PR[[2]]$t),sd(wilcox
 
 ####WILCOX CD LAYER####
 wilcox_PS_PR<-list()
->>>>>>> 2e31cbdeae4ebbc5bd8e64214fc82e39c58f324e
 for (i in 1:7){
   wilcox_ICS_TE[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
 }
