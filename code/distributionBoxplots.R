@@ -995,7 +995,7 @@ wilcox_PS_TE_W_SD<-c(sd(wilcox_PS_TE[[1]]$t),sd(wilcox_PS_TE[[2]]$t),sd(wilcox_P
 
 wilcox_PS_H<-list()
 for (i in 1:7){
-  wilcox_PS_H[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+  wilcox_PS_H[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="Hide")
 }
 wilcox_PS_H_W<-c(wilcox_PS_H[[1]]$t0,wilcox_PS_H[[2]]$t0,wilcox_PS_H[[3]]$t0,wilcox_PS_H[[4]]$t0,wilcox_PS_H[[5]]$t0,
                   wilcox_PS_H[[6]]$t0,wilcox_PS_H[[7]]$t0)
@@ -1023,7 +1023,7 @@ wilcox_CD_TE_W_SD<-c(sd(wilcox_CD_TE[[1]]$t),sd(wilcox_CD_TE[[2]]$t),sd(wilcox_C
 
 wilcox_CD_H<-list()
 for (i in 1:7){
-  wilcox_CD_H[[i]]<-boot(centCD[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+  wilcox_CD_H[[i]]<-boot(centCD[[i]], wilcoxDiff, R=1000,pv="pass",cm="Hide")
 }
 wilcox_CD_H_W<-c(wilcox_CD_H[[1]]$t0,wilcox_CD_H[[2]]$t0,wilcox_CD_H[[3]]$t0,wilcox_CD_H[[4]]$t0,wilcox_CD_H[[5]]$t0,
                  wilcox_CD_H[[6]]$t0,wilcox_CD_H[[7]]$t0)
@@ -1042,12 +1042,7 @@ wilcox_ICS_PR_W<-c(wilcox_ICS_PR[[1]]$t0,wilcox_ICS_PR[[2]]$t0,wilcox_ICS_PR[[3]
 wilcox_PR_PR_W_SD<-c(sd(wilcox_ICS_PR[[1]]$t),sd(wilcox_ICS_PR[[2]]$t),sd(wilcox_ICS_PR[[3]]$t),sd(wilcox_ICS_PR[[4]]$t),sd(wilcox_ICS_PR[[5]]$t),
                      sd(wilcox_ICS_PR[[6]]$t),sd(wilcox_ICS_PR[[7]]$t))
 
-<<<<<<< HEAD
-wilcox_ICS_TE<-list()
-=======
-<<<<<<< HEAD
 
-=======
 
 ####WILCOX CD LAYER####
 wilcox_PS_PR<-list()
@@ -1062,7 +1057,7 @@ wilcox_ICS_TE_W_SD<-c(sd(wilcox_ICS_TE[[1]]$t),sd(wilcox_ICS_TE[[2]]$t),sd(wilco
 
 wilcox_ICS_H<-list()
 for (i in 1:7){
-  wilcox_ICS_H[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
+  wilcox_ICS_H[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="Hide")
 }
 <<<<<<< HEAD
 wilcox_ICS_H_W<-c(wilcox_ICS_H[[1]]$t0,wilcox_ICS_H[[2]]$t0,wilcox_ICS_H[[3]]$t0,wilcox_ICS_H[[4]]$t0,wilcox_ICS_H[[5]]$t0,
@@ -1089,8 +1084,8 @@ plot(x, wilcox_PS_PR_W,
      pch=19, xlab="Weeks", ylab="W",
      main="Per week difference",type="b"
 )
-lines(x+0.15,wilcox_PS_TE_W,type="b",col="darkblue",pch=4)
-lines(x-0.15,wilcox_PS_H_W,type="b",col="darkred",pch=5)
+lines(x+0.15,wilcox_CD_PR_W,type="b",col="darkblue",pch=4)
+lines(x-0.15,wilcox_ICS_PR_W,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, wilcox_PS_PR_W-wilcox_PR_PR_W_SD, x, wilcox_PS_PR_W+wilcox_PR_PR_W_SD, length=0.05, angle=90, code=3)
 arrows(x+0.15, wilcox_PS_TE_W-wilcox_PS_TE_W_SD, x+0.15, wilcox_PS_TE_W+wilcox_PS_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
