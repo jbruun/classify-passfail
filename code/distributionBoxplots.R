@@ -509,7 +509,11 @@ abline(h=0.001)
 abline(v=0.336)#p<0.05
 abline(v=0.403)#p<0.01
 
+<<<<<<< HEAD
 
+=======
+=======
+>>>>>>> 2e31cbdeae4ebbc5bd8e64214fc82e39c58f324e
 
 
 plot(c(Dj),c(pj),log="y",xlim = c(0.3,0.45),ylim=c(0.001,0.1), xlab = "D",ylab="p-value",main="Results from KS-tests just pass/fail")
@@ -519,7 +523,11 @@ abline(h=0.001)
 abline(v=0.336)#p<0.05
 abline(v=0.403)#p<0.01
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+>>>>>>> 2e31cbdeae4ebbc5bd8e64214fc82e39c58f324e
 text(0.333,0.1,"*",)
 text(0.400,0.1,"**")
 ####Perform bootstrap KS tests####
@@ -634,11 +642,19 @@ abline(h=0.302) #p=0.01 line
 text(x = 7, y = 0.292, "**") 
 abline(h=0.36) #p=0.01 line
 text(x = 7, y = 0.35, "***") 
+<<<<<<< HEAD
 
 legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
 
 legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
 
+=======
+<<<<<<< HEAD
+legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
+=======
+legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
+>>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+>>>>>>> 2e31cbdeae4ebbc5bd8e64214fc82e39c58f324e
 dev.off()
 
 
@@ -661,11 +677,19 @@ abline(h=0.302) #p=0.01 line
 text(x = 7, y = 0.292, "**") 
 abline(h=0.36) #p=0.01 line
 text(x = 7, y = 0.35, "***") 
+<<<<<<< HEAD
 
 legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
 
 legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
 
+=======
+<<<<<<< HEAD
+legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
+=======
+legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
+>>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+>>>>>>> 2e31cbdeae4ebbc5bd8e64214fc82e39c58f324e
 dev.off()
 pdf(file="plots/kstestsPerWeekH.pdf",width = 5.3, height = 4.1)
 x<-c(1:7)
@@ -686,11 +710,19 @@ abline(h=0.302) #p=0.01 line
 text(x = 7, y = 0.292, "**") 
 abline(h=0.36) #p=0.01 line
 text(x = 7, y = 0.35, "***") 
+<<<<<<< HEAD
 
 legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
 
 legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
 
+=======
+<<<<<<< HEAD
+legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
+=======
+legend(6,0.15,c("PS","CD","ICS"),pch=c(1,4,5),col=c("black","darkblue","darkred"))
+>>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+>>>>>>> 2e31cbdeae4ebbc5bd8e64214fc82e39c58f324e
 dev.off()
 
 ####JP Perform bootstrap####
@@ -933,8 +965,16 @@ text(803,1.2,"***")
 text(389,1.2,"*")
 text(340,1.2,"**")
 
+<<<<<<< HEAD
 ####WILCOX PS LAYER####
 
+=======
+<<<<<<< HEAD
+####WILCOX PS LAYER###
+=======
+####WILCOX PS LAYER####
+>>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+>>>>>>> 2e31cbdeae4ebbc5bd8e64214fc82e39c58f324e
 wilcox_PS_PR<-list()
 for (i in 1:7){
   wilcox_PS_PR[[i]]<-boot(centPS[[i]], wilcoxDiff, R=1000,pv="pass",cm="PageRank")
@@ -1002,7 +1042,16 @@ wilcox_ICS_PR_W<-c(wilcox_ICS_PR[[1]]$t0,wilcox_ICS_PR[[2]]$t0,wilcox_ICS_PR[[3]
 wilcox_PR_PR_W_SD<-c(sd(wilcox_ICS_PR[[1]]$t),sd(wilcox_ICS_PR[[2]]$t),sd(wilcox_ICS_PR[[3]]$t),sd(wilcox_ICS_PR[[4]]$t),sd(wilcox_ICS_PR[[5]]$t),
                      sd(wilcox_ICS_PR[[6]]$t),sd(wilcox_ICS_PR[[7]]$t))
 
+<<<<<<< HEAD
 wilcox_ICS_TE<-list()
+=======
+<<<<<<< HEAD
+
+=======
+
+####WILCOX CD LAYER####
+wilcox_PS_PR<-list()
+>>>>>>> 2e31cbdeae4ebbc5bd8e64214fc82e39c58f324e
 for (i in 1:7){
   wilcox_ICS_TE[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
 }
@@ -1015,12 +1064,22 @@ wilcox_ICS_H<-list()
 for (i in 1:7){
   wilcox_ICS_H[[i]]<-boot(centICS[[i]], wilcoxDiff, R=1000,pv="pass",cm="tarEnt")
 }
+<<<<<<< HEAD
 wilcox_ICS_H_W<-c(wilcox_ICS_H[[1]]$t0,wilcox_ICS_H[[2]]$t0,wilcox_ICS_H[[3]]$t0,wilcox_ICS_H[[4]]$t0,wilcox_ICS_H[[5]]$t0,
                  wilcox_ICS_H[[6]]$t0,wilcox_ICS_H[[7]]$t0)
 wilcox_ICS_H_W_SD<-c(sd(wilcox_ICS_H[[1]]$t),sd(wilcox_ICS_H[[2]]$t),sd(wilcox_ICS_H[[3]]$t),sd(wilcox_ICS_H[[4]]$t),sd(wilcox_ICS_H[[5]]$t),
                     sd(wilcox_ICS_H[[6]]$t),sd(wilcox_ICS_H[[7]]$t))
 
 
+=======
+wilcox_PS_TE_W<-c(wilcox_PS_TE[[1]]$t0,wilcox_PS_TE[[2]]$t0,wilcox_PS_TE[[3]]$t0,wilcox_PS_TE[[4]]$t0,wilcox_PS_TE[[5]]$t0,
+                  wilcox_PS_TE[[6]]$t0,wilcox_PS_TE[[7]]$t0)
+wilcox_PS_TE_W_SD<-c(sd(wilcox_PS_TE[[1]]$t),sd(wilcox_PS_TE[[2]]$t),sd(wilcox_PS_TE[[3]]$t),sd(wilcox_PS_TE[[4]]$t),sd(wilcox_PS_TE[[5]]$t),
+                     sd(wilcox_PS_TE[[6]]$t),sd(wilcox_PS_TE[[7]]$t))
+<<<<<<< HEAD
+=======
+>>>>>>> 9f7d34fa92cb38bed8c46d1313d98a3277c90e67
+>>>>>>> 2e31cbdeae4ebbc5bd8e64214fc82e39c58f324e
 
 
 ####PLOT WEEKLY WILCOXON TESTS####
