@@ -1173,8 +1173,6 @@ wilcox_jp_ICS_H_W_SD<-c(sd(wilcox_jp_ICS_H[[1]]$t),sd(wilcox_jp_ICS_H[[2]]$t),sd
 
 
 ####JP PLOT WEEKLY WILCOXON TESTS####
-#abline(v=392) #p<0.05
-#abline(v=343) #p<0.01
 ##PR####
 pdf(file="plots/wilcoxtestsPerWeekPR.pdf_jp",width = 5.3, height = 4.1)
 plot(x, wilcox_jp_PS_PR_W,
@@ -1214,6 +1212,7 @@ legend(6,200,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"
 
 dev.off()
 ##H####
+pdf(file="plots/wilcoxtestsPerWeekH_jp.pdf",width = 5.3, height = 4.1)
 plot(x, wilcox_jp_PS_H_W,
      ylim=range(0, max(wilcox_jp_PS_PR_W+wilcox_jp_PR_PR_W_SD)),
      pch=19, xlab="Weeks", ylab="W",
@@ -1225,11 +1224,10 @@ lines(x-0.15,wilcox_jp_ICS_H_W,type="b",col="darkred",pch=5)
 arrows(x, wilcox_jp_PS_H_W-4.89*wilcox_jp_PS_H_W_SD/sqrt(1000), x, wilcox_jp_PS_H_W+4.89*wilcox_jp_PS_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3)
 arrows(x+0.15, wilcox_jp_CD_H_W-4.89*wilcox_jp_CD_H_W_SD/sqrt(1000), x+0.15, wilcox_jp_CD_H_W+4.89*wilcox_jp_CD_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, wilcox_jp_ICS_H_W-4.89*wilcox_jp_ICS_H_W_SD/sqrt(1000), x-0.15, wilcox_jp_ICS_H_W+4.89*wilcox_jp_ICS_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
-abline(h=700,col="red")
-abline(h=750,col="blue")
-abline(h=806,col="green")
+abline(h=392,col="red")
+abline(h=343,col="blue")
 legend(6,200,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
-
+dev.off()
 ####Week by week correlation of centrality measures####
 
 
@@ -1279,7 +1277,7 @@ ICS_PR_rankcor[6,] <- c(corKen(ICS_PR,x,6)[1],boot.ci(boot(ICS_PR, corKen, R=100
 y<-c(1:6)
 plot(y, PS_PR_rankcor[,1],
      ylim=range(c(0, 1)),
-     pch=19, xlab="Weeks", ylab="Kendall's Tau estimator",
+     pch=19, xlab="Weeks", ylab="Kendall's Tau estimator",sub="PageRank",
      main="Week to week rank correlations PageRank",type="b"
 )
 # hack: we draw arrows but with very special "arrowheads"
@@ -1327,7 +1325,7 @@ ICS_TE_rankcor[6,] <- c(corKen(ICS_TE,x,6)[1],boot.ci(boot(ICS_TE, corKen, R=100
 y<-c(1:6)
 plot(y, PS_TE_rankcor[,1],
      ylim=range(c(0, 1)),
-     pch=19, xlab="Weeks", ylab="Kendall's Tau estimator",
+     pch=19, xlab="Weeks", ylab="Kendall's Tau estimator",sub="Target Entropy",
      main="Week to week rank correlations tarEnt",type="b"
 )
 # hack: we draw arrows but with very special "arrowheads"
@@ -1376,7 +1374,7 @@ ICS_H_rankcor[6,] <- c(corKen(ICS_H,x,6)[1],boot.ci(boot(ICS_H, corKen, R=1000,i
 y<-c(1:6)
 plot(y, PS_H_rankcor[,1],
      ylim=range(c(0, 1)),
-     pch=19, xlab="Weeks", ylab="Kendall's Tau estimator",
+     pch=19, xlab="Weeks", ylab="Kendall's Tau estimator",sub="Hide"
      main="Week to week rank correlations Hide",type="b"
 )
 # hack: we draw arrows but with very special "arrowheads"
@@ -1401,6 +1399,7 @@ cmMeasuresWeek<-data.frame(centPS[[1]]$PageRank,centPS[[2]]$PageRank,centPS[[3]]
 
 
 cmCorMatrix<-matrix(data=NA,nrow=63,ncol=63)
+cmCorMatrixEstimate<-matrix(data=NA,nrow=63,ncol=63)
 PS_name<-c(paste("PS_PR",c(1:7),sep="_"),paste("PS_TE",c(1:7),sep="_"),paste("PS_H",c(1:7),sep="_"))
 CD_name<-c(paste("CD_PR",c(1:7),sep="_"),paste("CD_TE",c(1:7),sep="_"),paste("CD_H",c(1:7),sep="_"))
 ICS_name<-c(paste("ICS_PR",c(1:7),sep="_"),paste("ICS_TE",c(1:7),sep="_"),paste("ICS_H",c(1:7),sep="_"))
@@ -1422,6 +1421,14 @@ library(RColorBrewer)
 coul <- colorRampPalette(brewer.pal(8, "PiYG"))(100)
 levelplot(cmCorMatrix,col.regions=coul,scales=list(x=list(rot=90)),xlab="Centrality Measure", ylab="Centrality Measure",main="Z-statistic, kendall correlation")
 
-
-
+cmCorVectorEstimate<-function(i){
+  res<-vector()
+  for(j in 1:63){
+    res[j]<-cor.test(cmMeasuresWeek[,i],cmMeasuresWeek[,j],method="kendall")$estimate
+  }
+  return(res)
+}
+for(i in 1:63){
+  cmCorMatrixEstimate[i,]<-cmCorVectorEstimate(i)
+}
 
