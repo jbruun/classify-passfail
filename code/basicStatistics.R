@@ -609,8 +609,8 @@ ks_ICS_H_D<-c(ks_ICS_H[[1]]$t0,ks_ICS_H[[2]]$t0,ks_ICS_H[[3]]$t0,ks_ICS_H[[4]]$t
 ks_ICS_H_D_SD<-c(sd(ks_ICS_H[[1]]$t),sd(ks_ICS_H[[2]]$t),sd(ks_ICS_H[[3]]$t),sd(ks_ICS_H[[4]]$t),sd(ks_ICS_H[[5]]$t),
                 sd(ks_ICS_H[[6]]$t),sd(ks_ICS_H[[7]]$t))
 
-#####PLOT WEEKLY KS-DIFFERENCES####
-
+#####KS PLOT WEEKLY DIFFERENCES####
+##PS####
 dev.off()
 pdf(file="plots/kstestsPerWeekPR.pdf",width = 5.3, height = 4.1)
 x<-c(1:7)
@@ -625,9 +625,6 @@ lines(x-0.15,ks_ICS_PR_D,type="b",col="darkred",pch=5)
 arrows(x, ks_PS_PR_D-4.89*ks_PS_PR_D_SD/sqrt(1000), x, ks_PS_PR_D+4.89*ks_PS_PR_D_SD/sqrt(1000), length=0.05, angle=90, code=3)
 arrows(x+0.15, ks_CD_PR_D-4.89*ks_CD_PR_D_SD/sqrt(1000), x+0.15, ks_CD_PR_D+4.89*ks_CD_PR_D_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, ks_ICS_PR_D-4.89*ks_ICS_PR_D_SD/sqrt(1000), x-0.15, ks_ICS_PR_D+4.89*ks_ICS_PR_D_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
-arrows(x, ks_PS_PR_D-ks_PS_PR_D_SD, x, ks_PS_PR_D+ks_PS_PR_D_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, ks_CD_PR_D-ks_CD_PR_D_SD, x+0.15, ks_CD_PR_D+ks_CD_PR_D_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, ks_ICS_PR_D-ks_ICS_PR_D_SD, x-0.15, ks_ICS_PR_D+ks_ICS_PR_D_SD, length=0.05, angle=90, code=3,col="darkred")
 abline(h=0.25) #p=0.05 line
 text(x = 7, y = 0.235, "*") 
 abline(h=0.302) #p=0.01 line
@@ -636,12 +633,9 @@ abline(h=0.36) #p=0.01 line
 text(x = 7, y = 0.35, "***") 
 
 legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
-
-
-
 dev.off()
 
-
+##TE####
 pdf(file="plots/kstestsPerWeekTE.pdf",width = 5.3, height = 4.1)
 x<-c(1:7)
 plot(x, ks_PS_TE_D,
@@ -656,21 +650,16 @@ arrows(x, ks_PS_TE_D-4.89*ks_PS_TE_D_SD/sqrt(1000), x, ks_PS_TE_D+4.89*ks_PS_TE_
 arrows(x+0.15, ks_CD_TE_D-4.89*ks_CD_TE_D_SD/sqrt(1000), x+0.15, ks_CD_TE_D+4.89*ks_CD_TE_D_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, ks_ICS_TE_D-4.89*ks_ICS_TE_D_SD/sqrt(1000), x-0.15, ks_ICS_TE_D+4.89*ks_ICS_TE_D_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
 
-arrows(x, ks_PS_TE_D-ks_PS_TE_D_SD, x, ks_PS_TE_D+ks_PS_TE_D_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, ks_CD_TE_D-ks_CD_TE_D_SD, x+0.15, ks_CD_TE_D+ks_CD_TE_D_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, ks_ICS_TE_D-ks_ICS_TE_D_SD, x-0.15, ks_ICS_TE_D+ks_ICS_TE_D_SD, length=0.05, angle=90, code=3,col="darkred")
-
 abline(h=0.25) #p=0.05 line
 text(x = 7, y = 0.235, "*") 
 abline(h=0.302) #p=0.01 line
 text(x = 7, y = 0.292, "**") 
 abline(h=0.36) #p=0.01 line
 text(x = 7, y = 0.35, "***") 
-
-
 legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
-
 dev.off()
+
+##H####
 pdf(file="plots/kstestsPerWeekH.pdf",width = 5.3, height = 4.1)
 x<-c(1:7)
 plot(x, ks_PS_H_D,
@@ -686,9 +675,6 @@ arrows(x, ks_PS_H_D-4.89*ks_PS_H_D_SD/sqrt(1000), x, ks_PS_H_D+4.89*ks_PS_H_D_SD
 arrows(x+0.15, ks_CD_H_D-4.89*ks_CD_H_D_SD/sqrt(1000), x+0.15, ks_CD_H_D+4.89*ks_CD_H_D_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, ks_ICS_H_D-4.89*ks_ICS_H_D_SD/sqrt(1000), x-0.15, ks_ICS_H_D+4.89*ks_ICS_H_D_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
 
-arrows(x, ks_PS_H_D-ks_PS_H_D_SD, x, ks_PS_H_D+ks_PS_H_D_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, ks_CD_H_D-ks_CD_H_D_SD, x+0.15, ks_CD_H_D+ks_CD_H_D_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, ks_ICS_H_D-ks_ICS_H_D_SD, x-0.15, ks_ICS_H_D+ks_ICS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
 abline(h=0.25) #p=0.05 line
 text(x = 7, y = 0.235, "*") 
 abline(h=0.302) #p=0.01 line
@@ -790,8 +776,8 @@ ks_jp_ICS_H_D<-c(ks_jp_ICS_H[[1]]$t0,ks_jp_ICS_H[[2]]$t0,ks_jp_ICS_H[[3]]$t0,ks_
 ks_jp_ICS_H_D_SD<-c(sd(ks_jp_ICS_H[[1]]$t),sd(ks_jp_ICS_H[[2]]$t),sd(ks_jp_ICS_H[[3]]$t),sd(ks_jp_ICS_H[[4]]$t),sd(ks_jp_ICS_H[[5]]$t),
                  sd(ks_jp_ICS_H[[6]]$t),sd(ks_jp_ICS_H[[7]]$t))
 
-#####PLOT JP WEEKLY KS-DIFFERENCES####
-
+#####KS JP PLOT WEEKLY DIFFERENCES####
+##JP PR####
 dev.off()
 pdf(file="plots/kstestsPerWeekPR_jp.pdf",width = 5.3, height = 4.1)
 x<-c(1:7)
@@ -815,7 +801,7 @@ text(x = 7, y = 0.400, "**")
 legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
 dev.off()
 
-
+##JP TE####
 pdf(file="plots/kstestsPerWeekTE_jp.pdf",width = 5.3, height = 4.1)
 x<-c(1:7)
 plot(x, ks_jp_PS_TE_D,
@@ -838,29 +824,19 @@ text(x = 7, y = 0.400, "**")
 legend(6,0.15,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
 dev.off()
 
+##JP H####
 pdf(file="plots/kstestsPerWeekH_jp.pdf",width = 5.3, height = 4.1)
 x<-c(1:7)
 plot(x, ks_jp_PS_H_D,
      ylim=range(0, max(ks_jp_ICS_H_D+ks_jp_ICS_H_D_SD)),
      pch=19, xlab="Week", ylab="D",
-<<<<<<< HEAD
-     main="Per week KS-test for differences: just pass vs. just fail",type="b",sub="Hide"
-=======
-     main="Per week KS-test for differences: pass vs. fail",type="b",sub="PageRank"
->>>>>>> 9fc6bbc03890c6a0c1e560f656b06f1a74d87865
-)
+     main="Per week KS-test for differences: just pass vs. just fail",type="b",sub="Hide",)
 lines(x+0.15,ks_jp_CD_H_D,type="b",col="darkblue",pch=4)
 lines(x-0.15,ks_jp_ICS_H_D,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
-<<<<<<< HEAD
 arrows(x, ks_jp_PS_H_D-4.89*ks_jp_PS_H_D_SD/sqrt(1000), x, ks_jp_PS_H_D+4.89*ks_jp_PS_H_D_SD/sqrt(1000), length=0.05, angle=90, code=3)
 arrows(x+0.15, ks_jp_CD_H_D-4.89*ks_jp_CD_H_D_SD/sqrt(1000), x+0.15, ks_jp_CD_H_D+4.89*ks_jp_CD_H_D_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, ks_jp_ICS_H_D-4.89*ks_jp_ICS_H_D_SD/sqrt(1000), x-0.15, ks_jp_ICS_H_D+4.89*ks_jp_ICS_H_D_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
-=======
-arrows(x, ks_jp_PS_H_D-ks_jp_PS_H_D_SD, x, ks_jp_PS_H_D+ks_jp_PS_H_D_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, ks_jp_CD_H_D-ks_jp_CD_H_D_SD, x+0.15, ks_jp_CD_H_D+ks_jp_CD_H_D_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, ks_jp_ICS_H_D-ks_jp_ICS_H_D_SD, x-0.15, ks_jp_ICS_H_D+ks_jp_ICS_H_D_SD, length=0.05, angle=90, code=3,col="darkred")
->>>>>>> 9fc6bbc03890c6a0c1e560f656b06f1a74d87865
 abline(h=0.336) #p=0.05 line
 text(x = 7, y = 0.333, "*") 
 abline(h=0.403) #p=0.01 line
@@ -1044,50 +1020,38 @@ wilcox_ICS_H_W_SD<-c(sd(wilcox_ICS_H[[1]]$t),sd(wilcox_ICS_H[[2]]$t),sd(wilcox_I
 
 
 
-####PLOT WEEKLY WILCOXON TESTS####
+####WILCOX PLOT WEEKLY DIFFERENCESS####
 ##PR####
+pdf(file="plots/wilcoxtestsPerWeekPR.pdf",width = 5.3, height = 4.1)
 plot(x, wilcox_PS_PR_W,
      ylim=range(0, max(wilcox_PS_PR_W+wilcox_PS_PR_W_SD)),
-<<<<<<< HEAD
      pch=19, xlab="Weeks", ylab="W",sub="PageRank",
-=======
-     pch=19, xlab="Weeks", ylab="W",sub="PageRank"
->>>>>>> 9fc6bbc03890c6a0c1e560f656b06f1a74d87865
      main="Per Wilcoxon test for difference between pass and fail",type="b"
 )
 lines(x+0.15,wilcox_CD_PR_W,type="b",col="darkblue",pch=4)
 lines(x-0.15,wilcox_ICS_PR_W,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
-<<<<<<< HEAD
+
 arrows(x, wilcox_PS_PR_W-4.89*wilcox_PS_PR_W_SD/sqrt(1000), x, wilcox_PS_PR_W+4.89*wilcox_PS_PR_W_SD/sqrt(1000), length=0.05, angle=90, code=3)
 arrows(x+0.15, wilcox_CD_PR_W-4.89*wilcox_CD_PR_W_SD/sqrt(1000), x+0.15, wilcox_CD_PR_W+4.89*wilcox_CD_PR_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, wilcox_ICS_PR_W-4.89*wilcox_ICS_PR_W_SD/sqrt(1000), x-0.15, wilcox_ICS_PR_W+4.89*wilcox_ICS_PR_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
 abline(h=2940,col="red")
 abline(h=3070 ,col="blue")
 abline(h=3270,col="green")
-=======
-arrows(x, wilcox_PS_PR_W-wilcox_PS_PR_W_SD, x, wilcox_PS_PR_W+wilcox_PS_PR_W_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, wilcox_CD_PR_W-wilcox_CD_PR_W_SD, x+0.15, wilcox_CD_PR_W+wilcox_CD_PR_W_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, wilcox_ICS_PR_W-wilcox_ICS_PR_W_SD, x-0.15, wilcox_ICS_PR_W+wilcox_ICS_PR_W_SD, length=0.05, angle=90, code=3,col="darkred")
-abline(h=2940,col="red")
->>>>>>> 9fc6bbc03890c6a0c1e560f656b06f1a74d87865
 legend(6,1000,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
 
+dev.off()
 
 ##TE####
+pdf(file="plots/wilcoxtestsPerWeekTE.pdf",width = 5.3, height = 4.1)
 plot(x, wilcox_PS_TE_W,
      ylim=range(0, max(wilcox_PS_TE_W+wilcox_PS_TE_W_SD)),
-<<<<<<< HEAD
      pch=19, xlab="Weeks", ylab="W",sub="Target Entropy",
-=======
-     pch=19, xlab="Weeks", ylab="W",
->>>>>>> 9fc6bbc03890c6a0c1e560f656b06f1a74d87865
      main="Per Wilcoxon test for difference between pass and fail",type="b"
 )
 lines(x+0.15,wilcox_CD_TE_W,type="b",col="darkblue",pch=4)
 lines(x-0.15,wilcox_ICS_TE_W,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
-<<<<<<< HEAD
 arrows(x, wilcox_PS_TE_W-4.89*wilcox_PS_TE_W_SD/sqrt(1000), x, wilcox_PS_TE_W+4.89*wilcox_PS_TE_W_SD/sqrt(1000), length=0.05, angle=90, code=3)
 arrows(x+0.15, wilcox_CD_TE_W-4.89*wilcox_CD_TE_W_SD/sqrt(1000), x+0.15, wilcox_CD_TE_W+4.89*wilcox_CD_TE_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, wilcox_ICS_TE_W-4.89*wilcox_ICS_TE_W_SD/sqrt(1000), x-0.15, wilcox_ICS_TE_W+4.89*wilcox_ICS_TE_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
@@ -1095,8 +1059,9 @@ abline(h=2940,col="red")
 abline(h=3070 ,col="blue")
 abline(h=3270,col="green")
 legend(6,1000,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
-
+dev.off()
 ##H####
+pdf(file="plots/wilcoxtestsPerWeekH.pdf",width = 5.3, height = 4.1)
 plot(x, wilcox_PS_H_W,
      ylim=range(0, max(wilcox_PS_H_W+wilcox_PS_H_W_SD)),
      pch=19, xlab="Weeks", ylab="W",sub="Hide",
@@ -1105,32 +1070,15 @@ plot(x, wilcox_PS_H_W,
 lines(x+0.15,wilcox_CD_H_W,type="b",col="darkblue",pch=4)
 lines(x-0.15,wilcox_ICS_H_W,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
-arrows(x, wilcox_PS_H_W-wilcox_PS_H_W_SD/sqrt(1000), x, wilcox_PS_H_W+wilcox_PS_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3)
-arrows(x+0.15, wilcox_CD_H_W-wilcox_CD_H_W_SD/sqrt(1000), x+0.15, wilcox_CD_H_W+wilcox_CD_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, wilcox_ICS_H_W-wilcox_ICS_H_W_SD/sqrt(1000), x-0.15, wilcox_ICS_H_W+wilcox_ICS_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
+arrows(x, wilcox_PS_H_W-4.89*wilcox_PS_H_W_SD/sqrt(1000), x, wilcox_PS_H_W+4.89*wilcox_PS_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3)
+arrows(x+0.15, wilcox_CD_H_W-4.89*wilcox_CD_H_W_SD/sqrt(1000), x+0.15, wilcox_CD_H_W+4.89*wilcox_CD_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, wilcox_ICS_H_W-4.89*wilcox_ICS_H_W_SD/sqrt(1000), x-0.15, wilcox_ICS_H_W+4.89*wilcox_ICS_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
 abline(h=1900,col="red")
-=======
-arrows(x, wilcox_PS_TE_W-wilcox_PS_TE_W_SD, x, wilcox_PS_TE_W+wilcox_PS_TE_W_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, wilcox_CD_TE_W-wilcox_CD_TE_W_SD, x+0.15, wilcox_CD_TE_W+wilcox_CD_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, wilcox_ICS_TE_W-wilcox_ICS_TE_W_SD, x-0.15, wilcox_ICS_TE_W+wilcox_ICS_TE_W_SD, length=0.05, angle=90, code=3,col="darkred")
-abline(h=2940,col="red")
-legend(6,1000,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
+abline(h=1730,col="blue")
+abline(h=1550,col="green")
 
-##H####
-plot(x, wilcox_PS_PR_W,
-     ylim=range(0, max(wilcox_PS_PR_W+wilcox_PR_PR_W_SD)),
-     pch=19, xlab="Weeks", ylab="W",
-     main="Per Wilcoxon test for difference between pass and fail",type="b"
-)
-lines(x+0.15,wilcox_CD_PR_W,type="b",col="darkblue",pch=4)
-lines(x-0.15,wilcox_ICS_PR_W,type="b",col="darkred",pch=5)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, wilcox_PS_PR_W-wilcox_PS_PR_W_SD, x, wilcox_PS_PR_W+wilcox_PS_PR_W_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, wilcox_CD_PR_W-wilcox_CD_PR_W_SD, x+0.15, wilcox_CD_PR_W+wilcox_CD_PR_W_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, wilcox_ICS_PR_W-wilcox_ICS_PR_W_SD, x-0.15, wilcox_ICS_PR_W+wilcox_ICS_PR_W_SD, length=0.05, angle=90, code=3,col="darkred")
-abline(h=2940,col="red")
->>>>>>> 9fc6bbc03890c6a0c1e560f656b06f1a74d87865
 legend(6,1000,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
+dev.off()
 
 
 ####JP WILCOX PS LAYER####
@@ -1141,11 +1089,8 @@ for (i in 1:7){
 }
 wilcox_jp_PS_PR_W<-c(wilcox_jp_PS_PR[[1]]$t0,wilcox_jp_PS_PR[[2]]$t0,wilcox_jp_PS_PR[[3]]$t0,wilcox_jp_PS_PR[[4]]$t0,wilcox_jp_PS_PR[[5]]$t0,
                   wilcox_jp_PS_PR[[6]]$t0,wilcox_jp_PS_PR[[7]]$t0)
-<<<<<<< HEAD
+
 wilcox_jp_PS_PR_W_SD<-c(sd(wilcox_jp_PS_PR[[1]]$t),sd(wilcox_jp_PS_PR[[2]]$t),sd(wilcox_jp_PS_PR[[3]]$t),sd(wilcox_jp_PS_PR[[4]]$t),sd(wilcox_jp_PS_PR[[5]]$t),
-=======
-wilcox_jp_PR_PR_W_SD<-c(sd(wilcox_jp_PS_PR[[1]]$t),sd(wilcox_jp_PS_PR[[2]]$t),sd(wilcox_jp_PS_PR[[3]]$t),sd(wilcox_jp_PS_PR[[4]]$t),sd(wilcox_jp_PS_PR[[5]]$t),
->>>>>>> 9fc6bbc03890c6a0c1e560f656b06f1a74d87865
                      sd(wilcox_jp_PS_PR[[6]]$t),sd(wilcox_jp_PS_PR[[7]]$t))
 
 wilcox_jp_PS_TE<-list()
@@ -1228,60 +1173,46 @@ wilcox_jp_ICS_H_W_SD<-c(sd(wilcox_jp_ICS_H[[1]]$t),sd(wilcox_jp_ICS_H[[2]]$t),sd
 
 
 ####JP PLOT WEEKLY WILCOXON TESTS####
+#abline(v=392) #p<0.05
+#abline(v=343) #p<0.01
 ##PR####
+pdf(file="plots/wilcoxtestsPerWeekPR.pdf_jp",width = 5.3, height = 4.1)
 plot(x, wilcox_jp_PS_PR_W,
-<<<<<<< HEAD
      ylim=range(0, max(wilcox_jp_ICS_PR_W+wilcox_jp_ICS_PR_W_SD)),
      pch=19, xlab="Weeks", ylab="W",sub="PageRank",
-     main="Per Wilcoxon test for difference between just pass and just fail",type="b"
-=======
-     ylim=range(0, max(wilcox_jp_PS_PR_W+wilcox_jp_PR_PR_W_SD)),
-     pch=19, xlab="Weeks", ylab="W",
-     main="Per week difference",type="b"
->>>>>>> 9fc6bbc03890c6a0c1e560f656b06f1a74d87865
-)
+     main="Per Wilcoxon test for difference between just pass and just fail",type="b")
 lines(x+0.15,wilcox_jp_CD_PR_W,type="b",col="darkblue",pch=4)
 lines(x-0.15,wilcox_jp_ICS_PR_W,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
-<<<<<<< HEAD
 arrows(x, wilcox_jp_PS_PR_W-4.89*wilcox_jp_PS_PR_W_SD/sqrt(1000), x, wilcox_jp_PS_PR_W+4.89*wilcox_jp_PS_PR_W_SD/sqrt(1000), length=0.05, angle=90, code=3)
 arrows(x+0.15, wilcox_jp_CD_PR_W-4.89*wilcox_jp_CD_PR_W_SD/sqrt(1000), x+0.15, wilcox_jp_CD_PR_W+4.89*wilcox_jp_CD_PR_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
 arrows(x-0.15, wilcox_jp_ICS_PR_W-4.89*wilcox_jp_ICS_PR_W_SD/sqrt(1000), x-0.15, wilcox_jp_ICS_PR_W+4.89*wilcox_jp_ICS_PR_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
-abline(h=697,col="red")
+abline(h=700,col="red")
+abline(h=750,col="blue")
+abline(h=806,col="green")
 legend(6,200,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
+dev.off()
 
 ##TE####
-plot(x, wilcox_jp_PS_TE_W,
-     ylim=range(0, max(wilcox_jp_ICS_TE_W+wilcox_jp_ICS_TE_W_SD)),
-=======
-arrows(x, wilcox_jp_PS_PR_W-wilcox_jp_PR_PR_W_SD, x, wilcox_jp_PS_PR_W+wilcox_jp_PR_PR_W_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, wilcox_jp_CD_PR_W-wilcox_jp_CD_PR_W_SD, x+0.15, wilcox_jp_CD_PR_W+wilcox_jp_CD_PR_W_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, wilcox_jp_ICS_PR_W-wilcox_jp_ICS_PR_W_SD, x-0.15, wilcox_jp_ICS_PR_W+wilcox_jp_ICS_PR_W_SD, length=0.05, angle=90, code=3,col="darkred")
-abline(h=697,col="red")
+pdf(file="plots/wilcoxtestsPerWeekTE_jp.pdf",width = 5.3, height = 4.1)
 
-##TE####
 plot(x, wilcox_jp_PS_TE_W,
      ylim=range(0, max(wilcox_jp_PS_PR_W+wilcox_jp_PR_PR_W_SD)),
->>>>>>> 9fc6bbc03890c6a0c1e560f656b06f1a74d87865
      pch=19, xlab="Weeks", ylab="W",
      main="Per week difference",type="b"
 )
 lines(x+0.15,wilcox_jp_CD_TE_W,type="b",col="darkblue",pch=4)
 lines(x-0.15,wilcox_jp_ICS_TE_W,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
-<<<<<<< HEAD
-arrows(x, wilcox_jp_PS_TE_W-wilcox_jp_PS_TE_W_SD/sqrt(1000), x, wilcox_jp_PS_TE_W+wilcox_jp_PS_TE_W_SD/sqrt(1000), length=0.05, angle=90, code=3)
-arrows(x+0.15, wilcox_jp_CD_TE_W-wilcox_jp_CD_TE_W_SD/sqrt(1000), x+0.15, wilcox_jp_CD_TE_W+wilcox_jp_CD_TE_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, wilcox_jp_ICS_TE_W-wilcox_jp_ICS_TE_W_SD/sqrt(1000), x-0.15, wilcox_jp_ICS_TE_W+wilcox_jp_ICS_TE_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
-abline(h=697,col="red")
+arrows(x, wilcox_jp_PS_TE_W-4.89*wilcox_jp_PS_TE_W_SD/sqrt(1000), x, wilcox_jp_PS_TE_W+4.89*wilcox_jp_PS_TE_W_SD/sqrt(1000), length=0.05, angle=90, code=3)
+arrows(x+0.15, wilcox_jp_CD_TE_W-4.89*wilcox_jp_CD_TE_W_SD/sqrt(1000), x+0.15, wilcox_jp_CD_TE_W+4.89*wilcox_jp_CD_TE_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, wilcox_jp_ICS_TE_W-4.89*wilcox_jp_ICS_TE_W_SD/sqrt(1000), x-0.15, wilcox_jp_ICS_TE_W+4.89*wilcox_jp_ICS_TE_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
+abline(h=700,col="red")
+abline(h=750,col="blue")
+abline(h=806,col="green")
 legend(6,200,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
-=======
-arrows(x, wilcox_jp_PS_TE_W-wilcox_jp_PS_TE_W_SD, x, wilcox_jp_PS_TE_W+wilcox_jp_PS_TE_W_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, wilcox_jp_CD_TE_W-wilcox_jp_CD_TE_W_SD, x+0.15, wilcox_jp_CD_TE_W+wilcox_jp_CD_TE_W_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, wilcox_jp_ICS_TE_W-wilcox_jp_ICS_TE_W_SD, x-0.15, wilcox_jp_ICS_TE_W+wilcox_jp_ICS_TE_W_SD, length=0.05, angle=90, code=3,col="darkred")
-abline(h=697,col="red")
->>>>>>> 9fc6bbc03890c6a0c1e560f656b06f1a74d87865
 
+dev.off()
 ##H####
 plot(x, wilcox_jp_PS_H_W,
      ylim=range(0, max(wilcox_jp_PS_PR_W+wilcox_jp_PR_PR_W_SD)),
@@ -1291,16 +1222,13 @@ plot(x, wilcox_jp_PS_H_W,
 lines(x+0.15,wilcox_jp_CD_H_W,type="b",col="darkblue",pch=4)
 lines(x-0.15,wilcox_jp_ICS_H_W,type="b",col="darkred",pch=5)
 # hack: we draw arrows but with very special "arrowheads"
-<<<<<<< HEAD
-arrows(x, wilcox_jp_PS_H_W-wilcox_jp_PS_H_W_SD/sqrt(1000), x, wilcox_jp_PS_H_W+wilcox_jp_PS_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3)
-arrows(x+0.15, wilcox_jp_CD_H_W-wilcox_jp_CD_H_W_SD/sqrt(1000), x+0.15, wilcox_jp_CD_H_W+wilcox_jp_CD_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, wilcox_jp_ICS_H_W-wilcox_jp_ICS_H_W_SD/sqrt(1000), x-0.15, wilcox_jp_ICS_H_W+wilcox_jp_ICS_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
-=======
-arrows(x, wilcox_jp_PS_H_W-wilcox_jp_PS_H_W_SD, x, wilcox_jp_PS_H_W+wilcox_jp_PS_H_W_SD, length=0.05, angle=90, code=3)
-arrows(x+0.15, wilcox_jp_CD_H_W-wilcox_jp_CD_H_W_SD, x+0.15, wilcox_jp_CD_H_W+wilcox_jp_CD_H_W_SD, length=0.05, angle=90, code=3,col="darkblue")
-arrows(x-0.15, wilcox_jp_ICS_H_W-wilcox_jp_ICS_H_W_SD, x-0.15, wilcox_jp_ICS_H_W+wilcox_jp_ICS_H_W_SD, length=0.05, angle=90, code=3,col="darkred")
->>>>>>> 9fc6bbc03890c6a0c1e560f656b06f1a74d87865
-abline(h=697,col="red")
+arrows(x, wilcox_jp_PS_H_W-4.89*wilcox_jp_PS_H_W_SD/sqrt(1000), x, wilcox_jp_PS_H_W+4.89*wilcox_jp_PS_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3)
+arrows(x+0.15, wilcox_jp_CD_H_W-4.89*wilcox_jp_CD_H_W_SD/sqrt(1000), x+0.15, wilcox_jp_CD_H_W+4.89*wilcox_jp_CD_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkblue")
+arrows(x-0.15, wilcox_jp_ICS_H_W-4.89*wilcox_jp_ICS_H_W_SD/sqrt(1000), x-0.15, wilcox_jp_ICS_H_W+4.89*wilcox_jp_ICS_H_W_SD/sqrt(1000), length=0.05, angle=90, code=3,col="darkred")
+abline(h=700,col="red")
+abline(h=750,col="blue")
+abline(h=806,col="green")
+legend(6,200,c("PS","CD","ICS"),pch=c(19,4,5),col=c("black","darkblue","darkred"))
 
 ####Week by week correlation of centrality measures####
 
