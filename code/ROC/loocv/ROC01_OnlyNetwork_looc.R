@@ -80,15 +80,6 @@ plot(x, PS_log_PTH_auc,
 arrows(x, PS_log_PTH_ciL, x, PS_log_PTH_ciH, length=0.05, angle=90, code=3)
 abline(h = lazy)
 
-plot(rocPS_log_PTH[[1]])
-lines(rocPS_log_PTH[[2]],col="yellow")
-lines(rocPS_log_PTH[[3]],col="blue")
-lines(rocPS_log_PTH[[4]],col="magenta")
-lines(rocPS_log_PTH[[5]],col="red")
-lines(rocPS_log_PTH[[6]],col="green")
-lines(rocPS_log_PTH[[7]],col="purple")
-
-
 predCD_log_PTH<-jackPredLog(centCD,predictors = c("PageRank","tarEnt", "Hide"))
 rocCD_log_PTH<-list()
 rocCD_log_PTH[[1]]<-roc(predCD_log_PTH$pass,as.numeric(predCD_log_PTH$Week1),auc=T,ci=T)
@@ -3668,3 +3659,14 @@ save(ROC_PS_knn,ROC_CD_knn,ROC_ICS_knn, ROC_PS_justpass_knn,ROC_CD_justpass_knn,
 
 t2<-Sys.time()
 t2-t1
+
+
+####ROC curves####
+
+plot(rocPS_log_PTH[[1]])
+lines(rocPS_log_PTH[[2]],col="yellow")
+lines(rocPS_log_PTH[[3]],col="blue")
+lines(rocPS_log_PTH[[4]],col="magenta")
+lines(rocPS_log_PTH[[5]],col="red")
+lines(rocPS_log_PTH[[6]],col="green")
+lines(rocPS_log_PTH[[7]],col="purple")
