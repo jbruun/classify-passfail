@@ -1274,6 +1274,8 @@ ICS_PR_rankcor[4,] <- c(corKen(ICS_PR,x,4)[1],boot.ci(boot(ICS_PR, corKen, R=100
 ICS_PR_rankcor[5,] <- c(corKen(ICS_PR,x,5)[1],boot.ci(boot(ICS_PR, corKen, R=1000,i=5))$bca[c(4,5)])
 ICS_PR_rankcor[6,] <- c(corKen(ICS_PR,x,6)[1],boot.ci(boot(ICS_PR, corKen, R=1000,i=6))$bca[c(4,5)])
 
+
+pdf(file="plots/kendallByWeekPR.pdf",width = 5.3, height = 4.1)
 y<-c(1:6)
 plot(y, PS_PR_rankcor[,1],
      ylim=range(c(0, 1)),
@@ -1281,12 +1283,16 @@ plot(y, PS_PR_rankcor[,1],
      main="Week to week rank correlations PageRank",type="b"
 )
 # hack: we draw arrows but with very special "arrowheads"
-lines(y,CD_PR_rankcor[,1],type="b",col="darkblue",pch=4)
-lines(y,ICS_PR_rankcor[,1],type="b",col="darkred",pch=5)
+lines(y+0.1,CD_PR_rankcor[,1],type="b",col="darkblue",pch=4)
+lines(y-0.1,ICS_PR_rankcor[,1],type="b",col="darkred",pch=5)
 arrows(y, PS_PR_rankcor[,2], y, PS_PR_rankcor[,3], length=0.05, angle=90, code=3)
-arrows(y, CD_PR_rankcor[,2], y, CD_PR_rankcor[,3], length=0.05, angle=90, code=3,col="darkblue")
-arrows(y, ICS_PR_rankcor[,2], y, ICS_PR_rankcor[,3], length=0.05, angle=90, code=3,col="darkred")
+arrows(y+0.1, CD_PR_rankcor[,2], y+0.1, CD_PR_rankcor[,3], length=0.05, angle=90, code=3,col="darkblue")
+arrows(y-0.1, ICS_PR_rankcor[,2], y-0.1, ICS_PR_rankcor[,3], length=0.05, angle=90, code=3,col="darkred")
 legend(4,0.4,c("Problem Solving","Concept Discussion","In-Class Social"),pch=c(19,4,5),col = c("black","darkblue","darkred"))
+abline(h=0.27,col="red") #Z=5
+abline(h=0.52,col="blue") #Z=10
+abline(h=0.79,col="green") #Z=15
+dev.off()
 
 ####TARGET ENTROPY####
 PS_TE<-data.frame(centPS[[1]]$tarEnt,centPS[[2]]$tarEnt,centPS[[3]]$tarEnt,centPS[[4]]$tarEnt,centPS[[5]]$tarEnt,centPS[[6]]$tarEnt,centPS[[7]]$tarEnt)
@@ -1322,6 +1328,8 @@ ICS_TE_rankcor[4,] <- c(corKen(ICS_TE,x,4)[1],boot.ci(boot(ICS_TE, corKen, R=100
 ICS_TE_rankcor[5,] <- c(corKen(ICS_TE,x,5)[1],boot.ci(boot(ICS_TE, corKen, R=1000,i=5))$bca[c(4,5)])
 ICS_TE_rankcor[6,] <- c(corKen(ICS_TE,x,6)[1],boot.ci(boot(ICS_TE, corKen, R=1000,i=6))$bca[c(4,5)])
 
+pdf(file="plots/kendallByWeekTE.pdf",width = 5.3, height = 4.1)
+
 y<-c(1:6)
 plot(y, PS_TE_rankcor[,1],
      ylim=range(c(0, 1)),
@@ -1335,7 +1343,10 @@ arrows(y, PS_TE_rankcor[,2], y, PS_TE_rankcor[,3], length=0.05, angle=90, code=3
 arrows(y, CD_TE_rankcor[,2], y, CD_TE_rankcor[,3], length=0.05, angle=90, code=3,col="darkblue")
 arrows(y, ICS_TE_rankcor[,2], y, ICS_TE_rankcor[,3], length=0.05, angle=90, code=3,col="darkred")
 legend(4,0.4,c("Problem Solving","Concept Discussion","In-Class Social"),pch=c(19,4,5),col = c("black","darkblue","darkred"))
-
+abline(h=0.27,col="red") #Z=5
+abline(h=0.52,col="blue") #Z=10
+abline(h=0.79,col="green") #Z=15
+dev.off()
 
 ####HIDE#####
 PS_H<-data.frame(centPS[[1]]$Hide,centPS[[2]]$Hide,centPS[[3]]$Hide,centPS[[4]]$Hide,centPS[[5]]$Hide,centPS[[6]]$Hide,centPS[[7]]$Hide)
@@ -1371,10 +1382,11 @@ ICS_H_rankcor[4,] <- c(corKen(ICS_H,x,4)[1],boot.ci(boot(ICS_H, corKen, R=1000,i
 ICS_H_rankcor[5,] <- c(corKen(ICS_H,x,5)[1],boot.ci(boot(ICS_H, corKen, R=1000,i=5))$bca[c(4,5)])
 ICS_H_rankcor[6,] <- c(corKen(ICS_H,x,6)[1],boot.ci(boot(ICS_H, corKen, R=1000,i=6))$bca[c(4,5)])
 
+pdf(file="plots/kendallByWeekH.pdf",width = 5.3, height = 4.1)
 y<-c(1:6)
 plot(y, PS_H_rankcor[,1],
      ylim=range(c(0, 1)),
-     pch=19, xlab="Weeks", ylab="Kendall's Tau estimator",sub="Hide"
+     pch=19, xlab="Weeks", ylab="Kendall's Tau estimator",sub="Hide",
      main="Week to week rank correlations Hide",type="b"
 )
 # hack: we draw arrows but with very special "arrowheads"
@@ -1384,7 +1396,11 @@ arrows(y, PS_H_rankcor[,2], y, PS_H_rankcor[,3], length=0.05, angle=90, code=3)
 arrows(y, CD_H_rankcor[,2], y, CD_H_rankcor[,3], length=0.05, angle=90, code=3,col="darkblue")
 arrows(y, ICS_H_rankcor[,2], y, ICS_H_rankcor[,3], length=0.05, angle=90, code=3,col="darkblue")
 legend(4,0.4,c("Problem Solving","Concept Discussion","In-Class Social"),pch=c(19,4,5),col = c("black","darkblue","darkred"))
+abline(h=0.27,col="red") #Z=5
+abline(h=0.52,col="blue") #Z=10
+abline(h=0.79,col="green") #Z=15
 
+dev.off()
 
 ######CORRELATION ALL NETWORK MEASURE NON-BOOT STRAP####
 cmMeasuresWeek<-data.frame(centPS[[1]]$PageRank,centPS[[2]]$PageRank,centPS[[3]]$PageRank,centPS[[4]]$PageRank,centPS[[5]]$PageRank,centPS[[6]]$PageRank,centPS[[7]]$PageRank,
