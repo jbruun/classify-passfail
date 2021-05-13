@@ -2230,7 +2230,6 @@ ICS_qda_PTH_ciL<-c(rocICS_qda_PTH[[1]]$ci[1],rocICS_qda_PTH[[2]]$ci[1],rocICS_qd
 ICS_qda_PTH_ciH<-c(rocICS_qda_PTH[[1]]$ci[3],rocICS_qda_PTH[[2]]$ci[3],rocICS_qda_PTH[[3]]$ci[3],rocICS_qda_PTH[[4]]$ci[3],
                    rocICS_qda_PTH[[5]]$ci[3],rocICS_qda_PTH[[6]]$ci[3],rocICS_qda_PTH[[7]]$ci[3])
 
-<<<<<<< HEAD
 #Plot AUC for three layers.
 x<-c(1:7)
 plot(x, PS_qda_PTH_auc,
