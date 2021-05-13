@@ -48,6 +48,7 @@ bs<-function(d,m,R){
 #########LOGISTIC REGRESSION###########
 
 ######ALL NETWORK PREDICTORS######
+####PS layer####
 lazy<-table(predPS_log_PTH$pass)[2]/sum(table(predICS_jp_log_PTH$pass))
 
 predPS_log_PTH<-jackPredLog(centPS,predictors = c("PageRank","tarEnt", "Hide"))
@@ -65,7 +66,7 @@ PS_log_PTH_ciL<-c(rocPS_log_PTH[[1]]$ci[1],rocPS_log_PTH[[2]]$ci[1],rocPS_log_PT
                   rocPS_log_PTH[[5]]$ci[1],rocPS_log_PTH[[6]]$ci[1],rocPS_log_PTH[[7]]$ci[1])
 PS_log_PTH_ciH<-c(rocPS_log_PTH[[1]]$ci[3],rocPS_log_PTH[[2]]$ci[3],rocPS_log_PTH[[3]]$ci[3],rocPS_log_PTH[[4]]$ci[3],
                   rocPS_log_PTH[[5]]$ci[3],rocPS_log_PTH[[6]]$ci[3],rocPS_log_PTH[[7]]$ci[3])
-##CD layer
+####CD layer####
 
 
 lazy<-table(predPS_log_PTH$pass)[2]/sum(table(predPS_log_PTH$pass))
@@ -96,9 +97,9 @@ CD_log_PTH_ciL<-c(rocCD_log_PTH[[1]]$ci[1],rocCD_log_PTH[[2]]$ci[1],rocCD_log_PT
 CD_log_PTH_ciH<-c(rocCD_log_PTH[[1]]$ci[3],rocCD_log_PTH[[2]]$ci[3],rocCD_log_PTH[[3]]$ci[3],rocCD_log_PTH[[4]]$ci[3],
                   rocCD_log_PTH[[5]]$ci[3],rocCD_log_PTH[[6]]$ci[3],rocCD_log_PTH[[7]]$ci[3])
 
-<<<<<<< HEAD
-#ICS layer
-=======
+
+####ICS layer####
+
 lines(x, CD_log_PTH_auc,
      ylim=range(c(0, 1)),
      pch=19, xlab="Weeks", ylab="AUC and CI",
@@ -107,7 +108,6 @@ lines(x, CD_log_PTH_auc,
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, CD_log_PTH_ciL, x, CD_log_PTH_ciH, length=0.05, angle=90, code=3)
 
->>>>>>> 378bedd6afbf25f21a502f19c01fa97e27ce21c3
 predICS_log_PTH<-jackPredLog(centICS,predictors = c("PageRank","tarEnt", "Hide"))
 rocICS_log_PTH<-list()
 rocICS_log_PTH[[1]]<-roc(predICS_log_PTH$pass,as.numeric(predICS_log_PTH$Week1),auc=T,ci=T)
