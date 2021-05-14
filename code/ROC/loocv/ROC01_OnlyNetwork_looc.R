@@ -929,12 +929,13 @@ plot(x, PS_jp_log_PT_auc,
      pch=19, xlab="Course Week", ylab="AUC and CI",
      main="Logistic Regression Model", sub="Just pass/Just fail (n=67), PR-TE",type="b"
 )
+
+lines(x+0.1,CD_jp_log_PT_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_jp_log_PT_auc,pch=2,type="b",col="darkblue")
 # hack: we draw arrows but with very special "arrowheads"
-lines(x,CD_jp_log_PT_auc,pch=1,type="b",col="darkred")
-lines(x,ICS_jp_log_PT_auc,pch=2,type="b",col="darkblue")
 arrows(x, PS_jp_log_PT_ciL, x, PS_jp_log_PT_ciH, length=0.05, angle=90, code=3)
-arrows(x, CD_jp_log_PT_ciL, x, CD_jp_log_PT_ciH, length=0.05, angle=90, code=3,col="darkred")
-arrows(x, ICS_jp_log_PT_ciL, x, ICS_jp_log_PT_ciH, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x+0.1, CD_jp_log_PT_ciL, x+0.1, CD_jp_log_PT_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x-0.1, ICS_jp_log_PT_ciL, x-0.1, ICS_jp_log_PT_ciH, length=0.05, angle=90, code=3,col="darkblue")
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
        col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
 abline(h=lazy_jp)
@@ -947,12 +948,12 @@ plot(x, PS_jp_log_PH_auc,
      pch=19, xlab="Course Week", ylab="AUC and CI",
      main="Logistic Regression Model", sub="Just pass/just fail (n=67), PR-H",type="b"
 )
+lines(x+0.1,CD_jp_log_PH_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_jp_log_PH_auc,pch=2,type="b",col="darkblue")
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, PS_jp_log_PH_ciL, x, PS_jp_log_PH_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_jp_log_PH_auc,pch=1,type="b",col="darkred")
-arrows(x, CD_jp_log_PH_ciL, x, CD_jp_log_PH_ciH, length=0.05, angle=90, code=3,col="darkred")
-lines(x,ICS_jp_log_PH_auc,pch=2,type="b",col="darkblue")
-arrows(x, ICS_jp_log_PH_ciL, x, ICS_jp_log_PH_ciH, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x+0.1, CD_jp_log_PH_ciL, x+0.1, CD_jp_log_PH_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x-0.1, ICS_jp_log_PH_ciL, x-0.1, ICS_jp_log_PH_ciH, length=0.05, angle=90, code=3,col="darkblue")
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
        col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
 abline(h=lazy_jp)
@@ -983,12 +984,12 @@ plot(x, PS_jp_log_T_auc,
      pch=19, xlab="Course Week", ylab="AUC and CI",
      main="Logistic Regression Model", sub="Just pass/Just fail (n=67), TE",type="b"
 )
+lines(x+0.1,CD_jp_log_T_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_jp_log_T_auc,pch=2,type="b",col="darkblue")
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, PS_jp_log_T_ciL, x, PS_jp_log_T_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_jp_log_T_auc,pch=1,type="b",col="darkred")
-arrows(x, CD_jp_log_T_ciL, x, CD_jp_log_T_ciH, length=0.05, angle=90, code=3,col="darkred")
-lines(x,ICS_jp_log_T_auc,pch=2,type="b",col="darkblue")
-arrows(x, ICS_jp_log_T_ciL, x, ICS_jp_log_T_ciH, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x+0.1, CD_jp_log_T_ciL, x+0.1, CD_jp_log_T_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x-0.1, ICS_jp_log_T_ciL, x-0.1, ICS_jp_log_T_ciH, length=0.05, angle=90, code=3,col="darkblue")
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
        col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
 abline(h=lazy_jp)
@@ -1000,12 +1001,12 @@ plot(x, PS_jp_log_H_auc,
      pch=19, xlab="Course Week", ylab="AUC and CI",
      main="Logistic Regression Model", sub="Just pass/Just fail (n=67), TE-H",type="b"
 )
+lines(x+0.1,CD_jp_log_H_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_jp_log_H_auc,pch=2,type="b",col="darkblue")
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, PS_jp_log_H_ciL, x, PS_jp_log_H_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_jp_log_H_auc,pch=1,type="b",col="darkred")
-arrows(x, CD_jp_log_H_ciL, x, CD_jp_log_H_ciH, length=0.05, angle=90, code=3,col="darkred")
-lines(x,ICS_jp_log_H_auc,pch=2,type="b",col="darkblue")
-arrows(x, ICS_jp_log_H_ciL, x, ICS_jp_log_H_ciH, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x+0.1, CD_jp_log_H_ciL, x+0.1, CD_jp_log_H_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x-0.1, ICS_jp_log_H_ciL, x-0.1, ICS_jp_log_H_ciH, length=0.05, angle=90, code=3,col="darkblue")
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
        col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
 abline(h=lazy_jp)
@@ -1017,12 +1018,12 @@ plot(x, PS_jp_log_P_auc,
      pch=19, xlab="Course Week", ylab="AUC and CI",
      main="Logistic Regression Model", sub="Just pass/Just fail (n=67), PR",type="b"
 )
+lines(x+0.1,CD_jp_log_P_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_jp_log_P_auc,pch=2,type="b",col="darkblue")
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, PS_jp_log_P_ciL, x, PS_jp_log_P_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_jp_log_P_auc,pch=1,type="b",col="darkred")
-arrows(x, CD_jp_log_P_ciL, x, CD_jp_log_P_ciH, length=0.05, angle=90, code=3,col="darkred")
-lines(x,ICS_jp_log_P_auc,pch=2,type="b",col="darkblue")
-arrows(x, ICS_jp_log_P_ciL, x, ICS_jp_log_P_ciH, length=0.05, angle=90, code=3,col="darkblue")
+arrows(x+0.1, CD_jp_log_P_ciL, x+0.1, CD_jp_log_P_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x-0.1, ICS_jp_log_P_ciL, x-0.1, ICS_jp_log_P_ciH, length=0.05, angle=90, code=3,col="darkblue")
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
        col=c("black","darkred", "darkblue"), pch=c(19,1,2), lty=1, cex=0.8)
 abline(h=lazy_jp)
