@@ -309,6 +309,7 @@ ICS_log_PH_ciH<-c(rocICS_log_PH[[1]]$ci[3],rocICS_log_PH[[2]]$ci[3],rocICS_log_P
 
 
 ###JUST PASS
+##PS layer
 predPS_jp_log_PH<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank", "Hide"))
 rocPS_jp_log_PH<-list()
 rocPS_jp_log_PH[[1]]<-roc(predPS_jp_log_PH$justpass,as.numeric(predPS_jp_log_PH$Week1),auc=T,ci=T)
@@ -325,7 +326,7 @@ PS_jp_log_PH_ciL<-c(rocPS_jp_log_PH[[1]]$ci[1],rocPS_jp_log_PH[[2]]$ci[1],rocPS_
                      rocPS_jp_log_PH[[5]]$ci[1],rocPS_jp_log_PH[[6]]$ci[1],rocPS_jp_log_PH[[7]]$ci[1])
 PS_jp_log_PH_ciH<-c(rocPS_jp_log_PH[[1]]$ci[3],rocPS_jp_log_PH[[2]]$ci[3],rocPS_jp_log_PH[[3]]$ci[3],rocPS_jp_log_PH[[4]]$ci[3],
                      rocPS_jp_log_PH[[5]]$ci[3],rocPS_jp_log_PH[[6]]$ci[3],rocPS_jp_log_PH[[7]]$ci[3])
-
+#CD Layer
 predCD_jp_log_PH<-jackPredLog(centCD, outcome = "justpass",predictors = c("PageRank", "Hide"))
 rocCD_jp_log_PH<-list()
 rocCD_jp_log_PH[[1]]<-roc(predCD_jp_log_PH$justpass,as.numeric(predCD_jp_log_PH$Week1),auc=T,ci=T)
@@ -342,7 +343,7 @@ CD_jp_log_PH_ciL<-c(rocCD_jp_log_PH[[1]]$ci[1],rocCD_jp_log_PH[[2]]$ci[1],rocCD_
 CD_jp_log_PH_ciH<-c(rocCD_jp_log_PH[[1]]$ci[3],rocCD_jp_log_PH[[2]]$ci[3],rocCD_jp_log_PH[[3]]$ci[3],rocCD_jp_log_PH[[4]]$ci[3],
                      rocCD_jp_log_PH[[5]]$ci[3],rocCD_jp_log_PH[[6]]$ci[3],rocCD_jp_log_PH[[7]]$ci[3])
 
-
+#ICS layer
 predICS_jp_log_PH<-jackPredLog(centICS, outcome = "justpass",predictors = c("PageRank", "Hide"))
 rocICS_jp_log_PH<-list()
 rocICS_jp_log_PH[[1]]<-roc(predICS_jp_log_PH$justpass,as.numeric(predICS_jp_log_PH$Week1),auc=T,ci=T)
@@ -359,25 +360,9 @@ ICS_jp_log_PH_ciL<-c(rocICS_jp_log_PH[[1]]$ci[1],rocICS_jp_log_PH[[2]]$ci[1],roc
 ICS_jp_log_PH_ciH<-c(rocICS_jp_log_PH[[1]]$ci[3],rocICS_jp_log_PH[[2]]$ci[3],rocICS_jp_log_PH[[3]]$ci[3],rocICS_jp_log_PH[[4]]$ci[3],
                       rocICS_jp_log_PH[[5]]$ci[3],rocICS_jp_log_PH[[6]]$ci[3],rocICS_jp_log_PH[[7]]$ci[3])
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_jp_log_PH_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Just pass/just fail (n=67), PR-H",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_jp_log_PH_ciL, x, PS_jp_log_PH_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_jp_log_PH_auc,pch=17,type="b",col="red")
-arrows(x, CD_jp_log_PH_ciL, x, CD_jp_log_PH_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_jp_log_PH_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_jp_log_PH_ciL, x, ICS_jp_log_PH_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy_jp)
-######TARGET ENTROPY HIDE NETWORK PREDICTORS######
 
-
+######TE-H models######
+#PS layer
 predPS_log_TH<-jackPredLog(centPS,predictors = c("tarEnt", "Hide"))
 rocPS_log_TH<-list()
 rocPS_log_TH[[1]]<-roc(predPS_log_TH$pass,as.numeric(predPS_log_TH$Week1),auc=T,ci=T)
@@ -427,24 +412,9 @@ ICS_log_TH_ciL<-c(rocICS_log_TH[[1]]$ci[1],rocICS_log_TH[[2]]$ci[1],rocICS_log_T
 ICS_log_TH_ciH<-c(rocICS_log_TH[[1]]$ci[3],rocICS_log_TH[[2]]$ci[3],rocICS_log_TH[[3]]$ci[3],rocICS_log_TH[[4]]$ci[3],
                    rocICS_log_TH[[5]]$ci[3],rocICS_log_TH[[6]]$ci[3],rocICS_log_TH[[7]]$ci[3])
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_log_TH_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Pass/fail (n=166), TE-H",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_log_TH_ciL, x, PS_log_TH_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_log_TH_auc,pch=17,type="b",col="red")
-arrows(x, CD_log_TH_ciL, x, CD_log_TH_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_log_TH_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_log_TH_ciL, x, ICS_log_TH_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy)
 
 ###JUST PASS
+#PS Layer
 predPS_jp_log_TH<-jackPredLog(centPS,outcome = "justpass",predictors = c("tarEnt", "Hide"))
 rocPS_jp_log_TH<-list()
 rocPS_jp_log_TH[[1]]<-roc(predPS_jp_log_TH$justpass,as.numeric(predPS_jp_log_TH$Week1),auc=T,ci=T)
@@ -461,7 +431,7 @@ PS_jp_log_TH_ciL<-c(rocPS_jp_log_TH[[1]]$ci[1],rocPS_jp_log_TH[[2]]$ci[1],rocPS_
                      rocPS_jp_log_TH[[5]]$ci[1],rocPS_jp_log_TH[[6]]$ci[1],rocPS_jp_log_TH[[7]]$ci[1])
 PS_jp_log_TH_ciH<-c(rocPS_jp_log_TH[[1]]$ci[3],rocPS_jp_log_TH[[2]]$ci[3],rocPS_jp_log_TH[[3]]$ci[3],rocPS_jp_log_TH[[4]]$ci[3],
                      rocPS_jp_log_TH[[5]]$ci[3],rocPS_jp_log_TH[[6]]$ci[3],rocPS_jp_log_TH[[7]]$ci[3])
-
+#CD layer
 predCD_jp_log_TH<-jackPredLog(centCD, outcome = "justpass",predictors = c("tarEnt", "Hide"))
 rocCD_jp_log_TH<-list()
 rocCD_jp_log_TH[[1]]<-roc(predCD_jp_log_TH$justpass,as.numeric(predCD_jp_log_TH$Week1),auc=T,ci=T)
@@ -478,7 +448,7 @@ CD_jp_log_TH_ciL<-c(rocCD_jp_log_TH[[1]]$ci[1],rocCD_jp_log_TH[[2]]$ci[1],rocCD_
 CD_jp_log_TH_ciH<-c(rocCD_jp_log_TH[[1]]$ci[3],rocCD_jp_log_TH[[2]]$ci[3],rocCD_jp_log_TH[[3]]$ci[3],rocCD_jp_log_TH[[4]]$ci[3],
                      rocCD_jp_log_TH[[5]]$ci[3],rocCD_jp_log_TH[[6]]$ci[3],rocCD_jp_log_TH[[7]]$ci[3])
 
-
+#ICS Layer
 predICS_jp_log_TH<-jackPredLog(centICS, outcome = "justpass",predictors = c("tarEnt", "Hide"))
 rocICS_jp_log_TH<-list()
 rocICS_jp_log_TH[[1]]<-roc(predICS_jp_log_TH$justpass,as.numeric(predICS_jp_log_TH$Week1),auc=T,ci=T)
@@ -495,25 +465,8 @@ ICS_jp_log_TH_ciL<-c(rocICS_jp_log_TH[[1]]$ci[1],rocICS_jp_log_TH[[2]]$ci[1],roc
 ICS_jp_log_TH_ciH<-c(rocICS_jp_log_TH[[1]]$ci[3],rocICS_jp_log_TH[[2]]$ci[3],rocICS_jp_log_TH[[3]]$ci[3],rocICS_jp_log_TH[[4]]$ci[3],
                       rocICS_jp_log_TH[[5]]$ci[3],rocICS_jp_log_TH[[6]]$ci[3],rocICS_jp_log_TH[[7]]$ci[3])
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_jp_log_TH_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Just pass/Just fail (n=67), TE-H",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_jp_log_TH_ciL, x, PS_jp_log_TH_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_jp_log_TH_auc,pch=17,type="b",col="red")
-arrows(x, CD_jp_log_TH_ciL, x, CD_jp_log_TH_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_jp_log_TH_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_jp_log_TH_ciL, x, ICS_jp_log_TH_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy_jp)
-
-######TARGET ENTROPY NETWORK PREDICTORS######
-
+######TE models######
+#PS layer
 predPS_log_T<-jackPredLog(centPS,predictors = c("tarEnt"))
 rocPS_log_T<-list()
 rocPS_log_T[[1]]<-roc(predPS_log_T$pass,as.numeric(predPS_log_T$Week1),auc=T,ci=T)
@@ -563,24 +516,8 @@ ICS_log_T_ciL<-c(rocICS_log_T[[1]]$ci[1],rocICS_log_T[[2]]$ci[1],rocICS_log_T[[3
 ICS_log_T_ciH<-c(rocICS_log_T[[1]]$ci[3],rocICS_log_T[[2]]$ci[3],rocICS_log_T[[3]]$ci[3],rocICS_log_T[[4]]$ci[3],
                   rocICS_log_T[[5]]$ci[3],rocICS_log_T[[6]]$ci[3],rocICS_log_T[[7]]$ci[3])
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_log_T_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Pass/fail (n=166), TE",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_log_T_ciL, x, PS_log_T_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_log_T_auc,pch=17,type="b",col="red")
-arrows(x, CD_log_T_ciL, x, CD_log_T_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_log_T_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_log_T_ciL, x, ICS_log_T_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy)
-
 ###JUST PASS
+#PS layer
 predPS_jp_log_T<-jackPredLog(centPS,outcome = "justpass",predictors = c("tarEnt"))
 rocPS_jp_log_T<-list()
 rocPS_jp_log_T[[1]]<-roc(predPS_jp_log_T$justpass,as.numeric(predPS_jp_log_T$Week1),auc=T,ci=T)
@@ -597,7 +534,7 @@ PS_jp_log_T_ciL<-c(rocPS_jp_log_T[[1]]$ci[1],rocPS_jp_log_T[[2]]$ci[1],rocPS_jp_
                     rocPS_jp_log_T[[5]]$ci[1],rocPS_jp_log_T[[6]]$ci[1],rocPS_jp_log_T[[7]]$ci[1])
 PS_jp_log_T_ciH<-c(rocPS_jp_log_T[[1]]$ci[3],rocPS_jp_log_T[[2]]$ci[3],rocPS_jp_log_T[[3]]$ci[3],rocPS_jp_log_T[[4]]$ci[3],
                     rocPS_jp_log_T[[5]]$ci[3],rocPS_jp_log_T[[6]]$ci[3],rocPS_jp_log_T[[7]]$ci[3])
-
+#CD layer
 predCD_jp_log_T<-jackPredLog(centCD, outcome = "justpass",predictors = c("tarEnt"))
 rocCD_jp_log_T<-list()
 rocCD_jp_log_T[[1]]<-roc(predCD_jp_log_T$justpass,as.numeric(predCD_jp_log_T$Week1),auc=T,ci=T)
@@ -613,8 +550,7 @@ CD_jp_log_T_ciL<-c(rocCD_jp_log_T[[1]]$ci[1],rocCD_jp_log_T[[2]]$ci[1],rocCD_jp_
                     rocCD_jp_log_T[[5]]$ci[1],rocCD_jp_log_T[[6]]$ci[1],rocCD_jp_log_T[[7]]$ci[1])
 CD_jp_log_T_ciH<-c(rocCD_jp_log_T[[1]]$ci[3],rocCD_jp_log_T[[2]]$ci[3],rocCD_jp_log_T[[3]]$ci[3],rocCD_jp_log_T[[4]]$ci[3],
                     rocCD_jp_log_T[[5]]$ci[3],rocCD_jp_log_T[[6]]$ci[3],rocCD_jp_log_T[[7]]$ci[3])
-
-
+#ICS layer
 predICS_jp_log_T<-jackPredLog(centICS, outcome = "justpass",predictors = c("tarEnt"))
 rocICS_jp_log_T<-list()
 rocICS_jp_log_T[[1]]<-roc(predICS_jp_log_T$justpass,as.numeric(predICS_jp_log_T$Week1),auc=T,ci=T)
@@ -631,25 +567,10 @@ ICS_jp_log_T_ciL<-c(rocICS_jp_log_T[[1]]$ci[1],rocICS_jp_log_T[[2]]$ci[1],rocICS
 ICS_jp_log_T_ciH<-c(rocICS_jp_log_T[[1]]$ci[3],rocICS_jp_log_T[[2]]$ci[3],rocICS_jp_log_T[[3]]$ci[3],rocICS_jp_log_T[[4]]$ci[3],
                      rocICS_jp_log_T[[5]]$ci[3],rocICS_jp_log_T[[6]]$ci[3],rocICS_jp_log_T[[7]]$ci[3])
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_jp_log_T_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Just pass/Just fail (n=67), TE",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_jp_log_T_ciL, x, PS_jp_log_T_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_jp_log_T_auc,pch=17,type="b",col="red")
-arrows(x, CD_jp_log_T_ciL, x, CD_jp_log_T_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_jp_log_T_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_jp_log_T_ciL, x, ICS_jp_log_T_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy_jp)
 
-######HIDE NETWORK PREDICTORS######
 
+######H models######
+#PS layer
 predPS_log_H<-jackPredLog(centPS,predictors = c( "Hide"))
 rocPS_log_H<-list()
 rocPS_log_H[[1]]<-roc(predPS_log_H$pass,as.numeric(predPS_log_H$Week1),auc=T,ci=T)
@@ -699,22 +620,6 @@ ICS_log_H_ciL<-c(rocICS_log_H[[1]]$ci[1],rocICS_log_H[[2]]$ci[1],rocICS_log_H[[3
 ICS_log_H_ciH<-c(rocICS_log_H[[1]]$ci[3],rocICS_log_H[[2]]$ci[3],rocICS_log_H[[3]]$ci[3],rocICS_log_H[[4]]$ci[3],
                   rocICS_log_H[[5]]$ci[3],rocICS_log_H[[6]]$ci[3],rocICS_log_H[[7]]$ci[3])
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_log_H_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Pass/fail (n=166), TE-H",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_log_H_ciL, x, PS_log_H_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_log_H_auc,pch=17,type="b",col="red")
-arrows(x, CD_log_H_ciL, x, CD_log_H_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_log_H_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_log_H_ciL, x, ICS_log_H_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy)
 
 ###JUST PASS
 predPS_jp_log_H<-jackPredLog(centPS,outcome = "justpass",predictors = c( "Hide"))
@@ -767,25 +672,9 @@ ICS_jp_log_H_ciL<-c(rocICS_jp_log_H[[1]]$ci[1],rocICS_jp_log_H[[2]]$ci[1],rocICS
 ICS_jp_log_H_ciH<-c(rocICS_jp_log_H[[1]]$ci[3],rocICS_jp_log_H[[2]]$ci[3],rocICS_jp_log_H[[3]]$ci[3],rocICS_jp_log_H[[4]]$ci[3],
                      rocICS_jp_log_H[[5]]$ci[3],rocICS_jp_log_H[[6]]$ci[3],rocICS_jp_log_H[[7]]$ci[3])
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_jp_log_H_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Just pass/Just fail (n=67), TE-H",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_jp_log_H_ciL, x, PS_jp_log_H_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_jp_log_H_auc,pch=17,type="b",col="red")
-arrows(x, CD_jp_log_H_ciL, x, CD_jp_log_H_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_jp_log_H_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_jp_log_H_ciL, x, ICS_jp_log_H_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy_jp)
 
-######PAGERANK NETWORK PREDICTORS######
-
+######PR models######
+#PS layer
 predPS_log_P<-jackPredLog(centPS,predictors = c("PageRank"))
 rocPS_log_P<-list()
 rocPS_log_P[[1]]<-roc(predPS_log_P$pass,as.numeric(predPS_log_P$Week1),auc=T,ci=T)
@@ -835,24 +724,8 @@ ICS_log_P_ciL<-c(rocICS_log_P[[1]]$ci[1],rocICS_log_P[[2]]$ci[1],rocICS_log_P[[3
 ICS_log_P_ciH<-c(rocICS_log_P[[1]]$ci[3],rocICS_log_P[[2]]$ci[3],rocICS_log_P[[3]]$ci[3],rocICS_log_P[[4]]$ci[3],
                   rocICS_log_P[[5]]$ci[3],rocICS_log_P[[6]]$ci[3],rocICS_log_P[[7]]$ci[3])
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_log_P_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Pass/fail (n=166), PR",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_log_P_ciL, x, PS_log_P_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_log_P_auc,pch=17,type="b",col="red")
-arrows(x, CD_log_P_ciL, x, CD_log_P_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_log_P_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_log_P_ciL, x, ICS_log_P_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy)
-
 ###JUST PASS
+#PS layer
 predPS_jp_log_P<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank"))
 rocPS_jp_log_P<-list()
 rocPS_jp_log_P[[1]]<-roc(predPS_jp_log_P$justpass,as.numeric(predPS_jp_log_P$Week1),auc=T,ci=T)
@@ -869,7 +742,7 @@ PS_jp_log_P_ciL<-c(rocPS_jp_log_P[[1]]$ci[1],rocPS_jp_log_P[[2]]$ci[1],rocPS_jp_
                     rocPS_jp_log_P[[5]]$ci[1],rocPS_jp_log_P[[6]]$ci[1],rocPS_jp_log_P[[7]]$ci[1])
 PS_jp_log_P_ciH<-c(rocPS_jp_log_P[[1]]$ci[3],rocPS_jp_log_P[[2]]$ci[3],rocPS_jp_log_P[[3]]$ci[3],rocPS_jp_log_P[[4]]$ci[3],
                     rocPS_jp_log_P[[5]]$ci[3],rocPS_jp_log_P[[6]]$ci[3],rocPS_jp_log_P[[7]]$ci[3])
-
+#CD layer
 predCD_jp_log_P<-jackPredLog(centCD, outcome = "justpass",predictors = c("PageRank"))
 rocCD_jp_log_P<-list()
 rocCD_jp_log_P[[1]]<-roc(predCD_jp_log_P$justpass,as.numeric(predCD_jp_log_P$Week1),auc=T,ci=T)
@@ -886,7 +759,7 @@ CD_jp_log_P_ciL<-c(rocCD_jp_log_P[[1]]$ci[1],rocCD_jp_log_P[[2]]$ci[1],rocCD_jp_
 CD_jp_log_P_ciH<-c(rocCD_jp_log_P[[1]]$ci[3],rocCD_jp_log_P[[2]]$ci[3],rocCD_jp_log_P[[3]]$ci[3],rocCD_jp_log_P[[4]]$ci[3],
                     rocCD_jp_log_P[[5]]$ci[3],rocCD_jp_log_P[[6]]$ci[3],rocCD_jp_log_P[[7]]$ci[3])
 
-
+#ICS layer
 predICS_jp_log_P<-jackPredLog(centICS, outcome = "justpass",predictors = c("PageRank"))
 rocICS_jp_log_P<-list()
 rocICS_jp_log_P[[1]]<-roc(predICS_jp_log_P$justpass,as.numeric(predICS_jp_log_P$Week1),auc=T,ci=T)
@@ -903,25 +776,12 @@ ICS_jp_log_P_ciL<-c(rocICS_jp_log_P[[1]]$ci[1],rocICS_jp_log_P[[2]]$ci[1],rocICS
 ICS_jp_log_P_ciH<-c(rocICS_jp_log_P[[1]]$ci[3],rocICS_jp_log_P[[2]]$ci[3],rocICS_jp_log_P[[3]]$ci[3],rocICS_jp_log_P[[4]]$ci[3],
                      rocICS_jp_log_P[[5]]$ci[3],rocICS_jp_log_P[[6]]$ci[3],rocICS_jp_log_P[[7]]$ci[3])
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_jp_log_P_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Just pass/Just fail (n=67), PR",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_jp_log_P_ciL, x, PS_jp_log_P_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_jp_log_P_auc,pch=17,type="b",col="red")
-arrows(x, CD_jp_log_P_ciL, x, CD_jp_log_P_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_jp_log_P_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_jp_log_P_ciL, x, ICS_jp_log_P_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy_jp)
+
 
 ####LogReg Plot AUC with error bars####
 ####Pass-fail####
+par(mfrow=c(3,2))
+dev.off()
 ###PR-TE-H Models####
 x<-c(1:7)
 plot(x, PS_log_PTH_auc,
@@ -929,14 +789,14 @@ plot(x, PS_log_PTH_auc,
      pch=19, xlab="Course Week", ylab="AUC and CI",
      main="Logistic Regression Model", sub="Pass/fail (n=166), PR-TE-H",type="b"
 )
-lines(x+0.1,CD_log_PTH_auc,pch=17,type="b",col="darkred")
-lines(x-0.1,ICS_log_PTH_auc,pch=17,type="b",col="darkblue")
+lines(x+0.1,CD_log_PTH_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_log_PTH_auc,pch=2,type="b",col="darkblue")
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, PS_log_PTH_ciL, x, PS_log_PTH_ciH, length=0.05, angle=90, code=3)
 arrows(x+0.1, CD_log_PTH_ciL, x+0.1, CD_log_PTH_ciH, length=0.05, angle=90, code=3,col="darkred")
 arrows(x-0.1, ICS_log_PTH_ciL, x-0.1, ICS_log_PTH_ciH, length=0.05, angle=90, code=3,col="darkblue")
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","darkred", "darkblue"), lty=1, cex=0.8)
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
 abline(h=lazy)
 
 
@@ -948,13 +808,13 @@ plot(x, PS_log_PT_auc,
      main="Logistic Regression Model", sub="Just pass/Just fail (n=67), PR-TE",type="b"
 )
 # hack: we draw arrows but with very special "arrowheads"
-lines(x+0.1,CD_log_PT_auc,pch=17,type="b",col="darkred")
-lines(x-0.1,ICS_log_PT_auc,pch=17,type="b",col="darkblue")
+lines(x+0.1,CD_log_PT_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_log_PT_auc,pch=2,type="b",col="darkblue")
 arrows(x, PS_log_PT_ciL, x, PS_log_PT_ciH, length=0.05, angle=90, code=3)
 arrows(x+0.1, CD_log_PT_ciL, x+0.1, CD_log_PT_ciH, length=0.05, angle=90, code=3,col="darkred")
 arrows(x-0.1, ICS_log_PT_ciL, x-0.1, ICS_log_PT_ciH, length=0.05, angle=90, code=3,col="darkblue")
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","darkred", "darkblue"), lty=1, cex=0.8)
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
 abline(h=lazy)
 
 ###PR-H Models####
@@ -964,16 +824,85 @@ plot(x, PS_log_PH_auc,
      pch=19, xlab="Course Week", ylab="AUC and CI",
      main="Logistic Regression Model", sub="Pass/fail (n=166), PR-H",type="b"
 )
-lines(x+0.1,CD_log_PH_auc,pch=17,type="b",col="darkred")
-lines(x-0.1,ICS_log_PH_auc,pch=17,type="b",col="darkblue")
+lines(x+0.1,CD_log_PH_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_log_PH_auc,pch=2,type="b",col="darkblue")
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, PS_log_PH_ciL, x, PS_log_PH_ciH, length=0.05, angle=90, code=3)
 arrows(x+0.1, CD_log_PH_ciL, x+0.1, CD_log_PH_ciH, length=0.05, angle=90, code=3,col="darkred")
 arrows(x-0.1, ICS_log_PH_ciL, x-0.1, ICS_log_PH_ciH, length=0.05, angle=90, code=3,col="darkblue")
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","darkred", "darkblue"), lty=1, cex=0.8)
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
 abline(h=lazy)
 
+####TE-H Models####
+#Plot AUC for three layers.
+x<-c(1:7)
+plot(x, PS_log_TH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Pass/fail (n=166), TE-H",type="b"
+)
+lines(x+0.1,CD_log_TH_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_log_TH_auc,pch=2,type="b",col="darkblue")
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_log_TH_ciL, x, PS_log_TH_ciH, length=0.05, angle=90, code=3)
+arrows(x+0.1, CD_log_TH_ciL, x+0.1, CD_log_TH_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x-0.1, ICS_log_TH_ciL, x-0.1, ICS_log_TH_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
+abline(h=lazy)
+
+####TE models####
+#Plot AUC for three layers.
+x<-c(1:7)
+plot(x, PS_log_T_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Pass/fail (n=166), TE",type="b"
+)
+lines(x+0.1,CD_log_T_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_log_T_auc,pch=2,type="b",col="darkblue")
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_log_T_ciL, x, PS_log_T_ciH, length=0.05, angle=90, code=3)
+arrows(x+0.1, CD_log_T_ciL, x+0.1, CD_log_T_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x-0.1, ICS_log_T_ciL, x-0.1, ICS_log_T_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
+abline(h=lazy)
+####H models####
+x<-c(1:7)
+plot(x, PS_log_H_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Pass/fail (n=166), TE-H",type="b"
+)
+lines(x+0.1,CD_log_H_auc,pch=1,type="b",col="darkred")
+lines(x,ICS_log_H_auc,pch=2,type="b",col="darkblue")
+
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_log_H_ciL, x, PS_log_H_ciH, length=0.05, angle=90, code=3)
+arrows(x+0.1, CD_log_H_ciL, x+0.1, CD_log_H_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x-0.1, ICS_log_H_ciL, x-0.1, ICS_log_H_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
+abline(h=lazy)
+
+####PR models####
+x<-c(1:7)
+plot(x, PS_log_P_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Pass/fail (n=166), PR",type="b"
+)
+lines(x+0.1,CD_log_P_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_log_P_auc,pch=2,type="b",col="darkblue")
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_log_P_ciL, x, PS_log_P_ciH, length=0.05, angle=90, code=3)
+arrows(x+0.1, CD_log_P_ciL, x+0.1, CD_log_P_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x-0.1, ICS_log_P_ciL, x-0.1, ICS_log_P_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
+abline(h=lazy)
 ####Just pass Just fail####
 ####PR-TE-H Models####
 lazy_jp<-table(predPS_jp_log_PTH$justpass)[2]/sum(table(predPS_jp_log_PTH$justpass))
@@ -983,14 +912,14 @@ plot(x, PS_jp_log_PTH_auc,
      pch=19, xlab="Course Week", ylab="AUC and CI",
      main="Logistic Regression Model", sub="Just pass/Just fail (n=67), PR-TE-H",type="b"
 )
-lines(x+0.1,CD_jp_log_PTH_auc,pch=17,type="b",col="darkred")
-lines(x-0.1,ICS_jp_log_PTH_auc,pch=17,type="b",col="darkblue")
+lines(x+0.1,CD_jp_log_PTH_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_jp_log_PTH_auc,pch=2,type="b",col="darkblue")
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, PS_jp_log_PTH_ciL, x, PS_jp_log_PTH_ciH, length=0.05, angle=90, code=3)
 arrows(x+0.1, CD_jp_log_PTH_ciL, x+0.1, CD_jp_log_PTH_ciH, length=0.05, angle=90, code=3,col="darkred")
 arrows(x-0.1, ICS_jp_log_PTH_ciL, x-0.1, ICS_jp_log_PTH_ciH, length=0.05, angle=90, code=3,col="darkblue")
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","darkred", "darkblue"), lty=1, cex=0.8)
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
 abline(h=lazy_jp)
 
 ####PR-TE Models ####
@@ -1001,18 +930,203 @@ plot(x, PS_jp_log_PT_auc,
      main="Logistic Regression Model", sub="Just pass/Just fail (n=67), PR-TE",type="b"
 )
 # hack: we draw arrows but with very special "arrowheads"
-lines(x,CD_jp_log_PT_auc,pch=17,type="b",col="darkred")
-lines(x,ICS_jp_log_PT_auc,pch=17,type="b",col="darkblue")
+lines(x,CD_jp_log_PT_auc,pch=1,type="b",col="darkred")
+lines(x,ICS_jp_log_PT_auc,pch=2,type="b",col="darkblue")
 arrows(x, PS_jp_log_PT_ciL, x, PS_jp_log_PT_ciH, length=0.05, angle=90, code=3)
 arrows(x, CD_jp_log_PT_ciL, x, CD_jp_log_PT_ciH, length=0.05, angle=90, code=3,col="darkred")
 arrows(x, ICS_jp_log_PT_ciL, x, ICS_jp_log_PT_ciH, length=0.05, angle=90, code=3,col="darkblue")
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","darkred", "darkblue"), lty=1, cex=0.8)
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
 abline(h=lazy_jp)
+
+####PR-H models ####
+#Plot AUC for three layers.
+x<-c(1:7)
+plot(x, PS_jp_log_PH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Just pass/just fail (n=67), PR-H",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_jp_log_PH_ciL, x, PS_jp_log_PH_ciH, length=0.05, angle=90, code=3)
+lines(x,CD_jp_log_PH_auc,pch=1,type="b",col="darkred")
+arrows(x, CD_jp_log_PH_ciL, x, CD_jp_log_PH_ciH, length=0.05, angle=90, code=3,col="darkred")
+lines(x,ICS_jp_log_PH_auc,pch=2,type="b",col="darkblue")
+arrows(x, ICS_jp_log_PH_ciL, x, ICS_jp_log_PH_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
+abline(h=lazy_jp)
+
+####TE-H Models####
+#Plot AUC for three layers.
+x<-c(1:7)
+plot(x, PS_jp_log_TH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Just pass/Just fail (n=67), TE-H",type="b"
+)
+lines(x+0.1,CD_jp_log_TH_auc,pch=1,type="b",col="darkred")
+lines(x-0.1,ICS_jp_log_TH_auc,pch=2,type="b",col="darkblue")
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_jp_log_TH_ciL, x, PS_jp_log_TH_ciH, length=0.05, angle=90, code=3)
+arrows(x+0.1, CD_jp_log_TH_ciL, x+0.1, CD_jp_log_TH_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x-0.1, ICS_jp_log_TH_ciL, x-0.1, ICS_jp_log_TH_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
+abline(h=lazy_jp)
+
+####TE models####
+
+x<-c(1:7)
+plot(x, PS_jp_log_T_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Just pass/Just fail (n=67), TE",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_jp_log_T_ciL, x, PS_jp_log_T_ciH, length=0.05, angle=90, code=3)
+lines(x,CD_jp_log_T_auc,pch=1,type="b",col="darkred")
+arrows(x, CD_jp_log_T_ciL, x, CD_jp_log_T_ciH, length=0.05, angle=90, code=3,col="darkred")
+lines(x,ICS_jp_log_T_auc,pch=2,type="b",col="darkblue")
+arrows(x, ICS_jp_log_T_ciL, x, ICS_jp_log_T_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
+abline(h=lazy_jp)
+
+####H models#### 
+x<-c(1:7)
+plot(x, PS_jp_log_H_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Just pass/Just fail (n=67), TE-H",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_jp_log_H_ciL, x, PS_jp_log_H_ciH, length=0.05, angle=90, code=3)
+lines(x,CD_jp_log_H_auc,pch=1,type="b",col="darkred")
+arrows(x, CD_jp_log_H_ciL, x, CD_jp_log_H_ciH, length=0.05, angle=90, code=3,col="darkred")
+lines(x,ICS_jp_log_H_auc,pch=2,type="b",col="darkblue")
+arrows(x, ICS_jp_log_H_ciL, x, ICS_jp_log_H_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
+abline(h=lazy_jp)
+
+####PR models ####
+x<-c(1:7)
+plot(x, PS_jp_log_P_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Just pass/Just fail (n=67), PR",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_jp_log_P_ciL, x, PS_jp_log_P_ciH, length=0.05, angle=90, code=3)
+lines(x,CD_jp_log_P_auc,pch=1,type="b",col="darkred")
+arrows(x, CD_jp_log_P_ciL, x, CD_jp_log_P_ciH, length=0.05, angle=90, code=3,col="darkred")
+lines(x,ICS_jp_log_P_auc,pch=2,type="b",col="darkblue")
+arrows(x, ICS_jp_log_P_ciL, x, ICS_jp_log_P_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), pch=c(19,1,2), lty=1, cex=0.8)
+abline(h=lazy_jp)
+
 ####Log Reg Plot ROC curves####
+par(mfrow=c(3,2))
+plot(rocPS_log_PTH[[1]])
+lines(rocPS_log_PTH[[2]],col="yellow")
+lines(rocPS_log_PTH[[3]],col="blue")
+lines(rocPS_log_PTH[[4]],col="magenta")
+lines(rocPS_log_PTH[[5]],col="red")
+lines(rocPS_log_PTH[[6]],col="green")
+lines(rocPS_log_PTH[[7]],col="purple")
 
+plot(rocPS_log_PT[[1]])
+lines(rocPS_log_PT[[2]],col="yellow")
+lines(rocPS_log_PT[[3]],col="blue")
+lines(rocPS_log_PT[[4]],col="magenta")
+lines(rocPS_log_PT[[5]],col="red")
+lines(rocPS_log_PT[[6]],col="green")
+lines(rocPS_log_PT[[7]],col="purple")
 
+plot(rocPS_log_PH[[1]])
+lines(rocPS_log_PH[[2]],col="yellow")
+lines(rocPS_log_PH[[3]],col="blue")
+lines(rocPS_log_PH[[4]],col="magenta")
+lines(rocPS_log_PH[[5]],col="red")
+lines(rocPS_log_PH[[6]],col="green")
+lines(rocPS_log_PH[[7]],col="purple")
 
+plot(rocPS_log_TH[[1]])
+lines(rocPS_log_TH[[2]],col="yellow")
+lines(rocPS_log_TH[[3]],col="blue")
+lines(rocPS_log_TH[[4]],col="magenta")
+lines(rocPS_log_TH[[5]],col="red")
+lines(rocPS_log_TH[[6]],col="green")
+lines(rocPS_log_TH[[7]],col="purple")
+
+plot(rocPS_log_P[[1]])
+lines(rocPS_log_P[[2]],col="yellow")
+lines(rocPS_log_P[[3]],col="blue")
+lines(rocPS_log_P[[4]],col="magenta")
+lines(rocPS_log_P[[5]],col="red")
+lines(rocPS_log_P[[6]],col="green")
+lines(rocPS_log_P[[7]],col="purple")
+
+plot(rocPS_log_T[[1]])
+lines(rocPS_log_T[[2]],col="yellow")
+lines(rocPS_log_T[[3]],col="blue")
+lines(rocPS_log_T[[4]],col="magenta")
+lines(rocPS_log_T[[5]],col="red")
+lines(rocPS_log_T[[6]],col="green")
+lines(rocPS_log_T[[7]],col="purple")
+dev.off()
+
+par(mfrow=c(3,2))
+plot(rocPS_jp_log_PTH[[1]])
+lines(rocPS_jp_log_PTH[[2]],col="yellow")
+lines(rocPS_jp_log_PTH[[3]],col="blue")
+lines(rocPS_jp_log_PTH[[4]],col="magenta")
+lines(rocPS_jp_log_PTH[[5]],col="red")
+lines(rocPS_jp_log_PTH[[6]],col="green")
+lines(rocPS_jp_log_PTH[[7]],col="purple")
+
+plot(rocPS_jp_log_PT[[1]])
+lines(rocPS_jp_log_PT[[2]],col="yellow")
+lines(rocPS_jp_log_PT[[3]],col="blue")
+lines(rocPS_jp_log_PT[[4]],col="magenta")
+lines(rocPS_jp_log_PT[[5]],col="red")
+lines(rocPS_jp_log_PT[[6]],col="green")
+lines(rocPS_jp_log_PT[[7]],col="purple")
+
+plot(rocPS_jp_log_PH[[1]])
+lines(rocPS_jp_log_PH[[2]],col="yellow")
+lines(rocPS_jp_log_PH[[3]],col="blue")
+lines(rocPS_jp_log_PH[[4]],col="magenta")
+lines(rocPS_jp_log_PH[[5]],col="red")
+lines(rocPS_jp_log_PH[[6]],col="green")
+lines(rocPS_jp_log_PH[[7]],col="purple")
+
+plot(rocPS_jp_log_TH[[1]])
+lines(rocPS_jp_log_TH[[2]],col="yellow")
+lines(rocPS_jp_log_TH[[3]],col="blue")
+lines(rocPS_jp_log_TH[[4]],col="magenta")
+lines(rocPS_jp_log_TH[[5]],col="red")
+lines(rocPS_jp_log_TH[[6]],col="green")
+lines(rocPS_jp_log_TH[[7]],col="purple")
+
+plot(rocPS_jp_log_P[[1]])
+lines(rocPS_jp_log_P[[2]],col="yellow")
+lines(rocPS_jp_log_P[[3]],col="blue")
+lines(rocPS_jp_log_P[[4]],col="magenta")
+lines(rocPS_jp_log_P[[5]],col="red")
+lines(rocPS_jp_log_P[[6]],col="green")
+lines(rocPS_jp_log_P[[7]],col="purple")
+
+plot(rocPS_jp_log_T[[1]])
+lines(rocPS_jp_log_T[[2]],col="yellow")
+lines(rocPS_jp_log_T[[3]],col="blue")
+lines(rocPS_jp_log_T[[4]],col="magenta")
+lines(rocPS_jp_log_T[[5]],col="red")
+lines(rocPS_jp_log_T[[6]],col="green")
+lines(rocPS_jp_log_T[[7]],col="purple")
+dev.off()
 
 #########K NEAREST NEIGHBORS###########
 #########K NEAREST NEIGHBORS###########
