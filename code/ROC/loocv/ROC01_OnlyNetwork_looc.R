@@ -45,10 +45,8 @@ bs<-function(d,m,R){
 #########LOGISTIC REGRESSION###########
 
 
-######ALL NETWORK PREDICTORS######
-####PS layer####
+######PR-TE-H Models######
 lazy<-table(predPS_log_PTH$pass)[2]/sum(table(predICS_jp_log_PTH$pass))
-
 predPS_log_PTH<-jackPredLog(centPS,predictors = c("PageRank","tarEnt", "Hide"))
 rocPS_log_PTH<-list()
 rocPS_log_PTH[[1]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week1),auc=T,ci=T)
@@ -64,20 +62,6 @@ PS_log_PTH_ciL<-c(rocPS_log_PTH[[1]]$ci[1],rocPS_log_PTH[[2]]$ci[1],rocPS_log_PT
                   rocPS_log_PTH[[5]]$ci[1],rocPS_log_PTH[[6]]$ci[1],rocPS_log_PTH[[7]]$ci[1])
 PS_log_PTH_ciH<-c(rocPS_log_PTH[[1]]$ci[3],rocPS_log_PTH[[2]]$ci[3],rocPS_log_PTH[[3]]$ci[3],rocPS_log_PTH[[4]]$ci[3],
                   rocPS_log_PTH[[5]]$ci[3],rocPS_log_PTH[[6]]$ci[3],rocPS_log_PTH[[7]]$ci[3])
-####CD layer####
-
-
-lazy<-table(predPS_log_PTH$pass)[2]/sum(table(predPS_log_PTH$pass))
-
-x<-c(1:7)
-plot(x, PS_log_PTH_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Weeks", ylab="AUC and CI",
-     main="AUC with Confidence Intervals",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_log_PTH_ciL, x, PS_log_PTH_ciH, length=0.05, angle=90, code=3)
-abline(h = lazy)
 
 predCD_log_PTH<-jackPredLog(centCD,predictors = c("PageRank","tarEnt", "Hide"))
 rocCD_log_PTH<-list()
@@ -96,7 +80,6 @@ CD_log_PTH_ciH<-c(rocCD_log_PTH[[1]]$ci[3],rocCD_log_PTH[[2]]$ci[3],rocCD_log_PT
                   rocCD_log_PTH[[5]]$ci[3],rocCD_log_PTH[[6]]$ci[3],rocCD_log_PTH[[7]]$ci[3])
 
 
-####ICS layer####
 
 predICS_log_PTH<-jackPredLog(centICS,predictors = c("PageRank","tarEnt", "Hide"))
 rocICS_log_PTH<-list()
@@ -115,36 +98,9 @@ ICS_log_PTH_ciH<-c(rocICS_log_PTH[[1]]$ci[3],rocICS_log_PTH[[2]]$ci[3],rocICS_lo
                   rocICS_log_PTH[[5]]$ci[3],rocICS_log_PTH[[6]]$ci[3],rocICS_log_PTH[[7]]$ci[3])
 
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_log_PTH_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Pass/fail (n=166), PR-TE-H",type="b"
-)
-lines(x,CD_log_PTH_auc,pch=17,type="b",col="red")
-lines(x,ICS_log_PTH_auc,pch=17,type="b",col="blue")
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_log_PTH_ciL, x, PS_log_PTH_ciH, length=0.05, angle=90, code=3)
 
-arrows(x, CD_log_PTH_ciL, x, CD_log_PTH_ciH, length=0.05, angle=90, code=3,col="red")
-arrows(x, ICS_log_PTH_ciL, x, ICS_log_PTH_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy)
 
 ###JUST PASS
-
-lines(x, ICS_log_PTH_auc,
-      ylim=range(c(0, 1)),
-      pch=19, xlab="Weeks", ylab="AUC and CI",
-      main="AUC with Confidence Intervals",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, ICS_log_PTH_ciL, x, ICS_log_PTH_ciH, length=0.05, angle=90, code=3)
-##JUSTPASSED
-lazy<-table(predICS_jp_log_PTH$justpass)[2]/sum(table(predICS_jp_log_PTH$justpass))
-
 predPS_jp_log_PTH<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
 rocPS_jp_log_PTH<-list()
 rocPS_jp_log_PTH[[1]]<-roc(predPS_jp_log_PTH$justpass,as.numeric(predPS_jp_log_PTH$Week1),auc=T,ci=T)
@@ -203,13 +159,12 @@ plot(x, PS_jp_log_PTH_auc,
      pch=19, xlab="Course Week", ylab="AUC and CI",
      main="Logistic Regression Model", sub="Just pass/Just fail (n=67), PR-TE-H",type="b"
 )
+lines(x,CD_jp_log_PTH_auc,pch=17,type="b",col="darkred")
+lines(x,ICS_jp_log_PTH_auc,pch=17,type="b",col="darkblue")
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, PS_jp_log_PTH_ciL, x, PS_jp_log_PTH_ciH, length=0.05, angle=90, code=3)
-
-lines(x,CD_jp_log_PTH_auc,pch=17,type="b",col="red")
-arrows(x, CD_jp_log_PTH_ciL, x, CD_jp_log_PTH_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_jp_log_PTH_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_jp_log_PTH_ciL, x, ICS_jp_log_PTH_ciH, length=0.05, angle=90, code=3,col="blue")
+arrows(x, CD_jp_log_PTH_ciL, x, CD_jp_log_PTH_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x, ICS_jp_log_PTH_ciL, x, ICS_jp_log_PTH_ciH, length=0.05, angle=90, code=3,col="darkblue")
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
        col=c("black","red", "blue"), lty=1, cex=0.8)
 abline(h=lazy_jp)
@@ -268,9 +223,7 @@ lines(x, ICS_jp_log_PTH_auc,
 # hack: we draw arrows but with very special "arrowheads"
 arrows(x, ICS_jp_log_PTH_ciL, x, ICS_jp_log_PTH_ciH, length=0.05, angle=90, code=3)
 
-######PAGERANK TARGET ENTROPY NETWORK PREDICTORS######
-
-
+######PR TE models######
 predPS_log_PT<-jackPredLog(centPS,predictors = c("PageRank","tarEnt"))
 rocPS_log_PT<-list()
 rocPS_log_PT[[1]]<-roc(predPS_log_PT$pass,as.numeric(predPS_log_PT$Week1),auc=T,ci=T)
@@ -320,22 +273,7 @@ ICS_log_PT_ciL<-c(rocICS_log_PT[[1]]$ci[1],rocICS_log_PT[[2]]$ci[1],rocICS_log_P
 ICS_log_PT_ciH<-c(rocICS_log_PT[[1]]$ci[3],rocICS_log_PT[[2]]$ci[3],rocICS_log_PT[[3]]$ci[3],rocICS_log_PT[[4]]$ci[3],
                    rocICS_log_PT[[5]]$ci[3],rocICS_log_PT[[6]]$ci[3],rocICS_log_PT[[7]]$ci[3])
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_log_PT_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Pass/fail (n=166), PR-TE",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_log_PT_ciL, x, PS_log_PT_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_log_PT_auc,pch=17,type="b",col="red")
-arrows(x, CD_log_PT_ciL, x, CD_log_PT_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_log_PT_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_log_PT_ciL, x, ICS_log_PT_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy)
+
 
 ###JUST PASS
 predPS_jp_log_PT<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt"))
@@ -388,25 +326,10 @@ ICS_jp_log_PT_ciL<-c(rocICS_jp_log_PT[[1]]$ci[1],rocICS_jp_log_PT[[2]]$ci[1],roc
 ICS_jp_log_PT_ciH<-c(rocICS_jp_log_PT[[1]]$ci[3],rocICS_jp_log_PT[[2]]$ci[3],rocICS_jp_log_PT[[3]]$ci[3],rocICS_jp_log_PT[[4]]$ci[3],
                       rocICS_jp_log_PT[[5]]$ci[3],rocICS_jp_log_PT[[6]]$ci[3],rocICS_jp_log_PT[[7]]$ci[3])
 
-#Plot AUC for three layers.
-x<-c(1:7)
-plot(x, PS_jp_log_PT_auc,
-     ylim=range(c(0, 1)),
-     pch=19, xlab="Course Week", ylab="AUC and CI",
-     main="Logistic Regression Model", sub="Just pass/Just fail (n=67), PR-TE",type="b"
-)
-# hack: we draw arrows but with very special "arrowheads"
-arrows(x, PS_jp_log_PT_ciL, x, PS_jp_log_PT_ciH, length=0.05, angle=90, code=3)
-lines(x,CD_jp_log_PT_auc,pch=17,type="b",col="red")
-arrows(x, CD_jp_log_PT_ciL, x, CD_jp_log_PT_ciH, length=0.05, angle=90, code=3,col="red")
-lines(x,ICS_jp_log_PT_auc,pch=17,type="b",col="blue")
-arrows(x, ICS_jp_log_PT_ciL, x, ICS_jp_log_PT_ciH, length=0.05, angle=90, code=3,col="blue")
-legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
-       col=c("black","red", "blue"), lty=1, cex=0.8)
-abline(h=lazy_jp)
 
 
-######PAGERANK HIDE NETWORK PREDICTORS######
+
+######PR H MOdels######
 
 
 predPS_log_PH<-jackPredLog(centPS,predictors = c("PageRank", "Hide"))
@@ -1086,6 +1009,66 @@ arrows(x, ICS_jp_log_P_ciL, x, ICS_jp_log_P_ciH, length=0.05, angle=90, code=3,c
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
        col=c("black","red", "blue"), lty=1, cex=0.8)
 abline(h=lazy_jp)
+
+####LogReg Plot AUC with error bars####
+####Pass-fail####
+###PR-TE-H####
+x<-c(1:7)
+plot(x, PS_log_PTH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Pass/fail (n=166), PR-TE-H",type="b"
+)
+lines(x,CD_log_PTH_auc,pch=17,type="b",col="darkred")
+lines(x,ICS_log_PTH_auc,pch=17,type="b",col="darkblue")
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_log_PTH_ciL, x, PS_log_PTH_ciH, length=0.05, angle=90, code=3)
+arrows(x, CD_log_PTH_ciL, x, CD_log_PTH_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x, ICS_log_PTH_ciL, x, ICS_log_PTH_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), lty=1, cex=0.8)
+abline(h=lazy)
+
+
+###PR-T Models####
+
+
+####Just pass Just fail####
+####PR-TE-H Models####
+lazy_jp<-table(predPS_jp_log_PTH$justpass)[2]/sum(table(predPS_jp_log_PTH$justpass))
+x<-c(1:7)
+plot(x, PS_jp_log_PTH_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Just pass/Just fail (n=67), PR-TE-H",type="b"
+)
+lines(x,CD_jp_log_PTH_auc,pch=17,type="b",col="darkred")
+lines(x,ICS_jp_log_PTH_auc,pch=17,type="b",col="darkblue")
+# hack: we draw arrows but with very special "arrowheads"
+arrows(x, PS_jp_log_PTH_ciL, x, PS_jp_log_PTH_ciH, length=0.05, angle=90, code=3)
+arrows(x, CD_jp_log_PTH_ciL, x, CD_jp_log_PTH_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x, ICS_jp_log_PTH_ciL, x, ICS_jp_log_PTH_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), lty=1, cex=0.8)
+abline(h=lazy_jp)
+
+####PR-TE Models ####
+x<-c(1:7)
+plot(x, PS_jp_log_PT_auc,
+     ylim=range(c(0, 1)),
+     pch=19, xlab="Course Week", ylab="AUC and CI",
+     main="Logistic Regression Model", sub="Just pass/Just fail (n=67), PR-TE",type="b"
+)
+# hack: we draw arrows but with very special "arrowheads"
+lines(x,CD_jp_log_PT_auc,pch=17,type="b",col="darkred")
+lines(x,ICS_jp_log_PT_auc,pch=17,type="b",col="darkblue")
+arrows(x, PS_jp_log_PT_ciL, x, PS_jp_log_PT_ciH, length=0.05, angle=90, code=3)
+arrows(x, CD_jp_log_PT_ciL, x, CD_jp_log_PT_ciH, length=0.05, angle=90, code=3,col="darkred")
+arrows(x, ICS_jp_log_PT_ciL, x, ICS_jp_log_PT_ciH, length=0.05, angle=90, code=3,col="darkblue")
+legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
+       col=c("black","darkred", "darkblue"), lty=1, cex=0.8)
+abline(h=lazy_jp)
+####Log Reg Plot ROC curves####
 
 
 
