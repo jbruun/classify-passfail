@@ -7,6 +7,7 @@ rm(list = ls())
 t1<-Sys.time()
 
 library(igraph)
+library(boot)
 library(pROC)
 library(dplyr)
 library(class)   # for knn
@@ -44,7 +45,6 @@ bs<-function(d,m,R){
 
 #########LOGISTIC REGRESSION###########
 ######PR-TE-H Models######
-lazy<-table(predPS_log_PTH$pass)[2]/sum(table(predICS_jp_log_PTH$pass))
 predPS_log_PTH<-jackPredLog(centPS,predictors = c("PageRank","tarEnt", "Hide"))
 rocPS_log_PTH<-list()
 rocPS_log_PTH[[1]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week1),auc=T,ci=T)
@@ -1027,6 +1027,8 @@ arrows(x-0.1, ICS_jp_log_P_ciL, x-0.1, ICS_jp_log_P_ciH, length=0.05, angle=90, 
 legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social"),
        col=c("black","darkred", "darkblue"), pch=c(19,1,2), lty=1, cex=0.8)
 abline(h=lazy_jp)
+
+
 
 ####Log Reg Plot ROC curves####
 par(mfrow=c(3,2))
