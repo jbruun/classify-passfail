@@ -1028,6 +1028,8 @@ legend(1, 1, legend=c("Problem Solving", "Concept Discussion","In-Class Social")
        col=c("black","darkred", "darkblue"), pch=c(19,1,2), lty=1, cex=0.8)
 abline(h=lazy_jp)
 
+
+
 ####Log Reg Plot ROC curves####
 par(mfrow=c(3,2))
 plot(rocPS_log_PTH[[1]])
