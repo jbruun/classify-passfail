@@ -14,6 +14,11 @@ library(dplyr)
 load("data/centPassFail.Rdata")  # which one of these do I need?
 load("data/centrality_data_frames.Rdata")
 
+# Convert to tibbles
+dfPS <- as_tibble(dfPS)
+dfCD <- as_tibble(dfCD)
+dfICS <- as_tibble(dfICS)
+
 
 ## Bin weekly aggregate centrality values
 
@@ -34,6 +39,21 @@ quantbin <- function(x, cent) {
 
 binPSPR <- quantbin(centPS,"PageRank")
 binCDTE <- quantbin(centCD,"tarEnt")
+
+# New version: Input is data frame, not list
+# NOT WORKING YET
+quantbin2 <- function(x, cent) {
+  dat <- x[, c(cent)]  # pull out desired centrality measure
+  bin <- quantile(dat)
+  bunique <- names(bin)[!duplicated(bin)]
+  bin <- unique(bin)  # could be done above, but it's easier to get the names this way
+  names(bin) <- bunique
+    #bin[[i]][1] <- 0
+    #bin[[i]][length(bin[[i]])] <- 1 
+  
+  names(bin) <- paste0("Week", c(1:length(bin)))
+  return(bin)
+}
 
 
 # Make cuts for one layer/measure
