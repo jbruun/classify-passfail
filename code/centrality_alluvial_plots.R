@@ -70,31 +70,63 @@ binPSPR <- quantbin2(listPS,"PageRank")
 binCDTE <- quantbin2(listCD,"tarEnt")
 
 
-
 # Make cuts for one layer/measure
-# Input: A list of centrality data frames (centPS, centCD, etc.), centrality measure to use, 
-#  and a list of quartiles.
+# Input: A list of centrality data frames (listPS, listCD, etc.), centrality measure to use, 
+#  list of quartiles.
 # Output: A list of data frames by week, with id, week, bin (Q1, Q2, etc.) and pass/fail outcome
 cutbin <- function(x, cent, bin) {
-  binlist <- vector(mode="list",length=length(x))
+  binlist <- vector(mode = "list", length = length(x))
   for (i in 1:length(x)) {
     breaks <- 2  # if only two bins, cut in the middle
     labels <- c("50%","100%")
-    if (length(bin[[i]])>2) {
+    if (length(bin[[i]]) > 2) {
       breaks <- bin[[i]]
       labels <- names(bin[[i]])[-1]
     }
-    binlist[[i]] <- data.frame(id=x[[i]]$id,Week=paste0("W",as.character(i)),
-                               Bin=cut(x[[i]][,c(cent)],breaks=breaks,#breaks=bin[[i]],
-                                       labels=labels),#names(bin[[i]])[-1]),
-                               Pass=x[[i]]$Pass)
+    binlist[[i]] <- data.frame(id = x[[i]]$id, 
+                               Week = paste0("W", as.character(i)),
+                               Bin = cut(x[[i]][, c(cent)],
+                                         breaks = breaks,#breaks=bin[[i]],
+                                         labels = labels),#names(bin[[i]])[-1]),
+                               Pass = x[[i]]$Pass)
     # Manually set NAs (people not yet in network?) to lowest bin
-    binlist[[i]][is.na(binlist[[i]]$Bin),"Bin"] <- levels(binlist[[i]]$Bin)[1] #names(bin[[i]])[1]
+    binlist[[i]][is.na(binlist[[i]]$Bin), "Bin"] <- levels(binlist[[i]]$Bin)[1] #names(bin[[i]])[1]
   }
   return(binlist)
 }
-binlistPSPR <- cutbin(centPS,"PageRank",binPSPR)
-binlistCDTE <- cutbin(centCD,"tarEnt",binCDTE)
+
+# Make cuts for one layer/measure
+# Input: A list of centrality data frames (listPS, listCD, etc.), centrality measure to use, 
+#  list of quartiles.
+# Output: A list of data frames by week, with id, week, bin (Q1, Q2, etc.) and pass/fail outcome
+cutbin2 <- function(x, cent, binlist) {
+  allbins <- vector(mode = "list", length = length(x))
+  for (i in 1:length(x)) {
+    bin <- binlist[[i]]
+    breaks <- 2  # if only two bins, cut in the middle
+    labels <- c("50%","100%")
+    if (length(bin) > 2) {
+      breaks <- bin
+      labels <- names(bin)[-1]
+    }
+    allbins[[i]] <- data.frame(id = x[[i]]$id, 
+                               Week = paste0("W", as.character(i)),
+                               Bin = x[[i]] %>% pull(cent) %>% 
+                                 cut(breaks = breaks, labels = labels), 
+                               Pass = x[[i]]$Pass)
+    # Manually set NAs (people not yet in network?) to lowest bin
+    allbins[[i]][is.na(allbins[[i]]$Bin), "Bin"] <- levels(allbins[[i]]$Bin)[1] #names(bin[[i]])[1]
+  }
+  return(allbins)
+}
+
+
+#binlistPSPR <- cutbin(centPS,"PageRank",binPSPR)
+#binlistCDTE <- cutbin(centCD,"tarEnt",binCDTE)
+
+binlistPSPR <- cutbin2(listPS, "PageRank", binPSPR)
+binlistCDTE <- cutbin2(listCD, "tarEnt", binCDTE)
+
 
 # Node quartiles for each week
 # Input list of weekly bins by node
