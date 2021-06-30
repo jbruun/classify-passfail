@@ -1,7 +1,7 @@
 # Read in pass/fail tagged centrality data and plot alluvial diagrams
 # Last modified:  6/30/21 (updating with new data)
 # 
-# Status: quantbin works, look at cutbin next
+# Status: Counting quantiles updated, time to fix alluvial plots.
 
 rm(list = ls())
 
@@ -110,13 +110,15 @@ cutbin2 <- function(x, cent, binlist) {
       breaks <- bin
       labels <- names(bin)[-1]
     }
-    dfbin <- data.frame(id = dat$id, 
+    
+    dfbin <- data.frame(id = dat$name, 
                         Week = paste0("W", as.character(i)),
                         Bin = dat %>% pull(cent) %>% 
                           cut(breaks = breaks, labels = labels), 
-                        Pass = dat$Pass)
+                        Pass = dat$pass)
     # Manually set NAs (people not yet in network?) to lowest bin
-    allbins[[i]][is.na(dfbin$Bin), "Bin"] <- levels(dfbin$Bin)[1] #names(bin[[i]])[1]
+    dfbin[is.na(dfbin$Bin), "Bin"] <- levels(dfbin$Bin)[1] #names(bin[[i]])[1]
+    allbins[[i]] <- dfbin
   }
   return(allbins)
 }
@@ -133,11 +135,11 @@ binlistCDTE <- cutbin2(listCD, "tarEnt", binCDTE)
 # Input list of weekly bins by node
 # Output data frame with one row per node, column for each week showing quartile, and pass/fail column
 wideframe <- function(binlist) {
-  binwide <- data.frame(id=binlist[[1]]$id)
+  binwide <- data.frame(id = binlist[[1]]$id)
   for (i in 1:length(binlist)) {
-    binwide[,i+1] <- binlist[[i]]$Bin
+    binwide[, i+1] <- binlist[[i]]$Bin
   }
-  names(binwide)[1:length(binlist)+1] <- paste0("Week",c(1:length(binlist)))
+  names(binwide)[1:length(binlist) + 1] <- paste0("Week",c(1:length(binlist)))
   binwide$Pass <- binlist[[1]]$Pass
   return(binwide)
 }
@@ -145,21 +147,21 @@ wideframe <- function(binlist) {
 binwidePSPR <- wideframe(binlistPSPR)
 binwideCDTE <- wideframe(binlistCDTE)
 
+
 # Count frequencies of each factor combination
-#bincounts <- count(binwide,Week1,Week2,Week3,Week4,Week5,Week6,Week7)
-#bincountsPass <- count(binwide,Week1,Week2,Week3,Week4,Week5,Week6,Week7,Pass)
+countPSPR <- count(binwidePSPR, Week1, Week2, Week3, Week4, Week5, Week6, Week7)
+countCDTE <- count(binwideCDTE, Week1, Week2, Week3, Week4, Week5, Week6, Week7)
 
-countPSPR <- count(binwidePSPR,Week1,Week2,Week3,Week4,Week5,Week6,Week7)
-countCDTE <- count(binwideCDTE,Week1,Week2,Week3,Week4,Week5,Week6,Week7)
-
-countPassPSPR <- count(binwidePSPR,Week1,Week2,Week3,Week4,Week5,Week6,Week7,Pass)
-countPassCDTE <- count(binwidePSPR,Week1,Week2,Week3,Week4,Week5,Week6,Week7,Pass)
+countPassPSPR <- count(binwidePSPR, Week1, Week2, Week3, Week4, Week5, Week6, 
+                       Week7, Pass)
+countPassCDTE <- count(binwidePSPR, Week1, Week2, Week3, Week4, Week5, Week6, 
+                       Week7, Pass)
 
 
 ## Plot alluvial diagram from tidy frame
 
-alluvial(countPSPR[1:7],freq=countPSPR$n,hide=countPSPR$n<2)
-alluvial(countCDTE[1:7],freq=countCDTE$n,hide=countCDTE$n<2)
+alluvial(countPSPR[1:7], freq = countPSPR$n, hide = countPSPR$n < 2)
+alluvial(countCDTE[1:7], freq = countCDTE$n, hide = countCDTE$n < 2)
 
 # Include pass/fail column
 alluvial(countPassPSPR[1:8],freq=countPassPSPR$n)
