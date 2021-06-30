@@ -1,18 +1,24 @@
 # Read in pass/fail tagged centrality data and plot alluvial diagrams
-# Last modified:  8/16/18 (forked from plots_centrality.R to work on uneven quantiles)
+# Last modified:  6/30/21 (updating with new data)
 # 
-# Status: 
+# Status: quantbin works, look at cutbin next
 
 rm(list = ls())
-setwd("~/../Box Sync/Research/Multiplex classification/code")
 
 library(igraph)
-library(alluvial)
-library(dplyr)
+library(ggalluvial)
+library(tidyverse)
+#library(dplyr)
 #library(ggplot2)
 
 # Import pass/fail centrality data
-loadvars <- load("../data/centPassFail.Rdata")
+#loadvars <- load("../data/centPassFail.Rdata")
+loadvars <- load("data/centrality_data_frames.Rdata")
+
+# Tibble-ify
+dfPS <- as_tibble(dfPS)
+dfCD <- as_tibble(dfCD)
+dfICS <- as_tibble(dfICS)
 
 
 ## Bin weekly aggregate centrality values
@@ -32,15 +38,44 @@ quantbin <- function(x,cent) {
   return(bin)
 }
 
-binPSPR <- quantbin(centPS,"PageRank")
-binCDTE <- quantbin(centCD,"tarEnt")
+# Calculate centrality quantiles for a layer and set min/max values to 0/1
+# Input: List of data frames with centrality values and Week number; name of 
+#  centrality measure
+# Output: List of quantiles for each week for the given centrality measure
+quantbin2 <- function(x, cent) {
+  bin <- x %>% 
+    map(pull, "PageRank") %>% 
+    map(quantile)
+  for (i in 1:length(bin)) {
+    bunique <- names(bin[[i]])[!duplicated(bin[[i]])]
+    bin[[i]] <- unique(bin[[i]])  # could be done above, but it's easier to get the names this way
+    names(bin[[i]]) <- bunique
+    #bin[[i]][1] <- 0
+    #bin[[i]][length(bin[[i]])] <- 1 
+  }
+  names(bin) <- paste0("Week",c(1:length(bin)))
+  return(bin)
+}
+
+#binPSPR <- quantbin(centPS,"PageRank")
+#binCDTE <- quantbin(centCD,"tarEnt")
+
+# List-ify long data frames
+listPS <- dfPS %>% group_by(Week) %>% group_split() 
+listCD <- dfCD %>% group_by(Week) %>% group_split() 
+listICS <- dfICS %>% group_by(Week) %>% group_split() 
+
+
+binPSPR <- quantbin2(listPS,"PageRank")
+binCDTE <- quantbin2(listCD,"tarEnt")
+
 
 
 # Make cuts for one layer/measure
 # Input: A list of centrality data frames (centPS, centCD, etc.), centrality measure to use, 
 #  and a list of quartiles.
 # Output: A list of data frames by week, with id, week, bin (Q1, Q2, etc.) and pass/fail outcome
-cutbin <- function(x,cent,bin) {
+cutbin <- function(x, cent, bin) {
   binlist <- vector(mode="list",length=length(x))
   for (i in 1:length(x)) {
     breaks <- 2  # if only two bins, cut in the middle
