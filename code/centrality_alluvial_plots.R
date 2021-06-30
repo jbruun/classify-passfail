@@ -102,6 +102,7 @@ cutbin <- function(x, cent, bin) {
 cutbin2 <- function(x, cent, binlist) {
   allbins <- vector(mode = "list", length = length(x))
   for (i in 1:length(x)) {
+    dat <- x[[i]]
     bin <- binlist[[i]]
     breaks <- 2  # if only two bins, cut in the middle
     labels <- c("50%","100%")
@@ -109,13 +110,13 @@ cutbin2 <- function(x, cent, binlist) {
       breaks <- bin
       labels <- names(bin)[-1]
     }
-    allbins[[i]] <- data.frame(id = x[[i]]$id, 
-                               Week = paste0("W", as.character(i)),
-                               Bin = x[[i]] %>% pull(cent) %>% 
-                                 cut(breaks = breaks, labels = labels), 
-                               Pass = x[[i]]$Pass)
+    dfbin <- data.frame(id = dat$id, 
+                        Week = paste0("W", as.character(i)),
+                        Bin = dat %>% pull(cent) %>% 
+                          cut(breaks = breaks, labels = labels), 
+                        Pass = dat$Pass)
     # Manually set NAs (people not yet in network?) to lowest bin
-    allbins[[i]][is.na(allbins[[i]]$Bin), "Bin"] <- levels(allbins[[i]]$Bin)[1] #names(bin[[i]])[1]
+    allbins[[i]][is.na(dfbin$Bin), "Bin"] <- levels(dfbin$Bin)[1] #names(bin[[i]])[1]
   }
   return(allbins)
 }
