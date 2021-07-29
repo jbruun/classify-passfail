@@ -14,6 +14,7 @@ library(class)   # for knn
 library(tidyr)
 library(ggplot2)  # for plotting success rates
 library(MASS)
+library(boot)
 
 load("data/centrality_data_frames.Rdata")
 # Turn long data frame into list of weekly frames
@@ -28,22 +29,10 @@ lazy<-table(centPS[[1]]$pass)[2]/sum(table(centPS[[1]]$pass))
 lazy_jp<-table(centPS[[1]]$justpass)[2]/sum(table(centPS[[1]]$justpass))
 pass<-centPS[[1]]$pass
 justpass<-centPS[[1]]$justpass
-
-p_rate<-function(d,i) table(d)[2]/sum(table(d))
-boot(pass,p_rate,R=1000)
-
-bs<-function(d,m,R){
-  p_r<-vector()
-  for(i in 1:R){
-  x<-sample(d,m)
-  p_r[i]<-table(x)[2]/sum(table(x))
-  }
-  m<-mean(p_r)
-  sdev<-sd(p_r)
-  return(data.frame(m,sdev))
-}
-
+#######################################
 #########LOGISTIC REGRESSION###########
+#######################################
+######Run models and calculate AUC (with CI)####
 ######PR-TE-H Models######
 predPS_log_PTH<-jackPredLog(centPS,predictors = c("PageRank","tarEnt", "Hide"))
 rocPS_log_PTH<-list()
