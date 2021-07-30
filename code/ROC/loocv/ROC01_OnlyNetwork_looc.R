@@ -807,9 +807,9 @@ PS_jp_log_RegWeigths<-1/PS_jp_log_RegSD^2
 PS_jp_log_RegWM<-rowSums(PS_jp_log_RegAll*PS_jp_log_RegWeigths)/rowSums(PS_jp_log_RegWeigths)
 PS_jp_log_RegSEWM<-sqrt(1/rowSums(PS_jp_log_RegWeigths))
 
-CD_jp_log_RegAll<-data.frame(CD_jp_log_PTH_auc,CD_jp_log_PT_auc,CD_jp_log_TH_auc,CD_jp_log_P_auc,CD_jp_log_T_auc,CD_jp_log_H_auc)
-CD_jp_log_RegAllciH<-data.frame(CD_jp_log_PTH_ciH,CD_jp_log_PT_ciH,CD_jp_log_TH_ciH,CD_jp_log_P_ciH,CD_jp_log_T_ciH,CD_jp_log_H_ciH)
-CD_jp_log_RegAllciL<-data.frame(CD_jp_log_PTH_ciL,CD_jp_log_PT_ciL,CD_jp_log_TH_ciL,CD_jp_log_P_ciL,CD_jp_log_T_ciL,CD_jp_log_H_ciL)
+CD_jp_log_RegAll<-data.frame(CD_jp_log_PTH_auc,CD_jp_log_PT_auc,CD_jp_log_TH_auc,CD_jp_log_PH_auc,CD_jp_log_P_auc,CD_jp_log_T_auc,CD_jp_log_H_auc)
+CD_jp_log_RegAllciH<-data.frame(CD_jp_log_PTH_ciH,CD_jp_log_PT_ciH,CD_jp_log_TH_ciH,CD_jp_log_PH_ciH,CD_jp_log_P_ciH,CD_jp_log_T_ciH,CD_jp_log_H_ciH)
+CD_jp_log_RegAllciL<-data.frame(CD_jp_log_PTH_ciL,CD_jp_log_PT_ciL,CD_jp_log_TH_ciL,CD_jp_log_PH_ciL,CD_jp_log_P_ciL,CD_jp_log_T_ciL,CD_jp_log_H_ciL)
 
 CD_jp_log_RegSD<-sqrt(67)*(CD_jp_log_RegAllciH-CD_jp_log_RegAllciL)/3.92
 CD_jp_log_RegWeigths<-1/CD_jp_log_RegSD^2 #Zero standard deviations become infinite here. They are probably a sign of an outlier.
@@ -817,11 +817,11 @@ CD_jp_log_RegWeigths[!is.finite(as.matrix(CD_jp_log_RegWeigths))]<-NA #Correctio
 CD_jp_log_RegWM<-rowSums(CD_jp_log_RegAll*CD_jp_log_RegWeigths,na.rm = T)/rowSums(CD_jp_log_RegWeigths,na.rm = T)
 CD_jp_log_RegSEWM<-sqrt(1/rowSums(CD_jp_log_RegWeigths,na.rm=T))
 
-ICS_jp_log_RegAll<-data.frame(ICS_jp_log_PTH_auc,ICS_jp_log_PT_auc,ICS_jp_log_TH_auc,ICS_jp_log_P_auc,ICS_jp_log_T_auc,ICS_jp_log_H_auc)
-ICS_jp_log_RegAllciH<-data.frame(ICS_jp_log_PTH_ciH,ICS_jp_log_PT_ciH,ICS_jp_log_TH_ciH,ICS_jp_log_P_ciH,ICS_jp_log_T_ciH,ICS_jp_log_H_ciH)
-ICS_jp_log_RegAllciL<-data.frame(ICS_jp_log_PTH_ciL,ICS_jp_log_PT_ciL,ICS_jp_log_TH_ciL,ICS_jp_log_P_ciL,ICS_jp_log_T_ciL,ICS_jp_log_H_ciL)
+ICS_jp_log_RegAll<-data.frame(ICS_jp_log_PTH_auc,ICS_jp_log_PT_auc,ICS_jp_log_TH_auc,ICS_jp_log_PH_auc,ICS_jp_log_P_auc,ICS_jp_log_T_auc,ICS_jp_log_H_auc)
+ICS_jp_log_RegAllciH<-data.frame(ICS_jp_log_PTH_ciH,ICS_jp_log_PT_ciH,ICS_jp_log_TH_ciH,ICS_jp_log_PH_ciH,ICS_jp_log_P_ciH,ICS_jp_log_T_ciH,ICS_jp_log_H_ciH)
+ICS_jp_log_RegAllciL<-data.frame(ICS_jp_log_PTH_ciL,ICS_jp_log_PT_ciL,ICS_jp_log_TH_ciL,ICS_jp_log_PH_ciL,ICS_jp_log_P_ciL,ICS_jp_log_T_ciL,ICS_jp_log_H_ciL)
 
-ICS_jp_log_RegSD<-sqrt(67)*(ICS_jp_logRegAllciH-ICS_jp_logRegAllciL)/3.92
+ICS_jp_log_RegSD<-sqrt(67)*(ICS_jp_log_RegAllciH-ICS_jp_log_RegAllciL)/3.92
 ICS_jp_log_RegWeigths<-1/ICS_jp_log_RegSD^2
 ICS_jp_log_RegWM<-rowSums(ICS_jp_log_RegAll*ICS_jp_log_RegWeigths)/rowSums(ICS_jp_log_RegWeigths)
 ICS_jp_log_RegSEWM<-sqrt(1/rowSums(ICS_jp_log_RegWeigths))
