@@ -34,7 +34,7 @@ justpass<-centPS[[1]]$justpass
 #######################################
 ######Run models and calculate AUC (with CI)####
 ######PR-TE-H Models######
-predPS_log_PTH<-jackPredLog(centPS,predictors = c("PageRank","tarEnt", "Hide"))
+predPS_log_PTH<-jackPredLog(centPS,predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocPS_log_PTH<-list()
 rocPS_log_PTH[[1]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week1),auc=T,ci=T)
 rocPS_log_PTH[[2]]<-roc(predPS_log_PTH$pass,as.numeric(predPS_log_PTH$Week2),auc=T,ci=T)
@@ -50,7 +50,7 @@ PS_log_PTH_ciL<-c(rocPS_log_PTH[[1]]$ci[1],rocPS_log_PTH[[2]]$ci[1],rocPS_log_PT
 PS_log_PTH_ciH<-c(rocPS_log_PTH[[1]]$ci[3],rocPS_log_PTH[[2]]$ci[3],rocPS_log_PTH[[3]]$ci[3],rocPS_log_PTH[[4]]$ci[3],
                   rocPS_log_PTH[[5]]$ci[3],rocPS_log_PTH[[6]]$ci[3],rocPS_log_PTH[[7]]$ci[3])
 
-predCD_log_PTH<-jackPredLog(centCD,predictors = c("PageRank","tarEnt", "Hide"))
+predCD_log_PTH<-jackPredLog(centCD,predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocCD_log_PTH<-list()
 rocCD_log_PTH[[1]]<-roc(predCD_log_PTH$pass,as.numeric(predCD_log_PTH$Week1),auc=T,ci=T)
 rocCD_log_PTH[[2]]<-roc(predCD_log_PTH$pass,as.numeric(predCD_log_PTH$Week2),auc=T,ci=T)
@@ -68,7 +68,7 @@ CD_log_PTH_ciH<-c(rocCD_log_PTH[[1]]$ci[3],rocCD_log_PTH[[2]]$ci[3],rocCD_log_PT
 
 
 
-predICS_log_PTH<-jackPredLog(centICS,predictors = c("PageRank","tarEnt", "Hide"))
+predICS_log_PTH<-jackPredLog(centICS,predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocICS_log_PTH<-list()
 rocICS_log_PTH[[1]]<-roc(predICS_log_PTH$pass,as.numeric(predICS_log_PTH$Week1),auc=T,ci=T)
 rocICS_log_PTH[[2]]<-roc(predICS_log_PTH$pass,as.numeric(predICS_log_PTH$Week2),auc=T,ci=T)
@@ -78,17 +78,17 @@ rocICS_log_PTH[[5]]<-roc(predICS_log_PTH$pass,as.numeric(predICS_log_PTH$Week5),
 rocICS_log_PTH[[6]]<-roc(predICS_log_PTH$pass,as.numeric(predICS_log_PTH$Week6),auc=T,ci=T)
 rocICS_log_PTH[[7]]<-roc(predICS_log_PTH$pass,as.numeric(predICS_log_PTH$Week7),auc=T,ci=T)
 ICS_log_PTH_auc<-c(rocICS_log_PTH[[1]]$auc,rocICS_log_PTH[[2]]$auc,rocICS_log_PTH[[3]]$auc,rocICS_log_PTH[[4]]$auc,
-                  rocICS_log_PTH[[5]]$auc,rocICS_log_PTH[[6]]$auc,rocICS_log_PTH[[7]]$auc)
+                   rocICS_log_PTH[[5]]$auc,rocICS_log_PTH[[6]]$auc,rocICS_log_PTH[[7]]$auc)
 ICS_log_PTH_ciL<-c(rocICS_log_PTH[[1]]$ci[1],rocICS_log_PTH[[2]]$ci[1],rocICS_log_PTH[[3]]$ci[1],rocICS_log_PTH[[4]]$ci[1],
-                  rocICS_log_PTH[[5]]$ci[1],rocICS_log_PTH[[6]]$ci[1],rocICS_log_PTH[[7]]$ci[1])
+                   rocICS_log_PTH[[5]]$ci[1],rocICS_log_PTH[[6]]$ci[1],rocICS_log_PTH[[7]]$ci[1])
 ICS_log_PTH_ciH<-c(rocICS_log_PTH[[1]]$ci[3],rocICS_log_PTH[[2]]$ci[3],rocICS_log_PTH[[3]]$ci[3],rocICS_log_PTH[[4]]$ci[3],
-                  rocICS_log_PTH[[5]]$ci[3],rocICS_log_PTH[[6]]$ci[3],rocICS_log_PTH[[7]]$ci[3])
+                   rocICS_log_PTH[[5]]$ci[3],rocICS_log_PTH[[6]]$ci[3],rocICS_log_PTH[[7]]$ci[3])
 
 
 
 
 ###JUST PASS
-predPS_jp_log_PTH<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+predPS_jp_log_PTH<-jackPredLog(centPS,outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocPS_jp_log_PTH<-list()
 rocPS_jp_log_PTH[[1]]<-roc(predPS_jp_log_PTH$justpass,as.numeric(predPS_jp_log_PTH$Week1),auc=T,ci=T)
 rocPS_jp_log_PTH[[2]]<-roc(predPS_jp_log_PTH$justpass,as.numeric(predPS_jp_log_PTH$Week2),auc=T,ci=T)
@@ -99,13 +99,13 @@ rocPS_jp_log_PTH[[6]]<-roc(predPS_jp_log_PTH$justpass,as.numeric(predPS_jp_log_P
 rocPS_jp_log_PTH[[7]]<-roc(predPS_jp_log_PTH$justpass,as.numeric(predPS_jp_log_PTH$Week7),auc=T,ci=T)
 
 PS_jp_log_PTH_auc<-c(rocPS_jp_log_PTH[[1]]$auc,rocPS_jp_log_PTH[[2]]$auc,rocPS_jp_log_PTH[[3]]$auc,rocPS_jp_log_PTH[[4]]$auc,
-                  rocPS_jp_log_PTH[[5]]$auc,rocPS_jp_log_PTH[[6]]$auc,rocPS_jp_log_PTH[[7]]$auc)
+                     rocPS_jp_log_PTH[[5]]$auc,rocPS_jp_log_PTH[[6]]$auc,rocPS_jp_log_PTH[[7]]$auc)
 PS_jp_log_PTH_ciL<-c(rocPS_jp_log_PTH[[1]]$ci[1],rocPS_jp_log_PTH[[2]]$ci[1],rocPS_jp_log_PTH[[3]]$ci[1],rocPS_jp_log_PTH[[4]]$ci[1],
-                  rocPS_jp_log_PTH[[5]]$ci[1],rocPS_jp_log_PTH[[6]]$ci[1],rocPS_jp_log_PTH[[7]]$ci[1])
+                     rocPS_jp_log_PTH[[5]]$ci[1],rocPS_jp_log_PTH[[6]]$ci[1],rocPS_jp_log_PTH[[7]]$ci[1])
 PS_jp_log_PTH_ciH<-c(rocPS_jp_log_PTH[[1]]$ci[3],rocPS_jp_log_PTH[[2]]$ci[3],rocPS_jp_log_PTH[[3]]$ci[3],rocPS_jp_log_PTH[[4]]$ci[3],
-                  rocPS_jp_log_PTH[[5]]$ci[3],rocPS_jp_log_PTH[[6]]$ci[3],rocPS_jp_log_PTH[[7]]$ci[3])
+                     rocPS_jp_log_PTH[[5]]$ci[3],rocPS_jp_log_PTH[[6]]$ci[3],rocPS_jp_log_PTH[[7]]$ci[3])
 
-predCD_jp_log_PTH<-jackPredLog(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+predCD_jp_log_PTH<-jackPredLog(centCD, outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocCD_jp_log_PTH<-list()
 rocCD_jp_log_PTH[[1]]<-roc(predCD_jp_log_PTH$justpass,as.numeric(predCD_jp_log_PTH$Week1),auc=T,ci=T)
 rocCD_jp_log_PTH[[2]]<-roc(predCD_jp_log_PTH$justpass,as.numeric(predCD_jp_log_PTH$Week2),auc=T,ci=T)
@@ -122,7 +122,7 @@ CD_jp_log_PTH_ciH<-c(rocCD_jp_log_PTH[[1]]$ci[3],rocCD_jp_log_PTH[[2]]$ci[3],roc
                      rocCD_jp_log_PTH[[5]]$ci[3],rocCD_jp_log_PTH[[6]]$ci[3],rocCD_jp_log_PTH[[7]]$ci[3])
 
 
-predICS_jp_log_PTH<-jackPredLog(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+predICS_jp_log_PTH<-jackPredLog(centICS, outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocICS_jp_log_PTH<-list()
 rocICS_jp_log_PTH[[1]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_log_PTH$Week1),auc=T,ci=T)
 rocICS_jp_log_PTH[[2]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_log_PTH$Week2),auc=T,ci=T)
@@ -132,15 +132,15 @@ rocICS_jp_log_PTH[[5]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_lo
 rocICS_jp_log_PTH[[6]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_log_PTH$Week6),auc=T,ci=T)
 rocICS_jp_log_PTH[[7]]<-roc(predICS_jp_log_PTH$justpass,as.numeric(predICS_jp_log_PTH$Week7),auc=T,ci=T)
 ICS_jp_log_PTH_auc<-c(rocICS_jp_log_PTH[[1]]$auc,rocICS_jp_log_PTH[[2]]$auc,rocICS_jp_log_PTH[[3]]$auc,rocICS_jp_log_PTH[[4]]$auc,
-                     rocICS_jp_log_PTH[[5]]$auc,rocICS_jp_log_PTH[[6]]$auc,rocICS_jp_log_PTH[[7]]$auc)
+                      rocICS_jp_log_PTH[[5]]$auc,rocICS_jp_log_PTH[[6]]$auc,rocICS_jp_log_PTH[[7]]$auc)
 ICS_jp_log_PTH_ciL<-c(rocICS_jp_log_PTH[[1]]$ci[1],rocICS_jp_log_PTH[[2]]$ci[1],rocICS_jp_log_PTH[[3]]$ci[1],rocICS_jp_log_PTH[[4]]$ci[1],
-                     rocICS_jp_log_PTH[[5]]$ci[1],rocICS_jp_log_PTH[[6]]$ci[1],rocICS_jp_log_PTH[[7]]$ci[1])
+                      rocICS_jp_log_PTH[[5]]$ci[1],rocICS_jp_log_PTH[[6]]$ci[1],rocICS_jp_log_PTH[[7]]$ci[1])
 ICS_jp_log_PTH_ciH<-c(rocICS_jp_log_PTH[[1]]$ci[3],rocICS_jp_log_PTH[[2]]$ci[3],rocICS_jp_log_PTH[[3]]$ci[3],rocICS_jp_log_PTH[[4]]$ci[3],
-                     rocICS_jp_log_PTH[[5]]$ci[3],rocICS_jp_log_PTH[[6]]$ci[3],rocICS_jp_log_PTH[[7]]$ci[3])
+                      rocICS_jp_log_PTH[[5]]$ci[3],rocICS_jp_log_PTH[[6]]$ci[3],rocICS_jp_log_PTH[[7]]$ci[3])
 
 
 ######PR TE models######
-predPS_log_PT<-jackPredLog(centPS,predictors = c("PageRank","tarEnt"))
+predPS_log_PT<-jackPredLog(centPS,predictors = c("gender","PageRank","tarEnt"))
 rocPS_log_PT<-list()
 rocPS_log_PT[[1]]<-roc(predPS_log_PT$pass,as.numeric(predPS_log_PT$Week1),auc=T,ci=T)
 rocPS_log_PT[[2]]<-roc(predPS_log_PT$pass,as.numeric(predPS_log_PT$Week2),auc=T,ci=T)
@@ -150,13 +150,13 @@ rocPS_log_PT[[5]]<-roc(predPS_log_PT$pass,as.numeric(predPS_log_PT$Week5),auc=T,
 rocPS_log_PT[[6]]<-roc(predPS_log_PT$pass,as.numeric(predPS_log_PT$Week6),auc=T,ci=T)
 rocPS_log_PT[[7]]<-roc(predPS_log_PT$pass,as.numeric(predPS_log_PT$Week7),auc=T,ci=T)
 PS_log_PT_auc<-c(rocPS_log_PT[[1]]$auc,rocPS_log_PT[[2]]$auc,rocPS_log_PT[[3]]$auc,rocPS_log_PT[[4]]$auc,
-                  rocPS_log_PT[[5]]$auc,rocPS_log_PT[[6]]$auc,rocPS_log_PT[[7]]$auc)
+                 rocPS_log_PT[[5]]$auc,rocPS_log_PT[[6]]$auc,rocPS_log_PT[[7]]$auc)
 PS_log_PT_ciL<-c(rocPS_log_PT[[1]]$ci[1],rocPS_log_PT[[2]]$ci[1],rocPS_log_PT[[3]]$ci[1],rocPS_log_PT[[4]]$ci[1],
-                  rocPS_log_PT[[5]]$ci[1],rocPS_log_PT[[6]]$ci[1],rocPS_log_PT[[7]]$ci[1])
+                 rocPS_log_PT[[5]]$ci[1],rocPS_log_PT[[6]]$ci[1],rocPS_log_PT[[7]]$ci[1])
 PS_log_PT_ciH<-c(rocPS_log_PT[[1]]$ci[3],rocPS_log_PT[[2]]$ci[3],rocPS_log_PT[[3]]$ci[3],rocPS_log_PT[[4]]$ci[3],
-                  rocPS_log_PT[[5]]$ci[3],rocPS_log_PT[[6]]$ci[3],rocPS_log_PT[[7]]$ci[3])
+                 rocPS_log_PT[[5]]$ci[3],rocPS_log_PT[[6]]$ci[3],rocPS_log_PT[[7]]$ci[3])
 ##CD layer
-predCD_log_PT<-jackPredLog(centCD,predictors = c("PageRank","tarEnt"))
+predCD_log_PT<-jackPredLog(centCD,predictors = c("gender","PageRank","tarEnt"))
 rocCD_log_PT<-list()
 rocCD_log_PT[[1]]<-roc(predCD_log_PT$pass,as.numeric(predCD_log_PT$Week1),auc=T,ci=T)
 rocCD_log_PT[[2]]<-roc(predCD_log_PT$pass,as.numeric(predCD_log_PT$Week2),auc=T,ci=T)
@@ -166,14 +166,14 @@ rocCD_log_PT[[5]]<-roc(predCD_log_PT$pass,as.numeric(predCD_log_PT$Week5),auc=T,
 rocCD_log_PT[[6]]<-roc(predCD_log_PT$pass,as.numeric(predCD_log_PT$Week6),auc=T,ci=T)
 rocCD_log_PT[[7]]<-roc(predCD_log_PT$pass,as.numeric(predCD_log_PT$Week7),auc=T,ci=T)
 CD_log_PT_auc<-c(rocCD_log_PT[[1]]$auc,rocCD_log_PT[[2]]$auc,rocCD_log_PT[[3]]$auc,rocCD_log_PT[[4]]$auc,
-                  rocCD_log_PT[[5]]$auc,rocCD_log_PT[[6]]$auc,rocCD_log_PT[[7]]$auc)
+                 rocCD_log_PT[[5]]$auc,rocCD_log_PT[[6]]$auc,rocCD_log_PT[[7]]$auc)
 CD_log_PT_ciL<-c(rocCD_log_PT[[1]]$ci[1],rocCD_log_PT[[2]]$ci[1],rocCD_log_PT[[3]]$ci[1],rocCD_log_PT[[4]]$ci[1],
-                  rocCD_log_PT[[5]]$ci[1],rocCD_log_PT[[6]]$ci[1],rocCD_log_PT[[7]]$ci[1])
+                 rocCD_log_PT[[5]]$ci[1],rocCD_log_PT[[6]]$ci[1],rocCD_log_PT[[7]]$ci[1])
 CD_log_PT_ciH<-c(rocCD_log_PT[[1]]$ci[3],rocCD_log_PT[[2]]$ci[3],rocCD_log_PT[[3]]$ci[3],rocCD_log_PT[[4]]$ci[3],
-                  rocCD_log_PT[[5]]$ci[3],rocCD_log_PT[[6]]$ci[3],rocCD_log_PT[[7]]$ci[3])
+                 rocCD_log_PT[[5]]$ci[3],rocCD_log_PT[[6]]$ci[3],rocCD_log_PT[[7]]$ci[3])
 
 #ICS layer
-predICS_log_PT<-jackPredLog(centICS,predictors = c("PageRank","tarEnt"))
+predICS_log_PT<-jackPredLog(centICS,predictors = c("gender","PageRank","tarEnt"))
 rocICS_log_PT<-list()
 rocICS_log_PT[[1]]<-roc(predICS_log_PT$pass,as.numeric(predICS_log_PT$Week1),auc=T,ci=T)
 rocICS_log_PT[[2]]<-roc(predICS_log_PT$pass,as.numeric(predICS_log_PT$Week2),auc=T,ci=T)
@@ -183,16 +183,16 @@ rocICS_log_PT[[5]]<-roc(predICS_log_PT$pass,as.numeric(predICS_log_PT$Week5),auc
 rocICS_log_PT[[6]]<-roc(predICS_log_PT$pass,as.numeric(predICS_log_PT$Week6),auc=T,ci=T)
 rocICS_log_PT[[7]]<-roc(predICS_log_PT$pass,as.numeric(predICS_log_PT$Week7),auc=T,ci=T)
 ICS_log_PT_auc<-c(rocICS_log_PT[[1]]$auc,rocICS_log_PT[[2]]$auc,rocICS_log_PT[[3]]$auc,rocICS_log_PT[[4]]$auc,
-                   rocICS_log_PT[[5]]$auc,rocICS_log_PT[[6]]$auc,rocICS_log_PT[[7]]$auc)
+                  rocICS_log_PT[[5]]$auc,rocICS_log_PT[[6]]$auc,rocICS_log_PT[[7]]$auc)
 ICS_log_PT_ciL<-c(rocICS_log_PT[[1]]$ci[1],rocICS_log_PT[[2]]$ci[1],rocICS_log_PT[[3]]$ci[1],rocICS_log_PT[[4]]$ci[1],
-                   rocICS_log_PT[[5]]$ci[1],rocICS_log_PT[[6]]$ci[1],rocICS_log_PT[[7]]$ci[1])
+                  rocICS_log_PT[[5]]$ci[1],rocICS_log_PT[[6]]$ci[1],rocICS_log_PT[[7]]$ci[1])
 ICS_log_PT_ciH<-c(rocICS_log_PT[[1]]$ci[3],rocICS_log_PT[[2]]$ci[3],rocICS_log_PT[[3]]$ci[3],rocICS_log_PT[[4]]$ci[3],
-                   rocICS_log_PT[[5]]$ci[3],rocICS_log_PT[[6]]$ci[3],rocICS_log_PT[[7]]$ci[3])
+                  rocICS_log_PT[[5]]$ci[3],rocICS_log_PT[[6]]$ci[3],rocICS_log_PT[[7]]$ci[3])
 
 
 
 ###JUST PASS
-predPS_jp_log_PT<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt"))
+predPS_jp_log_PT<-jackPredLog(centPS,outcome = "justpass",predictors = c("gender","PageRank","tarEnt"))
 rocPS_jp_log_PT<-list()
 rocPS_jp_log_PT[[1]]<-roc(predPS_jp_log_PT$justpass,as.numeric(predPS_jp_log_PT$Week1),auc=T,ci=T)
 rocPS_jp_log_PT[[2]]<-roc(predPS_jp_log_PT$justpass,as.numeric(predPS_jp_log_PT$Week2),auc=T,ci=T)
@@ -203,13 +203,13 @@ rocPS_jp_log_PT[[6]]<-roc(predPS_jp_log_PT$justpass,as.numeric(predPS_jp_log_PT$
 rocPS_jp_log_PT[[7]]<-roc(predPS_jp_log_PT$justpass,as.numeric(predPS_jp_log_PT$Week7),auc=T,ci=T)
 
 PS_jp_log_PT_auc<-c(rocPS_jp_log_PT[[1]]$auc,rocPS_jp_log_PT[[2]]$auc,rocPS_jp_log_PT[[3]]$auc,rocPS_jp_log_PT[[4]]$auc,
-                     rocPS_jp_log_PT[[5]]$auc,rocPS_jp_log_PT[[6]]$auc,rocPS_jp_log_PT[[7]]$auc)
+                    rocPS_jp_log_PT[[5]]$auc,rocPS_jp_log_PT[[6]]$auc,rocPS_jp_log_PT[[7]]$auc)
 PS_jp_log_PT_ciL<-c(rocPS_jp_log_PT[[1]]$ci[1],rocPS_jp_log_PT[[2]]$ci[1],rocPS_jp_log_PT[[3]]$ci[1],rocPS_jp_log_PT[[4]]$ci[1],
-                     rocPS_jp_log_PT[[5]]$ci[1],rocPS_jp_log_PT[[6]]$ci[1],rocPS_jp_log_PT[[7]]$ci[1])
+                    rocPS_jp_log_PT[[5]]$ci[1],rocPS_jp_log_PT[[6]]$ci[1],rocPS_jp_log_PT[[7]]$ci[1])
 PS_jp_log_PT_ciH<-c(rocPS_jp_log_PT[[1]]$ci[3],rocPS_jp_log_PT[[2]]$ci[3],rocPS_jp_log_PT[[3]]$ci[3],rocPS_jp_log_PT[[4]]$ci[3],
-                     rocPS_jp_log_PT[[5]]$ci[3],rocPS_jp_log_PT[[6]]$ci[3],rocPS_jp_log_PT[[7]]$ci[3])
+                    rocPS_jp_log_PT[[5]]$ci[3],rocPS_jp_log_PT[[6]]$ci[3],rocPS_jp_log_PT[[7]]$ci[3])
 
-predCD_jp_log_PT<-jackPredLog(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt"))
+predCD_jp_log_PT<-jackPredLog(centCD, outcome = "justpass",predictors = c("gender","PageRank","tarEnt"))
 rocCD_jp_log_PT<-list()
 rocCD_jp_log_PT[[1]]<-roc(predCD_jp_log_PT$justpass,as.numeric(predCD_jp_log_PT$Week1),auc=T,ci=T)
 rocCD_jp_log_PT[[2]]<-roc(predCD_jp_log_PT$justpass,as.numeric(predCD_jp_log_PT$Week2),auc=T,ci=T)
@@ -219,14 +219,14 @@ rocCD_jp_log_PT[[5]]<-roc(predCD_jp_log_PT$justpass,as.numeric(predCD_jp_log_PT$
 rocCD_jp_log_PT[[6]]<-roc(predCD_jp_log_PT$justpass,as.numeric(predCD_jp_log_PT$Week6),auc=T,ci=T)
 rocCD_jp_log_PT[[7]]<-roc(predCD_jp_log_PT$justpass,as.numeric(predCD_jp_log_PT$Week7),auc=T,ci=T)
 CD_jp_log_PT_auc<-c(rocCD_jp_log_PT[[1]]$auc,rocCD_jp_log_PT[[2]]$auc,rocCD_jp_log_PT[[3]]$auc,rocCD_jp_log_PT[[4]]$auc,
-                     rocCD_jp_log_PT[[5]]$auc,rocCD_jp_log_PT[[6]]$auc,rocCD_jp_log_PT[[7]]$auc)
+                    rocCD_jp_log_PT[[5]]$auc,rocCD_jp_log_PT[[6]]$auc,rocCD_jp_log_PT[[7]]$auc)
 CD_jp_log_PT_ciL<-c(rocCD_jp_log_PT[[1]]$ci[1],rocCD_jp_log_PT[[2]]$ci[1],rocCD_jp_log_PT[[3]]$ci[1],rocCD_jp_log_PT[[4]]$ci[1],
-                     rocCD_jp_log_PT[[5]]$ci[1],rocCD_jp_log_PT[[6]]$ci[1],rocCD_jp_log_PT[[7]]$ci[1])
+                    rocCD_jp_log_PT[[5]]$ci[1],rocCD_jp_log_PT[[6]]$ci[1],rocCD_jp_log_PT[[7]]$ci[1])
 CD_jp_log_PT_ciH<-c(rocCD_jp_log_PT[[1]]$ci[3],rocCD_jp_log_PT[[2]]$ci[3],rocCD_jp_log_PT[[3]]$ci[3],rocCD_jp_log_PT[[4]]$ci[3],
-                     rocCD_jp_log_PT[[5]]$ci[3],rocCD_jp_log_PT[[6]]$ci[3],rocCD_jp_log_PT[[7]]$ci[3])
+                    rocCD_jp_log_PT[[5]]$ci[3],rocCD_jp_log_PT[[6]]$ci[3],rocCD_jp_log_PT[[7]]$ci[3])
 
 
-predICS_jp_log_PT<-jackPredLog(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt"))
+predICS_jp_log_PT<-jackPredLog(centICS, outcome = "justpass",predictors = c("gender","PageRank","tarEnt"))
 rocICS_jp_log_PT<-list()
 rocICS_jp_log_PT[[1]]<-roc(predICS_jp_log_PT$justpass,as.numeric(predICS_jp_log_PT$Week1),auc=T,ci=T)
 rocICS_jp_log_PT[[2]]<-roc(predICS_jp_log_PT$justpass,as.numeric(predICS_jp_log_PT$Week2),auc=T,ci=T)
@@ -236,17 +236,17 @@ rocICS_jp_log_PT[[5]]<-roc(predICS_jp_log_PT$justpass,as.numeric(predICS_jp_log_
 rocICS_jp_log_PT[[6]]<-roc(predICS_jp_log_PT$justpass,as.numeric(predICS_jp_log_PT$Week6),auc=T,ci=T)
 rocICS_jp_log_PT[[7]]<-roc(predICS_jp_log_PT$justpass,as.numeric(predICS_jp_log_PT$Week7),auc=T,ci=T)
 ICS_jp_log_PT_auc<-c(rocICS_jp_log_PT[[1]]$auc,rocICS_jp_log_PT[[2]]$auc,rocICS_jp_log_PT[[3]]$auc,rocICS_jp_log_PT[[4]]$auc,
-                      rocICS_jp_log_PT[[5]]$auc,rocICS_jp_log_PT[[6]]$auc,rocICS_jp_log_PT[[7]]$auc)
+                     rocICS_jp_log_PT[[5]]$auc,rocICS_jp_log_PT[[6]]$auc,rocICS_jp_log_PT[[7]]$auc)
 ICS_jp_log_PT_ciL<-c(rocICS_jp_log_PT[[1]]$ci[1],rocICS_jp_log_PT[[2]]$ci[1],rocICS_jp_log_PT[[3]]$ci[1],rocICS_jp_log_PT[[4]]$ci[1],
-                      rocICS_jp_log_PT[[5]]$ci[1],rocICS_jp_log_PT[[6]]$ci[1],rocICS_jp_log_PT[[7]]$ci[1])
+                     rocICS_jp_log_PT[[5]]$ci[1],rocICS_jp_log_PT[[6]]$ci[1],rocICS_jp_log_PT[[7]]$ci[1])
 ICS_jp_log_PT_ciH<-c(rocICS_jp_log_PT[[1]]$ci[3],rocICS_jp_log_PT[[2]]$ci[3],rocICS_jp_log_PT[[3]]$ci[3],rocICS_jp_log_PT[[4]]$ci[3],
-                      rocICS_jp_log_PT[[5]]$ci[3],rocICS_jp_log_PT[[6]]$ci[3],rocICS_jp_log_PT[[7]]$ci[3])
+                     rocICS_jp_log_PT[[5]]$ci[3],rocICS_jp_log_PT[[6]]$ci[3],rocICS_jp_log_PT[[7]]$ci[3])
 
 
 
 
 ######PR H Models######
-predPS_log_PH<-jackPredLog(centPS,predictors = c("PageRank", "Hide"))
+predPS_log_PH<-jackPredLog(centPS,predictors = c("gender","PageRank", "Hide"))
 rocPS_log_PH<-list()
 rocPS_log_PH[[1]]<-roc(predPS_log_PH$pass,as.numeric(predPS_log_PH$Week1),auc=T,ci=T)
 rocPS_log_PH[[2]]<-roc(predPS_log_PH$pass,as.numeric(predPS_log_PH$Week2),auc=T,ci=T)
@@ -256,13 +256,13 @@ rocPS_log_PH[[5]]<-roc(predPS_log_PH$pass,as.numeric(predPS_log_PH$Week5),auc=T,
 rocPS_log_PH[[6]]<-roc(predPS_log_PH$pass,as.numeric(predPS_log_PH$Week6),auc=T,ci=T)
 rocPS_log_PH[[7]]<-roc(predPS_log_PH$pass,as.numeric(predPS_log_PH$Week7),auc=T,ci=T)
 PS_log_PH_auc<-c(rocPS_log_PH[[1]]$auc,rocPS_log_PH[[2]]$auc,rocPS_log_PH[[3]]$auc,rocPS_log_PH[[4]]$auc,
-                  rocPS_log_PH[[5]]$auc,rocPS_log_PH[[6]]$auc,rocPS_log_PH[[7]]$auc)
+                 rocPS_log_PH[[5]]$auc,rocPS_log_PH[[6]]$auc,rocPS_log_PH[[7]]$auc)
 PS_log_PH_ciL<-c(rocPS_log_PH[[1]]$ci[1],rocPS_log_PH[[2]]$ci[1],rocPS_log_PH[[3]]$ci[1],rocPS_log_PH[[4]]$ci[1],
-                  rocPS_log_PH[[5]]$ci[1],rocPS_log_PH[[6]]$ci[1],rocPS_log_PH[[7]]$ci[1])
+                 rocPS_log_PH[[5]]$ci[1],rocPS_log_PH[[6]]$ci[1],rocPS_log_PH[[7]]$ci[1])
 PS_log_PH_ciH<-c(rocPS_log_PH[[1]]$ci[3],rocPS_log_PH[[2]]$ci[3],rocPS_log_PH[[3]]$ci[3],rocPS_log_PH[[4]]$ci[3],
-                  rocPS_log_PH[[5]]$ci[3],rocPS_log_PH[[6]]$ci[3],rocPS_log_PH[[7]]$ci[3])
+                 rocPS_log_PH[[5]]$ci[3],rocPS_log_PH[[6]]$ci[3],rocPS_log_PH[[7]]$ci[3])
 ##CD layer
-predCD_log_PH<-jackPredLog(centCD,predictors = c("PageRank", "Hide"))
+predCD_log_PH<-jackPredLog(centCD,predictors = c("gender","PageRank", "Hide"))
 rocCD_log_PH<-list()
 rocCD_log_PH[[1]]<-roc(predCD_log_PH$pass,as.numeric(predCD_log_PH$Week1),auc=T,ci=T)
 rocCD_log_PH[[2]]<-roc(predCD_log_PH$pass,as.numeric(predCD_log_PH$Week2),auc=T,ci=T)
@@ -272,14 +272,14 @@ rocCD_log_PH[[5]]<-roc(predCD_log_PH$pass,as.numeric(predCD_log_PH$Week5),auc=T,
 rocCD_log_PH[[6]]<-roc(predCD_log_PH$pass,as.numeric(predCD_log_PH$Week6),auc=T,ci=T)
 rocCD_log_PH[[7]]<-roc(predCD_log_PH$pass,as.numeric(predCD_log_PH$Week7),auc=T,ci=T)
 CD_log_PH_auc<-c(rocCD_log_PH[[1]]$auc,rocCD_log_PH[[2]]$auc,rocCD_log_PH[[3]]$auc,rocCD_log_PH[[4]]$auc,
-                  rocCD_log_PH[[5]]$auc,rocCD_log_PH[[6]]$auc,rocCD_log_PH[[7]]$auc)
+                 rocCD_log_PH[[5]]$auc,rocCD_log_PH[[6]]$auc,rocCD_log_PH[[7]]$auc)
 CD_log_PH_ciL<-c(rocCD_log_PH[[1]]$ci[1],rocCD_log_PH[[2]]$ci[1],rocCD_log_PH[[3]]$ci[1],rocCD_log_PH[[4]]$ci[1],
-                  rocCD_log_PH[[5]]$ci[1],rocCD_log_PH[[6]]$ci[1],rocCD_log_PH[[7]]$ci[1])
+                 rocCD_log_PH[[5]]$ci[1],rocCD_log_PH[[6]]$ci[1],rocCD_log_PH[[7]]$ci[1])
 CD_log_PH_ciH<-c(rocCD_log_PH[[1]]$ci[3],rocCD_log_PH[[2]]$ci[3],rocCD_log_PH[[3]]$ci[3],rocCD_log_PH[[4]]$ci[3],
-                  rocCD_log_PH[[5]]$ci[3],rocCD_log_PH[[6]]$ci[3],rocCD_log_PH[[7]]$ci[3])
+                 rocCD_log_PH[[5]]$ci[3],rocCD_log_PH[[6]]$ci[3],rocCD_log_PH[[7]]$ci[3])
 
 #ICS layer
-predICS_log_PH<-jackPredLog(centICS,predictors = c("PageRank", "Hide"))
+predICS_log_PH<-jackPredLog(centICS,predictors = c("gender","PageRank", "Hide"))
 rocICS_log_PH<-list()
 rocICS_log_PH[[1]]<-roc(predICS_log_PH$pass,as.numeric(predICS_log_PH$Week1),auc=T,ci=T)
 rocICS_log_PH[[2]]<-roc(predICS_log_PH$pass,as.numeric(predICS_log_PH$Week2),auc=T,ci=T)
@@ -289,17 +289,17 @@ rocICS_log_PH[[5]]<-roc(predICS_log_PH$pass,as.numeric(predICS_log_PH$Week5),auc
 rocICS_log_PH[[6]]<-roc(predICS_log_PH$pass,as.numeric(predICS_log_PH$Week6),auc=T,ci=T)
 rocICS_log_PH[[7]]<-roc(predICS_log_PH$pass,as.numeric(predICS_log_PH$Week7),auc=T,ci=T)
 ICS_log_PH_auc<-c(rocICS_log_PH[[1]]$auc,rocICS_log_PH[[2]]$auc,rocICS_log_PH[[3]]$auc,rocICS_log_PH[[4]]$auc,
-                   rocICS_log_PH[[5]]$auc,rocICS_log_PH[[6]]$auc,rocICS_log_PH[[7]]$auc)
+                  rocICS_log_PH[[5]]$auc,rocICS_log_PH[[6]]$auc,rocICS_log_PH[[7]]$auc)
 ICS_log_PH_ciL<-c(rocICS_log_PH[[1]]$ci[1],rocICS_log_PH[[2]]$ci[1],rocICS_log_PH[[3]]$ci[1],rocICS_log_PH[[4]]$ci[1],
-                   rocICS_log_PH[[5]]$ci[1],rocICS_log_PH[[6]]$ci[1],rocICS_log_PH[[7]]$ci[1])
+                  rocICS_log_PH[[5]]$ci[1],rocICS_log_PH[[6]]$ci[1],rocICS_log_PH[[7]]$ci[1])
 ICS_log_PH_ciH<-c(rocICS_log_PH[[1]]$ci[3],rocICS_log_PH[[2]]$ci[3],rocICS_log_PH[[3]]$ci[3],rocICS_log_PH[[4]]$ci[3],
-                   rocICS_log_PH[[5]]$ci[3],rocICS_log_PH[[6]]$ci[3],rocICS_log_PH[[7]]$ci[3])
+                  rocICS_log_PH[[5]]$ci[3],rocICS_log_PH[[6]]$ci[3],rocICS_log_PH[[7]]$ci[3])
 
 
 
 ###JUST PASS
 ##PS layer
-predPS_jp_log_PH<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank", "Hide"))
+predPS_jp_log_PH<-jackPredLog(centPS,outcome = "justpass",predictors = c("gender","PageRank", "Hide"))
 rocPS_jp_log_PH<-list()
 rocPS_jp_log_PH[[1]]<-roc(predPS_jp_log_PH$justpass,as.numeric(predPS_jp_log_PH$Week1),auc=T,ci=T)
 rocPS_jp_log_PH[[2]]<-roc(predPS_jp_log_PH$justpass,as.numeric(predPS_jp_log_PH$Week2),auc=T,ci=T)
@@ -310,13 +310,13 @@ rocPS_jp_log_PH[[6]]<-roc(predPS_jp_log_PH$justpass,as.numeric(predPS_jp_log_PH$
 rocPS_jp_log_PH[[7]]<-roc(predPS_jp_log_PH$justpass,as.numeric(predPS_jp_log_PH$Week7),auc=T,ci=T)
 
 PS_jp_log_PH_auc<-c(rocPS_jp_log_PH[[1]]$auc,rocPS_jp_log_PH[[2]]$auc,rocPS_jp_log_PH[[3]]$auc,rocPS_jp_log_PH[[4]]$auc,
-                     rocPS_jp_log_PH[[5]]$auc,rocPS_jp_log_PH[[6]]$auc,rocPS_jp_log_PH[[7]]$auc)
+                    rocPS_jp_log_PH[[5]]$auc,rocPS_jp_log_PH[[6]]$auc,rocPS_jp_log_PH[[7]]$auc)
 PS_jp_log_PH_ciL<-c(rocPS_jp_log_PH[[1]]$ci[1],rocPS_jp_log_PH[[2]]$ci[1],rocPS_jp_log_PH[[3]]$ci[1],rocPS_jp_log_PH[[4]]$ci[1],
-                     rocPS_jp_log_PH[[5]]$ci[1],rocPS_jp_log_PH[[6]]$ci[1],rocPS_jp_log_PH[[7]]$ci[1])
+                    rocPS_jp_log_PH[[5]]$ci[1],rocPS_jp_log_PH[[6]]$ci[1],rocPS_jp_log_PH[[7]]$ci[1])
 PS_jp_log_PH_ciH<-c(rocPS_jp_log_PH[[1]]$ci[3],rocPS_jp_log_PH[[2]]$ci[3],rocPS_jp_log_PH[[3]]$ci[3],rocPS_jp_log_PH[[4]]$ci[3],
-                     rocPS_jp_log_PH[[5]]$ci[3],rocPS_jp_log_PH[[6]]$ci[3],rocPS_jp_log_PH[[7]]$ci[3])
+                    rocPS_jp_log_PH[[5]]$ci[3],rocPS_jp_log_PH[[6]]$ci[3],rocPS_jp_log_PH[[7]]$ci[3])
 #CD Layer
-predCD_jp_log_PH<-jackPredLog(centCD, outcome = "justpass",predictors = c("PageRank", "Hide"))
+predCD_jp_log_PH<-jackPredLog(centCD, outcome = "justpass",predictors = c("gender","PageRank", "Hide"))
 rocCD_jp_log_PH<-list()
 rocCD_jp_log_PH[[1]]<-roc(predCD_jp_log_PH$justpass,as.numeric(predCD_jp_log_PH$Week1),auc=T,ci=T)
 rocCD_jp_log_PH[[2]]<-roc(predCD_jp_log_PH$justpass,as.numeric(predCD_jp_log_PH$Week2),auc=T,ci=T)
@@ -326,14 +326,14 @@ rocCD_jp_log_PH[[5]]<-roc(predCD_jp_log_PH$justpass,as.numeric(predCD_jp_log_PH$
 rocCD_jp_log_PH[[6]]<-roc(predCD_jp_log_PH$justpass,as.numeric(predCD_jp_log_PH$Week6),auc=T,ci=T)
 rocCD_jp_log_PH[[7]]<-roc(predCD_jp_log_PH$justpass,as.numeric(predCD_jp_log_PH$Week7),auc=T,ci=T)
 CD_jp_log_PH_auc<-c(rocCD_jp_log_PH[[1]]$auc,rocCD_jp_log_PH[[2]]$auc,rocCD_jp_log_PH[[3]]$auc,rocCD_jp_log_PH[[4]]$auc,
-                     rocCD_jp_log_PH[[5]]$auc,rocCD_jp_log_PH[[6]]$auc,rocCD_jp_log_PH[[7]]$auc)
+                    rocCD_jp_log_PH[[5]]$auc,rocCD_jp_log_PH[[6]]$auc,rocCD_jp_log_PH[[7]]$auc)
 CD_jp_log_PH_ciL<-c(rocCD_jp_log_PH[[1]]$ci[1],rocCD_jp_log_PH[[2]]$ci[1],rocCD_jp_log_PH[[3]]$ci[1],rocCD_jp_log_PH[[4]]$ci[1],
-                     rocCD_jp_log_PH[[5]]$ci[1],rocCD_jp_log_PH[[6]]$ci[1],rocCD_jp_log_PH[[7]]$ci[1])
+                    rocCD_jp_log_PH[[5]]$ci[1],rocCD_jp_log_PH[[6]]$ci[1],rocCD_jp_log_PH[[7]]$ci[1])
 CD_jp_log_PH_ciH<-c(rocCD_jp_log_PH[[1]]$ci[3],rocCD_jp_log_PH[[2]]$ci[3],rocCD_jp_log_PH[[3]]$ci[3],rocCD_jp_log_PH[[4]]$ci[3],
-                     rocCD_jp_log_PH[[5]]$ci[3],rocCD_jp_log_PH[[6]]$ci[3],rocCD_jp_log_PH[[7]]$ci[3])
+                    rocCD_jp_log_PH[[5]]$ci[3],rocCD_jp_log_PH[[6]]$ci[3],rocCD_jp_log_PH[[7]]$ci[3])
 
 #ICS layer
-predICS_jp_log_PH<-jackPredLog(centICS, outcome = "justpass",predictors = c("PageRank", "Hide"))
+predICS_jp_log_PH<-jackPredLog(centICS, outcome = "justpass",predictors = c("gender","PageRank", "Hide"))
 rocICS_jp_log_PH<-list()
 rocICS_jp_log_PH[[1]]<-roc(predICS_jp_log_PH$justpass,as.numeric(predICS_jp_log_PH$Week1),auc=T,ci=T)
 rocICS_jp_log_PH[[2]]<-roc(predICS_jp_log_PH$justpass,as.numeric(predICS_jp_log_PH$Week2),auc=T,ci=T)
@@ -343,16 +343,16 @@ rocICS_jp_log_PH[[5]]<-roc(predICS_jp_log_PH$justpass,as.numeric(predICS_jp_log_
 rocICS_jp_log_PH[[6]]<-roc(predICS_jp_log_PH$justpass,as.numeric(predICS_jp_log_PH$Week6),auc=T,ci=T)
 rocICS_jp_log_PH[[7]]<-roc(predICS_jp_log_PH$justpass,as.numeric(predICS_jp_log_PH$Week7),auc=T,ci=T)
 ICS_jp_log_PH_auc<-c(rocICS_jp_log_PH[[1]]$auc,rocICS_jp_log_PH[[2]]$auc,rocICS_jp_log_PH[[3]]$auc,rocICS_jp_log_PH[[4]]$auc,
-                      rocICS_jp_log_PH[[5]]$auc,rocICS_jp_log_PH[[6]]$auc,rocICS_jp_log_PH[[7]]$auc)
+                     rocICS_jp_log_PH[[5]]$auc,rocICS_jp_log_PH[[6]]$auc,rocICS_jp_log_PH[[7]]$auc)
 ICS_jp_log_PH_ciL<-c(rocICS_jp_log_PH[[1]]$ci[1],rocICS_jp_log_PH[[2]]$ci[1],rocICS_jp_log_PH[[3]]$ci[1],rocICS_jp_log_PH[[4]]$ci[1],
-                      rocICS_jp_log_PH[[5]]$ci[1],rocICS_jp_log_PH[[6]]$ci[1],rocICS_jp_log_PH[[7]]$ci[1])
+                     rocICS_jp_log_PH[[5]]$ci[1],rocICS_jp_log_PH[[6]]$ci[1],rocICS_jp_log_PH[[7]]$ci[1])
 ICS_jp_log_PH_ciH<-c(rocICS_jp_log_PH[[1]]$ci[3],rocICS_jp_log_PH[[2]]$ci[3],rocICS_jp_log_PH[[3]]$ci[3],rocICS_jp_log_PH[[4]]$ci[3],
-                      rocICS_jp_log_PH[[5]]$ci[3],rocICS_jp_log_PH[[6]]$ci[3],rocICS_jp_log_PH[[7]]$ci[3])
+                     rocICS_jp_log_PH[[5]]$ci[3],rocICS_jp_log_PH[[6]]$ci[3],rocICS_jp_log_PH[[7]]$ci[3])
 
 
 ######TE-H models######
 #PS layer
-predPS_log_TH<-jackPredLog(centPS,predictors = c("tarEnt", "Hide"))
+predPS_log_TH<-jackPredLog(centPS,predictors = c("gender","tarEnt", "Hide"))
 rocPS_log_TH<-list()
 rocPS_log_TH[[1]]<-roc(predPS_log_TH$pass,as.numeric(predPS_log_TH$Week1),auc=T,ci=T)
 rocPS_log_TH[[2]]<-roc(predPS_log_TH$pass,as.numeric(predPS_log_TH$Week2),auc=T,ci=T)
@@ -362,13 +362,13 @@ rocPS_log_TH[[5]]<-roc(predPS_log_TH$pass,as.numeric(predPS_log_TH$Week5),auc=T,
 rocPS_log_TH[[6]]<-roc(predPS_log_TH$pass,as.numeric(predPS_log_TH$Week6),auc=T,ci=T)
 rocPS_log_TH[[7]]<-roc(predPS_log_TH$pass,as.numeric(predPS_log_TH$Week7),auc=T,ci=T)
 PS_log_TH_auc<-c(rocPS_log_TH[[1]]$auc,rocPS_log_TH[[2]]$auc,rocPS_log_TH[[3]]$auc,rocPS_log_TH[[4]]$auc,
-                  rocPS_log_TH[[5]]$auc,rocPS_log_TH[[6]]$auc,rocPS_log_TH[[7]]$auc)
+                 rocPS_log_TH[[5]]$auc,rocPS_log_TH[[6]]$auc,rocPS_log_TH[[7]]$auc)
 PS_log_TH_ciL<-c(rocPS_log_TH[[1]]$ci[1],rocPS_log_TH[[2]]$ci[1],rocPS_log_TH[[3]]$ci[1],rocPS_log_TH[[4]]$ci[1],
-                  rocPS_log_TH[[5]]$ci[1],rocPS_log_TH[[6]]$ci[1],rocPS_log_TH[[7]]$ci[1])
+                 rocPS_log_TH[[5]]$ci[1],rocPS_log_TH[[6]]$ci[1],rocPS_log_TH[[7]]$ci[1])
 PS_log_TH_ciH<-c(rocPS_log_TH[[1]]$ci[3],rocPS_log_TH[[2]]$ci[3],rocPS_log_TH[[3]]$ci[3],rocPS_log_TH[[4]]$ci[3],
-                  rocPS_log_TH[[5]]$ci[3],rocPS_log_TH[[6]]$ci[3],rocPS_log_TH[[7]]$ci[3])
+                 rocPS_log_TH[[5]]$ci[3],rocPS_log_TH[[6]]$ci[3],rocPS_log_TH[[7]]$ci[3])
 ##CD layer
-predCD_log_TH<-jackPredLog(centCD,predictors = c("tarEnt", "Hide"))
+predCD_log_TH<-jackPredLog(centCD,predictors = c("gender","tarEnt", "Hide"))
 rocCD_log_TH<-list()
 rocCD_log_TH[[1]]<-roc(predCD_log_TH$pass,as.numeric(predCD_log_TH$Week1),auc=T,ci=T)
 rocCD_log_TH[[2]]<-roc(predCD_log_TH$pass,as.numeric(predCD_log_TH$Week2),auc=T,ci=T)
@@ -378,14 +378,14 @@ rocCD_log_TH[[5]]<-roc(predCD_log_TH$pass,as.numeric(predCD_log_TH$Week5),auc=T,
 rocCD_log_TH[[6]]<-roc(predCD_log_TH$pass,as.numeric(predCD_log_TH$Week6),auc=T,ci=T)
 rocCD_log_TH[[7]]<-roc(predCD_log_TH$pass,as.numeric(predCD_log_TH$Week7),auc=T,ci=T)
 CD_log_TH_auc<-c(rocCD_log_TH[[1]]$auc,rocCD_log_TH[[2]]$auc,rocCD_log_TH[[3]]$auc,rocCD_log_TH[[4]]$auc,
-                  rocCD_log_TH[[5]]$auc,rocCD_log_TH[[6]]$auc,rocCD_log_TH[[7]]$auc)
+                 rocCD_log_TH[[5]]$auc,rocCD_log_TH[[6]]$auc,rocCD_log_TH[[7]]$auc)
 CD_log_TH_ciL<-c(rocCD_log_TH[[1]]$ci[1],rocCD_log_TH[[2]]$ci[1],rocCD_log_TH[[3]]$ci[1],rocCD_log_TH[[4]]$ci[1],
-                  rocCD_log_TH[[5]]$ci[1],rocCD_log_TH[[6]]$ci[1],rocCD_log_TH[[7]]$ci[1])
+                 rocCD_log_TH[[5]]$ci[1],rocCD_log_TH[[6]]$ci[1],rocCD_log_TH[[7]]$ci[1])
 CD_log_TH_ciH<-c(rocCD_log_TH[[1]]$ci[3],rocCD_log_TH[[2]]$ci[3],rocCD_log_TH[[3]]$ci[3],rocCD_log_TH[[4]]$ci[3],
-                  rocCD_log_TH[[5]]$ci[3],rocCD_log_TH[[6]]$ci[3],rocCD_log_TH[[7]]$ci[3])
+                 rocCD_log_TH[[5]]$ci[3],rocCD_log_TH[[6]]$ci[3],rocCD_log_TH[[7]]$ci[3])
 
 #ICS layer
-predICS_log_TH<-jackPredLog(centICS,predictors = c("tarEnt", "Hide"))
+predICS_log_TH<-jackPredLog(centICS,predictors = c("gender","tarEnt", "Hide"))
 rocICS_log_TH<-list()
 rocICS_log_TH[[1]]<-roc(predICS_log_TH$pass,as.numeric(predICS_log_TH$Week1),auc=T,ci=T)
 rocICS_log_TH[[2]]<-roc(predICS_log_TH$pass,as.numeric(predICS_log_TH$Week2),auc=T,ci=T)
@@ -395,16 +395,16 @@ rocICS_log_TH[[5]]<-roc(predICS_log_TH$pass,as.numeric(predICS_log_TH$Week5),auc
 rocICS_log_TH[[6]]<-roc(predICS_log_TH$pass,as.numeric(predICS_log_TH$Week6),auc=T,ci=T)
 rocICS_log_TH[[7]]<-roc(predICS_log_TH$pass,as.numeric(predICS_log_TH$Week7),auc=T,ci=T)
 ICS_log_TH_auc<-c(rocICS_log_TH[[1]]$auc,rocICS_log_TH[[2]]$auc,rocICS_log_TH[[3]]$auc,rocICS_log_TH[[4]]$auc,
-                   rocICS_log_TH[[5]]$auc,rocICS_log_TH[[6]]$auc,rocICS_log_TH[[7]]$auc)
+                  rocICS_log_TH[[5]]$auc,rocICS_log_TH[[6]]$auc,rocICS_log_TH[[7]]$auc)
 ICS_log_TH_ciL<-c(rocICS_log_TH[[1]]$ci[1],rocICS_log_TH[[2]]$ci[1],rocICS_log_TH[[3]]$ci[1],rocICS_log_TH[[4]]$ci[1],
-                   rocICS_log_TH[[5]]$ci[1],rocICS_log_TH[[6]]$ci[1],rocICS_log_TH[[7]]$ci[1])
+                  rocICS_log_TH[[5]]$ci[1],rocICS_log_TH[[6]]$ci[1],rocICS_log_TH[[7]]$ci[1])
 ICS_log_TH_ciH<-c(rocICS_log_TH[[1]]$ci[3],rocICS_log_TH[[2]]$ci[3],rocICS_log_TH[[3]]$ci[3],rocICS_log_TH[[4]]$ci[3],
-                   rocICS_log_TH[[5]]$ci[3],rocICS_log_TH[[6]]$ci[3],rocICS_log_TH[[7]]$ci[3])
+                  rocICS_log_TH[[5]]$ci[3],rocICS_log_TH[[6]]$ci[3],rocICS_log_TH[[7]]$ci[3])
 
 
 ###JUST PASS
 #PS Layer
-predPS_jp_log_TH<-jackPredLog(centPS,outcome = "justpass",predictors = c("tarEnt", "Hide"))
+predPS_jp_log_TH<-jackPredLog(centPS,outcome = "justpass",predictors = c("gender","tarEnt", "Hide"))
 rocPS_jp_log_TH<-list()
 rocPS_jp_log_TH[[1]]<-roc(predPS_jp_log_TH$justpass,as.numeric(predPS_jp_log_TH$Week1),auc=T,ci=T)
 rocPS_jp_log_TH[[2]]<-roc(predPS_jp_log_TH$justpass,as.numeric(predPS_jp_log_TH$Week2),auc=T,ci=T)
@@ -415,13 +415,13 @@ rocPS_jp_log_TH[[6]]<-roc(predPS_jp_log_TH$justpass,as.numeric(predPS_jp_log_TH$
 rocPS_jp_log_TH[[7]]<-roc(predPS_jp_log_TH$justpass,as.numeric(predPS_jp_log_TH$Week7),auc=T,ci=T)
 
 PS_jp_log_TH_auc<-c(rocPS_jp_log_TH[[1]]$auc,rocPS_jp_log_TH[[2]]$auc,rocPS_jp_log_TH[[3]]$auc,rocPS_jp_log_TH[[4]]$auc,
-                     rocPS_jp_log_TH[[5]]$auc,rocPS_jp_log_TH[[6]]$auc,rocPS_jp_log_TH[[7]]$auc)
+                    rocPS_jp_log_TH[[5]]$auc,rocPS_jp_log_TH[[6]]$auc,rocPS_jp_log_TH[[7]]$auc)
 PS_jp_log_TH_ciL<-c(rocPS_jp_log_TH[[1]]$ci[1],rocPS_jp_log_TH[[2]]$ci[1],rocPS_jp_log_TH[[3]]$ci[1],rocPS_jp_log_TH[[4]]$ci[1],
-                     rocPS_jp_log_TH[[5]]$ci[1],rocPS_jp_log_TH[[6]]$ci[1],rocPS_jp_log_TH[[7]]$ci[1])
+                    rocPS_jp_log_TH[[5]]$ci[1],rocPS_jp_log_TH[[6]]$ci[1],rocPS_jp_log_TH[[7]]$ci[1])
 PS_jp_log_TH_ciH<-c(rocPS_jp_log_TH[[1]]$ci[3],rocPS_jp_log_TH[[2]]$ci[3],rocPS_jp_log_TH[[3]]$ci[3],rocPS_jp_log_TH[[4]]$ci[3],
-                     rocPS_jp_log_TH[[5]]$ci[3],rocPS_jp_log_TH[[6]]$ci[3],rocPS_jp_log_TH[[7]]$ci[3])
+                    rocPS_jp_log_TH[[5]]$ci[3],rocPS_jp_log_TH[[6]]$ci[3],rocPS_jp_log_TH[[7]]$ci[3])
 #CD layer
-predCD_jp_log_TH<-jackPredLog(centCD, outcome = "justpass",predictors = c("tarEnt", "Hide"))
+predCD_jp_log_TH<-jackPredLog(centCD, outcome = "justpass",predictors = c("gender","tarEnt", "Hide"))
 rocCD_jp_log_TH<-list()
 rocCD_jp_log_TH[[1]]<-roc(predCD_jp_log_TH$justpass,as.numeric(predCD_jp_log_TH$Week1),auc=T,ci=T)
 rocCD_jp_log_TH[[2]]<-roc(predCD_jp_log_TH$justpass,as.numeric(predCD_jp_log_TH$Week2),auc=T,ci=T)
@@ -431,14 +431,14 @@ rocCD_jp_log_TH[[5]]<-roc(predCD_jp_log_TH$justpass,as.numeric(predCD_jp_log_TH$
 rocCD_jp_log_TH[[6]]<-roc(predCD_jp_log_TH$justpass,as.numeric(predCD_jp_log_TH$Week6),auc=T,ci=T)
 rocCD_jp_log_TH[[7]]<-roc(predCD_jp_log_TH$justpass,as.numeric(predCD_jp_log_TH$Week7),auc=T,ci=T)
 CD_jp_log_TH_auc<-c(rocCD_jp_log_TH[[1]]$auc,rocCD_jp_log_TH[[2]]$auc,rocCD_jp_log_TH[[3]]$auc,rocCD_jp_log_TH[[4]]$auc,
-                     rocCD_jp_log_TH[[5]]$auc,rocCD_jp_log_TH[[6]]$auc,rocCD_jp_log_TH[[7]]$auc)
+                    rocCD_jp_log_TH[[5]]$auc,rocCD_jp_log_TH[[6]]$auc,rocCD_jp_log_TH[[7]]$auc)
 CD_jp_log_TH_ciL<-c(rocCD_jp_log_TH[[1]]$ci[1],rocCD_jp_log_TH[[2]]$ci[1],rocCD_jp_log_TH[[3]]$ci[1],rocCD_jp_log_TH[[4]]$ci[1],
-                     rocCD_jp_log_TH[[5]]$ci[1],rocCD_jp_log_TH[[6]]$ci[1],rocCD_jp_log_TH[[7]]$ci[1])
+                    rocCD_jp_log_TH[[5]]$ci[1],rocCD_jp_log_TH[[6]]$ci[1],rocCD_jp_log_TH[[7]]$ci[1])
 CD_jp_log_TH_ciH<-c(rocCD_jp_log_TH[[1]]$ci[3],rocCD_jp_log_TH[[2]]$ci[3],rocCD_jp_log_TH[[3]]$ci[3],rocCD_jp_log_TH[[4]]$ci[3],
-                     rocCD_jp_log_TH[[5]]$ci[3],rocCD_jp_log_TH[[6]]$ci[3],rocCD_jp_log_TH[[7]]$ci[3])
+                    rocCD_jp_log_TH[[5]]$ci[3],rocCD_jp_log_TH[[6]]$ci[3],rocCD_jp_log_TH[[7]]$ci[3])
 
 #ICS Layer
-predICS_jp_log_TH<-jackPredLog(centICS, outcome = "justpass",predictors = c("tarEnt", "Hide"))
+predICS_jp_log_TH<-jackPredLog(centICS, outcome = "justpass",predictors = c("gender","tarEnt", "Hide"))
 rocICS_jp_log_TH<-list()
 rocICS_jp_log_TH[[1]]<-roc(predICS_jp_log_TH$justpass,as.numeric(predICS_jp_log_TH$Week1),auc=T,ci=T)
 rocICS_jp_log_TH[[2]]<-roc(predICS_jp_log_TH$justpass,as.numeric(predICS_jp_log_TH$Week2),auc=T,ci=T)
@@ -448,15 +448,15 @@ rocICS_jp_log_TH[[5]]<-roc(predICS_jp_log_TH$justpass,as.numeric(predICS_jp_log_
 rocICS_jp_log_TH[[6]]<-roc(predICS_jp_log_TH$justpass,as.numeric(predICS_jp_log_TH$Week6),auc=T,ci=T)
 rocICS_jp_log_TH[[7]]<-roc(predICS_jp_log_TH$justpass,as.numeric(predICS_jp_log_TH$Week7),auc=T,ci=T)
 ICS_jp_log_TH_auc<-c(rocICS_jp_log_TH[[1]]$auc,rocICS_jp_log_TH[[2]]$auc,rocICS_jp_log_TH[[3]]$auc,rocICS_jp_log_TH[[4]]$auc,
-                      rocICS_jp_log_TH[[5]]$auc,rocICS_jp_log_TH[[6]]$auc,rocICS_jp_log_TH[[7]]$auc)
+                     rocICS_jp_log_TH[[5]]$auc,rocICS_jp_log_TH[[6]]$auc,rocICS_jp_log_TH[[7]]$auc)
 ICS_jp_log_TH_ciL<-c(rocICS_jp_log_TH[[1]]$ci[1],rocICS_jp_log_TH[[2]]$ci[1],rocICS_jp_log_TH[[3]]$ci[1],rocICS_jp_log_TH[[4]]$ci[1],
-                      rocICS_jp_log_TH[[5]]$ci[1],rocICS_jp_log_TH[[6]]$ci[1],rocICS_jp_log_TH[[7]]$ci[1])
+                     rocICS_jp_log_TH[[5]]$ci[1],rocICS_jp_log_TH[[6]]$ci[1],rocICS_jp_log_TH[[7]]$ci[1])
 ICS_jp_log_TH_ciH<-c(rocICS_jp_log_TH[[1]]$ci[3],rocICS_jp_log_TH[[2]]$ci[3],rocICS_jp_log_TH[[3]]$ci[3],rocICS_jp_log_TH[[4]]$ci[3],
-                      rocICS_jp_log_TH[[5]]$ci[3],rocICS_jp_log_TH[[6]]$ci[3],rocICS_jp_log_TH[[7]]$ci[3])
+                     rocICS_jp_log_TH[[5]]$ci[3],rocICS_jp_log_TH[[6]]$ci[3],rocICS_jp_log_TH[[7]]$ci[3])
 
 ######TE models######
 #PS layer
-predPS_log_T<-jackPredLog(centPS,predictors = c("tarEnt"))
+predPS_log_T<-jackPredLog(centPS,predictors = c("gender","tarEnt"))
 rocPS_log_T<-list()
 rocPS_log_T[[1]]<-roc(predPS_log_T$pass,as.numeric(predPS_log_T$Week1),auc=T,ci=T)
 rocPS_log_T[[2]]<-roc(predPS_log_T$pass,as.numeric(predPS_log_T$Week2),auc=T,ci=T)
@@ -466,13 +466,13 @@ rocPS_log_T[[5]]<-roc(predPS_log_T$pass,as.numeric(predPS_log_T$Week5),auc=T,ci=
 rocPS_log_T[[6]]<-roc(predPS_log_T$pass,as.numeric(predPS_log_T$Week6),auc=T,ci=T)
 rocPS_log_T[[7]]<-roc(predPS_log_T$pass,as.numeric(predPS_log_T$Week7),auc=T,ci=T)
 PS_log_T_auc<-c(rocPS_log_T[[1]]$auc,rocPS_log_T[[2]]$auc,rocPS_log_T[[3]]$auc,rocPS_log_T[[4]]$auc,
-                 rocPS_log_T[[5]]$auc,rocPS_log_T[[6]]$auc,rocPS_log_T[[7]]$auc)
+                rocPS_log_T[[5]]$auc,rocPS_log_T[[6]]$auc,rocPS_log_T[[7]]$auc)
 PS_log_T_ciL<-c(rocPS_log_T[[1]]$ci[1],rocPS_log_T[[2]]$ci[1],rocPS_log_T[[3]]$ci[1],rocPS_log_T[[4]]$ci[1],
-                 rocPS_log_T[[5]]$ci[1],rocPS_log_T[[6]]$ci[1],rocPS_log_T[[7]]$ci[1])
+                rocPS_log_T[[5]]$ci[1],rocPS_log_T[[6]]$ci[1],rocPS_log_T[[7]]$ci[1])
 PS_log_T_ciH<-c(rocPS_log_T[[1]]$ci[3],rocPS_log_T[[2]]$ci[3],rocPS_log_T[[3]]$ci[3],rocPS_log_T[[4]]$ci[3],
-                 rocPS_log_T[[5]]$ci[3],rocPS_log_T[[6]]$ci[3],rocPS_log_T[[7]]$ci[3])
+                rocPS_log_T[[5]]$ci[3],rocPS_log_T[[6]]$ci[3],rocPS_log_T[[7]]$ci[3])
 ##CD layer
-predCD_log_T<-jackPredLog(centCD,predictors = c("tarEnt"))
+predCD_log_T<-jackPredLog(centCD,predictors = c("gender","tarEnt"))
 rocCD_log_T<-list()
 rocCD_log_T[[1]]<-roc(predCD_log_T$pass,as.numeric(predCD_log_T$Week1),auc=T,ci=T)
 rocCD_log_T[[2]]<-roc(predCD_log_T$pass,as.numeric(predCD_log_T$Week2),auc=T,ci=T)
@@ -482,14 +482,14 @@ rocCD_log_T[[5]]<-roc(predCD_log_T$pass,as.numeric(predCD_log_T$Week5),auc=T,ci=
 rocCD_log_T[[6]]<-roc(predCD_log_T$pass,as.numeric(predCD_log_T$Week6),auc=T,ci=T)
 rocCD_log_T[[7]]<-roc(predCD_log_T$pass,as.numeric(predCD_log_T$Week7),auc=T,ci=T)
 CD_log_T_auc<-c(rocCD_log_T[[1]]$auc,rocCD_log_T[[2]]$auc,rocCD_log_T[[3]]$auc,rocCD_log_T[[4]]$auc,
-                 rocCD_log_T[[5]]$auc,rocCD_log_T[[6]]$auc,rocCD_log_T[[7]]$auc)
+                rocCD_log_T[[5]]$auc,rocCD_log_T[[6]]$auc,rocCD_log_T[[7]]$auc)
 CD_log_T_ciL<-c(rocCD_log_T[[1]]$ci[1],rocCD_log_T[[2]]$ci[1],rocCD_log_T[[3]]$ci[1],rocCD_log_T[[4]]$ci[1],
-                 rocCD_log_T[[5]]$ci[1],rocCD_log_T[[6]]$ci[1],rocCD_log_T[[7]]$ci[1])
+                rocCD_log_T[[5]]$ci[1],rocCD_log_T[[6]]$ci[1],rocCD_log_T[[7]]$ci[1])
 CD_log_T_ciH<-c(rocCD_log_T[[1]]$ci[3],rocCD_log_T[[2]]$ci[3],rocCD_log_T[[3]]$ci[3],rocCD_log_T[[4]]$ci[3],
-                 rocCD_log_T[[5]]$ci[3],rocCD_log_T[[6]]$ci[3],rocCD_log_T[[7]]$ci[3])
+                rocCD_log_T[[5]]$ci[3],rocCD_log_T[[6]]$ci[3],rocCD_log_T[[7]]$ci[3])
 
 #ICS layer
-predICS_log_T<-jackPredLog(centICS,predictors = c("tarEnt"))
+predICS_log_T<-jackPredLog(centICS,predictors = c("gender","tarEnt"))
 rocICS_log_T<-list()
 rocICS_log_T[[1]]<-roc(predICS_log_T$pass,as.numeric(predICS_log_T$Week1),auc=T,ci=T)
 rocICS_log_T[[2]]<-roc(predICS_log_T$pass,as.numeric(predICS_log_T$Week2),auc=T,ci=T)
@@ -499,15 +499,15 @@ rocICS_log_T[[5]]<-roc(predICS_log_T$pass,as.numeric(predICS_log_T$Week5),auc=T,
 rocICS_log_T[[6]]<-roc(predICS_log_T$pass,as.numeric(predICS_log_T$Week6),auc=T,ci=T)
 rocICS_log_T[[7]]<-roc(predICS_log_T$pass,as.numeric(predICS_log_T$Week7),auc=T,ci=T)
 ICS_log_T_auc<-c(rocICS_log_T[[1]]$auc,rocICS_log_T[[2]]$auc,rocICS_log_T[[3]]$auc,rocICS_log_T[[4]]$auc,
-                  rocICS_log_T[[5]]$auc,rocICS_log_T[[6]]$auc,rocICS_log_T[[7]]$auc)
+                 rocICS_log_T[[5]]$auc,rocICS_log_T[[6]]$auc,rocICS_log_T[[7]]$auc)
 ICS_log_T_ciL<-c(rocICS_log_T[[1]]$ci[1],rocICS_log_T[[2]]$ci[1],rocICS_log_T[[3]]$ci[1],rocICS_log_T[[4]]$ci[1],
-                  rocICS_log_T[[5]]$ci[1],rocICS_log_T[[6]]$ci[1],rocICS_log_T[[7]]$ci[1])
+                 rocICS_log_T[[5]]$ci[1],rocICS_log_T[[6]]$ci[1],rocICS_log_T[[7]]$ci[1])
 ICS_log_T_ciH<-c(rocICS_log_T[[1]]$ci[3],rocICS_log_T[[2]]$ci[3],rocICS_log_T[[3]]$ci[3],rocICS_log_T[[4]]$ci[3],
-                  rocICS_log_T[[5]]$ci[3],rocICS_log_T[[6]]$ci[3],rocICS_log_T[[7]]$ci[3])
+                 rocICS_log_T[[5]]$ci[3],rocICS_log_T[[6]]$ci[3],rocICS_log_T[[7]]$ci[3])
 
 ###JUST PASS
 #PS layer
-predPS_jp_log_T<-jackPredLog(centPS,outcome = "justpass",predictors = c("tarEnt"))
+predPS_jp_log_T<-jackPredLog(centPS,outcome = "justpass",predictors = c("gender","tarEnt"))
 rocPS_jp_log_T<-list()
 rocPS_jp_log_T[[1]]<-roc(predPS_jp_log_T$justpass,as.numeric(predPS_jp_log_T$Week1),auc=T,ci=T)
 rocPS_jp_log_T[[2]]<-roc(predPS_jp_log_T$justpass,as.numeric(predPS_jp_log_T$Week2),auc=T,ci=T)
@@ -518,13 +518,13 @@ rocPS_jp_log_T[[6]]<-roc(predPS_jp_log_T$justpass,as.numeric(predPS_jp_log_T$Wee
 rocPS_jp_log_T[[7]]<-roc(predPS_jp_log_T$justpass,as.numeric(predPS_jp_log_T$Week7),auc=T,ci=T)
 
 PS_jp_log_T_auc<-c(rocPS_jp_log_T[[1]]$auc,rocPS_jp_log_T[[2]]$auc,rocPS_jp_log_T[[3]]$auc,rocPS_jp_log_T[[4]]$auc,
-                    rocPS_jp_log_T[[5]]$auc,rocPS_jp_log_T[[6]]$auc,rocPS_jp_log_T[[7]]$auc)
+                   rocPS_jp_log_T[[5]]$auc,rocPS_jp_log_T[[6]]$auc,rocPS_jp_log_T[[7]]$auc)
 PS_jp_log_T_ciL<-c(rocPS_jp_log_T[[1]]$ci[1],rocPS_jp_log_T[[2]]$ci[1],rocPS_jp_log_T[[3]]$ci[1],rocPS_jp_log_T[[4]]$ci[1],
-                    rocPS_jp_log_T[[5]]$ci[1],rocPS_jp_log_T[[6]]$ci[1],rocPS_jp_log_T[[7]]$ci[1])
+                   rocPS_jp_log_T[[5]]$ci[1],rocPS_jp_log_T[[6]]$ci[1],rocPS_jp_log_T[[7]]$ci[1])
 PS_jp_log_T_ciH<-c(rocPS_jp_log_T[[1]]$ci[3],rocPS_jp_log_T[[2]]$ci[3],rocPS_jp_log_T[[3]]$ci[3],rocPS_jp_log_T[[4]]$ci[3],
-                    rocPS_jp_log_T[[5]]$ci[3],rocPS_jp_log_T[[6]]$ci[3],rocPS_jp_log_T[[7]]$ci[3])
+                   rocPS_jp_log_T[[5]]$ci[3],rocPS_jp_log_T[[6]]$ci[3],rocPS_jp_log_T[[7]]$ci[3])
 #CD layer
-predCD_jp_log_T<-jackPredLog(centCD, outcome = "justpass",predictors = c("tarEnt"))
+predCD_jp_log_T<-jackPredLog(centCD, outcome = "justpass",predictors = c("gender","tarEnt"))
 rocCD_jp_log_T<-list()
 rocCD_jp_log_T[[1]]<-roc(predCD_jp_log_T$justpass,as.numeric(predCD_jp_log_T$Week1),auc=T,ci=T)
 rocCD_jp_log_T[[2]]<-roc(predCD_jp_log_T$justpass,as.numeric(predCD_jp_log_T$Week2),auc=T,ci=T)
@@ -534,13 +534,13 @@ rocCD_jp_log_T[[5]]<-roc(predCD_jp_log_T$justpass,as.numeric(predCD_jp_log_T$Wee
 rocCD_jp_log_T[[6]]<-roc(predCD_jp_log_T$justpass,as.numeric(predCD_jp_log_T$Week6),auc=T,ci=T)
 rocCD_jp_log_T[[7]]<-roc(predCD_jp_log_T$justpass,as.numeric(predCD_jp_log_T$Week7),auc=T,ci=T)
 CD_jp_log_T_auc<-c(rocCD_jp_log_T[[1]]$auc,rocCD_jp_log_T[[2]]$auc,rocCD_jp_log_T[[3]]$auc,rocCD_jp_log_T[[4]]$auc,
-                    rocCD_jp_log_T[[5]]$auc,rocCD_jp_log_T[[6]]$auc,rocCD_jp_log_T[[7]]$auc)
+                   rocCD_jp_log_T[[5]]$auc,rocCD_jp_log_T[[6]]$auc,rocCD_jp_log_T[[7]]$auc)
 CD_jp_log_T_ciL<-c(rocCD_jp_log_T[[1]]$ci[1],rocCD_jp_log_T[[2]]$ci[1],rocCD_jp_log_T[[3]]$ci[1],rocCD_jp_log_T[[4]]$ci[1],
-                    rocCD_jp_log_T[[5]]$ci[1],rocCD_jp_log_T[[6]]$ci[1],rocCD_jp_log_T[[7]]$ci[1])
+                   rocCD_jp_log_T[[5]]$ci[1],rocCD_jp_log_T[[6]]$ci[1],rocCD_jp_log_T[[7]]$ci[1])
 CD_jp_log_T_ciH<-c(rocCD_jp_log_T[[1]]$ci[3],rocCD_jp_log_T[[2]]$ci[3],rocCD_jp_log_T[[3]]$ci[3],rocCD_jp_log_T[[4]]$ci[3],
-                    rocCD_jp_log_T[[5]]$ci[3],rocCD_jp_log_T[[6]]$ci[3],rocCD_jp_log_T[[7]]$ci[3])
+                   rocCD_jp_log_T[[5]]$ci[3],rocCD_jp_log_T[[6]]$ci[3],rocCD_jp_log_T[[7]]$ci[3])
 #ICS layer
-predICS_jp_log_T<-jackPredLog(centICS, outcome = "justpass",predictors = c("tarEnt"))
+predICS_jp_log_T<-jackPredLog(centICS, outcome = "justpass",predictors = c("gender","tarEnt"))
 rocICS_jp_log_T<-list()
 rocICS_jp_log_T[[1]]<-roc(predICS_jp_log_T$justpass,as.numeric(predICS_jp_log_T$Week1),auc=T,ci=T)
 rocICS_jp_log_T[[2]]<-roc(predICS_jp_log_T$justpass,as.numeric(predICS_jp_log_T$Week2),auc=T,ci=T)
@@ -550,17 +550,17 @@ rocICS_jp_log_T[[5]]<-roc(predICS_jp_log_T$justpass,as.numeric(predICS_jp_log_T$
 rocICS_jp_log_T[[6]]<-roc(predICS_jp_log_T$justpass,as.numeric(predICS_jp_log_T$Week6),auc=T,ci=T)
 rocICS_jp_log_T[[7]]<-roc(predICS_jp_log_T$justpass,as.numeric(predICS_jp_log_T$Week7),auc=T,ci=T)
 ICS_jp_log_T_auc<-c(rocICS_jp_log_T[[1]]$auc,rocICS_jp_log_T[[2]]$auc,rocICS_jp_log_T[[3]]$auc,rocICS_jp_log_T[[4]]$auc,
-                     rocICS_jp_log_T[[5]]$auc,rocICS_jp_log_T[[6]]$auc,rocICS_jp_log_T[[7]]$auc)
+                    rocICS_jp_log_T[[5]]$auc,rocICS_jp_log_T[[6]]$auc,rocICS_jp_log_T[[7]]$auc)
 ICS_jp_log_T_ciL<-c(rocICS_jp_log_T[[1]]$ci[1],rocICS_jp_log_T[[2]]$ci[1],rocICS_jp_log_T[[3]]$ci[1],rocICS_jp_log_T[[4]]$ci[1],
-                     rocICS_jp_log_T[[5]]$ci[1],rocICS_jp_log_T[[6]]$ci[1],rocICS_jp_log_T[[7]]$ci[1])
+                    rocICS_jp_log_T[[5]]$ci[1],rocICS_jp_log_T[[6]]$ci[1],rocICS_jp_log_T[[7]]$ci[1])
 ICS_jp_log_T_ciH<-c(rocICS_jp_log_T[[1]]$ci[3],rocICS_jp_log_T[[2]]$ci[3],rocICS_jp_log_T[[3]]$ci[3],rocICS_jp_log_T[[4]]$ci[3],
-                     rocICS_jp_log_T[[5]]$ci[3],rocICS_jp_log_T[[6]]$ci[3],rocICS_jp_log_T[[7]]$ci[3])
+                    rocICS_jp_log_T[[5]]$ci[3],rocICS_jp_log_T[[6]]$ci[3],rocICS_jp_log_T[[7]]$ci[3])
 
 
 
 ######H models######
 #PS layer
-predPS_log_H<-jackPredLog(centPS,predictors = c( "Hide"))
+predPS_log_H<-jackPredLog(centPS,predictors = c("gender", "Hide"))
 rocPS_log_H<-list()
 rocPS_log_H[[1]]<-roc(predPS_log_H$pass,as.numeric(predPS_log_H$Week1),auc=T,ci=T)
 rocPS_log_H[[2]]<-roc(predPS_log_H$pass,as.numeric(predPS_log_H$Week2),auc=T,ci=T)
@@ -570,13 +570,13 @@ rocPS_log_H[[5]]<-roc(predPS_log_H$pass,as.numeric(predPS_log_H$Week5),auc=T,ci=
 rocPS_log_H[[6]]<-roc(predPS_log_H$pass,as.numeric(predPS_log_H$Week6),auc=T,ci=T)
 rocPS_log_H[[7]]<-roc(predPS_log_H$pass,as.numeric(predPS_log_H$Week7),auc=T,ci=T)
 PS_log_H_auc<-c(rocPS_log_H[[1]]$auc,rocPS_log_H[[2]]$auc,rocPS_log_H[[3]]$auc,rocPS_log_H[[4]]$auc,
-                 rocPS_log_H[[5]]$auc,rocPS_log_H[[6]]$auc,rocPS_log_H[[7]]$auc)
+                rocPS_log_H[[5]]$auc,rocPS_log_H[[6]]$auc,rocPS_log_H[[7]]$auc)
 PS_log_H_ciL<-c(rocPS_log_H[[1]]$ci[1],rocPS_log_H[[2]]$ci[1],rocPS_log_H[[3]]$ci[1],rocPS_log_H[[4]]$ci[1],
-                 rocPS_log_H[[5]]$ci[1],rocPS_log_H[[6]]$ci[1],rocPS_log_H[[7]]$ci[1])
+                rocPS_log_H[[5]]$ci[1],rocPS_log_H[[6]]$ci[1],rocPS_log_H[[7]]$ci[1])
 PS_log_H_ciH<-c(rocPS_log_H[[1]]$ci[3],rocPS_log_H[[2]]$ci[3],rocPS_log_H[[3]]$ci[3],rocPS_log_H[[4]]$ci[3],
-                 rocPS_log_H[[5]]$ci[3],rocPS_log_H[[6]]$ci[3],rocPS_log_H[[7]]$ci[3])
+                rocPS_log_H[[5]]$ci[3],rocPS_log_H[[6]]$ci[3],rocPS_log_H[[7]]$ci[3])
 ##CD layer
-predCD_log_H<-jackPredLog(centCD,predictors = c( "Hide"))
+predCD_log_H<-jackPredLog(centCD,predictors = c("gender", "Hide"))
 rocCD_log_H<-list()
 rocCD_log_H[[1]]<-roc(predCD_log_H$pass,as.numeric(predCD_log_H$Week1),auc=T,ci=T)
 rocCD_log_H[[2]]<-roc(predCD_log_H$pass,as.numeric(predCD_log_H$Week2),auc=T,ci=T)
@@ -586,14 +586,14 @@ rocCD_log_H[[5]]<-roc(predCD_log_H$pass,as.numeric(predCD_log_H$Week5),auc=T,ci=
 rocCD_log_H[[6]]<-roc(predCD_log_H$pass,as.numeric(predCD_log_H$Week6),auc=T,ci=T)
 rocCD_log_H[[7]]<-roc(predCD_log_H$pass,as.numeric(predCD_log_H$Week7),auc=T,ci=T)
 CD_log_H_auc<-c(rocCD_log_H[[1]]$auc,rocCD_log_H[[2]]$auc,rocCD_log_H[[3]]$auc,rocCD_log_H[[4]]$auc,
-                 rocCD_log_H[[5]]$auc,rocCD_log_H[[6]]$auc,rocCD_log_H[[7]]$auc)
+                rocCD_log_H[[5]]$auc,rocCD_log_H[[6]]$auc,rocCD_log_H[[7]]$auc)
 CD_log_H_ciL<-c(rocCD_log_H[[1]]$ci[1],rocCD_log_H[[2]]$ci[1],rocCD_log_H[[3]]$ci[1],rocCD_log_H[[4]]$ci[1],
-                 rocCD_log_H[[5]]$ci[1],rocCD_log_H[[6]]$ci[1],rocCD_log_H[[7]]$ci[1])
+                rocCD_log_H[[5]]$ci[1],rocCD_log_H[[6]]$ci[1],rocCD_log_H[[7]]$ci[1])
 CD_log_H_ciH<-c(rocCD_log_H[[1]]$ci[3],rocCD_log_H[[2]]$ci[3],rocCD_log_H[[3]]$ci[3],rocCD_log_H[[4]]$ci[3],
-                 rocCD_log_H[[5]]$ci[3],rocCD_log_H[[6]]$ci[3],rocCD_log_H[[7]]$ci[3])
+                rocCD_log_H[[5]]$ci[3],rocCD_log_H[[6]]$ci[3],rocCD_log_H[[7]]$ci[3])
 
 #ICS layer
-predICS_log_H<-jackPredLog(centICS,predictors = c( "Hide"))
+predICS_log_H<-jackPredLog(centICS,predictors = c("gender", "Hide"))
 rocICS_log_H<-list()
 rocICS_log_H[[1]]<-roc(predICS_log_H$pass,as.numeric(predICS_log_H$Week1),auc=T,ci=T)
 rocICS_log_H[[2]]<-roc(predICS_log_H$pass,as.numeric(predICS_log_H$Week2),auc=T,ci=T)
@@ -603,15 +603,15 @@ rocICS_log_H[[5]]<-roc(predICS_log_H$pass,as.numeric(predICS_log_H$Week5),auc=T,
 rocICS_log_H[[6]]<-roc(predICS_log_H$pass,as.numeric(predICS_log_H$Week6),auc=T,ci=T)
 rocICS_log_H[[7]]<-roc(predICS_log_H$pass,as.numeric(predICS_log_H$Week7),auc=T,ci=T)
 ICS_log_H_auc<-c(rocICS_log_H[[1]]$auc,rocICS_log_H[[2]]$auc,rocICS_log_H[[3]]$auc,rocICS_log_H[[4]]$auc,
-                  rocICS_log_H[[5]]$auc,rocICS_log_H[[6]]$auc,rocICS_log_H[[7]]$auc)
+                 rocICS_log_H[[5]]$auc,rocICS_log_H[[6]]$auc,rocICS_log_H[[7]]$auc)
 ICS_log_H_ciL<-c(rocICS_log_H[[1]]$ci[1],rocICS_log_H[[2]]$ci[1],rocICS_log_H[[3]]$ci[1],rocICS_log_H[[4]]$ci[1],
-                  rocICS_log_H[[5]]$ci[1],rocICS_log_H[[6]]$ci[1],rocICS_log_H[[7]]$ci[1])
+                 rocICS_log_H[[5]]$ci[1],rocICS_log_H[[6]]$ci[1],rocICS_log_H[[7]]$ci[1])
 ICS_log_H_ciH<-c(rocICS_log_H[[1]]$ci[3],rocICS_log_H[[2]]$ci[3],rocICS_log_H[[3]]$ci[3],rocICS_log_H[[4]]$ci[3],
-                  rocICS_log_H[[5]]$ci[3],rocICS_log_H[[6]]$ci[3],rocICS_log_H[[7]]$ci[3])
+                 rocICS_log_H[[5]]$ci[3],rocICS_log_H[[6]]$ci[3],rocICS_log_H[[7]]$ci[3])
 
 
 ###JUST PASS
-predPS_jp_log_H<-jackPredLog(centPS,outcome = "justpass",predictors = c( "Hide"))
+predPS_jp_log_H<-jackPredLog(centPS,outcome = "justpass",predictors = c("gender", "Hide"))
 rocPS_jp_log_H<-list()
 rocPS_jp_log_H[[1]]<-roc(predPS_jp_log_H$justpass,as.numeric(predPS_jp_log_H$Week1),auc=T,ci=T)
 rocPS_jp_log_H[[2]]<-roc(predPS_jp_log_H$justpass,as.numeric(predPS_jp_log_H$Week2),auc=T,ci=T)
@@ -622,13 +622,13 @@ rocPS_jp_log_H[[6]]<-roc(predPS_jp_log_H$justpass,as.numeric(predPS_jp_log_H$Wee
 rocPS_jp_log_H[[7]]<-roc(predPS_jp_log_H$justpass,as.numeric(predPS_jp_log_H$Week7),auc=T,ci=T)
 
 PS_jp_log_H_auc<-c(rocPS_jp_log_H[[1]]$auc,rocPS_jp_log_H[[2]]$auc,rocPS_jp_log_H[[3]]$auc,rocPS_jp_log_H[[4]]$auc,
-                    rocPS_jp_log_H[[5]]$auc,rocPS_jp_log_H[[6]]$auc,rocPS_jp_log_H[[7]]$auc)
+                   rocPS_jp_log_H[[5]]$auc,rocPS_jp_log_H[[6]]$auc,rocPS_jp_log_H[[7]]$auc)
 PS_jp_log_H_ciL<-c(rocPS_jp_log_H[[1]]$ci[1],rocPS_jp_log_H[[2]]$ci[1],rocPS_jp_log_H[[3]]$ci[1],rocPS_jp_log_H[[4]]$ci[1],
-                    rocPS_jp_log_H[[5]]$ci[1],rocPS_jp_log_H[[6]]$ci[1],rocPS_jp_log_H[[7]]$ci[1])
+                   rocPS_jp_log_H[[5]]$ci[1],rocPS_jp_log_H[[6]]$ci[1],rocPS_jp_log_H[[7]]$ci[1])
 PS_jp_log_H_ciH<-c(rocPS_jp_log_H[[1]]$ci[3],rocPS_jp_log_H[[2]]$ci[3],rocPS_jp_log_H[[3]]$ci[3],rocPS_jp_log_H[[4]]$ci[3],
-                    rocPS_jp_log_H[[5]]$ci[3],rocPS_jp_log_H[[6]]$ci[3],rocPS_jp_log_H[[7]]$ci[3])
+                   rocPS_jp_log_H[[5]]$ci[3],rocPS_jp_log_H[[6]]$ci[3],rocPS_jp_log_H[[7]]$ci[3])
 
-predCD_jp_log_H<-jackPredLog(centCD, outcome = "justpass",predictors = c( "Hide"))
+predCD_jp_log_H<-jackPredLog(centCD, outcome = "justpass",predictors = c("gender", "Hide"))
 rocCD_jp_log_H<-list()
 rocCD_jp_log_H[[1]]<-roc(predCD_jp_log_H$justpass,as.numeric(predCD_jp_log_H$Week1),auc=T,ci=T)
 rocCD_jp_log_H[[2]]<-roc(predCD_jp_log_H$justpass,as.numeric(predCD_jp_log_H$Week2),auc=T,ci=T)
@@ -638,14 +638,14 @@ rocCD_jp_log_H[[5]]<-roc(predCD_jp_log_H$justpass,as.numeric(predCD_jp_log_H$Wee
 rocCD_jp_log_H[[6]]<-roc(predCD_jp_log_H$justpass,as.numeric(predCD_jp_log_H$Week6),auc=T,ci=T)
 rocCD_jp_log_H[[7]]<-roc(predCD_jp_log_H$justpass,as.numeric(predCD_jp_log_H$Week7),auc=T,ci=T)
 CD_jp_log_H_auc<-c(rocCD_jp_log_H[[1]]$auc,rocCD_jp_log_H[[2]]$auc,rocCD_jp_log_H[[3]]$auc,rocCD_jp_log_H[[4]]$auc,
-                    rocCD_jp_log_H[[5]]$auc,rocCD_jp_log_H[[6]]$auc,rocCD_jp_log_H[[7]]$auc)
+                   rocCD_jp_log_H[[5]]$auc,rocCD_jp_log_H[[6]]$auc,rocCD_jp_log_H[[7]]$auc)
 CD_jp_log_H_ciL<-c(rocCD_jp_log_H[[1]]$ci[1],rocCD_jp_log_H[[2]]$ci[1],rocCD_jp_log_H[[3]]$ci[1],rocCD_jp_log_H[[4]]$ci[1],
-                    rocCD_jp_log_H[[5]]$ci[1],rocCD_jp_log_H[[6]]$ci[1],rocCD_jp_log_H[[7]]$ci[1])
+                   rocCD_jp_log_H[[5]]$ci[1],rocCD_jp_log_H[[6]]$ci[1],rocCD_jp_log_H[[7]]$ci[1])
 CD_jp_log_H_ciH<-c(rocCD_jp_log_H[[1]]$ci[3],rocCD_jp_log_H[[2]]$ci[3],rocCD_jp_log_H[[3]]$ci[3],rocCD_jp_log_H[[4]]$ci[3],
-                    rocCD_jp_log_H[[5]]$ci[3],rocCD_jp_log_H[[6]]$ci[3],rocCD_jp_log_H[[7]]$ci[3])
+                   rocCD_jp_log_H[[5]]$ci[3],rocCD_jp_log_H[[6]]$ci[3],rocCD_jp_log_H[[7]]$ci[3])
 
 
-predICS_jp_log_H<-jackPredLog(centICS, outcome = "justpass",predictors = c( "Hide"))
+predICS_jp_log_H<-jackPredLog(centICS, outcome = "justpass",predictors = c("gender", "Hide"))
 rocICS_jp_log_H<-list()
 rocICS_jp_log_H[[1]]<-roc(predICS_jp_log_H$justpass,as.numeric(predICS_jp_log_H$Week1),auc=T,ci=T)
 rocICS_jp_log_H[[2]]<-roc(predICS_jp_log_H$justpass,as.numeric(predICS_jp_log_H$Week2),auc=T,ci=T)
@@ -655,16 +655,16 @@ rocICS_jp_log_H[[5]]<-roc(predICS_jp_log_H$justpass,as.numeric(predICS_jp_log_H$
 rocICS_jp_log_H[[6]]<-roc(predICS_jp_log_H$justpass,as.numeric(predICS_jp_log_H$Week6),auc=T,ci=T)
 rocICS_jp_log_H[[7]]<-roc(predICS_jp_log_H$justpass,as.numeric(predICS_jp_log_H$Week7),auc=T,ci=T)
 ICS_jp_log_H_auc<-c(rocICS_jp_log_H[[1]]$auc,rocICS_jp_log_H[[2]]$auc,rocICS_jp_log_H[[3]]$auc,rocICS_jp_log_H[[4]]$auc,
-                     rocICS_jp_log_H[[5]]$auc,rocICS_jp_log_H[[6]]$auc,rocICS_jp_log_H[[7]]$auc)
+                    rocICS_jp_log_H[[5]]$auc,rocICS_jp_log_H[[6]]$auc,rocICS_jp_log_H[[7]]$auc)
 ICS_jp_log_H_ciL<-c(rocICS_jp_log_H[[1]]$ci[1],rocICS_jp_log_H[[2]]$ci[1],rocICS_jp_log_H[[3]]$ci[1],rocICS_jp_log_H[[4]]$ci[1],
-                     rocICS_jp_log_H[[5]]$ci[1],rocICS_jp_log_H[[6]]$ci[1],rocICS_jp_log_H[[7]]$ci[1])
+                    rocICS_jp_log_H[[5]]$ci[1],rocICS_jp_log_H[[6]]$ci[1],rocICS_jp_log_H[[7]]$ci[1])
 ICS_jp_log_H_ciH<-c(rocICS_jp_log_H[[1]]$ci[3],rocICS_jp_log_H[[2]]$ci[3],rocICS_jp_log_H[[3]]$ci[3],rocICS_jp_log_H[[4]]$ci[3],
-                     rocICS_jp_log_H[[5]]$ci[3],rocICS_jp_log_H[[6]]$ci[3],rocICS_jp_log_H[[7]]$ci[3])
+                    rocICS_jp_log_H[[5]]$ci[3],rocICS_jp_log_H[[6]]$ci[3],rocICS_jp_log_H[[7]]$ci[3])
 
 
 ######PR models######
 #PS layer
-predPS_log_P<-jackPredLog(centPS,predictors = c("PageRank"))
+predPS_log_P<-jackPredLog(centPS,predictors = c("gender","PageRank"))
 rocPS_log_P<-list()
 rocPS_log_P[[1]]<-roc(predPS_log_P$pass,as.numeric(predPS_log_P$Week1),auc=T,ci=T)
 rocPS_log_P[[2]]<-roc(predPS_log_P$pass,as.numeric(predPS_log_P$Week2),auc=T,ci=T)
@@ -674,13 +674,13 @@ rocPS_log_P[[5]]<-roc(predPS_log_P$pass,as.numeric(predPS_log_P$Week5),auc=T,ci=
 rocPS_log_P[[6]]<-roc(predPS_log_P$pass,as.numeric(predPS_log_P$Week6),auc=T,ci=T)
 rocPS_log_P[[7]]<-roc(predPS_log_P$pass,as.numeric(predPS_log_P$Week7),auc=T,ci=T)
 PS_log_P_auc<-c(rocPS_log_P[[1]]$auc,rocPS_log_P[[2]]$auc,rocPS_log_P[[3]]$auc,rocPS_log_P[[4]]$auc,
-                 rocPS_log_P[[5]]$auc,rocPS_log_P[[6]]$auc,rocPS_log_P[[7]]$auc)
+                rocPS_log_P[[5]]$auc,rocPS_log_P[[6]]$auc,rocPS_log_P[[7]]$auc)
 PS_log_P_ciL<-c(rocPS_log_P[[1]]$ci[1],rocPS_log_P[[2]]$ci[1],rocPS_log_P[[3]]$ci[1],rocPS_log_P[[4]]$ci[1],
-                 rocPS_log_P[[5]]$ci[1],rocPS_log_P[[6]]$ci[1],rocPS_log_P[[7]]$ci[1])
+                rocPS_log_P[[5]]$ci[1],rocPS_log_P[[6]]$ci[1],rocPS_log_P[[7]]$ci[1])
 PS_log_P_ciH<-c(rocPS_log_P[[1]]$ci[3],rocPS_log_P[[2]]$ci[3],rocPS_log_P[[3]]$ci[3],rocPS_log_P[[4]]$ci[3],
-                 rocPS_log_P[[5]]$ci[3],rocPS_log_P[[6]]$ci[3],rocPS_log_P[[7]]$ci[3])
+                rocPS_log_P[[5]]$ci[3],rocPS_log_P[[6]]$ci[3],rocPS_log_P[[7]]$ci[3])
 ##CD layer
-predCD_log_P<-jackPredLog(centCD,predictors = c("PageRank"))
+predCD_log_P<-jackPredLog(centCD,predictors = c("gender","PageRank"))
 rocCD_log_P<-list()
 rocCD_log_P[[1]]<-roc(predCD_log_P$pass,as.numeric(predCD_log_P$Week1),auc=T,ci=T)
 rocCD_log_P[[2]]<-roc(predCD_log_P$pass,as.numeric(predCD_log_P$Week2),auc=T,ci=T)
@@ -690,14 +690,14 @@ rocCD_log_P[[5]]<-roc(predCD_log_P$pass,as.numeric(predCD_log_P$Week5),auc=T,ci=
 rocCD_log_P[[6]]<-roc(predCD_log_P$pass,as.numeric(predCD_log_P$Week6),auc=T,ci=T)
 rocCD_log_P[[7]]<-roc(predCD_log_P$pass,as.numeric(predCD_log_P$Week7),auc=T,ci=T)
 CD_log_P_auc<-c(rocCD_log_P[[1]]$auc,rocCD_log_P[[2]]$auc,rocCD_log_P[[3]]$auc,rocCD_log_P[[4]]$auc,
-                 rocCD_log_P[[5]]$auc,rocCD_log_P[[6]]$auc,rocCD_log_P[[7]]$auc)
+                rocCD_log_P[[5]]$auc,rocCD_log_P[[6]]$auc,rocCD_log_P[[7]]$auc)
 CD_log_P_ciL<-c(rocCD_log_P[[1]]$ci[1],rocCD_log_P[[2]]$ci[1],rocCD_log_P[[3]]$ci[1],rocCD_log_P[[4]]$ci[1],
-                 rocCD_log_P[[5]]$ci[1],rocCD_log_P[[6]]$ci[1],rocCD_log_P[[7]]$ci[1])
+                rocCD_log_P[[5]]$ci[1],rocCD_log_P[[6]]$ci[1],rocCD_log_P[[7]]$ci[1])
 CD_log_P_ciH<-c(rocCD_log_P[[1]]$ci[3],rocCD_log_P[[2]]$ci[3],rocCD_log_P[[3]]$ci[3],rocCD_log_P[[4]]$ci[3],
-                 rocCD_log_P[[5]]$ci[3],rocCD_log_P[[6]]$ci[3],rocCD_log_P[[7]]$ci[3])
+                rocCD_log_P[[5]]$ci[3],rocCD_log_P[[6]]$ci[3],rocCD_log_P[[7]]$ci[3])
 
 #ICS layer
-predICS_log_P<-jackPredLog(centICS,predictors = c("PageRank"))
+predICS_log_P<-jackPredLog(centICS,predictors = c("gender","PageRank"))
 rocICS_log_P<-list()
 rocICS_log_P[[1]]<-roc(predICS_log_P$pass,as.numeric(predICS_log_P$Week1),auc=T,ci=T)
 rocICS_log_P[[2]]<-roc(predICS_log_P$pass,as.numeric(predICS_log_P$Week2),auc=T,ci=T)
@@ -707,15 +707,15 @@ rocICS_log_P[[5]]<-roc(predICS_log_P$pass,as.numeric(predICS_log_P$Week5),auc=T,
 rocICS_log_P[[6]]<-roc(predICS_log_P$pass,as.numeric(predICS_log_P$Week6),auc=T,ci=T)
 rocICS_log_P[[7]]<-roc(predICS_log_P$pass,as.numeric(predICS_log_P$Week7),auc=T,ci=T)
 ICS_log_P_auc<-c(rocICS_log_P[[1]]$auc,rocICS_log_P[[2]]$auc,rocICS_log_P[[3]]$auc,rocICS_log_P[[4]]$auc,
-                  rocICS_log_P[[5]]$auc,rocICS_log_P[[6]]$auc,rocICS_log_P[[7]]$auc)
+                 rocICS_log_P[[5]]$auc,rocICS_log_P[[6]]$auc,rocICS_log_P[[7]]$auc)
 ICS_log_P_ciL<-c(rocICS_log_P[[1]]$ci[1],rocICS_log_P[[2]]$ci[1],rocICS_log_P[[3]]$ci[1],rocICS_log_P[[4]]$ci[1],
-                  rocICS_log_P[[5]]$ci[1],rocICS_log_P[[6]]$ci[1],rocICS_log_P[[7]]$ci[1])
+                 rocICS_log_P[[5]]$ci[1],rocICS_log_P[[6]]$ci[1],rocICS_log_P[[7]]$ci[1])
 ICS_log_P_ciH<-c(rocICS_log_P[[1]]$ci[3],rocICS_log_P[[2]]$ci[3],rocICS_log_P[[3]]$ci[3],rocICS_log_P[[4]]$ci[3],
-                  rocICS_log_P[[5]]$ci[3],rocICS_log_P[[6]]$ci[3],rocICS_log_P[[7]]$ci[3])
+                 rocICS_log_P[[5]]$ci[3],rocICS_log_P[[6]]$ci[3],rocICS_log_P[[7]]$ci[3])
 
 ###JUST PASS
 #PS layer
-predPS_jp_log_P<-jackPredLog(centPS,outcome = "justpass",predictors = c("PageRank"))
+predPS_jp_log_P<-jackPredLog(centPS,outcome = "justpass",predictors = c("gender","PageRank"))
 rocPS_jp_log_P<-list()
 rocPS_jp_log_P[[1]]<-roc(predPS_jp_log_P$justpass,as.numeric(predPS_jp_log_P$Week1),auc=T,ci=T)
 rocPS_jp_log_P[[2]]<-roc(predPS_jp_log_P$justpass,as.numeric(predPS_jp_log_P$Week2),auc=T,ci=T)
@@ -726,13 +726,13 @@ rocPS_jp_log_P[[6]]<-roc(predPS_jp_log_P$justpass,as.numeric(predPS_jp_log_P$Wee
 rocPS_jp_log_P[[7]]<-roc(predPS_jp_log_P$justpass,as.numeric(predPS_jp_log_P$Week7),auc=T,ci=T)
 
 PS_jp_log_P_auc<-c(rocPS_jp_log_P[[1]]$auc,rocPS_jp_log_P[[2]]$auc,rocPS_jp_log_P[[3]]$auc,rocPS_jp_log_P[[4]]$auc,
-                    rocPS_jp_log_P[[5]]$auc,rocPS_jp_log_P[[6]]$auc,rocPS_jp_log_P[[7]]$auc)
+                   rocPS_jp_log_P[[5]]$auc,rocPS_jp_log_P[[6]]$auc,rocPS_jp_log_P[[7]]$auc)
 PS_jp_log_P_ciL<-c(rocPS_jp_log_P[[1]]$ci[1],rocPS_jp_log_P[[2]]$ci[1],rocPS_jp_log_P[[3]]$ci[1],rocPS_jp_log_P[[4]]$ci[1],
-                    rocPS_jp_log_P[[5]]$ci[1],rocPS_jp_log_P[[6]]$ci[1],rocPS_jp_log_P[[7]]$ci[1])
+                   rocPS_jp_log_P[[5]]$ci[1],rocPS_jp_log_P[[6]]$ci[1],rocPS_jp_log_P[[7]]$ci[1])
 PS_jp_log_P_ciH<-c(rocPS_jp_log_P[[1]]$ci[3],rocPS_jp_log_P[[2]]$ci[3],rocPS_jp_log_P[[3]]$ci[3],rocPS_jp_log_P[[4]]$ci[3],
-                    rocPS_jp_log_P[[5]]$ci[3],rocPS_jp_log_P[[6]]$ci[3],rocPS_jp_log_P[[7]]$ci[3])
+                   rocPS_jp_log_P[[5]]$ci[3],rocPS_jp_log_P[[6]]$ci[3],rocPS_jp_log_P[[7]]$ci[3])
 #CD layer
-predCD_jp_log_P<-jackPredLog(centCD, outcome = "justpass",predictors = c("PageRank"))
+predCD_jp_log_P<-jackPredLog(centCD, outcome = "justpass",predictors = c("gender","PageRank"))
 rocCD_jp_log_P<-list()
 rocCD_jp_log_P[[1]]<-roc(predCD_jp_log_P$justpass,as.numeric(predCD_jp_log_P$Week1),auc=T,ci=T)
 rocCD_jp_log_P[[2]]<-roc(predCD_jp_log_P$justpass,as.numeric(predCD_jp_log_P$Week2),auc=T,ci=T)
@@ -742,14 +742,14 @@ rocCD_jp_log_P[[5]]<-roc(predCD_jp_log_P$justpass,as.numeric(predCD_jp_log_P$Wee
 rocCD_jp_log_P[[6]]<-roc(predCD_jp_log_P$justpass,as.numeric(predCD_jp_log_P$Week6),auc=T,ci=T)
 rocCD_jp_log_P[[7]]<-roc(predCD_jp_log_P$justpass,as.numeric(predCD_jp_log_P$Week7),auc=T,ci=T)
 CD_jp_log_P_auc<-c(rocCD_jp_log_P[[1]]$auc,rocCD_jp_log_P[[2]]$auc,rocCD_jp_log_P[[3]]$auc,rocCD_jp_log_P[[4]]$auc,
-                    rocCD_jp_log_P[[5]]$auc,rocCD_jp_log_P[[6]]$auc,rocCD_jp_log_P[[7]]$auc)
+                   rocCD_jp_log_P[[5]]$auc,rocCD_jp_log_P[[6]]$auc,rocCD_jp_log_P[[7]]$auc)
 CD_jp_log_P_ciL<-c(rocCD_jp_log_P[[1]]$ci[1],rocCD_jp_log_P[[2]]$ci[1],rocCD_jp_log_P[[3]]$ci[1],rocCD_jp_log_P[[4]]$ci[1],
-                    rocCD_jp_log_P[[5]]$ci[1],rocCD_jp_log_P[[6]]$ci[1],rocCD_jp_log_P[[7]]$ci[1])
+                   rocCD_jp_log_P[[5]]$ci[1],rocCD_jp_log_P[[6]]$ci[1],rocCD_jp_log_P[[7]]$ci[1])
 CD_jp_log_P_ciH<-c(rocCD_jp_log_P[[1]]$ci[3],rocCD_jp_log_P[[2]]$ci[3],rocCD_jp_log_P[[3]]$ci[3],rocCD_jp_log_P[[4]]$ci[3],
-                    rocCD_jp_log_P[[5]]$ci[3],rocCD_jp_log_P[[6]]$ci[3],rocCD_jp_log_P[[7]]$ci[3])
+                   rocCD_jp_log_P[[5]]$ci[3],rocCD_jp_log_P[[6]]$ci[3],rocCD_jp_log_P[[7]]$ci[3])
 
 #ICS layer
-predICS_jp_log_P<-jackPredLog(centICS, outcome = "justpass",predictors = c("PageRank"))
+predICS_jp_log_P<-jackPredLog(centICS, outcome = "justpass",predictors = c("gender","PageRank"))
 rocICS_jp_log_P<-list()
 rocICS_jp_log_P[[1]]<-roc(predICS_jp_log_P$justpass,as.numeric(predICS_jp_log_P$Week1),auc=T,ci=T)
 rocICS_jp_log_P[[2]]<-roc(predICS_jp_log_P$justpass,as.numeric(predICS_jp_log_P$Week2),auc=T,ci=T)
@@ -759,11 +759,11 @@ rocICS_jp_log_P[[5]]<-roc(predICS_jp_log_P$justpass,as.numeric(predICS_jp_log_P$
 rocICS_jp_log_P[[6]]<-roc(predICS_jp_log_P$justpass,as.numeric(predICS_jp_log_P$Week6),auc=T,ci=T)
 rocICS_jp_log_P[[7]]<-roc(predICS_jp_log_P$justpass,as.numeric(predICS_jp_log_P$Week7),auc=T,ci=T)
 ICS_jp_log_P_auc<-c(rocICS_jp_log_P[[1]]$auc,rocICS_jp_log_P[[2]]$auc,rocICS_jp_log_P[[3]]$auc,rocICS_jp_log_P[[4]]$auc,
-                     rocICS_jp_log_P[[5]]$auc,rocICS_jp_log_P[[6]]$auc,rocICS_jp_log_P[[7]]$auc)
+                    rocICS_jp_log_P[[5]]$auc,rocICS_jp_log_P[[6]]$auc,rocICS_jp_log_P[[7]]$auc)
 ICS_jp_log_P_ciL<-c(rocICS_jp_log_P[[1]]$ci[1],rocICS_jp_log_P[[2]]$ci[1],rocICS_jp_log_P[[3]]$ci[1],rocICS_jp_log_P[[4]]$ci[1],
-                     rocICS_jp_log_P[[5]]$ci[1],rocICS_jp_log_P[[6]]$ci[1],rocICS_jp_log_P[[7]]$ci[1])
+                    rocICS_jp_log_P[[5]]$ci[1],rocICS_jp_log_P[[6]]$ci[1],rocICS_jp_log_P[[7]]$ci[1])
 ICS_jp_log_P_ciH<-c(rocICS_jp_log_P[[1]]$ci[3],rocICS_jp_log_P[[2]]$ci[3],rocICS_jp_log_P[[3]]$ci[3],rocICS_jp_log_P[[4]]$ci[3],
-                     rocICS_jp_log_P[[5]]$ci[3],rocICS_jp_log_P[[6]]$ci[3],rocICS_jp_log_P[[7]]$ci[3])
+                    rocICS_jp_log_P[[5]]$ci[3],rocICS_jp_log_P[[6]]$ci[3],rocICS_jp_log_P[[7]]$ci[3])
 
 
 
@@ -827,7 +827,7 @@ ICS_jp_log_RegWM<-rowSums(ICS_jp_log_RegAll*ICS_jp_log_RegWeigths)/rowSums(ICS_j
 ICS_jp_log_RegSEWM<-sqrt(1/rowSums(ICS_jp_log_RegWeigths))
 
 ####PLOTTING####
-pdf(file = "plots/ROC_AUC_plots/AUC01_onlyNetworkMeasures_log_weightedMeans.pdf",   # The directory you want to save the file in
+pdf(file = "plots/ROC_AUC_plots/AUC03_NetworkMeasuresGender_log_weightedMeans.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,2))
@@ -866,7 +866,7 @@ legend(3, 0.3, legend=c("Problem Solving", "Concept Discussion","In-Class Social
 abline(h=lazy_jp)
 dev.off()
 ####ROC curves####
-pdf(file = "plots/ROC_AUC_plots/ROC01_log_pf.pdf",   # The directory you want to save the file in
+pdf(file = "plots/ROC_AUC_plots/ROC03_log_pf.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 14) # The height of the plot in inches
 par(mfrow=c(4,2))
@@ -933,7 +933,7 @@ legend(0.5,1,c("week 5","week 6","week 7"),
        col=c("red","green","purple"),lty=1, cex=2)
 
 dev.off()
-pdf(file = "plots/ROC_AUC_plots/ROC01_log_jpf.pdf",   # The directory you want to save the file in
+pdf(file = "plots/ROC_AUC_plots/ROC03_log_jpf.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 14) # The height of the plot in inches
 par(mfrow=c(4,2))
@@ -1008,7 +1008,7 @@ dev.off()
 ################################################
 ######Run models and calculate AUC (with CI)####
 ######PR-TE-H Models######
-predPS_lda_PTH<-jackPredLDA(centPS,predictors = c("PageRank","tarEnt", "Hide"))
+predPS_lda_PTH<-jackPredLDA(centPS,predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocPS_lda_PTH<-list()
 rocPS_lda_PTH[[1]]<-roc(predPS_lda_PTH$pass,as.numeric(predPS_lda_PTH$Week1),auc=T,ci=T)
 rocPS_lda_PTH[[2]]<-roc(predPS_lda_PTH$pass,as.numeric(predPS_lda_PTH$Week2),auc=T,ci=T)
@@ -1024,7 +1024,7 @@ PS_lda_PTH_ciL<-c(rocPS_lda_PTH[[1]]$ci[1],rocPS_lda_PTH[[2]]$ci[1],rocPS_lda_PT
 PS_lda_PTH_ciH<-c(rocPS_lda_PTH[[1]]$ci[3],rocPS_lda_PTH[[2]]$ci[3],rocPS_lda_PTH[[3]]$ci[3],rocPS_lda_PTH[[4]]$ci[3],
                   rocPS_lda_PTH[[5]]$ci[3],rocPS_lda_PTH[[6]]$ci[3],rocPS_lda_PTH[[7]]$ci[3])
 
-predCD_lda_PTH<-jackPredLDA(centCD,predictors = c("PageRank","tarEnt", "Hide"))
+predCD_lda_PTH<-jackPredLDA(centCD,predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocCD_lda_PTH<-list()
 rocCD_lda_PTH[[1]]<-roc(predCD_lda_PTH$pass,as.numeric(predCD_lda_PTH$Week1),auc=T,ci=T)
 rocCD_lda_PTH[[2]]<-roc(predCD_lda_PTH$pass,as.numeric(predCD_lda_PTH$Week2),auc=T,ci=T)
@@ -1042,7 +1042,7 @@ CD_lda_PTH_ciH<-c(rocCD_lda_PTH[[1]]$ci[3],rocCD_lda_PTH[[2]]$ci[3],rocCD_lda_PT
 
 
 
-predICS_lda_PTH<-jackPredLDA(centICS,predictors = c("PageRank","tarEnt", "Hide"))
+predICS_lda_PTH<-jackPredLDA(centICS,predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocICS_lda_PTH<-list()
 rocICS_lda_PTH[[1]]<-roc(predICS_lda_PTH$pass,as.numeric(predICS_lda_PTH$Week1),auc=T,ci=T)
 rocICS_lda_PTH[[2]]<-roc(predICS_lda_PTH$pass,as.numeric(predICS_lda_PTH$Week2),auc=T,ci=T)
@@ -1062,7 +1062,7 @@ ICS_lda_PTH_ciH<-c(rocICS_lda_PTH[[1]]$ci[3],rocICS_lda_PTH[[2]]$ci[3],rocICS_ld
 
 
 ###JUST PASS
-predPS_jp_lda_PTH<-jackPredLDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+predPS_jp_lda_PTH<-jackPredLDA(centPS,outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocPS_jp_lda_PTH<-list()
 rocPS_jp_lda_PTH[[1]]<-roc(predPS_jp_lda_PTH$justpass,as.numeric(predPS_jp_lda_PTH$Week1),auc=T,ci=T)
 rocPS_jp_lda_PTH[[2]]<-roc(predPS_jp_lda_PTH$justpass,as.numeric(predPS_jp_lda_PTH$Week2),auc=T,ci=T)
@@ -1079,7 +1079,7 @@ PS_jp_lda_PTH_ciL<-c(rocPS_jp_lda_PTH[[1]]$ci[1],rocPS_jp_lda_PTH[[2]]$ci[1],roc
 PS_jp_lda_PTH_ciH<-c(rocPS_jp_lda_PTH[[1]]$ci[3],rocPS_jp_lda_PTH[[2]]$ci[3],rocPS_jp_lda_PTH[[3]]$ci[3],rocPS_jp_lda_PTH[[4]]$ci[3],
                      rocPS_jp_lda_PTH[[5]]$ci[3],rocPS_jp_lda_PTH[[6]]$ci[3],rocPS_jp_lda_PTH[[7]]$ci[3])
 
-predCD_jp_lda_PTH<-jackPredLDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+predCD_jp_lda_PTH<-jackPredLDA(centCD, outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocCD_jp_lda_PTH<-list()
 rocCD_jp_lda_PTH[[1]]<-roc(predCD_jp_lda_PTH$justpass,as.numeric(predCD_jp_lda_PTH$Week1),auc=T,ci=T)
 rocCD_jp_lda_PTH[[2]]<-roc(predCD_jp_lda_PTH$justpass,as.numeric(predCD_jp_lda_PTH$Week2),auc=T,ci=T)
@@ -1096,7 +1096,7 @@ CD_jp_lda_PTH_ciH<-c(rocCD_jp_lda_PTH[[1]]$ci[3],rocCD_jp_lda_PTH[[2]]$ci[3],roc
                      rocCD_jp_lda_PTH[[5]]$ci[3],rocCD_jp_lda_PTH[[6]]$ci[3],rocCD_jp_lda_PTH[[7]]$ci[3])
 
 
-predICS_jp_lda_PTH<-jackPredLDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+predICS_jp_lda_PTH<-jackPredLDA(centICS, outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocICS_jp_lda_PTH<-list()
 rocICS_jp_lda_PTH[[1]]<-roc(predICS_jp_lda_PTH$justpass,as.numeric(predICS_jp_lda_PTH$Week1),auc=T,ci=T)
 rocICS_jp_lda_PTH[[2]]<-roc(predICS_jp_lda_PTH$justpass,as.numeric(predICS_jp_lda_PTH$Week2),auc=T,ci=T)
@@ -1114,7 +1114,7 @@ ICS_jp_lda_PTH_ciH<-c(rocICS_jp_lda_PTH[[1]]$ci[3],rocICS_jp_lda_PTH[[2]]$ci[3],
 
 
 ######PR TE models######
-predPS_lda_PT<-jackPredLDA(centPS,predictors = c("PageRank","tarEnt"))
+predPS_lda_PT<-jackPredLDA(centPS,predictors = c("gender","PageRank","tarEnt"))
 rocPS_lda_PT<-list()
 rocPS_lda_PT[[1]]<-roc(predPS_lda_PT$pass,as.numeric(predPS_lda_PT$Week1),auc=T,ci=T)
 rocPS_lda_PT[[2]]<-roc(predPS_lda_PT$pass,as.numeric(predPS_lda_PT$Week2),auc=T,ci=T)
@@ -1130,7 +1130,7 @@ PS_lda_PT_ciL<-c(rocPS_lda_PT[[1]]$ci[1],rocPS_lda_PT[[2]]$ci[1],rocPS_lda_PT[[3
 PS_lda_PT_ciH<-c(rocPS_lda_PT[[1]]$ci[3],rocPS_lda_PT[[2]]$ci[3],rocPS_lda_PT[[3]]$ci[3],rocPS_lda_PT[[4]]$ci[3],
                  rocPS_lda_PT[[5]]$ci[3],rocPS_lda_PT[[6]]$ci[3],rocPS_lda_PT[[7]]$ci[3])
 ##CD layer
-predCD_lda_PT<-jackPredLDA(centCD,predictors = c("PageRank","tarEnt"))
+predCD_lda_PT<-jackPredLDA(centCD,predictors = c("gender","PageRank","tarEnt"))
 rocCD_lda_PT<-list()
 rocCD_lda_PT[[1]]<-roc(predCD_lda_PT$pass,as.numeric(predCD_lda_PT$Week1),auc=T,ci=T)
 rocCD_lda_PT[[2]]<-roc(predCD_lda_PT$pass,as.numeric(predCD_lda_PT$Week2),auc=T,ci=T)
@@ -1147,7 +1147,7 @@ CD_lda_PT_ciH<-c(rocCD_lda_PT[[1]]$ci[3],rocCD_lda_PT[[2]]$ci[3],rocCD_lda_PT[[3
                  rocCD_lda_PT[[5]]$ci[3],rocCD_lda_PT[[6]]$ci[3],rocCD_lda_PT[[7]]$ci[3])
 
 #ICS layer
-predICS_lda_PT<-jackPredLDA(centICS,predictors = c("PageRank","tarEnt"))
+predICS_lda_PT<-jackPredLDA(centICS,predictors = c("gender","PageRank","tarEnt"))
 rocICS_lda_PT<-list()
 rocICS_lda_PT[[1]]<-roc(predICS_lda_PT$pass,as.numeric(predICS_lda_PT$Week1),auc=T,ci=T)
 rocICS_lda_PT[[2]]<-roc(predICS_lda_PT$pass,as.numeric(predICS_lda_PT$Week2),auc=T,ci=T)
@@ -1166,7 +1166,7 @@ ICS_lda_PT_ciH<-c(rocICS_lda_PT[[1]]$ci[3],rocICS_lda_PT[[2]]$ci[3],rocICS_lda_P
 
 
 ###JUST PASS
-predPS_jp_lda_PT<-jackPredLDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt"))
+predPS_jp_lda_PT<-jackPredLDA(centPS,outcome = "justpass",predictors = c("gender","PageRank","tarEnt"))
 rocPS_jp_lda_PT<-list()
 rocPS_jp_lda_PT[[1]]<-roc(predPS_jp_lda_PT$justpass,as.numeric(predPS_jp_lda_PT$Week1),auc=T,ci=T)
 rocPS_jp_lda_PT[[2]]<-roc(predPS_jp_lda_PT$justpass,as.numeric(predPS_jp_lda_PT$Week2),auc=T,ci=T)
@@ -1183,7 +1183,7 @@ PS_jp_lda_PT_ciL<-c(rocPS_jp_lda_PT[[1]]$ci[1],rocPS_jp_lda_PT[[2]]$ci[1],rocPS_
 PS_jp_lda_PT_ciH<-c(rocPS_jp_lda_PT[[1]]$ci[3],rocPS_jp_lda_PT[[2]]$ci[3],rocPS_jp_lda_PT[[3]]$ci[3],rocPS_jp_lda_PT[[4]]$ci[3],
                     rocPS_jp_lda_PT[[5]]$ci[3],rocPS_jp_lda_PT[[6]]$ci[3],rocPS_jp_lda_PT[[7]]$ci[3])
 
-predCD_jp_lda_PT<-jackPredLDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt"))
+predCD_jp_lda_PT<-jackPredLDA(centCD, outcome = "justpass",predictors = c("gender","PageRank","tarEnt"))
 rocCD_jp_lda_PT<-list()
 rocCD_jp_lda_PT[[1]]<-roc(predCD_jp_lda_PT$justpass,as.numeric(predCD_jp_lda_PT$Week1),auc=T,ci=T)
 rocCD_jp_lda_PT[[2]]<-roc(predCD_jp_lda_PT$justpass,as.numeric(predCD_jp_lda_PT$Week2),auc=T,ci=T)
@@ -1200,7 +1200,7 @@ CD_jp_lda_PT_ciH<-c(rocCD_jp_lda_PT[[1]]$ci[3],rocCD_jp_lda_PT[[2]]$ci[3],rocCD_
                     rocCD_jp_lda_PT[[5]]$ci[3],rocCD_jp_lda_PT[[6]]$ci[3],rocCD_jp_lda_PT[[7]]$ci[3])
 
 
-predICS_jp_lda_PT<-jackPredLDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt"))
+predICS_jp_lda_PT<-jackPredLDA(centICS, outcome = "justpass",predictors = c("gender","PageRank","tarEnt"))
 rocICS_jp_lda_PT<-list()
 rocICS_jp_lda_PT[[1]]<-roc(predICS_jp_lda_PT$justpass,as.numeric(predICS_jp_lda_PT$Week1),auc=T,ci=T)
 rocICS_jp_lda_PT[[2]]<-roc(predICS_jp_lda_PT$justpass,as.numeric(predICS_jp_lda_PT$Week2),auc=T,ci=T)
@@ -1220,7 +1220,7 @@ ICS_jp_lda_PT_ciH<-c(rocICS_jp_lda_PT[[1]]$ci[3],rocICS_jp_lda_PT[[2]]$ci[3],roc
 
 
 ######PR H Models######
-predPS_lda_PH<-jackPredLDA(centPS,predictors = c("PageRank", "Hide"))
+predPS_lda_PH<-jackPredLDA(centPS,predictors = c("gender","PageRank", "Hide"))
 rocPS_lda_PH<-list()
 rocPS_lda_PH[[1]]<-roc(predPS_lda_PH$pass,as.numeric(predPS_lda_PH$Week1),auc=T,ci=T)
 rocPS_lda_PH[[2]]<-roc(predPS_lda_PH$pass,as.numeric(predPS_lda_PH$Week2),auc=T,ci=T)
@@ -1236,7 +1236,7 @@ PS_lda_PH_ciL<-c(rocPS_lda_PH[[1]]$ci[1],rocPS_lda_PH[[2]]$ci[1],rocPS_lda_PH[[3
 PS_lda_PH_ciH<-c(rocPS_lda_PH[[1]]$ci[3],rocPS_lda_PH[[2]]$ci[3],rocPS_lda_PH[[3]]$ci[3],rocPS_lda_PH[[4]]$ci[3],
                  rocPS_lda_PH[[5]]$ci[3],rocPS_lda_PH[[6]]$ci[3],rocPS_lda_PH[[7]]$ci[3])
 ##CD layer
-predCD_lda_PH<-jackPredLDA(centCD,predictors = c("PageRank", "Hide"))
+predCD_lda_PH<-jackPredLDA(centCD,predictors = c("gender","PageRank", "Hide"))
 rocCD_lda_PH<-list()
 rocCD_lda_PH[[1]]<-roc(predCD_lda_PH$pass,as.numeric(predCD_lda_PH$Week1),auc=T,ci=T)
 rocCD_lda_PH[[2]]<-roc(predCD_lda_PH$pass,as.numeric(predCD_lda_PH$Week2),auc=T,ci=T)
@@ -1253,7 +1253,7 @@ CD_lda_PH_ciH<-c(rocCD_lda_PH[[1]]$ci[3],rocCD_lda_PH[[2]]$ci[3],rocCD_lda_PH[[3
                  rocCD_lda_PH[[5]]$ci[3],rocCD_lda_PH[[6]]$ci[3],rocCD_lda_PH[[7]]$ci[3])
 
 #ICS layer
-predICS_lda_PH<-jackPredLDA(centICS,predictors = c("PageRank", "Hide"))
+predICS_lda_PH<-jackPredLDA(centICS,predictors = c("gender","PageRank", "Hide"))
 rocICS_lda_PH<-list()
 rocICS_lda_PH[[1]]<-roc(predICS_lda_PH$pass,as.numeric(predICS_lda_PH$Week1),auc=T,ci=T)
 rocICS_lda_PH[[2]]<-roc(predICS_lda_PH$pass,as.numeric(predICS_lda_PH$Week2),auc=T,ci=T)
@@ -1273,7 +1273,7 @@ ICS_lda_PH_ciH<-c(rocICS_lda_PH[[1]]$ci[3],rocICS_lda_PH[[2]]$ci[3],rocICS_lda_P
 
 ###JUST PASS
 ##PS layer
-predPS_jp_lda_PH<-jackPredLDA(centPS,outcome = "justpass",predictors = c("PageRank", "Hide"))
+predPS_jp_lda_PH<-jackPredLDA(centPS,outcome = "justpass",predictors = c("gender","PageRank", "Hide"))
 rocPS_jp_lda_PH<-list()
 rocPS_jp_lda_PH[[1]]<-roc(predPS_jp_lda_PH$justpass,as.numeric(predPS_jp_lda_PH$Week1),auc=T,ci=T)
 rocPS_jp_lda_PH[[2]]<-roc(predPS_jp_lda_PH$justpass,as.numeric(predPS_jp_lda_PH$Week2),auc=T,ci=T)
@@ -1290,7 +1290,7 @@ PS_jp_lda_PH_ciL<-c(rocPS_jp_lda_PH[[1]]$ci[1],rocPS_jp_lda_PH[[2]]$ci[1],rocPS_
 PS_jp_lda_PH_ciH<-c(rocPS_jp_lda_PH[[1]]$ci[3],rocPS_jp_lda_PH[[2]]$ci[3],rocPS_jp_lda_PH[[3]]$ci[3],rocPS_jp_lda_PH[[4]]$ci[3],
                     rocPS_jp_lda_PH[[5]]$ci[3],rocPS_jp_lda_PH[[6]]$ci[3],rocPS_jp_lda_PH[[7]]$ci[3])
 #CD Layer
-predCD_jp_lda_PH<-jackPredLDA(centCD, outcome = "justpass",predictors = c("PageRank", "Hide"))
+predCD_jp_lda_PH<-jackPredLDA(centCD, outcome = "justpass",predictors = c("gender","PageRank", "Hide"))
 rocCD_jp_lda_PH<-list()
 rocCD_jp_lda_PH[[1]]<-roc(predCD_jp_lda_PH$justpass,as.numeric(predCD_jp_lda_PH$Week1),auc=T,ci=T)
 rocCD_jp_lda_PH[[2]]<-roc(predCD_jp_lda_PH$justpass,as.numeric(predCD_jp_lda_PH$Week2),auc=T,ci=T)
@@ -1307,7 +1307,7 @@ CD_jp_lda_PH_ciH<-c(rocCD_jp_lda_PH[[1]]$ci[3],rocCD_jp_lda_PH[[2]]$ci[3],rocCD_
                     rocCD_jp_lda_PH[[5]]$ci[3],rocCD_jp_lda_PH[[6]]$ci[3],rocCD_jp_lda_PH[[7]]$ci[3])
 
 #ICS layer
-predICS_jp_lda_PH<-jackPredLDA(centICS, outcome = "justpass",predictors = c("PageRank", "Hide"))
+predICS_jp_lda_PH<-jackPredLDA(centICS, outcome = "justpass",predictors = c("gender","PageRank", "Hide"))
 rocICS_jp_lda_PH<-list()
 rocICS_jp_lda_PH[[1]]<-roc(predICS_jp_lda_PH$justpass,as.numeric(predICS_jp_lda_PH$Week1),auc=T,ci=T)
 rocICS_jp_lda_PH[[2]]<-roc(predICS_jp_lda_PH$justpass,as.numeric(predICS_jp_lda_PH$Week2),auc=T,ci=T)
@@ -1326,7 +1326,7 @@ ICS_jp_lda_PH_ciH<-c(rocICS_jp_lda_PH[[1]]$ci[3],rocICS_jp_lda_PH[[2]]$ci[3],roc
 
 ######TE-H models######
 #PS layer
-predPS_lda_TH<-jackPredLDA(centPS,predictors = c("tarEnt", "Hide"))
+predPS_lda_TH<-jackPredLDA(centPS,predictors = c("gender","tarEnt", "Hide"))
 rocPS_lda_TH<-list()
 rocPS_lda_TH[[1]]<-roc(predPS_lda_TH$pass,as.numeric(predPS_lda_TH$Week1),auc=T,ci=T)
 rocPS_lda_TH[[2]]<-roc(predPS_lda_TH$pass,as.numeric(predPS_lda_TH$Week2),auc=T,ci=T)
@@ -1342,7 +1342,7 @@ PS_lda_TH_ciL<-c(rocPS_lda_TH[[1]]$ci[1],rocPS_lda_TH[[2]]$ci[1],rocPS_lda_TH[[3
 PS_lda_TH_ciH<-c(rocPS_lda_TH[[1]]$ci[3],rocPS_lda_TH[[2]]$ci[3],rocPS_lda_TH[[3]]$ci[3],rocPS_lda_TH[[4]]$ci[3],
                  rocPS_lda_TH[[5]]$ci[3],rocPS_lda_TH[[6]]$ci[3],rocPS_lda_TH[[7]]$ci[3])
 ##CD layer
-predCD_lda_TH<-jackPredLDA(centCD,predictors = c("tarEnt", "Hide"))
+predCD_lda_TH<-jackPredLDA(centCD,predictors = c("gender","tarEnt", "Hide"))
 rocCD_lda_TH<-list()
 rocCD_lda_TH[[1]]<-roc(predCD_lda_TH$pass,as.numeric(predCD_lda_TH$Week1),auc=T,ci=T)
 rocCD_lda_TH[[2]]<-roc(predCD_lda_TH$pass,as.numeric(predCD_lda_TH$Week2),auc=T,ci=T)
@@ -1359,7 +1359,7 @@ CD_lda_TH_ciH<-c(rocCD_lda_TH[[1]]$ci[3],rocCD_lda_TH[[2]]$ci[3],rocCD_lda_TH[[3
                  rocCD_lda_TH[[5]]$ci[3],rocCD_lda_TH[[6]]$ci[3],rocCD_lda_TH[[7]]$ci[3])
 
 #ICS layer
-predICS_lda_TH<-jackPredLDA(centICS,predictors = c("tarEnt", "Hide"))
+predICS_lda_TH<-jackPredLDA(centICS,predictors = c("gender","tarEnt", "Hide"))
 rocICS_lda_TH<-list()
 rocICS_lda_TH[[1]]<-roc(predICS_lda_TH$pass,as.numeric(predICS_lda_TH$Week1),auc=T,ci=T)
 rocICS_lda_TH[[2]]<-roc(predICS_lda_TH$pass,as.numeric(predICS_lda_TH$Week2),auc=T,ci=T)
@@ -1378,7 +1378,7 @@ ICS_lda_TH_ciH<-c(rocICS_lda_TH[[1]]$ci[3],rocICS_lda_TH[[2]]$ci[3],rocICS_lda_T
 
 ###JUST PASS
 #PS Layer
-predPS_jp_lda_TH<-jackPredLDA(centPS,outcome = "justpass",predictors = c("tarEnt", "Hide"))
+predPS_jp_lda_TH<-jackPredLDA(centPS,outcome = "justpass",predictors = c("gender","tarEnt", "Hide"))
 rocPS_jp_lda_TH<-list()
 rocPS_jp_lda_TH[[1]]<-roc(predPS_jp_lda_TH$justpass,as.numeric(predPS_jp_lda_TH$Week1),auc=T,ci=T)
 rocPS_jp_lda_TH[[2]]<-roc(predPS_jp_lda_TH$justpass,as.numeric(predPS_jp_lda_TH$Week2),auc=T,ci=T)
@@ -1395,7 +1395,7 @@ PS_jp_lda_TH_ciL<-c(rocPS_jp_lda_TH[[1]]$ci[1],rocPS_jp_lda_TH[[2]]$ci[1],rocPS_
 PS_jp_lda_TH_ciH<-c(rocPS_jp_lda_TH[[1]]$ci[3],rocPS_jp_lda_TH[[2]]$ci[3],rocPS_jp_lda_TH[[3]]$ci[3],rocPS_jp_lda_TH[[4]]$ci[3],
                     rocPS_jp_lda_TH[[5]]$ci[3],rocPS_jp_lda_TH[[6]]$ci[3],rocPS_jp_lda_TH[[7]]$ci[3])
 #CD layer
-predCD_jp_lda_TH<-jackPredLDA(centCD, outcome = "justpass",predictors = c("tarEnt", "Hide"))
+predCD_jp_lda_TH<-jackPredLDA(centCD, outcome = "justpass",predictors = c("gender","tarEnt", "Hide"))
 rocCD_jp_lda_TH<-list()
 rocCD_jp_lda_TH[[1]]<-roc(predCD_jp_lda_TH$justpass,as.numeric(predCD_jp_lda_TH$Week1),auc=T,ci=T)
 rocCD_jp_lda_TH[[2]]<-roc(predCD_jp_lda_TH$justpass,as.numeric(predCD_jp_lda_TH$Week2),auc=T,ci=T)
@@ -1412,7 +1412,7 @@ CD_jp_lda_TH_ciH<-c(rocCD_jp_lda_TH[[1]]$ci[3],rocCD_jp_lda_TH[[2]]$ci[3],rocCD_
                     rocCD_jp_lda_TH[[5]]$ci[3],rocCD_jp_lda_TH[[6]]$ci[3],rocCD_jp_lda_TH[[7]]$ci[3])
 
 #ICS Layer
-predICS_jp_lda_TH<-jackPredLDA(centICS, outcome = "justpass",predictors = c("tarEnt", "Hide"))
+predICS_jp_lda_TH<-jackPredLDA(centICS, outcome = "justpass",predictors = c("gender","tarEnt", "Hide"))
 rocICS_jp_lda_TH<-list()
 rocICS_jp_lda_TH[[1]]<-roc(predICS_jp_lda_TH$justpass,as.numeric(predICS_jp_lda_TH$Week1),auc=T,ci=T)
 rocICS_jp_lda_TH[[2]]<-roc(predICS_jp_lda_TH$justpass,as.numeric(predICS_jp_lda_TH$Week2),auc=T,ci=T)
@@ -1430,7 +1430,7 @@ ICS_jp_lda_TH_ciH<-c(rocICS_jp_lda_TH[[1]]$ci[3],rocICS_jp_lda_TH[[2]]$ci[3],roc
 
 ######TE models######
 #PS layer
-predPS_lda_T<-jackPredLDA(centPS,predictors = c("tarEnt"))
+predPS_lda_T<-jackPredLDA(centPS,predictors = c("gender","tarEnt"))
 rocPS_lda_T<-list()
 rocPS_lda_T[[1]]<-roc(predPS_lda_T$pass,as.numeric(predPS_lda_T$Week1),auc=T,ci=T)
 rocPS_lda_T[[2]]<-roc(predPS_lda_T$pass,as.numeric(predPS_lda_T$Week2),auc=T,ci=T)
@@ -1446,7 +1446,7 @@ PS_lda_T_ciL<-c(rocPS_lda_T[[1]]$ci[1],rocPS_lda_T[[2]]$ci[1],rocPS_lda_T[[3]]$c
 PS_lda_T_ciH<-c(rocPS_lda_T[[1]]$ci[3],rocPS_lda_T[[2]]$ci[3],rocPS_lda_T[[3]]$ci[3],rocPS_lda_T[[4]]$ci[3],
                 rocPS_lda_T[[5]]$ci[3],rocPS_lda_T[[6]]$ci[3],rocPS_lda_T[[7]]$ci[3])
 ##CD layer
-predCD_lda_T<-jackPredLDA(centCD,predictors = c("tarEnt"))
+predCD_lda_T<-jackPredLDA(centCD,predictors = c("gender","tarEnt"))
 rocCD_lda_T<-list()
 rocCD_lda_T[[1]]<-roc(predCD_lda_T$pass,as.numeric(predCD_lda_T$Week1),auc=T,ci=T)
 rocCD_lda_T[[2]]<-roc(predCD_lda_T$pass,as.numeric(predCD_lda_T$Week2),auc=T,ci=T)
@@ -1463,7 +1463,7 @@ CD_lda_T_ciH<-c(rocCD_lda_T[[1]]$ci[3],rocCD_lda_T[[2]]$ci[3],rocCD_lda_T[[3]]$c
                 rocCD_lda_T[[5]]$ci[3],rocCD_lda_T[[6]]$ci[3],rocCD_lda_T[[7]]$ci[3])
 
 #ICS layer
-predICS_lda_T<-jackPredLDA(centICS,predictors = c("tarEnt"))
+predICS_lda_T<-jackPredLDA(centICS,predictors = c("gender","tarEnt"))
 rocICS_lda_T<-list()
 rocICS_lda_T[[1]]<-roc(predICS_lda_T$pass,as.numeric(predICS_lda_T$Week1),auc=T,ci=T)
 rocICS_lda_T[[2]]<-roc(predICS_lda_T$pass,as.numeric(predICS_lda_T$Week2),auc=T,ci=T)
@@ -1481,7 +1481,7 @@ ICS_lda_T_ciH<-c(rocICS_lda_T[[1]]$ci[3],rocICS_lda_T[[2]]$ci[3],rocICS_lda_T[[3
 
 ###JUST PASS
 #PS layer
-predPS_jp_lda_T<-jackPredLDA(centPS,outcome = "justpass",predictors = c("tarEnt"))
+predPS_jp_lda_T<-jackPredLDA(centPS,outcome = "justpass",predictors = c("gender","tarEnt"))
 rocPS_jp_lda_T<-list()
 rocPS_jp_lda_T[[1]]<-roc(predPS_jp_lda_T$justpass,as.numeric(predPS_jp_lda_T$Week1),auc=T,ci=T)
 rocPS_jp_lda_T[[2]]<-roc(predPS_jp_lda_T$justpass,as.numeric(predPS_jp_lda_T$Week2),auc=T,ci=T)
@@ -1498,7 +1498,7 @@ PS_jp_lda_T_ciL<-c(rocPS_jp_lda_T[[1]]$ci[1],rocPS_jp_lda_T[[2]]$ci[1],rocPS_jp_
 PS_jp_lda_T_ciH<-c(rocPS_jp_lda_T[[1]]$ci[3],rocPS_jp_lda_T[[2]]$ci[3],rocPS_jp_lda_T[[3]]$ci[3],rocPS_jp_lda_T[[4]]$ci[3],
                    rocPS_jp_lda_T[[5]]$ci[3],rocPS_jp_lda_T[[6]]$ci[3],rocPS_jp_lda_T[[7]]$ci[3])
 #CD layer
-predCD_jp_lda_T<-jackPredLDA(centCD, outcome = "justpass",predictors = c("tarEnt"))
+predCD_jp_lda_T<-jackPredLDA(centCD, outcome = "justpass",predictors = c("gender","tarEnt"))
 rocCD_jp_lda_T<-list()
 rocCD_jp_lda_T[[1]]<-roc(predCD_jp_lda_T$justpass,as.numeric(predCD_jp_lda_T$Week1),auc=T,ci=T)
 rocCD_jp_lda_T[[2]]<-roc(predCD_jp_lda_T$justpass,as.numeric(predCD_jp_lda_T$Week2),auc=T,ci=T)
@@ -1514,7 +1514,7 @@ CD_jp_lda_T_ciL<-c(rocCD_jp_lda_T[[1]]$ci[1],rocCD_jp_lda_T[[2]]$ci[1],rocCD_jp_
 CD_jp_lda_T_ciH<-c(rocCD_jp_lda_T[[1]]$ci[3],rocCD_jp_lda_T[[2]]$ci[3],rocCD_jp_lda_T[[3]]$ci[3],rocCD_jp_lda_T[[4]]$ci[3],
                    rocCD_jp_lda_T[[5]]$ci[3],rocCD_jp_lda_T[[6]]$ci[3],rocCD_jp_lda_T[[7]]$ci[3])
 #ICS layer
-predICS_jp_lda_T<-jackPredLDA(centICS, outcome = "justpass",predictors = c("tarEnt"))
+predICS_jp_lda_T<-jackPredLDA(centICS, outcome = "justpass",predictors = c("gender","tarEnt"))
 rocICS_jp_lda_T<-list()
 rocICS_jp_lda_T[[1]]<-roc(predICS_jp_lda_T$justpass,as.numeric(predICS_jp_lda_T$Week1),auc=T,ci=T)
 rocICS_jp_lda_T[[2]]<-roc(predICS_jp_lda_T$justpass,as.numeric(predICS_jp_lda_T$Week2),auc=T,ci=T)
@@ -1534,7 +1534,7 @@ ICS_jp_lda_T_ciH<-c(rocICS_jp_lda_T[[1]]$ci[3],rocICS_jp_lda_T[[2]]$ci[3],rocICS
 
 ######H models######
 #PS layer
-predPS_lda_H<-jackPredLDA(centPS,predictors = c( "Hide"))
+predPS_lda_H<-jackPredLDA(centPS,predictors = c("gender", "Hide"))
 rocPS_lda_H<-list()
 rocPS_lda_H[[1]]<-roc(predPS_lda_H$pass,as.numeric(predPS_lda_H$Week1),auc=T,ci=T)
 rocPS_lda_H[[2]]<-roc(predPS_lda_H$pass,as.numeric(predPS_lda_H$Week2),auc=T,ci=T)
@@ -1550,7 +1550,7 @@ PS_lda_H_ciL<-c(rocPS_lda_H[[1]]$ci[1],rocPS_lda_H[[2]]$ci[1],rocPS_lda_H[[3]]$c
 PS_lda_H_ciH<-c(rocPS_lda_H[[1]]$ci[3],rocPS_lda_H[[2]]$ci[3],rocPS_lda_H[[3]]$ci[3],rocPS_lda_H[[4]]$ci[3],
                 rocPS_lda_H[[5]]$ci[3],rocPS_lda_H[[6]]$ci[3],rocPS_lda_H[[7]]$ci[3])
 ##CD layer
-predCD_lda_H<-jackPredLDA(centCD,predictors = c( "Hide"))
+predCD_lda_H<-jackPredLDA(centCD,predictors = c("gender", "Hide"))
 rocCD_lda_H<-list()
 rocCD_lda_H[[1]]<-roc(predCD_lda_H$pass,as.numeric(predCD_lda_H$Week1),auc=T,ci=T)
 rocCD_lda_H[[2]]<-roc(predCD_lda_H$pass,as.numeric(predCD_lda_H$Week2),auc=T,ci=T)
@@ -1567,7 +1567,7 @@ CD_lda_H_ciH<-c(rocCD_lda_H[[1]]$ci[3],rocCD_lda_H[[2]]$ci[3],rocCD_lda_H[[3]]$c
                 rocCD_lda_H[[5]]$ci[3],rocCD_lda_H[[6]]$ci[3],rocCD_lda_H[[7]]$ci[3])
 
 #ICS layer
-predICS_lda_H<-jackPredLDA(centICS,predictors = c( "Hide"))
+predICS_lda_H<-jackPredLDA(centICS,predictors = c("gender", "Hide"))
 rocICS_lda_H<-list()
 rocICS_lda_H[[1]]<-roc(predICS_lda_H$pass,as.numeric(predICS_lda_H$Week1),auc=T,ci=T)
 rocICS_lda_H[[2]]<-roc(predICS_lda_H$pass,as.numeric(predICS_lda_H$Week2),auc=T,ci=T)
@@ -1585,7 +1585,7 @@ ICS_lda_H_ciH<-c(rocICS_lda_H[[1]]$ci[3],rocICS_lda_H[[2]]$ci[3],rocICS_lda_H[[3
 
 
 ###JUST PASS
-predPS_jp_lda_H<-jackPredLDA(centPS,outcome = "justpass",predictors = c( "Hide"))
+predPS_jp_lda_H<-jackPredLDA(centPS,outcome = "justpass",predictors = c("gender", "Hide"))
 rocPS_jp_lda_H<-list()
 rocPS_jp_lda_H[[1]]<-roc(predPS_jp_lda_H$justpass,as.numeric(predPS_jp_lda_H$Week1),auc=T,ci=T)
 rocPS_jp_lda_H[[2]]<-roc(predPS_jp_lda_H$justpass,as.numeric(predPS_jp_lda_H$Week2),auc=T,ci=T)
@@ -1602,7 +1602,7 @@ PS_jp_lda_H_ciL<-c(rocPS_jp_lda_H[[1]]$ci[1],rocPS_jp_lda_H[[2]]$ci[1],rocPS_jp_
 PS_jp_lda_H_ciH<-c(rocPS_jp_lda_H[[1]]$ci[3],rocPS_jp_lda_H[[2]]$ci[3],rocPS_jp_lda_H[[3]]$ci[3],rocPS_jp_lda_H[[4]]$ci[3],
                    rocPS_jp_lda_H[[5]]$ci[3],rocPS_jp_lda_H[[6]]$ci[3],rocPS_jp_lda_H[[7]]$ci[3])
 
-predCD_jp_lda_H<-jackPredLDA(centCD, outcome = "justpass",predictors = c( "Hide"))
+predCD_jp_lda_H<-jackPredLDA(centCD, outcome = "justpass",predictors = c("gender", "Hide"))
 rocCD_jp_lda_H<-list()
 rocCD_jp_lda_H[[1]]<-roc(predCD_jp_lda_H$justpass,as.numeric(predCD_jp_lda_H$Week1),auc=T,ci=T)
 rocCD_jp_lda_H[[2]]<-roc(predCD_jp_lda_H$justpass,as.numeric(predCD_jp_lda_H$Week2),auc=T,ci=T)
@@ -1619,7 +1619,7 @@ CD_jp_lda_H_ciH<-c(rocCD_jp_lda_H[[1]]$ci[3],rocCD_jp_lda_H[[2]]$ci[3],rocCD_jp_
                    rocCD_jp_lda_H[[5]]$ci[3],rocCD_jp_lda_H[[6]]$ci[3],rocCD_jp_lda_H[[7]]$ci[3])
 
 
-predICS_jp_lda_H<-jackPredLDA(centICS, outcome = "justpass",predictors = c( "Hide"))
+predICS_jp_lda_H<-jackPredLDA(centICS, outcome = "justpass",predictors = c("gender", "Hide"))
 rocICS_jp_lda_H<-list()
 rocICS_jp_lda_H[[1]]<-roc(predICS_jp_lda_H$justpass,as.numeric(predICS_jp_lda_H$Week1),auc=T,ci=T)
 rocICS_jp_lda_H[[2]]<-roc(predICS_jp_lda_H$justpass,as.numeric(predICS_jp_lda_H$Week2),auc=T,ci=T)
@@ -1638,7 +1638,7 @@ ICS_jp_lda_H_ciH<-c(rocICS_jp_lda_H[[1]]$ci[3],rocICS_jp_lda_H[[2]]$ci[3],rocICS
 
 ######PR models######
 #PS layer
-predPS_lda_P<-jackPredLDA(centPS,predictors = c("PageRank"))
+predPS_lda_P<-jackPredLDA(centPS,predictors = c("gender","PageRank"))
 rocPS_lda_P<-list()
 rocPS_lda_P[[1]]<-roc(predPS_lda_P$pass,as.numeric(predPS_lda_P$Week1),auc=T,ci=T)
 rocPS_lda_P[[2]]<-roc(predPS_lda_P$pass,as.numeric(predPS_lda_P$Week2),auc=T,ci=T)
@@ -1654,7 +1654,7 @@ PS_lda_P_ciL<-c(rocPS_lda_P[[1]]$ci[1],rocPS_lda_P[[2]]$ci[1],rocPS_lda_P[[3]]$c
 PS_lda_P_ciH<-c(rocPS_lda_P[[1]]$ci[3],rocPS_lda_P[[2]]$ci[3],rocPS_lda_P[[3]]$ci[3],rocPS_lda_P[[4]]$ci[3],
                 rocPS_lda_P[[5]]$ci[3],rocPS_lda_P[[6]]$ci[3],rocPS_lda_P[[7]]$ci[3])
 ##CD layer
-predCD_lda_P<-jackPredLDA(centCD,predictors = c("PageRank"))
+predCD_lda_P<-jackPredLDA(centCD,predictors = c("gender","PageRank"))
 rocCD_lda_P<-list()
 rocCD_lda_P[[1]]<-roc(predCD_lda_P$pass,as.numeric(predCD_lda_P$Week1),auc=T,ci=T)
 rocCD_lda_P[[2]]<-roc(predCD_lda_P$pass,as.numeric(predCD_lda_P$Week2),auc=T,ci=T)
@@ -1671,7 +1671,7 @@ CD_lda_P_ciH<-c(rocCD_lda_P[[1]]$ci[3],rocCD_lda_P[[2]]$ci[3],rocCD_lda_P[[3]]$c
                 rocCD_lda_P[[5]]$ci[3],rocCD_lda_P[[6]]$ci[3],rocCD_lda_P[[7]]$ci[3])
 
 #ICS layer
-predICS_lda_P<-jackPredLDA(centICS,predictors = c("PageRank"))
+predICS_lda_P<-jackPredLDA(centICS,predictors = c("gender","PageRank"))
 rocICS_lda_P<-list()
 rocICS_lda_P[[1]]<-roc(predICS_lda_P$pass,as.numeric(predICS_lda_P$Week1),auc=T,ci=T)
 rocICS_lda_P[[2]]<-roc(predICS_lda_P$pass,as.numeric(predICS_lda_P$Week2),auc=T,ci=T)
@@ -1689,7 +1689,7 @@ ICS_lda_P_ciH<-c(rocICS_lda_P[[1]]$ci[3],rocICS_lda_P[[2]]$ci[3],rocICS_lda_P[[3
 
 ###JUST PASS
 #PS layer
-predPS_jp_lda_P<-jackPredLDA(centPS,outcome = "justpass",predictors = c("PageRank"))
+predPS_jp_lda_P<-jackPredLDA(centPS,outcome = "justpass",predictors = c("gender","PageRank"))
 rocPS_jp_lda_P<-list()
 rocPS_jp_lda_P[[1]]<-roc(predPS_jp_lda_P$justpass,as.numeric(predPS_jp_lda_P$Week1),auc=T,ci=T)
 rocPS_jp_lda_P[[2]]<-roc(predPS_jp_lda_P$justpass,as.numeric(predPS_jp_lda_P$Week2),auc=T,ci=T)
@@ -1706,7 +1706,7 @@ PS_jp_lda_P_ciL<-c(rocPS_jp_lda_P[[1]]$ci[1],rocPS_jp_lda_P[[2]]$ci[1],rocPS_jp_
 PS_jp_lda_P_ciH<-c(rocPS_jp_lda_P[[1]]$ci[3],rocPS_jp_lda_P[[2]]$ci[3],rocPS_jp_lda_P[[3]]$ci[3],rocPS_jp_lda_P[[4]]$ci[3],
                    rocPS_jp_lda_P[[5]]$ci[3],rocPS_jp_lda_P[[6]]$ci[3],rocPS_jp_lda_P[[7]]$ci[3])
 #CD layer
-predCD_jp_lda_P<-jackPredLDA(centCD, outcome = "justpass",predictors = c("PageRank"))
+predCD_jp_lda_P<-jackPredLDA(centCD, outcome = "justpass",predictors = c("gender","PageRank"))
 rocCD_jp_lda_P<-list()
 rocCD_jp_lda_P[[1]]<-roc(predCD_jp_lda_P$justpass,as.numeric(predCD_jp_lda_P$Week1),auc=T,ci=T)
 rocCD_jp_lda_P[[2]]<-roc(predCD_jp_lda_P$justpass,as.numeric(predCD_jp_lda_P$Week2),auc=T,ci=T)
@@ -1723,7 +1723,7 @@ CD_jp_lda_P_ciH<-c(rocCD_jp_lda_P[[1]]$ci[3],rocCD_jp_lda_P[[2]]$ci[3],rocCD_jp_
                    rocCD_jp_lda_P[[5]]$ci[3],rocCD_jp_lda_P[[6]]$ci[3],rocCD_jp_lda_P[[7]]$ci[3])
 
 #ICS layer
-predICS_jp_lda_P<-jackPredLDA(centICS, outcome = "justpass",predictors = c("PageRank"))
+predICS_jp_lda_P<-jackPredLDA(centICS, outcome = "justpass",predictors = c("gender","PageRank"))
 rocICS_jp_lda_P<-list()
 rocICS_jp_lda_P[[1]]<-roc(predICS_jp_lda_P$justpass,as.numeric(predICS_jp_lda_P$Week1),auc=T,ci=T)
 rocICS_jp_lda_P[[2]]<-roc(predICS_jp_lda_P$justpass,as.numeric(predICS_jp_lda_P$Week2),auc=T,ci=T)
@@ -1800,7 +1800,7 @@ ICS_jp_lda_RegWeigths<-1/ICS_jp_lda_RegSD^2
 ICS_jp_lda_RegWM<-rowSums(ICS_jp_lda_RegAll*ICS_jp_lda_RegWeigths)/rowSums(ICS_jp_lda_RegWeigths)
 ICS_jp_lda_RegSEWM<-sqrt(1/rowSums(ICS_jp_lda_RegWeigths))
 ####PLOTTING####
-pdf(file = "plots/ROC_AUC_plots/AUC01_onlyNetworkMeasures_lda_weightedMeans.pdf",   # The directory you want to save the file in
+pdf(file = "plots/ROC_AUC_plots/AUC03_NetworkMeasuresGender_lda_weightedMeans.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,2))
@@ -1839,7 +1839,7 @@ legend(3, 0.3, legend=c("Problem Solving", "Concept Discussion","In-Class Social
 abline(h=lazy_jp)
 dev.off()
 ####ROC curves####
-pdf(file = "plots/ROC_AUC_plots/ROC01_lda_pf.pdf",   # The directory you want to save the file in
+pdf(file = "plots/ROC_AUC_plots/ROC03_lda_pf.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 14) # The height of the plot in inches
 par(mfrow=c(4,2))
@@ -1906,7 +1906,7 @@ legend(0.5,1,c("week 5","week 6","week 7"),
        col=c("red","green","purple"),lty=1, cex=0.8)
 
 dev.off()
-pdf(file = "/Users/rmn845/GitHub/classify-passfail/plots/ROC_AUC_plots/ROC01_lda_jpf.pdf",   # The directory you want to save the file in
+pdf(file = "plots/ROC_AUC_plots/ROC03_lda_jpf.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 14) # The height of the plot in inches
 par(mfrow=c(4,2))
@@ -1980,7 +1980,7 @@ dev.off()
 ###################################################
 ######Run models and calculate AUC (with CI)####
 ######PR-TE-H Models######
-predPS_qda_PTH<-jackPredQDA(centPS,predictors = c("PageRank","tarEnt", "Hide"))
+predPS_qda_PTH<-jackPredQDA(centPS,predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocPS_qda_PTH<-list()
 rocPS_qda_PTH[[1]]<-roc(predPS_qda_PTH$pass,as.numeric(predPS_qda_PTH$Week1),auc=T,ci=T)
 rocPS_qda_PTH[[2]]<-roc(predPS_qda_PTH$pass,as.numeric(predPS_qda_PTH$Week2),auc=T,ci=T)
@@ -1996,7 +1996,7 @@ PS_qda_PTH_ciL<-c(rocPS_qda_PTH[[1]]$ci[1],rocPS_qda_PTH[[2]]$ci[1],rocPS_qda_PT
 PS_qda_PTH_ciH<-c(rocPS_qda_PTH[[1]]$ci[3],rocPS_qda_PTH[[2]]$ci[3],rocPS_qda_PTH[[3]]$ci[3],rocPS_qda_PTH[[4]]$ci[3],
                   rocPS_qda_PTH[[5]]$ci[3],rocPS_qda_PTH[[6]]$ci[3],rocPS_qda_PTH[[7]]$ci[3])
 
-predCD_qda_PTH<-jackPredQDA(centCD,predictors = c("PageRank","tarEnt", "Hide"))
+predCD_qda_PTH<-jackPredQDA(centCD,predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocCD_qda_PTH<-list()
 rocCD_qda_PTH[[1]]<-roc(predCD_qda_PTH$pass,as.numeric(predCD_qda_PTH$Week1),auc=T,ci=T)
 rocCD_qda_PTH[[2]]<-roc(predCD_qda_PTH$pass,as.numeric(predCD_qda_PTH$Week2),auc=T,ci=T)
@@ -2014,7 +2014,7 @@ CD_qda_PTH_ciH<-c(rocCD_qda_PTH[[1]]$ci[3],rocCD_qda_PTH[[2]]$ci[3],rocCD_qda_PT
 
 
 
-predICS_qda_PTH<-jackPredQDA(centICS,predictors = c("PageRank","tarEnt", "Hide"))
+predICS_qda_PTH<-jackPredQDA(centICS,predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocICS_qda_PTH<-list()
 rocICS_qda_PTH[[1]]<-roc(predICS_qda_PTH$pass,as.numeric(predICS_qda_PTH$Week1),auc=T,ci=T)
 rocICS_qda_PTH[[2]]<-roc(predICS_qda_PTH$pass,as.numeric(predICS_qda_PTH$Week2),auc=T,ci=T)
@@ -2034,7 +2034,7 @@ ICS_qda_PTH_ciH<-c(rocICS_qda_PTH[[1]]$ci[3],rocICS_qda_PTH[[2]]$ci[3],rocICS_qd
 
 
 ###JUST PASS
-predPS_jp_qda_PTH<-jackPredQDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+predPS_jp_qda_PTH<-jackPredQDA(centPS,outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocPS_jp_qda_PTH<-list()
 rocPS_jp_qda_PTH[[1]]<-roc(predPS_jp_qda_PTH$justpass,as.numeric(predPS_jp_qda_PTH$Week1),auc=T,ci=T)
 rocPS_jp_qda_PTH[[2]]<-roc(predPS_jp_qda_PTH$justpass,as.numeric(predPS_jp_qda_PTH$Week2),auc=T,ci=T)
@@ -2052,7 +2052,7 @@ PS_jp_qda_PTH_ciH<-c(rocPS_jp_qda_PTH[[1]]$ci[3],rocPS_jp_qda_PTH[[2]]$ci[3],roc
                      rocPS_jp_qda_PTH[[5]]$ci[3],rocPS_jp_qda_PTH[[6]]$ci[3],rocPS_jp_qda_PTH[[7]]$ci[3])
 
 ####RANK DEF. PROBLEM####
-#predCD_jp_qda_PTH<-jackPredQDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+#predCD_jp_qda_PTH<-jackPredQDA(centCD, outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"))
 #rocCD_jp_qda_PTH<-list()
 #rocCD_jp_qda_PTH[[1]]<-roc(predCD_jp_qda_PTH$justpass,as.numeric(predCD_jp_qda_PTH$Week1),auc=T,ci=T)
 #rocCD_jp_qda_PTH[[2]]<-roc(predCD_jp_qda_PTH$justpass,as.numeric(predCD_jp_qda_PTH$Week2),auc=T,ci=T)
@@ -2062,14 +2062,14 @@ PS_jp_qda_PTH_ciH<-c(rocPS_jp_qda_PTH[[1]]$ci[3],rocPS_jp_qda_PTH[[2]]$ci[3],roc
 #rocCD_jp_qda_PTH[[6]]<-roc(predCD_jp_qda_PTH$justpass,as.numeric(predCD_jp_qda_PTH$Week6),auc=T,ci=T)
 #rocCD_jp_qda_PTH[[7]]<-roc(predCD_jp_qda_PTH$justpass,as.numeric(predCD_jp_qda_PTH$Week7),auc=T,ci=T)
 #CD_jp_qda_PTH_auc<-c(rocCD_jp_qda_PTH[[1]]$auc,rocCD_jp_qda_PTH[[2]]$auc,rocCD_jp_qda_PTH[[3]]$auc,rocCD_jp_qda_PTH[[4]]$auc,
- #                    rocCD_jp_qda_PTH[[5]]$auc,rocCD_jp_qda_PTH[[6]]$auc,rocCD_jp_qda_PTH[[7]]$auc)
+#                    rocCD_jp_qda_PTH[[5]]$auc,rocCD_jp_qda_PTH[[6]]$auc,rocCD_jp_qda_PTH[[7]]$auc)
 #CD_jp_qda_PTH_ciL<-c(rocCD_jp_qda_PTH[[1]]$ci[1],rocCD_jp_qda_PTH[[2]]$ci[1],rocCD_jp_qda_PTH[[3]]$ci[1],rocCD_jp_qda_PTH[[4]]$ci[1],
 #                     rocCD_jp_qda_PTH[[5]]$ci[1],rocCD_jp_qda_PTH[[6]]$ci[1],rocCD_jp_qda_PTH[[7]]$ci[1])
 #CD_jp_qda_PTH_ciH<-c(rocCD_jp_qda_PTH[[1]]$ci[3],rocCD_jp_qda_PTH[[2]]$ci[3],rocCD_jp_qda_PTH[[3]]$ci[3],rocCD_jp_qda_PTH[[4]]$ci[3],
- #                    rocCD_jp_qda_PTH[[5]]$ci[3],rocCD_jp_qda_PTH[[6]]$ci[3],rocCD_jp_qda_PTH[[7]]$ci[3])
+#                    rocCD_jp_qda_PTH[[5]]$ci[3],rocCD_jp_qda_PTH[[6]]$ci[3],rocCD_jp_qda_PTH[[7]]$ci[3])
 
 
-predICS_jp_qda_PTH<-jackPredQDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"))
+predICS_jp_qda_PTH<-jackPredQDA(centICS, outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"))
 rocICS_jp_qda_PTH<-list()
 rocICS_jp_qda_PTH[[1]]<-roc(predICS_jp_qda_PTH$justpass,as.numeric(predICS_jp_qda_PTH$Week1),auc=T,ci=T)
 rocICS_jp_qda_PTH[[2]]<-roc(predICS_jp_qda_PTH$justpass,as.numeric(predICS_jp_qda_PTH$Week2),auc=T,ci=T)
@@ -2087,7 +2087,7 @@ ICS_jp_qda_PTH_ciH<-c(rocICS_jp_qda_PTH[[1]]$ci[3],rocICS_jp_qda_PTH[[2]]$ci[3],
 
 
 ######PR TE models######
-predPS_qda_PT<-jackPredQDA(centPS,predictors = c("PageRank","tarEnt"))
+predPS_qda_PT<-jackPredQDA(centPS,predictors = c("gender","PageRank","tarEnt"))
 rocPS_qda_PT<-list()
 rocPS_qda_PT[[1]]<-roc(predPS_qda_PT$pass,as.numeric(predPS_qda_PT$Week1),auc=T,ci=T)
 rocPS_qda_PT[[2]]<-roc(predPS_qda_PT$pass,as.numeric(predPS_qda_PT$Week2),auc=T,ci=T)
@@ -2103,7 +2103,7 @@ PS_qda_PT_ciL<-c(rocPS_qda_PT[[1]]$ci[1],rocPS_qda_PT[[2]]$ci[1],rocPS_qda_PT[[3
 PS_qda_PT_ciH<-c(rocPS_qda_PT[[1]]$ci[3],rocPS_qda_PT[[2]]$ci[3],rocPS_qda_PT[[3]]$ci[3],rocPS_qda_PT[[4]]$ci[3],
                  rocPS_qda_PT[[5]]$ci[3],rocPS_qda_PT[[6]]$ci[3],rocPS_qda_PT[[7]]$ci[3])
 ##CD layer
-predCD_qda_PT<-jackPredQDA(centCD,predictors = c("PageRank","tarEnt"))
+predCD_qda_PT<-jackPredQDA(centCD,predictors = c("gender","PageRank","tarEnt"))
 rocCD_qda_PT<-list()
 rocCD_qda_PT[[1]]<-roc(predCD_qda_PT$pass,as.numeric(predCD_qda_PT$Week1),auc=T,ci=T)
 rocCD_qda_PT[[2]]<-roc(predCD_qda_PT$pass,as.numeric(predCD_qda_PT$Week2),auc=T,ci=T)
@@ -2120,7 +2120,7 @@ CD_qda_PT_ciH<-c(rocCD_qda_PT[[1]]$ci[3],rocCD_qda_PT[[2]]$ci[3],rocCD_qda_PT[[3
                  rocCD_qda_PT[[5]]$ci[3],rocCD_qda_PT[[6]]$ci[3],rocCD_qda_PT[[7]]$ci[3])
 
 #ICS layer
-predICS_qda_PT<-jackPredQDA(centICS,predictors = c("PageRank","tarEnt"))
+predICS_qda_PT<-jackPredQDA(centICS,predictors = c("gender","PageRank","tarEnt"))
 rocICS_qda_PT<-list()
 rocICS_qda_PT[[1]]<-roc(predICS_qda_PT$pass,as.numeric(predICS_qda_PT$Week1),auc=T,ci=T)
 rocICS_qda_PT[[2]]<-roc(predICS_qda_PT$pass,as.numeric(predICS_qda_PT$Week2),auc=T,ci=T)
@@ -2139,7 +2139,7 @@ ICS_qda_PT_ciH<-c(rocICS_qda_PT[[1]]$ci[3],rocICS_qda_PT[[2]]$ci[3],rocICS_qda_P
 
 
 ###JUST PASS
-predPS_jp_qda_PT<-jackPredQDA(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt"))
+predPS_jp_qda_PT<-jackPredQDA(centPS,outcome = "justpass",predictors = c("gender","PageRank","tarEnt"))
 rocPS_jp_qda_PT<-list()
 rocPS_jp_qda_PT[[1]]<-roc(predPS_jp_qda_PT$justpass,as.numeric(predPS_jp_qda_PT$Week1),auc=T,ci=T)
 rocPS_jp_qda_PT[[2]]<-roc(predPS_jp_qda_PT$justpass,as.numeric(predPS_jp_qda_PT$Week2),auc=T,ci=T)
@@ -2157,7 +2157,7 @@ PS_jp_qda_PT_ciH<-c(rocPS_jp_qda_PT[[1]]$ci[3],rocPS_jp_qda_PT[[2]]$ci[3],rocPS_
                     rocPS_jp_qda_PT[[5]]$ci[3],rocPS_jp_qda_PT[[6]]$ci[3],rocPS_jp_qda_PT[[7]]$ci[3])
 
 ####Rank def. problem####
-#predCD_jp_qda_PT<-jackPredQDA(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt"))
+#predCD_jp_qda_PT<-jackPredQDA(centCD, outcome = "justpass",predictors = c("gender","PageRank","tarEnt"))
 #rocCD_jp_qda_PT<-list()
 #rocCD_jp_qda_PT[[1]]<-roc(predCD_jp_qda_PT$justpass,as.numeric(predCD_jp_qda_PT$Week1),auc=T,ci=T)
 #rocCD_jp_qda_PT[[2]]<-roc(predCD_jp_qda_PT$justpass,as.numeric(predCD_jp_qda_PT$Week2),auc=T,ci=T)
@@ -2167,14 +2167,14 @@ PS_jp_qda_PT_ciH<-c(rocPS_jp_qda_PT[[1]]$ci[3],rocPS_jp_qda_PT[[2]]$ci[3],rocPS_
 #rocCD_jp_qda_PT[[6]]<-roc(predCD_jp_qda_PT$justpass,as.numeric(predCD_jp_qda_PT$Week6),auc=T,ci=T)
 #rocCD_jp_qda_PT[[7]]<-roc(predCD_jp_qda_PT$justpass,as.numeric(predCD_jp_qda_PT$Week7),auc=T,ci=T)
 #CD_jp_qda_PT_auc<-c(rocCD_jp_qda_PT[[1]]$auc,rocCD_jp_qda_PT[[2]]$auc,rocCD_jp_qda_PT[[3]]$auc,rocCD_jp_qda_PT[[4]]$auc,
- #                   rocCD_jp_qda_PT[[5]]$auc,rocCD_jp_qda_PT[[6]]$auc,rocCD_jp_qda_PT[[7]]$auc)
+#                   rocCD_jp_qda_PT[[5]]$auc,rocCD_jp_qda_PT[[6]]$auc,rocCD_jp_qda_PT[[7]]$auc)
 #CD_jp_qda_PT_ciL<-c(rocCD_jp_qda_PT[[1]]$ci[1],rocCD_jp_qda_PT[[2]]$ci[1],rocCD_jp_qda_PT[[3]]$ci[1],rocCD_jp_qda_PT[[4]]$ci[1],
 #                    rocCD_jp_qda_PT[[5]]$ci[1],rocCD_jp_qda_PT[[6]]$ci[1],rocCD_jp_qda_PT[[7]]$ci[1])
 #CD_jp_qda_PT_ciH<-c(rocCD_jp_qda_PT[[1]]$ci[3],rocCD_jp_qda_PT[[2]]$ci[3],rocCD_jp_qda_PT[[3]]$ci[3],rocCD_jp_qda_PT[[4]]$ci[3],
- #                   rocCD_jp_qda_PT[[5]]$ci[3],rocCD_jp_qda_PT[[6]]$ci[3],rocCD_jp_qda_PT[[7]]$ci[3])
+#                   rocCD_jp_qda_PT[[5]]$ci[3],rocCD_jp_qda_PT[[6]]$ci[3],rocCD_jp_qda_PT[[7]]$ci[3])
 
 
-predICS_jp_qda_PT<-jackPredQDA(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt"))
+predICS_jp_qda_PT<-jackPredQDA(centICS, outcome = "justpass",predictors = c("gender","PageRank","tarEnt"))
 rocICS_jp_qda_PT<-list()
 rocICS_jp_qda_PT[[1]]<-roc(predICS_jp_qda_PT$justpass,as.numeric(predICS_jp_qda_PT$Week1),auc=T,ci=T)
 rocICS_jp_qda_PT[[2]]<-roc(predICS_jp_qda_PT$justpass,as.numeric(predICS_jp_qda_PT$Week2),auc=T,ci=T)
@@ -2194,7 +2194,7 @@ ICS_jp_qda_PT_ciH<-c(rocICS_jp_qda_PT[[1]]$ci[3],rocICS_jp_qda_PT[[2]]$ci[3],roc
 
 
 ######PR H Models######
-predPS_qda_PH<-jackPredQDA(centPS,predictors = c("PageRank", "Hide"))
+predPS_qda_PH<-jackPredQDA(centPS,predictors = c("gender","PageRank", "Hide"))
 rocPS_qda_PH<-list()
 rocPS_qda_PH[[1]]<-roc(predPS_qda_PH$pass,as.numeric(predPS_qda_PH$Week1),auc=T,ci=T)
 rocPS_qda_PH[[2]]<-roc(predPS_qda_PH$pass,as.numeric(predPS_qda_PH$Week2),auc=T,ci=T)
@@ -2210,7 +2210,7 @@ PS_qda_PH_ciL<-c(rocPS_qda_PH[[1]]$ci[1],rocPS_qda_PH[[2]]$ci[1],rocPS_qda_PH[[3
 PS_qda_PH_ciH<-c(rocPS_qda_PH[[1]]$ci[3],rocPS_qda_PH[[2]]$ci[3],rocPS_qda_PH[[3]]$ci[3],rocPS_qda_PH[[4]]$ci[3],
                  rocPS_qda_PH[[5]]$ci[3],rocPS_qda_PH[[6]]$ci[3],rocPS_qda_PH[[7]]$ci[3])
 ##CD layer
-predCD_qda_PH<-jackPredQDA(centCD,predictors = c("PageRank", "Hide"))
+predCD_qda_PH<-jackPredQDA(centCD,predictors = c("gender","PageRank", "Hide"))
 rocCD_qda_PH<-list()
 rocCD_qda_PH[[1]]<-roc(predCD_qda_PH$pass,as.numeric(predCD_qda_PH$Week1),auc=T,ci=T)
 rocCD_qda_PH[[2]]<-roc(predCD_qda_PH$pass,as.numeric(predCD_qda_PH$Week2),auc=T,ci=T)
@@ -2227,7 +2227,7 @@ CD_qda_PH_ciH<-c(rocCD_qda_PH[[1]]$ci[3],rocCD_qda_PH[[2]]$ci[3],rocCD_qda_PH[[3
                  rocCD_qda_PH[[5]]$ci[3],rocCD_qda_PH[[6]]$ci[3],rocCD_qda_PH[[7]]$ci[3])
 
 #ICS layer
-predICS_qda_PH<-jackPredQDA(centICS,predictors = c("PageRank", "Hide"))
+predICS_qda_PH<-jackPredQDA(centICS,predictors = c("gender","PageRank", "Hide"))
 rocICS_qda_PH<-list()
 rocICS_qda_PH[[1]]<-roc(predICS_qda_PH$pass,as.numeric(predICS_qda_PH$Week1),auc=T,ci=T)
 rocICS_qda_PH[[2]]<-roc(predICS_qda_PH$pass,as.numeric(predICS_qda_PH$Week2),auc=T,ci=T)
@@ -2247,7 +2247,7 @@ ICS_qda_PH_ciH<-c(rocICS_qda_PH[[1]]$ci[3],rocICS_qda_PH[[2]]$ci[3],rocICS_qda_P
 
 ###JUST PASS
 ##PS layer
-predPS_jp_qda_PH<-jackPredQDA(centPS,outcome = "justpass",predictors = c("PageRank", "Hide"))
+predPS_jp_qda_PH<-jackPredQDA(centPS,outcome = "justpass",predictors = c("gender","PageRank", "Hide"))
 rocPS_jp_qda_PH<-list()
 rocPS_jp_qda_PH[[1]]<-roc(predPS_jp_qda_PH$justpass,as.numeric(predPS_jp_qda_PH$Week1),auc=T,ci=T)
 rocPS_jp_qda_PH[[2]]<-roc(predPS_jp_qda_PH$justpass,as.numeric(predPS_jp_qda_PH$Week2),auc=T,ci=T)
@@ -2264,7 +2264,7 @@ PS_jp_qda_PH_ciL<-c(rocPS_jp_qda_PH[[1]]$ci[1],rocPS_jp_qda_PH[[2]]$ci[1],rocPS_
 PS_jp_qda_PH_ciH<-c(rocPS_jp_qda_PH[[1]]$ci[3],rocPS_jp_qda_PH[[2]]$ci[3],rocPS_jp_qda_PH[[3]]$ci[3],rocPS_jp_qda_PH[[4]]$ci[3],
                     rocPS_jp_qda_PH[[5]]$ci[3],rocPS_jp_qda_PH[[6]]$ci[3],rocPS_jp_qda_PH[[7]]$ci[3])
 #CD Layer
-predCD_jp_qda_PH<-jackPredQDA(centCD, outcome = "justpass",predictors = c("PageRank", "Hide"))
+predCD_jp_qda_PH<-jackPredQDA(centCD, outcome = "justpass",predictors = c("gender","PageRank", "Hide"))
 rocCD_jp_qda_PH<-list()
 rocCD_jp_qda_PH[[1]]<-roc(predCD_jp_qda_PH$justpass,as.numeric(predCD_jp_qda_PH$Week1),auc=T,ci=T)
 rocCD_jp_qda_PH[[2]]<-roc(predCD_jp_qda_PH$justpass,as.numeric(predCD_jp_qda_PH$Week2),auc=T,ci=T)
@@ -2281,7 +2281,7 @@ CD_jp_qda_PH_ciH<-c(rocCD_jp_qda_PH[[1]]$ci[3],rocCD_jp_qda_PH[[2]]$ci[3],rocCD_
                     rocCD_jp_qda_PH[[5]]$ci[3],rocCD_jp_qda_PH[[6]]$ci[3],rocCD_jp_qda_PH[[7]]$ci[3])
 
 #ICS layer
-predICS_jp_qda_PH<-jackPredQDA(centICS, outcome = "justpass",predictors = c("PageRank", "Hide"))
+predICS_jp_qda_PH<-jackPredQDA(centICS, outcome = "justpass",predictors = c("gender","PageRank", "Hide"))
 rocICS_jp_qda_PH<-list()
 rocICS_jp_qda_PH[[1]]<-roc(predICS_jp_qda_PH$justpass,as.numeric(predICS_jp_qda_PH$Week1),auc=T,ci=T)
 rocICS_jp_qda_PH[[2]]<-roc(predICS_jp_qda_PH$justpass,as.numeric(predICS_jp_qda_PH$Week2),auc=T,ci=T)
@@ -2300,7 +2300,7 @@ ICS_jp_qda_PH_ciH<-c(rocICS_jp_qda_PH[[1]]$ci[3],rocICS_jp_qda_PH[[2]]$ci[3],roc
 
 ######TE-H models######
 #PS layer
-predPS_qda_TH<-jackPredQDA(centPS,predictors = c("tarEnt", "Hide"))
+predPS_qda_TH<-jackPredQDA(centPS,predictors = c("gender","tarEnt", "Hide"))
 rocPS_qda_TH<-list()
 rocPS_qda_TH[[1]]<-roc(predPS_qda_TH$pass,as.numeric(predPS_qda_TH$Week1),auc=T,ci=T)
 rocPS_qda_TH[[2]]<-roc(predPS_qda_TH$pass,as.numeric(predPS_qda_TH$Week2),auc=T,ci=T)
@@ -2316,7 +2316,7 @@ PS_qda_TH_ciL<-c(rocPS_qda_TH[[1]]$ci[1],rocPS_qda_TH[[2]]$ci[1],rocPS_qda_TH[[3
 PS_qda_TH_ciH<-c(rocPS_qda_TH[[1]]$ci[3],rocPS_qda_TH[[2]]$ci[3],rocPS_qda_TH[[3]]$ci[3],rocPS_qda_TH[[4]]$ci[3],
                  rocPS_qda_TH[[5]]$ci[3],rocPS_qda_TH[[6]]$ci[3],rocPS_qda_TH[[7]]$ci[3])
 ##CD layer
-predCD_qda_TH<-jackPredQDA(centCD,predictors = c("tarEnt", "Hide"))
+predCD_qda_TH<-jackPredQDA(centCD,predictors = c("gender","tarEnt", "Hide"))
 rocCD_qda_TH<-list()
 rocCD_qda_TH[[1]]<-roc(predCD_qda_TH$pass,as.numeric(predCD_qda_TH$Week1),auc=T,ci=T)
 rocCD_qda_TH[[2]]<-roc(predCD_qda_TH$pass,as.numeric(predCD_qda_TH$Week2),auc=T,ci=T)
@@ -2333,7 +2333,7 @@ CD_qda_TH_ciH<-c(rocCD_qda_TH[[1]]$ci[3],rocCD_qda_TH[[2]]$ci[3],rocCD_qda_TH[[3
                  rocCD_qda_TH[[5]]$ci[3],rocCD_qda_TH[[6]]$ci[3],rocCD_qda_TH[[7]]$ci[3])
 
 #ICS layer
-predICS_qda_TH<-jackPredQDA(centICS,predictors = c("tarEnt", "Hide"))
+predICS_qda_TH<-jackPredQDA(centICS,predictors = c("gender","tarEnt", "Hide"))
 rocICS_qda_TH<-list()
 rocICS_qda_TH[[1]]<-roc(predICS_qda_TH$pass,as.numeric(predICS_qda_TH$Week1),auc=T,ci=T)
 rocICS_qda_TH[[2]]<-roc(predICS_qda_TH$pass,as.numeric(predICS_qda_TH$Week2),auc=T,ci=T)
@@ -2352,7 +2352,7 @@ ICS_qda_TH_ciH<-c(rocICS_qda_TH[[1]]$ci[3],rocICS_qda_TH[[2]]$ci[3],rocICS_qda_T
 
 ###JUST PASS
 #PS Layer
-predPS_jp_qda_TH<-jackPredQDA(centPS,outcome = "justpass",predictors = c("tarEnt", "Hide"))
+predPS_jp_qda_TH<-jackPredQDA(centPS,outcome = "justpass",predictors = c("gender","tarEnt", "Hide"))
 rocPS_jp_qda_TH<-list()
 rocPS_jp_qda_TH[[1]]<-roc(predPS_jp_qda_TH$justpass,as.numeric(predPS_jp_qda_TH$Week1),auc=T,ci=T)
 rocPS_jp_qda_TH[[2]]<-roc(predPS_jp_qda_TH$justpass,as.numeric(predPS_jp_qda_TH$Week2),auc=T,ci=T)
@@ -2370,7 +2370,7 @@ PS_jp_qda_TH_ciH<-c(rocPS_jp_qda_TH[[1]]$ci[3],rocPS_jp_qda_TH[[2]]$ci[3],rocPS_
                     rocPS_jp_qda_TH[[5]]$ci[3],rocPS_jp_qda_TH[[6]]$ci[3],rocPS_jp_qda_TH[[7]]$ci[3])
 ####Rank def. problem####
 #CD layer
-#predCD_jp_qda_TH<-jackPredQDA(centCD, outcome = "justpass",predictors = c("tarEnt", "Hide"))
+#predCD_jp_qda_TH<-jackPredQDA(centCD, outcome = "justpass",predictors = c("gender","tarEnt", "Hide"))
 #rocCD_jp_qda_TH<-list()
 #rocCD_jp_qda_TH[[1]]<-roc(predCD_jp_qda_TH$justpass,as.numeric(predCD_jp_qda_TH$Week1),auc=T,ci=T)
 #rocCD_jp_qda_TH[[2]]<-roc(predCD_jp_qda_TH$justpass,as.numeric(predCD_jp_qda_TH$Week2),auc=T,ci=T)
@@ -2382,12 +2382,12 @@ PS_jp_qda_TH_ciH<-c(rocPS_jp_qda_TH[[1]]$ci[3],rocPS_jp_qda_TH[[2]]$ci[3],rocPS_
 #CD_jp_qda_TH_auc<-c(rocCD_jp_qda_TH[[1]]$auc,rocCD_jp_qda_TH[[2]]$auc,rocCD_jp_qda_TH[[3]]$auc,rocCD_jp_qda_TH[[4]]$auc,
 #                    rocCD_jp_qda_TH[[5]]$auc,rocCD_jp_qda_TH[[6]]$auc,rocCD_jp_qda_TH[[7]]$auc)
 #CD_jp_qda_TH_ciL<-c(rocCD_jp_qda_TH[[1]]$ci[1],rocCD_jp_qda_TH[[2]]$ci[1],rocCD_jp_qda_TH[[3]]$ci[1],rocCD_jp_qda_TH[[4]]$ci[1],
- #                   rocCD_jp_qda_TH[[5]]$ci[1],rocCD_jp_qda_TH[[6]]$ci[1],rocCD_jp_qda_TH[[7]]$ci[1])
+#                   rocCD_jp_qda_TH[[5]]$ci[1],rocCD_jp_qda_TH[[6]]$ci[1],rocCD_jp_qda_TH[[7]]$ci[1])
 #CD_jp_qda_TH_ciH<-c(rocCD_jp_qda_TH[[1]]$ci[3],rocCD_jp_qda_TH[[2]]$ci[3],rocCD_jp_qda_TH[[3]]$ci[3],rocCD_jp_qda_TH[[4]]$ci[3],
-  #                  rocCD_jp_qda_TH[[5]]$ci[3],rocCD_jp_qda_TH[[6]]$ci[3],rocCD_jp_qda_TH[[7]]$ci[3])
+#                  rocCD_jp_qda_TH[[5]]$ci[3],rocCD_jp_qda_TH[[6]]$ci[3],rocCD_jp_qda_TH[[7]]$ci[3])
 
 #ICS Layer
-predICS_jp_qda_TH<-jackPredQDA(centICS, outcome = "justpass",predictors = c("tarEnt", "Hide"))
+predICS_jp_qda_TH<-jackPredQDA(centICS, outcome = "justpass",predictors = c("gender","tarEnt", "Hide"))
 rocICS_jp_qda_TH<-list()
 rocICS_jp_qda_TH[[1]]<-roc(predICS_jp_qda_TH$justpass,as.numeric(predICS_jp_qda_TH$Week1),auc=T,ci=T)
 rocICS_jp_qda_TH[[2]]<-roc(predICS_jp_qda_TH$justpass,as.numeric(predICS_jp_qda_TH$Week2),auc=T,ci=T)
@@ -2405,7 +2405,7 @@ ICS_jp_qda_TH_ciH<-c(rocICS_jp_qda_TH[[1]]$ci[3],rocICS_jp_qda_TH[[2]]$ci[3],roc
 
 ######TE models######
 #PS layer
-predPS_qda_T<-jackPredQDA(centPS,predictors = c("tarEnt"))
+predPS_qda_T<-jackPredQDA(centPS,predictors = c("gender","tarEnt"))
 rocPS_qda_T<-list()
 rocPS_qda_T[[1]]<-roc(predPS_qda_T$pass,as.numeric(predPS_qda_T$Week1),auc=T,ci=T)
 rocPS_qda_T[[2]]<-roc(predPS_qda_T$pass,as.numeric(predPS_qda_T$Week2),auc=T,ci=T)
@@ -2421,7 +2421,7 @@ PS_qda_T_ciL<-c(rocPS_qda_T[[1]]$ci[1],rocPS_qda_T[[2]]$ci[1],rocPS_qda_T[[3]]$c
 PS_qda_T_ciH<-c(rocPS_qda_T[[1]]$ci[3],rocPS_qda_T[[2]]$ci[3],rocPS_qda_T[[3]]$ci[3],rocPS_qda_T[[4]]$ci[3],
                 rocPS_qda_T[[5]]$ci[3],rocPS_qda_T[[6]]$ci[3],rocPS_qda_T[[7]]$ci[3])
 ##CD layer
-predCD_qda_T<-jackPredQDA(centCD,predictors = c("tarEnt"))
+predCD_qda_T<-jackPredQDA(centCD,predictors = c("gender","tarEnt"))
 rocCD_qda_T<-list()
 rocCD_qda_T[[1]]<-roc(predCD_qda_T$pass,as.numeric(predCD_qda_T$Week1),auc=T,ci=T)
 rocCD_qda_T[[2]]<-roc(predCD_qda_T$pass,as.numeric(predCD_qda_T$Week2),auc=T,ci=T)
@@ -2438,7 +2438,7 @@ CD_qda_T_ciH<-c(rocCD_qda_T[[1]]$ci[3],rocCD_qda_T[[2]]$ci[3],rocCD_qda_T[[3]]$c
                 rocCD_qda_T[[5]]$ci[3],rocCD_qda_T[[6]]$ci[3],rocCD_qda_T[[7]]$ci[3])
 
 #ICS layer
-predICS_qda_T<-jackPredQDA(centICS,predictors = c("tarEnt"))
+predICS_qda_T<-jackPredQDA(centICS,predictors = c("gender","tarEnt"))
 rocICS_qda_T<-list()
 rocICS_qda_T[[1]]<-roc(predICS_qda_T$pass,as.numeric(predICS_qda_T$Week1),auc=T,ci=T)
 rocICS_qda_T[[2]]<-roc(predICS_qda_T$pass,as.numeric(predICS_qda_T$Week2),auc=T,ci=T)
@@ -2456,7 +2456,7 @@ ICS_qda_T_ciH<-c(rocICS_qda_T[[1]]$ci[3],rocICS_qda_T[[2]]$ci[3],rocICS_qda_T[[3
 
 ###JUST PASS
 #PS layer
-predPS_jp_qda_T<-jackPredQDA(centPS,outcome = "justpass",predictors = c("tarEnt"))
+predPS_jp_qda_T<-jackPredQDA(centPS,outcome = "justpass",predictors = c("gender","tarEnt"))
 rocPS_jp_qda_T<-list()
 rocPS_jp_qda_T[[1]]<-roc(predPS_jp_qda_T$justpass,as.numeric(predPS_jp_qda_T$Week1),auc=T,ci=T)
 rocPS_jp_qda_T[[2]]<-roc(predPS_jp_qda_T$justpass,as.numeric(predPS_jp_qda_T$Week2),auc=T,ci=T)
@@ -2474,7 +2474,7 @@ PS_jp_qda_T_ciH<-c(rocPS_jp_qda_T[[1]]$ci[3],rocPS_jp_qda_T[[2]]$ci[3],rocPS_jp_
                    rocPS_jp_qda_T[[5]]$ci[3],rocPS_jp_qda_T[[6]]$ci[3],rocPS_jp_qda_T[[7]]$ci[3])
 ####Rank def. problem####
 #CD layer
-#predCD_jp_qda_T<-jackPredQDA(centCD, outcome = "justpass",predictors = c("tarEnt"))
+#predCD_jp_qda_T<-jackPredQDA(centCD, outcome = "justpass",predictors = c("gender","tarEnt"))
 #rocCD_jp_qda_T<-list()
 #rocCD_jp_qda_T[[1]]<-roc(predCD_jp_qda_T$justpass,as.numeric(predCD_jp_qda_T$Week1),auc=T,ci=T)
 #rocCD_jp_qda_T[[2]]<-roc(predCD_jp_qda_T$justpass,as.numeric(predCD_jp_qda_T$Week2),auc=T,ci=T)
@@ -2484,13 +2484,13 @@ PS_jp_qda_T_ciH<-c(rocPS_jp_qda_T[[1]]$ci[3],rocPS_jp_qda_T[[2]]$ci[3],rocPS_jp_
 #rocCD_jp_qda_T[[6]]<-roc(predCD_jp_qda_T$justpass,as.numeric(predCD_jp_qda_T$Week6),auc=T,ci=T)
 #rocCD_jp_qda_T[[7]]<-roc(predCD_jp_qda_T$justpass,as.numeric(predCD_jp_qda_T$Week7),auc=T,ci=T)
 #CD_jp_qda_T_auc<-c(rocCD_jp_qda_T[[1]]$auc,rocCD_jp_qda_T[[2]]$auc,rocCD_jp_qda_T[[3]]$auc,rocCD_jp_qda_T[[4]]$auc,
- #                  rocCD_jp_qda_T[[5]]$auc,rocCD_jp_qda_T[[6]]$auc,rocCD_jp_qda_T[[7]]$auc)
+#                  rocCD_jp_qda_T[[5]]$auc,rocCD_jp_qda_T[[6]]$auc,rocCD_jp_qda_T[[7]]$auc)
 #CD_jp_qda_T_ciL<-c(rocCD_jp_qda_T[[1]]$ci[1],rocCD_jp_qda_T[[2]]$ci[1],rocCD_jp_qda_T[[3]]$ci[1],rocCD_jp_qda_T[[4]]$ci[1],
 #                   rocCD_jp_qda_T[[5]]$ci[1],rocCD_jp_qda_T[[6]]$ci[1],rocCD_jp_qda_T[[7]]$ci[1])
 #CD_jp_qda_T_ciH<-c(rocCD_jp_qda_T[[1]]$ci[3],rocCD_jp_qda_T[[2]]$ci[3],rocCD_jp_qda_T[[3]]$ci[3],rocCD_jp_qda_T[[4]]$ci[3],
- #                  rocCD_jp_qda_T[[5]]$ci[3],rocCD_jp_qda_T[[6]]$ci[3],rocCD_jp_qda_T[[7]]$ci[3])
+#                  rocCD_jp_qda_T[[5]]$ci[3],rocCD_jp_qda_T[[6]]$ci[3],rocCD_jp_qda_T[[7]]$ci[3])
 #ICS layer
-predICS_jp_qda_T<-jackPredQDA(centICS, outcome = "justpass",predictors = c("tarEnt"))
+predICS_jp_qda_T<-jackPredQDA(centICS, outcome = "justpass",predictors = c("gender","tarEnt"))
 rocICS_jp_qda_T<-list()
 rocICS_jp_qda_T[[1]]<-roc(predICS_jp_qda_T$justpass,as.numeric(predICS_jp_qda_T$Week1),auc=T,ci=T)
 rocICS_jp_qda_T[[2]]<-roc(predICS_jp_qda_T$justpass,as.numeric(predICS_jp_qda_T$Week2),auc=T,ci=T)
@@ -2510,7 +2510,7 @@ ICS_jp_qda_T_ciH<-c(rocICS_jp_qda_T[[1]]$ci[3],rocICS_jp_qda_T[[2]]$ci[3],rocICS
 
 ######H models######
 #PS layer
-predPS_qda_H<-jackPredQDA(centPS,predictors = c( "Hide"))
+predPS_qda_H<-jackPredQDA(centPS,predictors = c("gender", "Hide"))
 rocPS_qda_H<-list()
 rocPS_qda_H[[1]]<-roc(predPS_qda_H$pass,as.numeric(predPS_qda_H$Week1),auc=T,ci=T)
 rocPS_qda_H[[2]]<-roc(predPS_qda_H$pass,as.numeric(predPS_qda_H$Week2),auc=T,ci=T)
@@ -2526,7 +2526,7 @@ PS_qda_H_ciL<-c(rocPS_qda_H[[1]]$ci[1],rocPS_qda_H[[2]]$ci[1],rocPS_qda_H[[3]]$c
 PS_qda_H_ciH<-c(rocPS_qda_H[[1]]$ci[3],rocPS_qda_H[[2]]$ci[3],rocPS_qda_H[[3]]$ci[3],rocPS_qda_H[[4]]$ci[3],
                 rocPS_qda_H[[5]]$ci[3],rocPS_qda_H[[6]]$ci[3],rocPS_qda_H[[7]]$ci[3])
 ##CD layer
-predCD_qda_H<-jackPredQDA(centCD,predictors = c( "Hide"))
+predCD_qda_H<-jackPredQDA(centCD,predictors = c("gender", "Hide"))
 rocCD_qda_H<-list()
 rocCD_qda_H[[1]]<-roc(predCD_qda_H$pass,as.numeric(predCD_qda_H$Week1),auc=T,ci=T)
 rocCD_qda_H[[2]]<-roc(predCD_qda_H$pass,as.numeric(predCD_qda_H$Week2),auc=T,ci=T)
@@ -2543,7 +2543,7 @@ CD_qda_H_ciH<-c(rocCD_qda_H[[1]]$ci[3],rocCD_qda_H[[2]]$ci[3],rocCD_qda_H[[3]]$c
                 rocCD_qda_H[[5]]$ci[3],rocCD_qda_H[[6]]$ci[3],rocCD_qda_H[[7]]$ci[3])
 
 #ICS layer
-predICS_qda_H<-jackPredQDA(centICS,predictors = c( "Hide"))
+predICS_qda_H<-jackPredQDA(centICS,predictors = c("gender", "Hide"))
 rocICS_qda_H<-list()
 rocICS_qda_H[[1]]<-roc(predICS_qda_H$pass,as.numeric(predICS_qda_H$Week1),auc=T,ci=T)
 rocICS_qda_H[[2]]<-roc(predICS_qda_H$pass,as.numeric(predICS_qda_H$Week2),auc=T,ci=T)
@@ -2561,7 +2561,7 @@ ICS_qda_H_ciH<-c(rocICS_qda_H[[1]]$ci[3],rocICS_qda_H[[2]]$ci[3],rocICS_qda_H[[3
 
 
 ###JUST PASS
-predPS_jp_qda_H<-jackPredQDA(centPS,outcome = "justpass",predictors = c( "Hide"))
+predPS_jp_qda_H<-jackPredQDA(centPS,outcome = "justpass",predictors = c("gender", "Hide"))
 rocPS_jp_qda_H<-list()
 rocPS_jp_qda_H[[1]]<-roc(predPS_jp_qda_H$justpass,as.numeric(predPS_jp_qda_H$Week1),auc=T,ci=T)
 rocPS_jp_qda_H[[2]]<-roc(predPS_jp_qda_H$justpass,as.numeric(predPS_jp_qda_H$Week2),auc=T,ci=T)
@@ -2578,7 +2578,7 @@ PS_jp_qda_H_ciL<-c(rocPS_jp_qda_H[[1]]$ci[1],rocPS_jp_qda_H[[2]]$ci[1],rocPS_jp_
 PS_jp_qda_H_ciH<-c(rocPS_jp_qda_H[[1]]$ci[3],rocPS_jp_qda_H[[2]]$ci[3],rocPS_jp_qda_H[[3]]$ci[3],rocPS_jp_qda_H[[4]]$ci[3],
                    rocPS_jp_qda_H[[5]]$ci[3],rocPS_jp_qda_H[[6]]$ci[3],rocPS_jp_qda_H[[7]]$ci[3])
 
-predCD_jp_qda_H<-jackPredQDA(centCD, outcome = "justpass",predictors = c( "Hide"))
+predCD_jp_qda_H<-jackPredQDA(centCD, outcome = "justpass",predictors = c("gender", "Hide"))
 rocCD_jp_qda_H<-list()
 rocCD_jp_qda_H[[1]]<-roc(predCD_jp_qda_H$justpass,as.numeric(predCD_jp_qda_H$Week1),auc=T,ci=T)
 rocCD_jp_qda_H[[2]]<-roc(predCD_jp_qda_H$justpass,as.numeric(predCD_jp_qda_H$Week2),auc=T,ci=T)
@@ -2595,7 +2595,7 @@ CD_jp_qda_H_ciH<-c(rocCD_jp_qda_H[[1]]$ci[3],rocCD_jp_qda_H[[2]]$ci[3],rocCD_jp_
                    rocCD_jp_qda_H[[5]]$ci[3],rocCD_jp_qda_H[[6]]$ci[3],rocCD_jp_qda_H[[7]]$ci[3])
 
 
-predICS_jp_qda_H<-jackPredQDA(centICS, outcome = "justpass",predictors = c( "Hide"))
+predICS_jp_qda_H<-jackPredQDA(centICS, outcome = "justpass",predictors = c("gender", "Hide"))
 rocICS_jp_qda_H<-list()
 rocICS_jp_qda_H[[1]]<-roc(predICS_jp_qda_H$justpass,as.numeric(predICS_jp_qda_H$Week1),auc=T,ci=T)
 rocICS_jp_qda_H[[2]]<-roc(predICS_jp_qda_H$justpass,as.numeric(predICS_jp_qda_H$Week2),auc=T,ci=T)
@@ -2614,7 +2614,7 @@ ICS_jp_qda_H_ciH<-c(rocICS_jp_qda_H[[1]]$ci[3],rocICS_jp_qda_H[[2]]$ci[3],rocICS
 
 ######PR models######
 #PS layer
-predPS_qda_P<-jackPredQDA(centPS,predictors = c("PageRank"))
+predPS_qda_P<-jackPredQDA(centPS,predictors = c("gender","PageRank"))
 rocPS_qda_P<-list()
 rocPS_qda_P[[1]]<-roc(predPS_qda_P$pass,as.numeric(predPS_qda_P$Week1),auc=T,ci=T)
 rocPS_qda_P[[2]]<-roc(predPS_qda_P$pass,as.numeric(predPS_qda_P$Week2),auc=T,ci=T)
@@ -2630,7 +2630,7 @@ PS_qda_P_ciL<-c(rocPS_qda_P[[1]]$ci[1],rocPS_qda_P[[2]]$ci[1],rocPS_qda_P[[3]]$c
 PS_qda_P_ciH<-c(rocPS_qda_P[[1]]$ci[3],rocPS_qda_P[[2]]$ci[3],rocPS_qda_P[[3]]$ci[3],rocPS_qda_P[[4]]$ci[3],
                 rocPS_qda_P[[5]]$ci[3],rocPS_qda_P[[6]]$ci[3],rocPS_qda_P[[7]]$ci[3])
 ##CD layer
-predCD_qda_P<-jackPredQDA(centCD,predictors = c("PageRank"))
+predCD_qda_P<-jackPredQDA(centCD,predictors = c("gender","PageRank"))
 rocCD_qda_P<-list()
 rocCD_qda_P[[1]]<-roc(predCD_qda_P$pass,as.numeric(predCD_qda_P$Week1),auc=T,ci=T)
 rocCD_qda_P[[2]]<-roc(predCD_qda_P$pass,as.numeric(predCD_qda_P$Week2),auc=T,ci=T)
@@ -2647,7 +2647,7 @@ CD_qda_P_ciH<-c(rocCD_qda_P[[1]]$ci[3],rocCD_qda_P[[2]]$ci[3],rocCD_qda_P[[3]]$c
                 rocCD_qda_P[[5]]$ci[3],rocCD_qda_P[[6]]$ci[3],rocCD_qda_P[[7]]$ci[3])
 
 #ICS layer
-predICS_qda_P<-jackPredQDA(centICS,predictors = c("PageRank"))
+predICS_qda_P<-jackPredQDA(centICS,predictors = c("gender","PageRank"))
 rocICS_qda_P<-list()
 rocICS_qda_P[[1]]<-roc(predICS_qda_P$pass,as.numeric(predICS_qda_P$Week1),auc=T,ci=T)
 rocICS_qda_P[[2]]<-roc(predICS_qda_P$pass,as.numeric(predICS_qda_P$Week2),auc=T,ci=T)
@@ -2665,7 +2665,7 @@ ICS_qda_P_ciH<-c(rocICS_qda_P[[1]]$ci[3],rocICS_qda_P[[2]]$ci[3],rocICS_qda_P[[3
 
 ###JUST PASS
 #PS layer
-predPS_jp_qda_P<-jackPredQDA(centPS,outcome = "justpass",predictors = c("PageRank"))
+predPS_jp_qda_P<-jackPredQDA(centPS,outcome = "justpass",predictors = c("gender","PageRank"))
 rocPS_jp_qda_P<-list()
 rocPS_jp_qda_P[[1]]<-roc(predPS_jp_qda_P$justpass,as.numeric(predPS_jp_qda_P$Week1),auc=T,ci=T)
 rocPS_jp_qda_P[[2]]<-roc(predPS_jp_qda_P$justpass,as.numeric(predPS_jp_qda_P$Week2),auc=T,ci=T)
@@ -2682,7 +2682,7 @@ PS_jp_qda_P_ciL<-c(rocPS_jp_qda_P[[1]]$ci[1],rocPS_jp_qda_P[[2]]$ci[1],rocPS_jp_
 PS_jp_qda_P_ciH<-c(rocPS_jp_qda_P[[1]]$ci[3],rocPS_jp_qda_P[[2]]$ci[3],rocPS_jp_qda_P[[3]]$ci[3],rocPS_jp_qda_P[[4]]$ci[3],
                    rocPS_jp_qda_P[[5]]$ci[3],rocPS_jp_qda_P[[6]]$ci[3],rocPS_jp_qda_P[[7]]$ci[3])
 #CD layer
-predCD_jp_qda_P<-jackPredQDA(centCD, outcome = "justpass",predictors = c("PageRank"))
+predCD_jp_qda_P<-jackPredQDA(centCD, outcome = "justpass",predictors = c("gender","PageRank"))
 rocCD_jp_qda_P<-list()
 rocCD_jp_qda_P[[1]]<-roc(predCD_jp_qda_P$justpass,as.numeric(predCD_jp_qda_P$Week1),auc=T,ci=T)
 rocCD_jp_qda_P[[2]]<-roc(predCD_jp_qda_P$justpass,as.numeric(predCD_jp_qda_P$Week2),auc=T,ci=T)
@@ -2699,7 +2699,7 @@ CD_jp_qda_P_ciH<-c(rocCD_jp_qda_P[[1]]$ci[3],rocCD_jp_qda_P[[2]]$ci[3],rocCD_jp_
                    rocCD_jp_qda_P[[5]]$ci[3],rocCD_jp_qda_P[[6]]$ci[3],rocCD_jp_qda_P[[7]]$ci[3])
 
 #ICS layer
-predICS_jp_qda_P<-jackPredQDA(centICS, outcome = "justpass",predictors = c("PageRank"))
+predICS_jp_qda_P<-jackPredQDA(centICS, outcome = "justpass",predictors = c("gender","PageRank"))
 rocICS_jp_qda_P<-list()
 rocICS_jp_qda_P[[1]]<-roc(predICS_jp_qda_P$justpass,as.numeric(predICS_jp_qda_P$Week1),auc=T,ci=T)
 rocICS_jp_qda_P[[2]]<-roc(predICS_jp_qda_P$justpass,as.numeric(predICS_jp_qda_P$Week2),auc=T,ci=T)
@@ -2776,7 +2776,7 @@ ICS_jp_qda_RegWeigths<-1/ICS_jp_qda_RegSD^2
 ICS_jp_qda_RegWM<-rowSums(ICS_jp_qda_RegAll*ICS_jp_qda_RegWeigths)/rowSums(ICS_jp_qda_RegWeigths)
 ICS_jp_qda_RegSEWM<-sqrt(1/rowSums(ICS_jp_qda_RegWeigths))
 ####PLOTTING####
-pdf(file = "plots/ROC_AUC_plots/AUC01_onlyNetworkMeasures_qda_weightedMeans.pdf",   # The directory you want to save the file in
+pdf(file = "plots/ROC_AUC_plots/AUC03_NetworkMeasuresGender_qda_weightedMeans.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,2))
@@ -2815,7 +2815,7 @@ legend(3, 0.3, legend=c("Problem Solving", "Concept Discussion","In-Class Social
 abline(h=lazy_jp)
 dev.off()
 ####ROC curves####
-pdf(file = "plots/ROC_AUC_plots/ROC01_qda_pf.pdf",   # The directory you want to save the file in
+pdf(file = "plots/ROC_AUC_plots/ROC03_qda_pf.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 14) # The height of the plot in inches
 par(mfrow=c(4,2))
@@ -2882,7 +2882,7 @@ legend(0.5,1,c("week 5","week 6","week 7"),
        col=c("red","green","purple"),lty=1, cex=0.8)
 
 dev.off()
-pdf(file = "plots/ROC_AUC_plots/ROC01_qda_jpf.pdf",   # The directory you want to save the file in
+pdf(file = "plots/ROC_AUC_plots/ROC03_qda_jpf.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 14) # The height of the plot in inches
 par(mfrow=c(4,2))
@@ -2958,7 +2958,7 @@ dev.off()
 ######Pagerank Target Entropy Hide models######
 ROC_PS_knn_PTH<-list()
 for(i in 1:20){
-  predPS_knn_PTH<-jackPredKNN(centPS,predictors = c("PageRank","tarEnt", "Hide"),nK = i)
+  predPS_knn_PTH<-jackPredKNN(centPS,predictors = c("gender","PageRank","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predPS_knn_PTH$allpred)
   ROC_PS_knn_PTH[[i]]<-ROC
 }
@@ -2976,7 +2976,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_knn_PTH_means<-rowMeans(SR_m)
 PS_knn_PTH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PTH_PS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PTH_PS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -2996,7 +2996,7 @@ dev.off()
 
 ROC_CD_knn_PTH<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("PageRank","tarEnt", "Hide"),nK = i)
+  predCD_x<-jackPredKNN(centCD,predictors = c("gender","PageRank","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_knn_PTH[[i]]<-ROC
 }
@@ -3014,7 +3014,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_knn_PTH_means<-rowMeans(SR_m)
 CD_knn_PTH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PTH_CD.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PTH_CD.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3035,7 +3035,7 @@ dev.off()
 
 ROC_ICS_knn_PTH<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("PageRank","tarEnt", "Hide"),nK = i)
+  predICS_x<-jackPredKNN(centICS,predictors = c("gender","PageRank","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_knn_PTH[[i]]<-ROC
 }
@@ -3053,7 +3053,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_knn_PTH_means<-rowMeans(SR_m)
 ICS_knn_PTH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PTH_ICS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PTH_ICS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3073,7 +3073,7 @@ dev.off()
 
 ROC_PS_justpass_knn_PTH<-list()
 for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),nK = i)
+  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   ROC_PS_justpass_knn_PTH[[i]]<-ROC
 }
@@ -3089,7 +3089,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_justpass_knn_PTH_means<-rowMeans(SR_m)
 PS_justpass_knn_PTH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PTH_PS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PTH_PS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3110,7 +3110,7 @@ dev.off()
 
 ROC_CD_justpass_knn_PTH<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),nK = i)
+  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_justpass_knn_PTH[[i]]<-ROC
 }
@@ -3126,7 +3126,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_justpass_knn_PTH_means<-rowMeans(SR_m)
 CD_justpass_knn_PTH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PTH_CD_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PTH_CD_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3148,7 +3148,7 @@ dev.off()
 
 ROC_ICS_justpass_knn_PTH<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt", "Hide"),nK = i)
+  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("gender","PageRank","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_justpass_knn_PTH[[i]]<-ROC
 }
@@ -3167,7 +3167,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_justpass_knn_PTH_means<-rowMeans(SR_m)
 ICS_justpass_knn_PTH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PTH_ICS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PTH_ICS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3192,7 +3192,7 @@ dev.off()
 ######Pagerank Target Entropy models######
 ROC_PS_knn_PT<-list()
 for(i in 1:20){
-  predPS_knn_PT<-jackPredKNN(centPS,predictors = c("PageRank","tarEnt"),nK = i)
+  predPS_knn_PT<-jackPredKNN(centPS,predictors = c("gender","PageRank","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predPS_knn_PT$allpred)
   ROC_PS_knn_PT[[i]]<-ROC
 }
@@ -3210,7 +3210,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_knn_PT_means<-rowMeans(SR_m)
 PS_knn_PT_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PT_PS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PT_PS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3230,7 +3230,7 @@ dev.off()
 
 ROC_CD_knn_PT<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("PageRank","tarEnt"),nK = i)
+  predCD_x<-jackPredKNN(centCD,predictors = c("gender","PageRank","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_knn_PT[[i]]<-ROC
 }
@@ -3248,7 +3248,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_knn_PT_means<-rowMeans(SR_m)
 CD_knn_PT_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PT_CD.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PT_CD.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3269,7 +3269,7 @@ dev.off()
 
 ROC_ICS_knn_PT<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("PageRank","tarEnt"),nK = i)
+  predICS_x<-jackPredKNN(centICS,predictors = c("gender","PageRank","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_knn_PT[[i]]<-ROC
 }
@@ -3287,7 +3287,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_knn_PT_means<-rowMeans(SR_m)
 ICS_knn_PT_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PT_ICS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PT_ICS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3307,7 +3307,7 @@ dev.off()
 
 ROC_PS_justpass_knn_PT<-list()
 for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("PageRank","tarEnt"),nK = i)
+  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("gender","PageRank","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   ROC_PS_justpass_knn_PT[[i]]<-ROC
 }
@@ -3323,7 +3323,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_justpass_knn_PT_means<-rowMeans(SR_m)
 PS_justpass_knn_PT_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PT_PS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PT_PS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3344,7 +3344,7 @@ dev.off()
 
 ROC_CD_justpass_knn_PT<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("PageRank","tarEnt"),nK = i)
+  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("gender","PageRank","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_justpass_knn_PT[[i]]<-ROC
 }
@@ -3360,7 +3360,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_justpass_knn_PT_means<-rowMeans(SR_m)
 CD_justpass_knn_PT_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PT_CD_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PT_CD_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3382,7 +3382,7 @@ dev.off()
 
 ROC_ICS_justpass_knn_PT<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("PageRank","tarEnt"),nK = i)
+  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("gender","PageRank","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_justpass_knn_PT[[i]]<-ROC
 }
@@ -3401,7 +3401,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_justpass_knn_PT_means<-rowMeans(SR_m)
 ICS_justpass_knn_PT_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PT_ICS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PT_ICS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3427,7 +3427,7 @@ dev.off()
 ######Target Entropy Hide models######
 ROC_PS_knn_TH<-list()
 for(i in 1:20){
-  predPS_knn_TH<-jackPredKNN(centPS,predictors = c("tarEnt", "Hide"),nK = i)
+  predPS_knn_TH<-jackPredKNN(centPS,predictors = c("gender","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predPS_knn_TH$allpred)
   ROC_PS_knn_TH[[i]]<-ROC
 }
@@ -3445,7 +3445,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_knn_TH_means<-rowMeans(SR_m)
 PS_knn_TH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_TH_PS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_TH_PS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3465,7 +3465,7 @@ dev.off()
 
 ROC_CD_knn_TH<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("tarEnt", "Hide"),nK = i)
+  predCD_x<-jackPredKNN(centCD,predictors = c("gender","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_knn_TH[[i]]<-ROC
 }
@@ -3483,7 +3483,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_knn_TH_means<-rowMeans(SR_m)
 CD_knn_TH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_TH_CD.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_TH_CD.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3504,7 +3504,7 @@ dev.off()
 
 ROC_ICS_knn_TH<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("tarEnt", "Hide"),nK = i)
+  predICS_x<-jackPredKNN(centICS,predictors = c("gender","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_knn_TH[[i]]<-ROC
 }
@@ -3522,7 +3522,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_knn_TH_means<-rowMeans(SR_m)
 ICS_knn_TH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_TH_ICS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_TH_ICS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3542,7 +3542,7 @@ dev.off()
 
 ROC_PS_justpass_knn_TH<-list()
 for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("tarEnt", "Hide"),nK = i)
+  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("gender","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   ROC_PS_justpass_knn_TH[[i]]<-ROC
 }
@@ -3558,7 +3558,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_justpass_knn_TH_means<-rowMeans(SR_m)
 PS_justpass_knn_TH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_TH_PS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_TH_PS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3579,7 +3579,7 @@ dev.off()
 
 ROC_CD_justpass_knn_TH<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("tarEnt", "Hide"),nK = i)
+  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("gender","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_justpass_knn_TH[[i]]<-ROC
 }
@@ -3595,7 +3595,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_justpass_knn_TH_means<-rowMeans(SR_m)
 CD_justpass_knn_TH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_TH_CD_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_TH_CD_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3617,7 +3617,7 @@ dev.off()
 
 ROC_ICS_justpass_knn_TH<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("tarEnt", "Hide"),nK = i)
+  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("gender","tarEnt", "Hide"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_justpass_knn_TH[[i]]<-ROC
 }
@@ -3636,7 +3636,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_justpass_knn_TH_means<-rowMeans(SR_m)
 ICS_justpass_knn_TH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_TH_ICS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_TH_ICS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3661,7 +3661,7 @@ dev.off()
 ######Pagerank Hide models######
 ROC_PS_knn_PH<-list()
 for(i in 1:20){
-  predPS_knn_PH<-jackPredKNN(centPS,predictors = c("PageRank","Hide"),nK = i)
+  predPS_knn_PH<-jackPredKNN(centPS,predictors = c("gender","PageRank","Hide"),nK = i)
   ROC<-ROCplusWeeks(predPS_knn_PH$allpred)
   ROC_PS_knn_PH[[i]]<-ROC
 }
@@ -3679,7 +3679,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_knn_PH_means<-rowMeans(SR_m)
 PS_knn_PH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PH_PS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PH_PS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3699,7 +3699,7 @@ dev.off()
 
 ROC_CD_knn_PH<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("PageRank","Hide"),nK = i)
+  predCD_x<-jackPredKNN(centCD,predictors = c("gender","PageRank","Hide"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_knn_PH[[i]]<-ROC
 }
@@ -3717,7 +3717,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_knn_PH_means<-rowMeans(SR_m)
 CD_knn_PH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PH_CD.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PH_CD.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3738,7 +3738,7 @@ dev.off()
 
 ROC_ICS_knn_PH<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("PageRank","Hide"),nK = i)
+  predICS_x<-jackPredKNN(centICS,predictors = c("gender","PageRank","Hide"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_knn_PH[[i]]<-ROC
 }
@@ -3756,7 +3756,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_knn_PH_means<-rowMeans(SR_m)
 ICS_knn_PH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PH_ICS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PH_ICS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3776,7 +3776,7 @@ dev.off()
 
 ROC_PS_justpass_knn_PH<-list()
 for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("PageRank","Hide"),nK = i)
+  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("gender","PageRank","Hide"),nK = i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   ROC_PS_justpass_knn_PH[[i]]<-ROC
 }
@@ -3792,7 +3792,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_justpass_knn_PH_means<-rowMeans(SR_m)
 PS_justpass_knn_PH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PH_PS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PH_PS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3813,7 +3813,7 @@ dev.off()
 
 ROC_CD_justpass_knn_PH<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("PageRank","Hide"),nK = i)
+  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("gender","PageRank","Hide"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_justpass_knn_PH[[i]]<-ROC
 }
@@ -3829,7 +3829,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_justpass_knn_PH_means<-rowMeans(SR_m)
 CD_justpass_knn_PH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PH_CD_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PH_CD_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3851,7 +3851,7 @@ dev.off()
 
 ROC_ICS_justpass_knn_PH<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("PageRank","Hide"),nK = i)
+  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("gender","PageRank","Hide"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_justpass_knn_PH[[i]]<-ROC
 }
@@ -3870,7 +3870,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_justpass_knn_PH_means<-rowMeans(SR_m)
 ICS_justpass_knn_PH_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_PH_ICS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_PH_ICS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3894,7 +3894,7 @@ dev.off()
 ######Pagerank models######
 ROC_PS_knn_P<-list()
 for(i in 1:20){
-  predPS_knn_P<-jackPredKNN(centPS,predictors = c("PageRank"),nK = i)
+  predPS_knn_P<-jackPredKNN(centPS,predictors = c("gender","PageRank"),nK = i)
   ROC<-ROCplusWeeks(predPS_knn_P$allpred)
   ROC_PS_knn_P[[i]]<-ROC
 }
@@ -3912,7 +3912,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_knn_P_means<-rowMeans(SR_m)
 PS_knn_P_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_P_PS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_P_PS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3932,7 +3932,7 @@ dev.off()
 
 ROC_CD_knn_P<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("PageRank"),nK = i)
+  predCD_x<-jackPredKNN(centCD,predictors = c("gender","PageRank"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_knn_P[[i]]<-ROC
 }
@@ -3950,7 +3950,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_knn_P_means<-rowMeans(SR_m)
 CD_knn_P_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_P_CD.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_P_CD.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -3971,7 +3971,7 @@ dev.off()
 
 ROC_ICS_knn_P<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("PageRank"),nK = i)
+  predICS_x<-jackPredKNN(centICS,predictors = c("gender","PageRank"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_knn_P[[i]]<-ROC
 }
@@ -3989,7 +3989,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_knn_P_means<-rowMeans(SR_m)
 ICS_knn_P_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_P_ICS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_P_ICS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4009,7 +4009,7 @@ dev.off()
 
 ROC_PS_justpass_knn_P<-list()
 for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("PageRank"),nK = i)
+  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("gender","PageRank"),nK = i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   ROC_PS_justpass_knn_P[[i]]<-ROC
 }
@@ -4025,7 +4025,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_justpass_knn_P_means<-rowMeans(SR_m)
 PS_justpass_knn_P_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_P_PS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_P_PS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4046,7 +4046,7 @@ dev.off()
 
 ROC_CD_justpass_knn_P<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("PageRank"),nK = i)
+  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("gender","PageRank"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_justpass_knn_P[[i]]<-ROC
 }
@@ -4062,7 +4062,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_justpass_knn_P_means<-rowMeans(SR_m)
 CD_justpass_knn_P_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_P_CD_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_P_CD_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4084,7 +4084,7 @@ dev.off()
 
 ROC_ICS_justpass_knn_P<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("PageRank"),nK = i)
+  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("gender","PageRank"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_justpass_knn_P[[i]]<-ROC
 }
@@ -4103,7 +4103,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_justpass_knn_P_means<-rowMeans(SR_m)
 ICS_justpass_knn_P_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_P_ICS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_P_ICS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4127,7 +4127,7 @@ dev.off()
 ######Target Entropy models######
 ROC_PS_knn_T<-list()
 for(i in 1:20){
-  predPS_knn_T<-jackPredKNN(centPS,predictors = c("tarEnt"),nK = i)
+  predPS_knn_T<-jackPredKNN(centPS,predictors = c("gender","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predPS_knn_T$allpred)
   ROC_PS_knn_T[[i]]<-ROC
 }
@@ -4145,7 +4145,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_knn_T_means<-rowMeans(SR_m)
 PS_knn_T_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_T_PS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_T_PS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4165,7 +4165,7 @@ dev.off()
 
 ROC_CD_knn_T<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("tarEnt"),nK = i)
+  predCD_x<-jackPredKNN(centCD,predictors = c("gender","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_knn_T[[i]]<-ROC
 }
@@ -4183,7 +4183,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_knn_T_means<-rowMeans(SR_m)
 CD_knn_T_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_T_CD.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_T_CD.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4204,7 +4204,7 @@ dev.off()
 
 ROC_ICS_knn_T<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("tarEnt"),nK = i)
+  predICS_x<-jackPredKNN(centICS,predictors = c("gender","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_knn_T[[i]]<-ROC
 }
@@ -4222,7 +4222,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_knn_T_means<-rowMeans(SR_m)
 ICS_knn_T_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_T_ICS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_T_ICS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4242,7 +4242,7 @@ dev.off()
 
 ROC_PS_justpass_knn_T<-list()
 for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("tarEnt"),nK = i)
+  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("gender","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   ROC_PS_justpass_knn_T[[i]]<-ROC
 }
@@ -4258,7 +4258,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_justpass_knn_T_means<-rowMeans(SR_m)
 PS_justpass_knn_T_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_T_PS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_T_PS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4279,7 +4279,7 @@ dev.off()
 
 ROC_CD_justpass_knn_T<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("tarEnt"),nK = i)
+  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("gender","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_justpass_knn_T[[i]]<-ROC
 }
@@ -4295,7 +4295,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_justpass_knn_T_means<-rowMeans(SR_m)
 CD_justpass_knn_T_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_T_CD_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_T_CD_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4317,7 +4317,7 @@ dev.off()
 
 ROC_ICS_justpass_knn_T<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("tarEnt"),nK = i)
+  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("gender","tarEnt"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_justpass_knn_T[[i]]<-ROC
 }
@@ -4336,7 +4336,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_justpass_knn_T_means<-rowMeans(SR_m)
 ICS_justpass_knn_T_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_T_ICS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_T_ICS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4360,7 +4360,7 @@ dev.off()
 ######Hide models######
 ROC_PS_knn_H<-list()
 for(i in 1:20){
-  predPS_knn_H<-jackPredKNN(centPS,predictors = c("Hide"),nK = i)
+  predPS_knn_H<-jackPredKNN(centPS,predictors = c("gender","Hide"),nK = i)
   ROC<-ROCplusWeeks(predPS_knn_H$allpred)
   ROC_PS_knn_H[[i]]<-ROC
 }
@@ -4378,7 +4378,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_knn_H_means<-rowMeans(SR_m)
 PS_knn_H_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_H_PS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_H_PS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4398,7 +4398,7 @@ dev.off()
 
 ROC_CD_knn_H<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD,predictors = c("Hide"),nK = i)
+  predCD_x<-jackPredKNN(centCD,predictors = c("gender","Hide"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_knn_H[[i]]<-ROC
 }
@@ -4416,7 +4416,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_knn_H_means<-rowMeans(SR_m)
 CD_knn_H_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_H_CD.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_H_CD.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4437,7 +4437,7 @@ dev.off()
 
 ROC_ICS_knn_H<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS,predictors = c("Hide"),nK = i)
+  predICS_x<-jackPredKNN(centICS,predictors = c("gender","Hide"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_knn_H[[i]]<-ROC
 }
@@ -4455,7 +4455,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_knn_H_means<-rowMeans(SR_m)
 ICS_knn_H_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_H_ICS.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_H_ICS.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4475,7 +4475,7 @@ dev.off()
 
 ROC_PS_justpass_knn_H<-list()
 for(i in 1:20){
-  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("Hide"),nK = i)
+  predPS_x<-jackPredKNN(centPS,outcome = "justpass",predictors = c("gender","Hide"),nK = i)
   ROC<-ROCplusWeeks(predPS_x$allpred)
   ROC_PS_justpass_knn_H[[i]]<-ROC
 }
@@ -4491,7 +4491,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 PS_justpass_knn_H_means<-rowMeans(SR_m)
 PS_justpass_knn_H_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_H_PS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_H_PS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4512,7 +4512,7 @@ dev.off()
 
 ROC_CD_justpass_knn_H<-list()
 for(i in 1:20){
-  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("Hide"),nK = i)
+  predCD_x<-jackPredKNN(centCD, outcome = "justpass",predictors = c("gender","Hide"),nK = i)
   ROC<-ROCplusWeeks(predCD_x$allpred)
   ROC_CD_justpass_knn_H[[i]]<-ROC
 }
@@ -4528,7 +4528,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 CD_justpass_knn_H_means<-rowMeans(SR_m)
 CD_justpass_knn_H_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_H_CD_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_H_CD_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4550,7 +4550,7 @@ dev.off()
 
 ROC_ICS_justpass_knn_H<-list()
 for(i in 1:20){
-  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("Hide"),nK = i)
+  predICS_x<-jackPredKNN(centICS, outcome = "justpass",predictors = c("gender","Hide"),nK = i)
   ROC<-ROCplusWeeks(predICS_x$allpred)
   ROC_ICS_justpass_knn_H[[i]]<-ROC
 }
@@ -4569,7 +4569,7 @@ SR_m<-matrix(unlist(SRs),ncol=20,byrow=T) #The better option - the above code co
 ICS_justpass_knn_H_means<-rowMeans(SR_m)
 ICS_justpass_knn_H_sds<-apply(SR_m,1,sd)
 
-pdf(file = "plots/KNN_plots/SR01_onlyNetworkMeasures_knn_H_ICS_jp.pdf",   # The directory you want to save the file in
+pdf(file = "plots/KNN_plots/SR03_NetworkMeasures_Gender_knn_H_ICS_jp.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,3))
@@ -4634,7 +4634,7 @@ ICS_jp_knn_WM<-rowSums(ICS_jp_knn_All*ICS_jp_knn_Weigths)/rowSums(ICS_jp_knn_Wei
 ICS_jp_knn_SEWM<-sqrt(1/rowSums(ICS_jp_knn_Weigths))
 
 ####PLOTTING####
-pdf(file = "plots/ROC_AUC_plots/SR01_onlyNetworkMeasures_knn_weightedMeans.pdf",   # The directory you want to save the file in
+pdf(file = "plots/ROC_AUC_plots/SR02_NetworkMeasuresFCI_C_knn_weightedMeans.pdf",   # The directory you want to save the file in
     width = 8.5, # The width of the plot in inches
     height = 4) # The height of the plot in inches
 par(mfrow=c(1,2))
@@ -4672,3 +4672,6 @@ legend(3, 0.3, legend=c("Problem Solving", "Concept Discussion","In-Class Social
        col=c("black","darkred", "darkblue"), pch=c(19,1,2),lty=1, cex=0.8)
 abline(h=lazy_jp)
 dev.off()
+
+t2<-Sys.time()
+t2-t1
